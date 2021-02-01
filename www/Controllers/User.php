@@ -10,41 +10,11 @@ use App\Models\Page;
 class User
 {
 
-	//Method : Action
-	public function defaultAction(){
+	public function defaultAction() {
 		echo "User default";
 	}
 
-
-	//Method : Action
-	public function registerAction(){
-		
-		/*
-			$user->setFirstname("Yves");
-			$user->setLastname("SKRZYPCZYK");
-			$user->setEmail("y.skrzypczyk@gmail.com");
-			$user->setPwd("Test1234");
-			$user->setCountry("fr");
-
-			$user->save();
-
-
-
-			$page = new Page();
-			$page->setTitle("Nous contacter");
-			$page->setSlug("/contact");
-			$page->save();
-
-
-
-			$user = new User();
-			$user->setId(2); //Attention on doit populate
-			$user->setFirstname("Toto");
-			$user->save();
-
-		*/
-
-
+	public function registerAction() {
 		$user = new UserModel();
 		$view = new View("register"); 
 
@@ -82,7 +52,6 @@ class User
 
 	}
 
-	//Method : Action
 	public function showAction(){
 		
 		//Affiche la vue user intégrée dans le template du front

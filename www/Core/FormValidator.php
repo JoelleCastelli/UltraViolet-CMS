@@ -8,11 +8,10 @@ class FormValidator
 	{
 		$errors = [];
 
-
-		if( count($data) != count($config["inputs"]) ){
+		if (count($data) != count($config["inputs"])) {
 			$errors[] = "Tentative de HACK - Faille XSS";
 
-		}else{
+		} else {
 
 			foreach ($config["inputs"] as $name => $configInputs) {
 				
@@ -23,13 +22,9 @@ class FormValidator
 					$errors[] = $configInputs["error"];
 
 				}
-
-
 			}
-	}
-
+	    }
 		return $errors; //[] vide si ok
 	}
-
 
 }
