@@ -1,0 +1,13 @@
+1er étape : redirection sur index.php
+2nd étape : Récupérer et nettoyer l'URI
+3ème étape : Création des controllers Global et User avec les action (default, add et show)
+4ème étape : Création d'une classe router permettant de parser un fichier YAML et de retourner le controller et l'action associés
+5ème étape : Utilisation d'un autoloader pour inclure la class Router.class.php
+6ème étape : Vérification :
+-> Fichier existant
+-> Inclusion de la class
+-> Class existante
+-> Instance de la classe
+-> Methode existante
+-> Appel de la méthode
+-> ERREUR : 404

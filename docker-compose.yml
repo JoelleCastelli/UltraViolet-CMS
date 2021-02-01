@@ -1,0 +1,43 @@
+version: '3'
+services:
+  web:
+    environment:
+      - DEBUG=1
+    build: site
+    container_name: apache-3IW
+    ports :
+     - "8080:80"
+    volumes:
+     - ./www:/var/www/html/
+     - ./server/000-default.conf:/etc/apache2/sites-available/000-default.conf
+     - ./server/apache2.conf:/etc/apache2/apache2.conf
+     - ./server/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+     - database
+
+  database:
+    image: mysql:5.7
+    container_name: mysql-mvc
+    ports :
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: mvcdocker2
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-mvc
+    depends_on:
+      - database
+    ports:
+      - 8888:80
+    environment:
+        - PMA_ARBITRARY=1
+
+      
+      

@@ -1,0 +1,29 @@
+/:
+  controller: Main
+  action: default
+
+/404:
+  controller: Main
+  action: page404
+
+/utilisateur:
+  controller: User
+  action: default
+
+/ajout-d-un-utilisateur:
+  controller: User
+  action: add
+
+
+/s-inscrire:
+  controller: User
+  action: register
+
+/afficher-un-utilisateur:
+  controller: User
+  action: show
+
+
+/afficher-les-utilisateurs:
+  controller: User
+  action: showAll
