@@ -1,6 +1,7 @@
 <?php
 namespace App\Core;
 
+use App\Models\User as UserModel;
 
 class Database{
 
@@ -35,9 +36,31 @@ class Database{
 			
 		} else {
 			//UPDATE
+
+            echo "<pre>";
+            print_r($this);
+
+            $object = $this->findOneById($this->getId());
+
+            print_r($object);
+
+            //change properties
+
+            //final update
+
+
 		}
 
-		$query->execute($column);
+		//$query->execute($column);
 	}
+
+	public function findOneById($id)
+    {
+        $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id); //1
+        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+        $object = $query->fetch();
+
+        return $object;
+    }
 
 }

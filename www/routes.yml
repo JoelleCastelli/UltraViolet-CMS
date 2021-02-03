@@ -14,6 +14,9 @@
   controller: User
   action: add
 
+/met-a-jour:
+  controller: User
+  action: update
 
 /s-inscrire:
   controller: User

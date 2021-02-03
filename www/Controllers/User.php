@@ -20,7 +20,7 @@ class User
 
 		$form = $user->formBuilderRegister();
 
-		if(!empty($_POST)){
+		if(!empty($_POST)) {
 			
 			$errors = FormValidator::check($form, $_POST);
 
@@ -41,6 +41,13 @@ class User
 		$view->assign("formLogin", $user->formBuilderLogin());
 	}
 
+    public function updateAction()
+    {
+        $user = new UserModel();
+        $user->setId(1);
+        $user->setFirstname("Toto");
+        $user->save();
+    }
 
 	//Method : Action
 	public function addAction(){
