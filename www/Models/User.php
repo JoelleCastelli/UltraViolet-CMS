@@ -33,10 +33,8 @@ class User extends Database
 	 */
 	public function setId($id): void {
 	    $this->id = $id;
-        $this->findOneById($id);
-	    //ON doit peupler (populate) l'objet avec les valeurs de la bdd ...
-
-	}
+        $this->findOneById($this->id); // populate object with all the others values
+    }
 
 	/**
 	 * @return mixed

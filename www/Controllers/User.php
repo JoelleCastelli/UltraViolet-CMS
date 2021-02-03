@@ -47,6 +47,7 @@ class User
         $user->setId(1);
         $user->setFirstname("Toto");
         $user->save();
+
     }
 
 	//Method : Action

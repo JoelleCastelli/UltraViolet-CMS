@@ -14,7 +14,7 @@
   controller: User
   action: add
 
-/met-a-jour:
+/met-a-jour-utilisateur:
   controller: User
   action: update
 
