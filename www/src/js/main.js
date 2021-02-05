@@ -88,6 +88,9 @@ function slide(slider){
 
 }
 
+const sayHello = () => console.log("WEBPACK FONCTIONNE");
+sayHello();
+
 
 
 

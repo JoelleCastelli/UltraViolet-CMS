@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Template de back</title>
 	<meta name="description" content="description de la page de back">
+	<link rel="stylesheet" href="../../dist/main.css">
 </head>
 <body>
 	<header>
@@ -13,5 +14,6 @@
 	<!-- afficher la vue -->
 	<?php include $this->view ?>
 
+	<script type="text/javascript" src="../../dist/main.js"></script>
 </body>
 </html>

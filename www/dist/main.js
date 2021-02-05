@@ -4115,3 +4115,7 @@ function slide(slider) {
     });
   }
 }
+
+var sayHello = function sayHello() {
+  return console.log("WEBPACK FONCTIONNE");
+};
