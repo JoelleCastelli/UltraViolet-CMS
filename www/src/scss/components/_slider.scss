@@ -1,0 +1,30 @@
+$slide-width: 36rem;
+$slide-height: 24rem;
+
+.slider{
+	width: $slide-width;
+	height: $slide-height;
+	overflow: hidden;
+	position: relative;
+	& .slides-container{
+		display: flex;
+		position: relative;
+		transition: left 1s;
+		left: 0;
+	}
+	& .slide{
+		width: $slide-width;
+		height: $slide-height;
+		object-fit: cover;
+		object-position: center;
+	}
+	& nav{
+		position: absolute;
+		left: 0;
+		width: 100%;
+		top: 50%;
+		transform: translateY(-50%);
+		display: flex;
+		justify-content: space-between;
+	}
+}

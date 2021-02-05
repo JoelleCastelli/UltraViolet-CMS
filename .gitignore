@@ -1,3 +1,13 @@
+
+# IDE related
 .idea
+.vscode
+
+# Database related
 db_data
+
+# Local machines related
 .DS_Store
+
+# Node modules
+*node_modules
