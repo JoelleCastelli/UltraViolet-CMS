@@ -11,3 +11,7 @@ db_data
 
 # Node modules
 *node_modules
+
+# builds from the dist directory
+www/dist/main.css
+www/dist/main.js

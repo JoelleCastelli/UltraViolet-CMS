@@ -1,0 +1,15 @@
+
+// Teacher's course code
+// Let this as it is in order to not breack the components made with these variable.
+// TODO :  Apply our style instead of the default styles here.
+
+@function rem($pxval) {
+  $base: 16;
+  @return ($pxval / $base) * 1rem;
+}
+
+@mixin bg-cover{
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
