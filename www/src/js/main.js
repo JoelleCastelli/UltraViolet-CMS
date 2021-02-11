@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	// si des éléments avec la class .slider existent
+	// Vérifier qu'il y a des ékéléments avec la classe .slider
 	if($('.slider').length){
 		$('.slider').each(function(){
 			sliderInit($(this));
@@ -7,91 +7,162 @@ $(document).ready(function(){
 	}
 })
 
+
 function sliderInit(slider){
-	// Créer un container de slides
-	var container = $('<div></div>');
-	container.addClass('slides-container');
-
-	// Mettre le contenu du slider dans notre container de slides
-	var sliderContent = slider.html();
-	container.html(sliderContent);
-
-	// Ajouter la classe slide à toutes les images
+	var container = $('<div></div>'); // div vide
+	container.addClass('slides-container'); 
+	container.html(slider.html()); 
 	container.children('img').addClass('slide');
 
-	// Mettre le container de slides dans slider
 	slider.html(container);
 
-	// Ajouter une nav au slider
+	// Ajouter la navigation
 	var nav = $('<nav></nav>');
-	nav.append('<button class="prev">prev</button>');
-	nav.append('<button class="next">next</button>');
+	nav.append('<button class="prev"></button>');
+	nav.append('<button class="next"></button>');
 	slider.append(nav);
 
-	slider.attr('data-currentSlide', '0');
-
-	//Ajouter un écouteur de clic sur les boutons prev et next
+	// ajouter un attribut data-currentSlide au slider
+	slider.attr('data-currentSlide', 0);
 	slider.find('.prev').click(function(){
 		prev(slider);
 	})
 	slider.find('.next').click(function(){
 		next(slider);
 	})
-// Ces boutons lancent les fonctions prev(slider) et next(slider)
-// Ces fonctions modifient 'attribut data-currentSlide du slider
-
+	startAutoPlay(slider);
 }
 
 function next(slider){
-	var currentSlide = Number(slider.attr('data-currentSlide'));
-	slider.attr('data-currentSlide', currentSlide + 1);
+	var currentSlide = slider.attr('data-currentSlide');
+	var nextSlide = Number(currentSlide) + 1;
+	slider.attr('data-currentSlide', nextSlide);
 	slide(slider);
 }
 
 function prev(slider){
-	var currentSlide = Number(slider.attr('data-currentSlide'));
-	slider.attr('data-currentSlide', currentSlide - 1);
+	var currentSlide = slider.attr('data-currentSlide');
+	var prevSlide = Number(currentSlide) - 1;
+	slider.attr('data-currentSlide', prevSlide);
 	slide(slider);
 }
 
-
 function slide(slider){
-	var currentSlide = Number(slider.attr('data-currentSlide'));
-	slider.children('.slides-container').css('left', currentSlide * slider.width() * -1);
 
+	var currentSlide = slider.attr('data-currentSlide');
+	var container = slider.children('.slides-container');
+	var left = slider.width() * currentSlide * -1;
+	container.css('left', left);
+
+	disableNav(slider);
+	container.on('transitionend',function(){
+		container.off('transitionend');
+		enableNav(slider);
+	})
 
 	if(currentSlide == -1){
-		// Dupliquer la dernière image
-		var duplicate = slider.find('img:last').clone();
-		duplicate.css({
-			'position' : 'absolute',
+		//Cloner la dernière image pour la mettre avant la première
+		var clone = container.find('.slide:last').clone();
+		clone.css({
+			'position':'absolute',
 			'top': 0,
 			'left': 0,
 			'transform': 'translateX(-100%)'
 		})
-		slider.find('.slides-container').prepend(duplicate);
+		container.prepend(clone); // Ajouter le clone au début du container de slides
 
-		slider.find('.slides-container').on('transitionend', function(){
-			$(this).off('transitionend');
-			var lastImageIndex = slider.find('img').length - 2;
+		// Ecouter la fin de la transition
+		container.on('transitionend', function(){
+
+			container.off('transitionend'); // Supprimer l'écouteur car cette fonction ne doit être lancée qu'une fois
+
+			// Enlever la transition du container
+			container.css('transition', 'none');
+
+			// Ramener le slider sur la dernière image
+			var lastImageIndex = container.find('.slide').length - 1 - 1; // On retire 1 pour avoir l'index et encore un pour ne pas compter le clone présent dans le container
 			slider.attr('data-currentSlide', lastImageIndex);
-			$(this).css('transition', 'none');
 			slide(slider);
+
+
 			setTimeout(function(){
-				slider.find('img:first').remove();
-				slider.find('.slides-container').css('transition', 'left 1s');
-			},10);
-			
-		});
+
+				enableNav(slider);
+
+				// Supprimer le clone situé au début du container
+				container.find('.slide:first').remove();
+
+				// Rétablir la transition du container
+				container.css('transition', 'left 1s');
+			}, 10);
+
+		})
 
 	}
 
+	if(currentSlide == container.find('.slide').length){
+
+		//Cloner la première image pour la mettre après la dernière
+		var clone = container.find('.slide:first').clone();
+		container.append(clone); // Ajouter le clone à la fin du container de slides
+
+		// Ecouter la fin de la transition
+		container.on('transitionend', function(){
+
+			container.off('transitionend'); // Supprimer l'écouteur car cette fonction ne doit être lancée qu'une fois
+
+			// Enlever la transition du container
+			container.css('transition', 'none');
+
+			// Ramener le slider sur la première image
+			slider.attr('data-currentSlide', 0);
+			slide(slider);
+
+
+			setTimeout(function(){
+				enableNav(slider);
+
+				// Supprimer le clone situé à la fin du container
+				container.find('.slide:last').remove();
+
+				// Rétablir la transition du container
+				container.css('transition', 'left 1s');
+			}, 10);
+
+		})
+	}
+
+	stopAutoPlay(slider); // pas vraiment nécessaire
+	startAutoPlay(slider);
 }
 
-const sayHello = () => console.log("WEBPACK FONCTIONNE");
-sayHello();
+
+function disableNav(slider){
+	slider.find('nav').css({
+		'pointer-events':'none',
+		'opacity':'0.5'
+	})
+}
+
+function enableNav(slider){
+	slider.find('nav').css({
+		'pointer-events':'auto',
+		'opacity':'1'
+	})
+}
 
 
+var interval;
+
+function startAutoPlay(slider){
+	interval = setInterval(function(){
+		next(slider)
+	}, 4000);
+}
+
+function stopAutoPlay(slider){
+	clearInterval(interval)
+}
 
 
 
