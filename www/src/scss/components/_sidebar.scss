@@ -1,0 +1,122 @@
+#sidebar {
+    background: #363740;
+    color: #A4A6B3;
+    font-family: 'Mulish', sans-serif;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 15rem;
+    height: 100vh;
+    transition: width 0.4s ease-out;
+}
+
+#sidebar li {
+    /* background: green; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem;
+}
+
+#sidebar hr {
+    background-color: #f1f1f1;
+    height: 1px;
+    flex: auto;
+}
+
+#sidebar li i {
+    font-size: 30px;
+}
+
+#sidebar li div.grow-separator {
+    flex: auto;
+}
+
+#sidebar li div {
+    font-size: 16px;
+}
+
+
+
+
+/* Ligne du logo + titre */
+#sidebar #sidebar-label {
+    font-size: 19px;
+}
+
+#sidebar #sidebar-label div {
+    flex: none;
+}
+
+
+
+
+
+/* Ligne du boutton */
+#sidebar li:nth-child(2) {
+    justify-content: flex-end;
+    padding: 1rem 0;
+}
+
+#sidebar #cta-toggle-sidebar {
+    background: #f1f1f1;
+    cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    transform: translateX(50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#sidebar #cta-toggle-sidebar i {
+    color: #000000;
+    transition: ease-out 0.4s;
+}
+
+
+
+
+/* Les autres liens de la nav */
+#sidebar li div:not(#cta-toggle-sidebar) {
+    /* background: yellow; */
+    transition: transform 0.3s ease, 
+                opacity 0.3s ease-out;
+}
+
+
+
+
+
+
+/* WRAPPED */
+#sidebar.wrapped {
+    width: 4rem;
+}
+
+#sidebar.wrapped li div:not(#cta-toggle-sidebar) {
+    /* background: yellow; */
+    transform: translateX(-300%);
+    opacity: 0;
+}
+
+#sidebar.wrapped li div:not(#cta-toggle-sidebar) i {
+    /* background: yellow; */
+    align-self: center;
+}
+
+#sidebar.wrapped li #cta-toggle-sidebar i {
+    transform: rotate(180deg);
+}
+
+
+
+
+/* HOVERS */
+#sidebar li:not(:first-child):not(:nth-child(2)):not(:nth-child(10)):hover {
+    background: #9FA2B4; /* voir le layer sur figma 8% ? */
+    transition: background 0.3s ease-out;
+    cursor: pointer;
+    
+}
