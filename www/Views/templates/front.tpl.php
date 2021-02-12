@@ -6,30 +6,11 @@
 	<meta name="description" content="description de la page de front">
 	<link rel="stylesheet" href="../../dist/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
-	<style>
-
-		.grid-front {
-			display: grid;
-			height: 100vh;
-			grid-template-columns: minmax(15rem, auto) 1fr; /* auto dos not work here ? */
-			grid-template-rows: 1fr;
-			grid-column-gap: 2rem;
-			grid-template-areas: "sidebar main-content";
-		}
-
-		#sidebar {
-			grid-area: sidebar;
-		}
-
-		#main-content {
-			grid-area: main-content;
-		}
-
-	</style>
+	
 </head>
 <body>
 
-	<div class="grid-front">
+	<div class="grid">
 		<nav id="sidebar">
 			<ul>
 				<li id="sidebar-label">
@@ -91,9 +72,33 @@
 				</li>
 			</ul>
 		</nav>
-		<div id="main-content">
+		<div class="main-content">
+
+		<!-- DEBUT : A partir d'ic, c'est à mettre dans les views -->
+			<main class="grid-modify-article">
+
+				<header class="header">
+					<h1>Modifier un article</h1>
+					<div class=left-controls>
+						<i class="fas fa-bell"></i>
+						<div class="user-label">
+							<span>Kamal Hennou</span>
+							<img src="https://randomuser.me/api/portraits/men/93.jpg" alt="profile-picture">
+						</div>
+					</div>
+				</header>
+
+				<section class="card">section 1</section>
+				<section class="card">section 2</section>
+				<section class="card">section 3</section>
+
+			</main>
+
+		<!-- FIN -->
+		
 			<!-- afficher la vue -->
-			<?php include $this->view ?>
+			<!-- <php include $this->view ?> -->
+
 		</div>
 	</div>
 

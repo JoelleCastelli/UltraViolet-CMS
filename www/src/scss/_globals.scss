@@ -50,3 +50,9 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+// Global after resets :
+
+body {
+	background: $main-bg-color;
+}
