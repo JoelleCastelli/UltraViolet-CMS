@@ -1,22 +1,29 @@
 // Alignment of the viewport 
 
-.grid {
+.container {
     display: flex;
+    flex-flow: row nowrap;
+    height: 100vh;
 }
 
-.grid .main-content {
+.container .main-content {
     flex-basis: 100%;
 }
+
+
 
 // Alignement of the main content 
 
 .main {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column nowrap;
     flex-basis: 100%;
     height: 100%;
-    padding: 0 2rem;
+    overflow: auto;
+}
 
+.main > *:nth-child(n) {
+    flex: none;
 }
 
 // GRIDS per pages
@@ -25,13 +32,11 @@
 
 .grid-modify-article {
     display: grid;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
     height: 100%;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 5rem 1fr 2fr;
-    grid-gap: 20px;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
     grid-template-areas:    "header header"
                             "section1 section2"
                             "section3 section3";

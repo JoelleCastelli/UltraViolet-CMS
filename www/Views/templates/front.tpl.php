@@ -10,7 +10,7 @@
 </head>
 <body>
 
-	<div class="grid">
+	<div class="container">
 		<nav id="sidebar">
 			<ul>
 				<li id="sidebar-label">
@@ -72,10 +72,10 @@
 				</li>
 			</ul>
 		</nav>
-		<div class="main-content">
 
-		<!-- DEBUT : A partir d'ic, c'est à mettre dans les views -->
-			<main class="grid-modify-article">
+		<main class="main">
+			
+			<div class="grid-modify-article">
 
 				<header class="header">
 					<h1>Modifier un article</h1>
@@ -92,15 +92,40 @@
 				<section class="card">section 2</section>
 				<section class="card">section 3</section>
 
-			</main>
+			</div>
+
+		</main>
+
+	</div>
+		<!-- <div class="main-content"> -->
+
+		<!-- DEBUT : A partir d'ic, c'est à mettre dans les views -->
+			<!-- <main class="grid-modify-article"> -->
+
+				<!-- <header class="header">
+					<h1>Modifier un article</h1>
+					<div class=left-controls>
+						<i class="fas fa-bell"></i>
+						<div class="user-label">
+							<span>Kamal Hennou</span>
+							<img src="https://randomuser.me/api/portraits/men/93.jpg" alt="profile-picture">
+						</div>
+					</div>
+				</header>
+
+				<section class="card">section 1</section>
+				<section class="card">section 2</section>
+				<section class="card">section 3</section> -->
+
+			<!-- </main> -->
 
 		<!-- FIN -->
 		
 			<!-- afficher la vue -->
 			<!-- <php include $this->view ?> -->
 
-		</div>
-	</div>
+		<!-- </div> -->
+	
 
 	
 
