@@ -11,14 +11,6 @@
 }
 
 
-// Container for items need to be wrapped.
-// Example : Filter-tags
-.container-wrap {
-    display: flex;
-    flex-flow: row wrap;
-}
-
-
 // Alignement of the main content 
 
 .main {
@@ -63,4 +55,24 @@
     & section:nth-of-type(3) {
         grid-area: section3;
     }
+}
+
+.grid-title-modify-article {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 1fr auto auto;
+    grid-template-areas:    "title1 input1"
+                            "title2 input2"
+                            "...... filter-tag"
+                            "...... filter-tag";
+    
+    & .filter-container {
+        max-width: 100%;
+        display: flex;
+        flex-flow: row wrap;
+        flex: none;
+        justify-content: flex-start;
+        grid-area: filter-tag;
+    } 
 }

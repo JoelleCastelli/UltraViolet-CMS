@@ -89,12 +89,44 @@
 				</header>
 
 				<section class="card">
+					<div class="grid-title-modify-article">
+				<!-- FAIRE SA EN VERSION GRILLE PARCE QUE SINON ON REFAIT BOOTRAP... ET BOOTSTRAP C NUL :s -->
+
+					<span class="label-card-1">Titre :</span>
+					<div class="search-bar">
+						<input type="text" placeholder="Rentrer le nouveau titre...">
+					</div>
+					<span class="label-card-2">Item concerné :</span>
+					<div class="search-bar">
+						<i class="fas fa-search"></i>
+						<input type="text" placeholder="Selectionner un item...">
+					</div>
+					<div class="filter-container">
+						<button class="filter-tag">
+							<span>Nom de l'oeuvre</span>
+							<i class="fas fa-times"></i>
+						</button>
+						<button class="filter-tag">
+							<span>Oeuvre 2</span>
+							<i class="fas fa-times"></i>
+						</button>
+						<button class="filter-tag filter-tag--genre">
+							<span>Oeuvre 2</span>
+							<i class="fas fa-times"></i>
+						</button>
+						<button class="filter-tag">
+							<span>Oeuvre 3 avec un nom vachement plus long</span>
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+
+					<!-- <input type="text" class="search-bar">
+
+					<span class="label-card-1">Titre :</span>
+					<span class="label-card-2">Item concerné :</span>
 
 					<button class="btn">Publier</button>
 					<button class="btn btn--remove">Supprimer</button>
-					
-					
-					
 
 					<div class="search-bar">
 						<i class="fas fa-search"></i>
@@ -118,10 +150,11 @@
 							<span>Oeuvre 3 avec un nom vachement plus long</span>
 							<i class="fas fa-times"></i>
 						</button>
-					</div>
+					</div> -->
 				
-			
+			</div>
 				</section>
+				
 				<section class="card">section 2</section>
 				<section class="card">section 3</section>
 
