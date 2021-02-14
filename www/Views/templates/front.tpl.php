@@ -88,7 +88,22 @@
 					</div>
 				</header>
 
-				<section class="card">section 1</section>
+				<section class="card">
+				
+					<button class="filter-tag">
+						<span>Nom de l'oeuvre</span>
+						<i class="fas fa-times"></i>
+					</button>
+					<button class="filter-tag">
+						<span>Oeuvre 2</span>
+						<i class="fas fa-times"></i>
+					</button>
+					<button class="filter-tag">
+						<span>Oeuvre 3 avec un nom vachement plus long</span>
+						<i class="fas fa-times"></i>
+					</button>
+			
+				</section>
 				<section class="card">section 2</section>
 				<section class="card">section 3</section>
 
