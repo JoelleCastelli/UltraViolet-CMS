@@ -89,19 +89,27 @@
 				</header>
 
 				<section class="card">
+
+					<div class="search-bar">
+						<i class="fas fa-search"></i>
+						<input type="text" placeholder="Selectionner un item...">
+					</div>
+
+					<div class="container-wrap">
+						<button class="filter-tag">
+							<span>Nom de l'oeuvre</span>
+							<i class="fas fa-times"></i>
+						</button>
+						<button class="filter-tag">
+							<span>Oeuvre 2</span>
+							<i class="fas fa-times"></i>
+						</button>
+						<button class="filter-tag">
+							<span>Oeuvre 3 avec un nom vachement plus long</span>
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
 				
-					<button class="filter-tag">
-						<span>Nom de l'oeuvre</span>
-						<i class="fas fa-times"></i>
-					</button>
-					<button class="filter-tag">
-						<span>Oeuvre 2</span>
-						<i class="fas fa-times"></i>
-					</button>
-					<button class="filter-tag">
-						<span>Oeuvre 3 avec un nom vachement plus long</span>
-						<i class="fas fa-times"></i>
-					</button>
 			
 				</section>
 				<section class="card">section 2</section>

@@ -11,6 +11,13 @@
 }
 
 
+// Container for items need to be wrapped.
+// Example : Filter-tags
+.container-wrap {
+    display: flex;
+    flex-flow: row wrap;
+}
+
 
 // Alignement of the main content 
 
