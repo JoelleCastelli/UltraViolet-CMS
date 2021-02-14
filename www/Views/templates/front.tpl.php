@@ -90,6 +90,12 @@
 
 				<section class="card">
 
+					<button class="btn">Publier</button>
+					<button class="btn btn--remove">Supprimer</button>
+					
+					
+					
+
 					<div class="search-bar">
 						<i class="fas fa-search"></i>
 						<input type="text" placeholder="Selectionner un item...">
@@ -101,6 +107,10 @@
 							<i class="fas fa-times"></i>
 						</button>
 						<button class="filter-tag">
+							<span>Oeuvre 2</span>
+							<i class="fas fa-times"></i>
+						</button>
+						<button class="filter-tag filter-tag--genre">
 							<span>Oeuvre 2</span>
 							<i class="fas fa-times"></i>
 						</button>
