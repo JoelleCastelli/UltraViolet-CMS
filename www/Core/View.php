@@ -26,7 +26,6 @@ class View
 
 	public function setView($view) {
 		if(file_exists("Views/".$view.".view.php")) {
-			print_r($view);
 			$this->view = "Views/".$view.".view.php";
 		} else {
 			die("La vue n'existe pas");
