@@ -27,3 +27,11 @@
 /afficher-les-utilisateurs:
   controller: User
   action: showAll
+
+/modifier-un-article:
+  controller: Article
+  action: modifyArticle
+
+/ma-collection:
+  controller: Collection
+  action: displayCollection
