@@ -1,28 +1,71 @@
-.button{
-	text-decoration: none;
-	border: none;
-	outline: none;
-	padding: 1em 2em;
-	display: inline-block;
-	background-color: $grey;
-	color: $white;
-	transition: all 0.3s;
-	@media screen and (max-width: $phone-width){
-		font-size: rem(14);
-	}
-	&:hover{
-		background-color: lighten($grey, 10%);
-	}
-	&--success{
-		background-color: $green;
-		&:hover{
-			background-color: lighten($green, 10%);
-		}
-	}
-	&--alert{
-		background-color: $red;
-		&:hover{
-			background-color: lighten($red, 10%);
-		}
-	}
+.btn {
+    // display: flex;
+    // align-items: center;
+    border-radius: 45px;
+    background-color: $button-bg;
+    color: $button-font-color;
+    font-family: $poppins;
+    font-weight: semibold;
+    border-style: none;
+    box-shadow: 0px 2px 4px 0px $button-shadow-color;
+    transition: all 0.4s ease;
+    padding: 0.5rem 2rem;
+    min-width: 10rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $button-hover-color;
+    }
+
+    &:active {
+        transform: translateY(20%);
+    }
+
+    // IDEA, but not the priority
+
+    /*
+    <button class="btn btn-remove">
+        <i class="fas fa-chevron-right"></i>
+            Supprimer
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    */
+
+    // & i:nth-of-type(1) {
+    //     // transform: translateX(-200%);
+    //     left: -150%;
+    //     // color: $transparent;
+    //     color: yellow;
+    // }
+
+    // & i:nth-of-type(2) {
+    //     // transform: translateX(200%);
+    //     right: 150%;
+    //     // color: $transparent;
+    //     color: yellow;
+    // }
+
+    // &:hover {
+    //     & i:nth-of-type(1) {
+    //         transform: translateX(100%);
+    //         color: $white;
+    //     }
+
+    //     & i:nth-of-type(2) {
+    //         transform: translateX(-100%);
+    //         color: $white;
+    //     }
+    // }
+
+    // Others alternatives
+    &.btn--remove {
+        background-color: $button-remove-bg;
+
+        &:hover {
+            background-color: $button-remove-hover-color;
+        }
+    }
+
 }
+
+

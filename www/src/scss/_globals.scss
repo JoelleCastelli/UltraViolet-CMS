@@ -50,3 +50,27 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+// Global after resets :
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	background: $main-bg-color;
+}

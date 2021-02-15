@@ -1,0 +1,84 @@
+.radio-group {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.radio-group-aligned {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.radio-line {
+    display: flex;
+    align-items: center;
+}
+
+.radio-label {
+    font-family: $mulish;
+    font-size: 16px;
+    font-weight: bold;
+    color: $radio-label-font-color;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/*
+    Note for the team:
+
+    Styling radio buttons is not easy :
+
+    The trick here is to hide the inpout, but still keep its main feature.
+    So we use the border for the button itsel, thanks to the label, thant contains the functionnal input radio
+
+    Then we create the checkmark by ourselves, and decide if we want to display
+    it with the display property inline-block or none (and then, with the opacity 0-1 to make a nice transition)
+
+    video that helps me understand how to styling by keeping the radio feature : 
+    https://www.youtube.com/watch?v=MZq5zFSpUlo
+*/
+.radio-btn-outline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    // border: 2px solid black;
+    background-color: $radio-uncheck-bg;
+    border-radius: 50%;
+
+    & .radio-btn-checkmark {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transition: all 0.2s linear;
+        background-color: $radio-checked-outline;
+
+        & .radio-btn-checkmark-inside {
+            display: inline-block;
+            opacity: 1;
+            width: 50%;
+            height: 50%;
+            border-radius: 50%;
+            background: $radio-checked-checkmark-inside;
+        }
+    }
+
+    & input:checked + .radio-btn-checkmark {
+        opacity: 1;
+        background-color: $radio-checked-outline;
+
+            & .radio-btn-checkmark-inside {
+                opacity: 1;
+            }
+    }
+
+    // Hidding the basic style of a radio element
+    & input {
+        display: none;
+    }
+
+}

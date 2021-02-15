@@ -8,5 +8,60 @@ $light-grey: #F2F2F2;
 $dark-grey: #444;
 $red: #ce0a0a;
 $green: #31aa66;
-
 $phone-width: 800px;
+
+// OUR CODE :
+
+// Main
+$main-bg-color: #E5E5E5;
+$main-font-color: #252733;
+
+// Profile picture
+$profile-picture-border: #DFE0EB;
+$notification-icon: #C5C7CD;
+
+// Card
+$card-border: $profile-picture-border;
+$card-background-color: #FFFFFF;
+
+// Filter tag
+$filter-tag-border-color: #5F2EEA;
+$filter-tag-bg-color: #D5C6FF;
+$filter-tag-cross-color: #14142B;
+$filter-tag-bg-color-hover: #b8abdb;
+// Filter tag - genre
+$filter-tag-genre-bg-color: lighten(#F29400, 25%);
+$filter-tag-genre-border-color: lighten(#F20000, 10%);
+
+// search bar
+$search-bar-icon-color: #5B1CE0;
+$search-bar-bg: #E7E9F3;
+$seach-bar-placeholder: #b5b5b5;
+
+// Buttons - Standard
+$button-bg: #5F2EEA;
+$button-font-color: #F7F7FC;
+$button-shadow-color: #C1C1C1;
+$button-hover-color: #4622ab;
+// Buttons - Remove
+$button-remove-bg: #EB5757;
+$button-remove-hover-color: #c94949;
+
+// titles
+$title-card-color: #5B1CE0;
+$title-card-2-color: lighten(black, 26%);
+
+// Select
+$select-font-color: #14142B;
+$select-bg-color: #EFF0F6;
+
+// Radio
+$radio-uncheck-bg: #E7E9F3;
+$radio-checked-outline: #5F2EEA;
+$radio-checked-checkmark: #E7E9F3;
+$radio-checked-checkmark-inside: #E7E9F3;
+// Radio labels
+$radio-label-font-color: lighten(#000000, 26%);
+
+// Useful
+$transparent: rgba($color: #000000, $alpha: 0.0);
