@@ -77,6 +77,10 @@
 
     & section:nth-of-type(3) {
         grid-area: section3;
+        
+        & textarea {
+            height: 100%;
+        }
     }
 
     & section:nth-of-type(4) {

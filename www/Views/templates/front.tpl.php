@@ -188,7 +188,9 @@
 				</section>
 
 
-				<section class="card">section 3</section>
+				<section class="card">
+					<textarea name="tinymce-text-area" id="tinymce-text-area"></textarea>
+				</section>
 
 				<section>
 					<button class="btn btn--remove">Supprimer</button>
@@ -201,5 +203,11 @@
 
 	</div>
 	<script type="text/javascript" src="../../dist/main.js"></script>
+	<script src="https://cdn.tiny.cloud/1/itne6ytngfhi89x71prh233w7ahp2mgfmc8vwnjxhvue2m6h/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+	<script>
+    tinymce.init({
+      selector: '#tinymce-text-area'
+    });
+  </script>
 </body>
 </html>
