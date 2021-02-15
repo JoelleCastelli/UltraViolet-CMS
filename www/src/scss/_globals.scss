@@ -58,6 +58,12 @@ button:focus {
     outline: none;
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 // Global after resets :
 
 html {
