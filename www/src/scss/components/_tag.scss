@@ -1,0 +1,16 @@
+.tag {
+    display: inline-block;
+    background-color: $tag-genre-bg-color;
+    font-family: $mulish;
+    font-weight: bold;
+    font-size: 9px;
+    color: $tag-font-color;
+    border-radius: 30px;
+    padding: 5px 12px;
+
+    &.tag--type {
+        background-color: $tag-type-bg-color;
+    }
+
+
+}

@@ -21,8 +21,9 @@ $profile-picture-border: #DFE0EB;
 $notification-icon: #C5C7CD;
 
 // Card
-$card-border: $profile-picture-border;
+$card-border: #DFE0EB;
 $card-background-color: #FFFFFF;
+
 
 // Filter tag
 $filter-tag-border-color: #5F2EEA;
@@ -50,6 +51,8 @@ $button-remove-hover-color: #c94949;
 // titles
 $title-card-color: #5B1CE0;
 $title-card-2-color: lighten(black, 26%);
+$title-item-collection-color: #000000;
+$title-date-color: lighten(#252733, 25%);
 
 // Select
 $select-font-color: #14142B;
@@ -62,6 +65,19 @@ $radio-checked-checkmark: #E7E9F3;
 $radio-checked-checkmark-inside: #E7E9F3;
 // Radio labels
 $radio-label-font-color: lighten(#000000, 26%);
+
+// Tag
+$tag-genre-bg-color: #E0861C;
+$tag-type-bg-color: #1CB1E0;
+$tag-font-color: #FFFFFF;
+
+// Collection Item
+$collection-item-border-color: lighten(#E3E3E3, 25%);
+$collection-item-bg-color: #FFFFFF;
+
+// Item navigation
+$item-navigation-font-color: #9FA2B4;
+
 
 // Useful
 $transparent: rgba($color: #000000, $alpha: 0.0);

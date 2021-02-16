@@ -124,7 +124,91 @@
         </section>
 
 
-        <section class="card">section 2</section>
+        <section class="card">
+            <div class="collection-container">
+                <article class="collection-item">
+                    <img src="https://m.media-amazon.com/images/I/51cw3aOJmOL._AC_.jpg" alt="affiche-de-film">
+                    <div>
+                        <div class="tag-group">
+                            <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                            <label class="tag tag--type">Film</label>
+                            <label class="tag">Aventure</label>
+                            <label class="tag">Fantastique</label>
+                        </div>
+                        <h1 class="label-item-collection">Titre de l'affiche</h1>
+                        <label class=label-date>JJ / MM / AAAA</label>
+                    </div>
+                </article>
+
+                <article class="collection-item">
+                    <img src="https://lh3.googleusercontent.com/proxy/uz7lD3dfD_qj6l37c8bm8OEC00id79I6ZiBzZkUeeZ_mgnnB9Xnch-jtdGIHkBOm2LjAnrtdIIHu47V16UPtwBiHpss7EQPz8li_-ZnH3nY1i70uO7Q3IgRFOCOyL43S0yPpz2r8-wMTQzs" alt="affiche-de-film">
+                    <div>
+                        <div class="tag-group">
+                            <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                            <label class="tag tag--type">Film</label>
+                            <label class="tag">Aventure</label>
+                            <label class="tag">Fantastique</label>
+                        </div>
+                        <h1 class="label-item-collection">Titre de l'affiche</h1>
+                        <label class=label-date>JJ / MM / AAAA</label>
+                    </div>
+                </article>
+
+                <article class="collection-item">
+                    <img src="https://images-na.ssl-images-amazon.com/images/I/51K4w8DY5cL._AC_.jpg" alt="affiche-de-film">
+                    <div>
+                        <div class="tag-group">
+                            <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                            <label class="tag tag--type">Film</label>
+                            <label class="tag">Aventure</label>
+                            <label class="tag">Fantastique</label>
+                        </div>
+                        <h1 class="label-item-collection">Titre de l'affiche</h1>
+                        <label class=label-date>JJ / MM / AAAA</label>
+                    </div>
+                </article>
+
+                <article class="collection-item">
+                    <img src="https://www.themoviedb.org/t/p/w500/uU32j2eWvoHIIVyn7QfBg5UaKue.jpg" alt="affiche-de-film">
+                    <div>
+                        <div class="tag-group">
+                            <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                            <label class="tag tag--type">Film</label>
+                            <label class="tag">Aventure</label>
+                            <label class="tag">Fantastique</label>
+                        </div>
+                        <h1 class="label-item-collection">Titre de l'affiche</h1>
+                        <label class=label-date>JJ / MM / AAAA</label>
+                    </div>
+                </article>
+
+                <article class="collection-item">
+                    <img src="https://i.pinimg.com/originals/8f/9b/d9/8f9bd9178ac91804f876d9f967d7bf8c.jpg" alt="affiche-de-film">
+                    <div>
+                        <div class="tag-group">
+                            <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                            <label class="tag tag--type">Film</label>
+                            <label class="tag">Aventure</label>
+                            <label class="tag">Fantastique</label>
+                        </div>
+                        <h1 class="label-item-collection">Titre de l'affiche</h1>
+                        <label class=label-date>JJ / MM / AAAA</label>
+                    </div>
+                </article>
+            </div>
+            <nav class="item-navigation">
+                <span>1 - 8 of 1276</span>
+                <button>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+           
+            </nav>
+            
+
+        </section>
 
         </div>
 

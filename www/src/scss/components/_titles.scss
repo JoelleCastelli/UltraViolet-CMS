@@ -13,3 +13,21 @@
     font-weight: bold;
     color: $title-card-2-color;
 }
+
+.label-item-collection {
+    display: inline-block;
+    font-family: $mulish;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: $title-item-collection-color;
+
+}
+
+.label-date {
+    display: inline-block;
+    font-family: $poppins;
+    font-size: 12px;
+    font-weight: regular;
+    color: $title-date-color;
+}
