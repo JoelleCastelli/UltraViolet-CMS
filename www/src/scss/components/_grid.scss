@@ -182,4 +182,57 @@
         grid-area: button2;
     }
 
-                        }
+}
+
+
+// PAGE : Display my collection
+
+.grid-display-collection {
+    display: grid;
+    height: 100vh;
+    grid-template-rows: 5rem 1fr 3fr;
+    grid-gap: 30px;
+    margin: 0px 20px;
+
+}
+
+.grid-display-collection-sorter {
+    display: grid;
+    height: 100%;
+    grid-template-rows: repeat(4, 2rem);
+    grid-template-columns: 1fr 2fr 2fr 2fr 3fr;
+    align-items: center;
+    grid-gap: 20px 10px;
+    grid-template-areas:    "title1 radio radio ..... ....."
+                            "title2 select1 select2 search-bar ....."
+                            "...... filter-tag filter-tag filter-tag ....."
+                            "...... filter-tag filter-tag filter-tag .....";
+    
+    & h2:nth-of-type(1) {
+        grid-area: title1;
+    }
+
+    & h2:nth-of-type(2) {
+        grid-area: title2;
+    }
+
+    & .radio-group-aligned {
+        grid-area: radio;
+    }
+
+    & select:nth-of-type(1) {
+        grid-area: select1;
+    }
+
+    & select:nth-of-type(2) {
+        grid-area: select2;
+    }
+
+    & .search-bar {
+        grid-area: search-bar;
+    }
+
+    & .filter-container {
+        grid-area: filter-tag;
+    }
+}
