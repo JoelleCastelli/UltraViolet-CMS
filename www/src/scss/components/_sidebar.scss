@@ -19,9 +19,11 @@
 }
 
 #sidebar hr {
-    background-color: #f1f1f1;
+    background-color: grey;
     height: 1px;
     flex: auto;
+    text-decoration: none;
+    border-style: none;
 }
 
 #sidebar li i {
@@ -39,6 +41,22 @@
 
 
 
+// Ajout de la fonctionnalité de lien à l'arrache
+#sidebar a {
+    text-decoration: none;
+    color: inherit;
+    display: inline;
+    transition: all 0.3s ease;
+}
+
+#sidebar a:hover {
+    color: #FFFFFF;
+}
+
+
+
+
+
 /* Ligne du logo + titre */
 #sidebar #sidebar-label {
     font-size: 19px;
@@ -48,6 +66,28 @@
     flex: none;
 }
 
+#sidebar #sidebar-label #logo-site {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    background-color: $logo-bg-color;
+    border-radius: 50%;
+    border-style: none;
+    flex: none;
+    margin-right: 10px;
+}
+
+#sidebar #sidebar-label #logo-site::after {
+    display: block;
+    content: '';
+    width: 13px;
+    height: 13px;
+    background-color: white;
+    filter: $logo-icon-color;
+    border-radius: 1px 50% 50% 1px;
+}
 
 
 
@@ -68,10 +108,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: filter 0.3s ease;
+}
+
+#sidebar #cta-toggle-sidebar:hover {
+    filter: brightness(85%);
 }
 
 #sidebar #cta-toggle-sidebar i {
-    color: #000000;
+    color: grey;
     transition: ease-out 0.4s;
 }
 
