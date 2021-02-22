@@ -34,6 +34,9 @@ class User extends Database
 	public function setId($id): void {
 	    $this->id = $id;
         $this->findOneById($this->id); // populate object with all the others values
+        echo "<pre>";
+        print_r($this);
+        die();
     }
 
 	/**

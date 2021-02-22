@@ -38,7 +38,7 @@ class Database{
 			//UPDATE
 
             $str = "";
-            foreach($column as $key => $value) // build string for update "propertie = :propertie"
+            foreach($column as $key => $value) // build string for update -> "propertie = :propertie"
             {
                 $str .= $key . " = :" . $key . ", ";
             }
@@ -54,8 +54,9 @@ class Database{
     {
         $column = array_diff_key(get_object_vars($this), get_class_vars(get_class())); // get properties of the model
 
-        $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id); // get one row
+        $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id); // get one row by the id
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this)); // return instance
+
         $object = $query->fetch();
 
         foreach($column as $key => $value)

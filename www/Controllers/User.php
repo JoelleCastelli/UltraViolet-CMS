@@ -44,10 +44,10 @@ class User
     public function updateAction()
     {
         $user = new UserModel();
-        $user->setId(1);
-        $user->setFirstname("Toto");
+        $user->setId(2);
+        $user->setFirstname("qwerty");
         $user->save();
-
+        echo "YOUPI";
     }
 
 	//Method : Action
