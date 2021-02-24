@@ -37,6 +37,39 @@
 								<span>Oeuvre 4 moyenne</span>
 								<i class="fas fa-times"></i>
 							</button>
+							<button class="filter-tag">
+								<span>Oeuvre 4 moyenne</span>
+								<i class="fas fa-times"></i>
+							</button>
+							<button class="filter-tag">
+								<span>Oeuvre 4 moyenne</span>
+								<i class="fas fa-times"></i>
+							</button>
+							<button class="filter-tag">
+								<span>Oeuvre 4 moyenne</span>
+								<i class="fas fa-times"></i>
+							</button>
+							<button class="filter-tag">
+								<span>Oeuvre 4 moyenne</span>
+								<i class="fas fa-times"></i>
+							</button>
+							<button class="filter-tag">
+								<span>Oeuvre 4 moyenne</span>
+								<i class="fas fa-times"></i>
+							</button>
+							<button class="filter-tag">
+								<span>Oeuvre 4 moyenne</span>
+								<i class="fas fa-times"></i>
+							</button>
+							<button class="filter-tag">
+								<span>Oeuvre 4 moyenne</span>
+								<i class="fas fa-times"></i>
+							</button>
+							<button class="filter-tag">
+								<span>Oeuvre 4 moyenne</span>
+								<i class="fas fa-times"></i>
+							</button>
+							
 						</div>
 				
 					</div>

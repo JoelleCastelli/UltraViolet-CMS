@@ -1,56 +1,3 @@
-// Alignment of the viewport 
-
-.container {
-    display: flex;
-    flex-flow: row nowrap;
-    height: 100vh;
-}
-
-.container .main-content {
-    flex-basis: 100%;
-}
-
-
-
-
-
-// Alignement of the main content 
-
-.main {
-    display: flex;
-    flex-flow: column nowrap;
-    flex-basis: 100%;
-    height: 100%;
-    overflow: auto;
-}
-
-.main > *:nth-child(n) {
-    flex: none;
-}
-
-
-
-
-
-
-// Rare container needed
-.filter-container {
-    max-width: 100%;
-    display: flex;
-    flex-flow: row wrap;
-    flex: none;
-    justify-content: flex-start;
-}
-
-
-
-
-
-
-
-
-// GRIDS per pages
-
 // PAGE : MODIFIIER UN ARTICLE 
 .grid-modify-article {
     display: grid;
@@ -63,27 +10,27 @@
                             "section1 section2"
                             "section3 section3"
                             "btn-section btn-section";
-    & header {
+    header {
         grid-area: header;
     }
 
-    & section:nth-of-type(1) {
+    section:nth-of-type(1) {
         grid-area: section1;
     }
 
-    & section:nth-of-type(2) {
+    section:nth-of-type(2) {
         grid-area: section2;
     }
 
-    & section:nth-of-type(3) {
+    section:nth-of-type(3) {
         grid-area: section3;
         
-        & textarea {
+        textarea {
             height: 100%;
         }
     }
 
-    & section:nth-of-type(4) {
+    section:nth-of-type(4) {
         display: flex;
         grid-area: btn-section;
         justify-content: space-between;
@@ -182,76 +129,4 @@
         grid-area: button2;
     }
 
-}
-
-
-// PAGE : Display my collection
-.grid-display-collection {
-    display: grid;
-    height: 100vh;
-    grid-template-rows: 5rem max-content max-content;
-    grid-gap: 30px;
-    margin: 0px 20px;
-
-    & section:nth-of-type(2) {
-        display: flex;
-        flex-flow: column nowrap;
-
-        & > div {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-around;
-            align-items: center;
-            overflow: auto;
-        }
-
-        & > nav {
-           align-self: flex-end;
-           margin-top: 20px;
-        }
-    }
-
-}
-
-
-// Card : Card with sorting and filter features
-.grid-display-collection-sorter {
-    display: grid;
-    height: 100%;
-    grid-template-rows: repeat(4, 2rem);
-    grid-template-columns: 1fr 2fr 2fr 2fr 3fr;
-    align-items: center;
-    grid-gap: 20px 10px;
-    grid-template-areas:    "title1 radio radio ..... ....."
-                            "title2 select1 select2 search-bar ....."
-                            "...... filter-tag filter-tag filter-tag ....."
-                            "...... filter-tag filter-tag filter-tag .....";
-    
-    & h2:nth-of-type(1) {
-        grid-area: title1;
-    }
-
-    & h2:nth-of-type(2) {
-        grid-area: title2;
-    }
-
-    & .radio-group-aligned {
-        grid-area: radio;
-    }
-
-    & select:nth-of-type(1) {
-        grid-area: select1;
-    }
-
-    & select:nth-of-type(2) {
-        grid-area: select2;
-    }
-
-    & .search-bar {
-        grid-area: search-bar;
-    }
-
-    & .filter-container {
-        grid-area: filter-tag;
-    }
 }

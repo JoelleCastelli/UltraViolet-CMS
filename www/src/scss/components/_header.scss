@@ -7,16 +7,23 @@
     color: $main-font-color;
     font-family: $mulish;
 
-    & h1 {
-        font-size: 22px;
+    h1 {
+        font-size: 30px;
         font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+
+        i {
+            margin: 0px 5px;
+            color: $button-bg;
+        }
     }
 
-    & .left-controls {
+    .left-controls {
         display: flex;
         align-items: center;
 
-        & i {
+        i {
             display: block;
             font-size: 20px;
             color: $notification-icon;
@@ -25,17 +32,17 @@
             cursor: pointer;
         }
 
-        & .user-label {
+        .user-label {
             display: flex;
             align-items: center;
             justify-content: space-between;
 
-            & span {
+            span {
                 cursor: pointer;
                 margin-right: 2rem;
             }
 
-            & img {
+            img {
                 border-radius: 50%;
                 width: 30px;
                 border-color: $profile-picture-border;
