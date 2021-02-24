@@ -1,4 +1,5 @@
-// PAGE : MODIFIIER UN ARTICLE 
+// PAGE : http://localhost:8080/modifier-un-article
+
 .grid-modify-article {
     display: grid;
     height: 100%;
@@ -39,13 +40,8 @@
 }
 
 
-
-
-
-
-
-
 // CARD : Modifying title and filter tags
+
 .grid-title-modify-article {
     display: grid;
     height: 100%;
@@ -75,13 +71,8 @@
 }
 
 
-
-
-
-
-
-
 // CARD : Modifying publications values
+
 .grid-publication-modify-article {
     display: grid;
     height: 100%;
@@ -129,4 +120,26 @@
         grid-area: button2;
     }
 
+}
+
+@media screen and (max-width: 1500px) {
+    
+    .grid-modify-article {
+        display: flex;
+        flex-flow: column;
+    }
+
+}
+
+@media screen and (max-width: 1000px) {
+
+    .grid-publication-modify-article {
+        grid-template-columns: max-content min-content;
+        grid-template-rows: max-content max-content max-content max-content;
+        grid-template-areas:    "title1 radio"
+                                "title2 select"
+                                "filter-tag filter-tag"
+                                "button1 button2";
+        width: 100%;
+    }
 }

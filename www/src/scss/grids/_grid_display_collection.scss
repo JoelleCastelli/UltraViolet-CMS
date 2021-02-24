@@ -1,33 +1,39 @@
-// PAGE : Display my collection
+// PAGE : http://localhost:8080/ma-collection
+
 .grid-display-collection {
     display: grid;
     height: 100vh;
     grid-template-rows: 5rem max-content max-content;
     grid-gap: 30px;
-    margin: 0px 20px;
 
-    & section:nth-of-type(2) {
+    // section:nth-of-type(2) {
+    //     display: flex;
+    //     flex-flow: column nowrap;
+
+    //     & > div {
+    //         display: flex;
+    //         flex-flow: row nowrap;
+    //         justify-content: space-around;
+    //         align-items: center;
+    //         overflow: auto;
+    //     }
+
+    //     & > nav {
+    //        align-self: flex-end;
+    //        margin-top: 20px;
+    //     }
+    // }
+
+    nav {
         display: flex;
-        flex-flow: column nowrap;
-
-        & > div {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-around;
-            align-items: center;
-            overflow: auto;
-        }
-
-        & > nav {
-           align-self: flex-end;
-           margin-top: 20px;
-        }
+        justify-content: flex-end;
+        margin-top: 30px;
     }
-
 }
 
 
 // Card : Card with sorting and filter features
+
 .grid-display-collection-sorter {
     display: grid;
     height: 100%;
@@ -40,31 +46,71 @@
                             "...... filter-tag filter-tag filter-tag ....."
                             "...... filter-tag filter-tag filter-tag .....";
     
-    & h2:nth-of-type(1) {
+    h2:nth-of-type(1) {
         grid-area: title1;
     }
 
-    & h2:nth-of-type(2) {
+    h2:nth-of-type(2) {
         grid-area: title2;
     }
 
-    & .radio-group-aligned {
+    .radio-group-aligned {
         grid-area: radio;
     }
 
-    & select:nth-of-type(1) {
+    select:nth-of-type(1) {
         grid-area: select1;
     }
 
-    & select:nth-of-type(2) {
+    select:nth-of-type(2) {
         grid-area: select2;
     }
 
-    & .search-bar {
+    .search-bar {
         grid-area: search-bar;
     }
 
-    & .filter-container {
+    .filter-container {
         grid-area: filter-tag;
+    }
+
+    @media screen and (max-width: 900px) {
+        display: flex;
+        flex-flow: column;
+        align-items: flex-start;
+    }
+
+}
+
+
+// CARD : Section 3
+
+.grid-collection-container {
+    display: grid;
+    grid-template-columns: repeat(5, 200px);
+    justify-content: space-around;
+    grid-row-gap: 50px;
+    align-self: center;
+    align-items: center;
+    
+
+    > article {
+        align-self: center;
+    }
+
+    @media screen and (max-width: 1800px) {
+        grid-template-columns: repeat(4, 200px);
+    }
+
+    @media screen and (max-width: 1500px) {
+        grid-template-columns: repeat(3, 200px);
+    }
+
+    @media screen and (max-width: 1100px) {
+        grid-template-columns: repeat(2, 200px);
+    }
+
+    @media screen and (max-width: 900px) {
+        grid-template-columns: 200px
     }
 }

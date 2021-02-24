@@ -125,7 +125,8 @@
 
 
             <section class="card">
-                <div class="collection-container">
+                <div class="grid-collection-container">
+            
                     <article class="collection-item">
                         <img src="https://m.media-amazon.com/images/I/51cw3aOJmOL._AC_.jpg" alt="affiche-de-film">
                         <div>
@@ -197,17 +198,14 @@
                     </article>
                 </div>
                 <nav class="item-navigation">
-                    <span>1 - 8 of 1276</span>
-                    <button>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button>
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-            
-                </nav>
-                
-
+                        <span>1 - 8 of 1276</span>
+                        <button>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </nav>
             </section>
 
         </div>
