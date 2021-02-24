@@ -14,50 +14,57 @@
         </li>
         <a href="#">
             <li>
-                <i class="fas fa-circle-notch"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-circle-notch"></i>
+                </span>
                 <div>Overview</div>
             </li>
         </a>
         <a href="#">
             <li>
-                <i class="fas fa-pager"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-pager"></i>
+                </span>
                 <div>Pages</div>
             </li>
         </a>
         <a href="modifier-un-article">
             <li>
-                <i class="fas fa-newspaper"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-newspaper"></i>
+                </span>
                 <div>Article</div>
             </li>
         </a>
         <a href="ma-collection">
             <li>
-                <i class="fas fa-book"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-book"></i>
+                </span>
                 <div>Collections</div>
             </li>
         </a>
         <a href="#">
             <li>
-                <i class="fas fa-comments"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-comments"></i>
+                </span>
                 <div>Commentaires</div>
             </li>
         </a>
         <a href="#">
             <li>
-                <i class="fas fa-paste"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-paste"></i>
+                </span>
                 <div>Templates</div>
             </li>
         </a>
         <a href="#">
             <li>
-                <i class="fas fa-chart-line"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-chart-line"></i>
+                </span>
                 <div>Statistiques</div>
             </li>
         </a>
@@ -66,15 +73,17 @@
         </li>
         <a href="#">
             <li>
-                <i class="fas fa-cogs"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-cogs"></i>
+                </span>
                 <div>Settings</div>
             </li>
         </a>
         <a href="#">
             <li>
-                <i class="fas fa-certificate"></i>
-                <div class="grow-separator"></div>
+                <span class="icon">
+                    <i class="fas fa-certificate"></i>
+                </span>
                 <div>Subscription</div>
             </li>
         </a>
