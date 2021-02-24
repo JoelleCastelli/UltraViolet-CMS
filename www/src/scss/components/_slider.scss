@@ -6,19 +6,19 @@ $slide-height: 24rem;
 	height: $slide-height;
 	overflow: hidden;
 	position: relative;
-	& .slides-container{
+	.slides-container{
 		display: flex;
 		position: relative;
 		transition: left 1s;
 		left: 0;
 	}
-	& .slide{
+	.slide{
 		width: $slide-width;
 		height: $slide-height;
 		object-fit: cover;
 		object-position: center;
 	}
-	& nav{
+	nav{
 		position: absolute;
 		left: 0;
 		width: 100%;

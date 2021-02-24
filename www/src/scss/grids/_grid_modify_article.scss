@@ -54,17 +54,17 @@
                             "...... filter-tag"
                             "...... filter-tag";
     
-    & .filter-container {
+    .filter-container {
         grid-area: filter-tag;
         margin-top: -20px;
     }
 
-    & .label-card-1 {
+    .label-card-1 {
         grid-area: title1;
         align-self: center;
     }
 
-    & .label-card-2 {
+    .label-card-2 {
         grid-area: title2;
         align-self: center;
     }
@@ -85,38 +85,38 @@
                             "title2 select button2"
                             "filter-tag filter-tag filter-tag";
     
-    & .label-card-1 {
+    .label-card-1 {
         grid-area: title1;
         align-self: start;
     }
     
-    & .radio-group {
+    .radio-group {
         grid-area: radio;
         display: flex;
         flex-flow: column;
         align-self: start;
     }
 
-    & .label-card-2 {
+    .label-card-2 {
         grid-area: title2;
         align-self: center;
     }
 
-    & select {
+    select {
         grid-area: select;
     }
 
-    & .filter-container {
+    .filter-container {
         grid-area: filter-tag;
         margin-top: -20px;
     }
 
-    & button:nth-of-type(1) {
+    button:nth-of-type(1) {
         grid-area: button1;
         align-self: end;
     }
 
-    & button:nth-of-type(2) {
+    button:nth-of-type(2) {
         grid-area: button2;
     }
 

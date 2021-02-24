@@ -46,7 +46,7 @@
     background-color: $radio-uncheck-bg;
     border-radius: 50%;
 
-    & .radio-btn-checkmark {
+    .radio-btn-checkmark {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -57,7 +57,7 @@
         transition: all 0.2s linear;
         background-color: $radio-checked-outline;
 
-        & .radio-btn-checkmark-inside {
+        .radio-btn-checkmark-inside {
             display: inline-block;
             opacity: 1;
             width: 50%;
@@ -67,17 +67,17 @@
         }
     }
 
-    & input:checked + .radio-btn-checkmark {
+    input:checked + .radio-btn-checkmark {
         opacity: 1;
         background-color: $radio-checked-outline;
 
-            & .radio-btn-checkmark-inside {
+            .radio-btn-checkmark-inside {
                 opacity: 1;
             }
     }
 
     // Hidding the basic style of a radio element
-    & input {
+    input {
         display: none;
     }
 
