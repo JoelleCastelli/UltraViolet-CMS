@@ -5,12 +5,12 @@
     border-color: $collection-item-border-color;
     border-width: 2px;
     border-style: solid;
-    box-shadow: 0px 3px 3px 0px lighten(grey, 40px);
+    box-shadow: 1px 20px 6px -4px lighten(grey, 40px);
     
     display: grid;
     grid-template-rows: min-content auto;
 
-    & img {
+    img {
         object-fit: cover;
         border-radius: 10px 10px 0 0;
         width: 100%;
@@ -22,12 +22,12 @@
         display: flex;
         flex-flow: column nowrap;
 
-        & h1 {
+        h1 {
             margin-top: 10px;
             
         }
 
-        & .label-date {
+        .label-date {
             margin-top: 7px;
         }
 

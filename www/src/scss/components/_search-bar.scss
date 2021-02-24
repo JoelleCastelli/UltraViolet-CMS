@@ -13,7 +13,7 @@
     // min-width: 15rem;
     // max-width: 35rem;
     
-    & input {
+    input {
         border-style: none;
         font-size: 13px;
         background: $transparent;
@@ -24,7 +24,7 @@
         }
     }
 
-    & i {
+    i {
         color: $search-bar-icon-color;
         margin-right: 10px;
     }
