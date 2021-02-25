@@ -1,11 +1,13 @@
 .collection-item {
     background: $collection-item-bg-color;
     width: 250px;
+    // border-radius: 10px;
+    // border-color: $collection-item-border-color;
+    // border-width: 2px;
+    // border-style: solid;
     border-radius: 10px;
-    border-color: $collection-item-border-color;
-    border-width: 2px;
-    border-style: solid;
-    box-shadow: 1px 20px 6px -4px lighten(grey, 40px);
+    border: 1px solid rgba(227, 227, 227, 0.5);
+    box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
     
     display: grid;
     grid-template-rows: min-content auto;

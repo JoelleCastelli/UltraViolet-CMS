@@ -196,6 +196,145 @@
                             <label class=label-date>19 / 09 / 1977</label>
                         </div>
                     </article>
+                    <article class="collection-item">
+                        <img src="https://m.media-amazon.com/images/I/51cw3aOJmOL._AC_.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Film</label>
+                                <label class="tag">Aventure</label>
+                                <label class="tag">Fantastique</label>
+                            </div>
+                            <h1 class="label-item-collection">Le seigneur des anneaux</h1>
+                            <label class=label-date>19 / 12 / 2001</label>
+                        </div>
+                    </article>
+
+                    <article class="collection-item">
+                        <img src="https://static.posters.cz/image/750/affiches/game-of-thrones-winter-is-here-jon-i49289.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Série</label>
+                                <label class="tag">Guerre</label>
+                                <label class="tag">Fantastique</label>
+                            </div>
+                            <h1 class="label-item-collection">Game of Thrones</h1>
+                            <label class=label-date>17 / 04 / 2011</label>
+                        </div>
+                    </article>
+
+                    <article class="collection-item">
+                        <img src="https://images-na.ssl-images-amazon.com/images/I/51K4w8DY5cL._AC_.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Série</label>
+                                <label class="tag tag--type">Animation</label>
+                                <label class="tag">Drame</label>
+                            </div>
+                            <h1 class="label-item-collection">L'attaque des titans</h1>
+                            <label class=label-date>09 / 09 / 2009</label>
+                        </div>
+                    </article>
+
+                    <article class="collection-item">
+                        <img src="https://www.themoviedb.org/t/p/w500/uU32j2eWvoHIIVyn7QfBg5UaKue.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Film</label>
+                                <label class="tag">Aventure</label>
+                                <label class="tag">Voyage</label>
+                            </div>
+                            <h1 class="label-item-collection">Le chateau dans le ciel</h1>
+                            <label class=label-date>15 / 01 / 2003</label>
+                        </div>
+                    </article>
+
+                    <article class="collection-item">
+                        <img src="https://i.pinimg.com/originals/8f/9b/d9/8f9bd9178ac91804f876d9f967d7bf8c.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Film</label>
+                                <label class="tag">Science-fiction</label>
+                                <label class="tag">Action</label>
+                            </div>
+                            <h1 class="label-item-collection">Star Wars : Episode IV</h1>
+                            <label class=label-date>19 / 09 / 1977</label>
+                        </div>
+                    </article>
+                    
+                    <article class="collection-item">
+                        <img src="https://m.media-amazon.com/images/I/51cw3aOJmOL._AC_.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Film</label>
+                                <label class="tag">Aventure</label>
+                                <label class="tag">Fantastique</label>
+                            </div>
+                            <h1 class="label-item-collection">Le seigneur des anneaux</h1>
+                            <label class=label-date>19 / 12 / 2001</label>
+                        </div>
+                    </article>
+
+                    <article class="collection-item">
+                        <img src="https://static.posters.cz/image/750/affiches/game-of-thrones-winter-is-here-jon-i49289.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Série</label>
+                                <label class="tag">Guerre</label>
+                                <label class="tag">Fantastique</label>
+                            </div>
+                            <h1 class="label-item-collection">Game of Thrones</h1>
+                            <label class=label-date>17 / 04 / 2011</label>
+                        </div>
+                    </article>
+
+                    <article class="collection-item">
+                        <img src="https://images-na.ssl-images-amazon.com/images/I/51K4w8DY5cL._AC_.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Série</label>
+                                <label class="tag tag--type">Animation</label>
+                                <label class="tag">Drame</label>
+                            </div>
+                            <h1 class="label-item-collection">L'attaque des titans</h1>
+                            <label class=label-date>09 / 09 / 2009</label>
+                        </div>
+                    </article>
+
+                    <article class="collection-item">
+                        <img src="https://www.themoviedb.org/t/p/w500/uU32j2eWvoHIIVyn7QfBg5UaKue.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Film</label>
+                                <label class="tag">Aventure</label>
+                                <label class="tag">Voyage</label>
+                            </div>
+                            <h1 class="label-item-collection">Le chateau dans le ciel</h1>
+                            <label class=label-date>15 / 01 / 2003</label>
+                        </div>
+                    </article>
+
+                    <article class="collection-item">
+                        <img src="https://i.pinimg.com/originals/8f/9b/d9/8f9bd9178ac91804f876d9f967d7bf8c.jpg" alt="affiche-de-film">
+                        <div>
+                            <div class="tag-group">
+                                <!-- TODO : Faire les composants tag indépendemment du ce composant -->
+                                <label class="tag tag--type">Film</label>
+                                <label class="tag">Science-fiction</label>
+                                <label class="tag">Action</label>
+                            </div>
+                            <h1 class="label-item-collection">Star Wars : Episode IV</h1>
+                            <label class=label-date>19 / 09 / 1977</label>
+                        </div>
+                    </article>
                 </div>
                 <nav class="item-navigation">
                         <span>1 - 8 of 1276</span>
