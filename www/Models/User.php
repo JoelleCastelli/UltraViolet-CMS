@@ -191,64 +191,168 @@ class User extends Database
 				"id"=>"form_register",
 				"submit"=>"S'inscrire"
 			],
-			"inputs"=>[
-				"firstname" => [
-				    "type"=>"text",
+            "inputs"=>[
+                "firstname" => [
+                    "type"=>"text",
                     "placeholder"=>"Exemple : Yves",
                     "label"=>"Votre Prénom",
-                    "required"=>true,
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>50,
                     "error"=>"Votre prénom doit faire entre 2 et 50 caractères"
                 ],
-				"lastname"=>[
+                "lastname"=>[
                     "type"=>"text",
                     "placeholder"=>"Exemple : Skrzypczyk",
                     "label"=>"Votre Nom",
-                    "required"=>true,
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>100,
                     "error"=>"Votre nom doit faire entre 2 et 100 caractères"
                 ],
-				"email"=>[
+                "email"=>[
                     "type"=>"email",
                     "placeholder"=>"Exemple : nom@gmail.com",
                     "label"=>"Votre Email",
-                    "required"=>true,
                     "class"=>"form_input",
                     "minLength"=>8,
                     "maxLength"=>320,
                     "error"=>"Votre email doit faire entre 8 et 320 caractères"
                 ],
-				"pwd"=>[
+                "pwd"=>[
                     "type"=>"password",
                     "label"=>"Votre mot de passe",
-                    "required"=>true,
                     "class"=>"form_input",
                     "minLength"=>8,
                     "error"=>"Votre mot de passe doit faire au minimum 8 caractères"
                 ],
-				"pwdConfirm"=> [
+                "pwdConfirm"=> [
                     "type"=>"password",
                     "label"=>"Confirmation",
-                    "required"=>true,
                     "class"=>"form_input",
                     "confirm"=>"pwd",
                     "error"=>"Votre mot de passe de confirmation ne correspond pas"
                 ],
-				"country"=>[
+                "country"=>[
                     "type"=>"text",
                     "placeholder"=>"Exemple : fr",
                     "label"=>"Votre Pays",
-                    "required"=>true,
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>2,
                     "error"=>"Votre pays doit faire 2 caractères"
                 ],
-			]
+
+            ],
+            "selects"=>[
+                "cars"=>[
+                    "label"=>"Choisissez une voiture : ",
+                    "error"=>"Choisir une voiture svp",
+                    "options"=>[
+                        [
+                            "value"=>"",
+                            "label"=>"Veuiller selectionner une voiture",
+                            "disabled"=>"disabled",
+                            "selected"=>"selected"
+                        ],
+                        [
+                            "value"=>"volvo1",
+                            "label"=>"Volvo",
+
+                        ],
+                        [
+                            "value"=>"saab1",
+                            "label"=>"Saab",
+                        ],
+                        [
+                            "value"=>"mercedes1",
+                            "label"=>"Mercedes",
+
+                        ],
+                        [
+                            "value"=>"audi1",
+                            "label"=>"Audi",
+
+                        ],
+
+                    ]
+                ],
+                "houses"=>[
+                    "label"=>"Choisissez une maison : ",
+                    "error"=>"Choisir une maison svp",
+                    "options"=>[
+                        [
+                            "disabled"=>"disabled",
+                            "selected"=>"selected",
+                            "value"=>"",
+                            "label"=>"Choisissez une maison ",
+                        ],
+                        [
+                            "value"=>"tinyHouse1",
+                            "label"=>"mini maison",
+                        ],
+                        [
+                            "value"=>"bigHouse1",
+                            "label"=>"grande maison",
+                        ]
+                    ]
+                ],
+            ],
+            "radios"=>[
+                "gender"=> [
+                    "error" => "Choisissez un genre siouplè !",
+                    "options"=>[
+                        [
+                            "id"=>"male",
+                            "value"=>"male",
+                            "label"=>"Male",
+                        ],
+                        [
+                            "id"=>"female",
+                            "value"=>"female",
+                            "label"=>"Female",
+                        ],
+                        [
+                            "id"=>"other",
+                            "value"=>"other",
+                            "label"=>"Other",
+                            "checked"=>"checked",
+                        ],
+                        [
+                            "id"=>"cactus",
+                            "value"=>"cactus",
+                            "label"=>"Je me sens cactus",
+                        ]
+                    ]
+                ]
+            ],
+            "checkboxes"=>[
+                "transports"=> [
+                    "error" => "Choississez un transport siouplè !",
+                    "options"=>[
+                        [
+                            "id"=>"vehicle1",
+                            "name"=>"vehicle1",
+                            "value"=>"Bike",
+                            "label"=>"I have a bike",
+                            "required"=>true
+                        ],
+                        [
+                            "id"=>"vehicle2",
+                            "name"=>"vehicle2",
+                            "value"=>"Car",
+                            "label"=>"I have a car",
+                            "checked" => "checked"
+                        ],
+                        [
+                            "id"=>"vehicle3",
+                            "name"=>"vehicle3",
+                            "value"=>"Boat",
+                            "label"=>"I have a boat",
+                        ]
+                    ]
+                ]
+            ]
 		];
 	}
 }
@@ -257,7 +361,65 @@ class User extends Database
 
 
 
+/*"inputs"=>[
+    "firstname" => [
+        "type"=>"text",
+        "placeholder"=>"Exemple : Yves",
+        "label"=>"Votre Prénom",
+        "required"=>true,
+        "class"=>"form_input",
+        "minLength"=>2,
+        "maxLength"=>50,
+        "error"=>"Votre prénom doit faire entre 2 et 50 caractères"
+    ],
+    "lastname"=>[
+        "type"=>"text",
+        "placeholder"=>"Exemple : Skrzypczyk",
+        "label"=>"Votre Nom",
+        "required"=>true,
+        "class"=>"form_input",
+        "minLength"=>2,
+        "maxLength"=>100,
+        "error"=>"Votre nom doit faire entre 2 et 100 caractères"
+    ],
+    "email"=>[
+        "type"=>"email",
+        "placeholder"=>"Exemple : nom@gmail.com",
+        "label"=>"Votre Email",
+        "required"=>true,
+        "class"=>"form_input",
+        "minLength"=>8,
+        "maxLength"=>320,
+        "error"=>"Votre email doit faire entre 8 et 320 caractères"
+    ],
+    "pwd"=>[
+        "type"=>"password",
+        "label"=>"Votre mot de passe",
+        "required"=>true,
+        "class"=>"form_input",
+        "minLength"=>8,
+        "error"=>"Votre mot de passe doit faire au minimum 8 caractères"
+    ],
+    "pwdConfirm"=> [
+        "type"=>"password",
+        "label"=>"Confirmation",
+        "required"=>true,
+        "class"=>"form_input",
+        "confirm"=>"pwd",
+        "error"=>"Votre mot de passe de confirmation ne correspond pas"
+    ],
+    "country"=>[
+        "type"=>"text",
+        "placeholder"=>"Exemple : fr",
+        "label"=>"Votre Pays",
+        "required"=>true,
+        "class"=>"form_input",
+        "minLength"=>2,
+        "maxLength"=>2,
+        "error"=>"Votre pays doit faire 2 caractères"
+    ],
 
-
+],
+*/
 
 

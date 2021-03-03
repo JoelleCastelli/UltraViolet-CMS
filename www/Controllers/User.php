@@ -19,7 +19,6 @@ class User
 		$view = new View("register"); 
 
 		$form = $user->formBuilderRegister();
-
 		if(!empty($_POST)) {
 			
 			$errors = FormValidator::check($form, $_POST);
@@ -29,23 +28,26 @@ class User
 				$user->setLastname($_POST["lastname"]);
 				$user->setEmail($_POST["email"]);
 				$user->setPwd($_POST["pwd"]);
-				$user->setCountry($_POST["country"]);
+                $user->setCountry($_POST["country"]);
 
 				$user->save();
 			}else{
-				$view->assign("errors", $errors);
+                $view->assign("errors", $errors);
 			}
 		}
 
-		$view->assign("form", $form);
-		$view->assign("formLogin", $user->formBuilderLogin());
+        $view->assign("form", $form);
+        $view->assign("post", $_POST);
+        $view->assign("formLogin", $user->formBuilderLogin());
 	}
 
     public function updateAction()
     {
         $user = new UserModel();
-        $user->setId(1);
-        $user->setFirstname("qwerty");
+        $user->setId(3);
+        $user->setFirstname("NON");
+        $user->setCountry("pr");
+        $user->setRole("6");
         $user->save();
     }
 
@@ -64,8 +66,6 @@ class User
 		//Affiche la vue user intégrée dans le template du front
 		$view = new View("user"); 
 	}
-
-
 
 	//Method : Action
 	public function showAllAction(){

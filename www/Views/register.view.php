@@ -7,7 +7,7 @@
 <?php endif;?>
 
 
-<?php App\Core\FormBuilder::render($form); ?>
+<?php App\Core\FormBuilder::render($form, true); ?>
 
 <h2>Se connecter</h2>
 
