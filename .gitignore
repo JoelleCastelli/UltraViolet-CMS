@@ -15,3 +15,6 @@ db_data
 # builds from the dist directory
 www/dist/main.css
 www/dist/main.js
+
+# env files
+www/.env*
