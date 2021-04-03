@@ -9,7 +9,7 @@ Collection {
     
     public function displayCollectionAction() {
 
-		$item_url = 'https://api.themoviedb.org/3/movie/76341?api_key='.APIKEY.'&append_to_response=credits&language=fr';
+		$item_url = 'https://api.themoviedb.org/3/movie/76341?api_key='.TMDB_API_KEY.'&append_to_response=credits&language=fr';
 
 		// Curl request
 		$ch = curl_init();
