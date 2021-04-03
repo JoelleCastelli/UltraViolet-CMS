@@ -3,15 +3,15 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema ultraviolet
 -- -----------------------------------------------------
-/*CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;*/
+CREATE SCHEMA IF NOT EXISTS `ultraviolet` DEFAULT CHARACTER SET utf8 ;
+USE `ultraviolet` ;
 
 -- -----------------------------------------------------
--- Table `uv_media`
+-- Table `ultraviolet`.`uvtr_media`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_media` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_media` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(50) NULL,
   `path` VARCHAR(255) NOT NULL,
@@ -19,13 +19,13 @@ CREATE TABLE IF NOT EXISTS `uv_media` (
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_person`
+-- Table `ultraviolet`.`uvtr_person`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_person` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_person` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fullName` VARCHAR(50) NULL,
   `pseudo` VARCHAR(25) NULL,
@@ -37,21 +37,21 @@ CREATE TABLE IF NOT EXISTS `uv_person` (
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt` DATETIME NULL,
-  `uv_media_id` INT NOT NULL,
+  `uvtr_media_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uv_person_uv_media1_idx` (`uv_media_id` ASC),
-  CONSTRAINT `fk_uv_person_uv_media1`
-    FOREIGN KEY (`uv_media_id`)
-    REFERENCES `uv_media` (`id`)
+  INDEX `fk_uvtr_person_uvtr_media1_idx` (`uvtr_media_id` ASC),
+  CONSTRAINT `fk_uvtr_person_uvtr_media1`
+    FOREIGN KEY (`uvtr_media_id`)
+    REFERENCES `uvtr_media` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_article`
+-- Table `ultraviolet`.`uvtr_article`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_article` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_article` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(100) NULL,
   `description` VARCHAR(255) NULL,
@@ -67,41 +67,42 @@ CREATE TABLE IF NOT EXISTS `uv_article` (
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt` DATETIME NULL,
-  `uv_media_id` INT NOT NULL,
-  `uv_person_id` INT NOT NULL,
+  `uvtr_media_id` INT NOT NULL,
+  `uvtr_person_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uv_article_uv_media1_idx` (`uv_media_id` ASC),
-  INDEX `fk_uv_article_uv_person1_idx` (`uv_person_id` ASC),
-  CONSTRAINT `fk_uv_article_uv_media1`
-    FOREIGN KEY (`uv_media_id`)
-    REFERENCES `uv_media` (`id`)
+  INDEX `fk_uvtr_article_uvtr_media1_idx` (`uvtr_media_id` ASC),
+  INDEX `fk_uvtr_article_uvtr_person1_idx` (`uvtr_person_id` ASC),
+  CONSTRAINT `fk_uvtr_article_uvtr_media1`
+    FOREIGN KEY (`uvtr_media_id`)
+    REFERENCES `uvtr_media` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_uv_article_uv_person1`
-    FOREIGN KEY (`uv_person_id`)
-    REFERENCES `uv_person` (`id`)
+  CONSTRAINT `fk_uvtr_article_uvtr_person1`
+    FOREIGN KEY (`uvtr_person_id`)
+    REFERENCES `uvtr_person` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_mailing`
+-- Table `ultraviolet`.`uvtr_mailing`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_mailing` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_mailing` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(130) NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_production`
+-- Table `ultraviolet`.`uvtr_production`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_production` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `tmdbId` INT NULL,
   `title` VARCHAR(100) NOT NULL,
   `originalTitle` VARCHAR(100) NULL,
   `releaseDate` DATETIME NULL,
@@ -112,33 +113,33 @@ CREATE TABLE IF NOT EXISTS `uv_production` (
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt` DATETIME NULL,
-  `uv_production_id` INT NOT NULL,
+  `uvtr_production_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uv_production_uv_production1_idx` (`uv_production_id` ASC),
-  CONSTRAINT `fk_uv_production_uv_production1`
-    FOREIGN KEY (`uv_production_id`)
-    REFERENCES `uv_production` (`id`)
+  INDEX `fk_uvtr_production_uvtr_production1_idx` (`uvtr_production_id` ASC),
+  CONSTRAINT `fk_uvtr_production_uvtr_production1`
+    FOREIGN KEY (`uvtr_production_id`)
+    REFERENCES `uvtr_production` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_genre`
+-- Table `ultraviolet`.`uvtr_genre`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_genre` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_genre` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(20) NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_page`
+-- Table `ultraviolet`.`uvtr_page`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_page` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_page` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(100) NULL,
   `slug` VARCHAR(100) NULL,
@@ -151,94 +152,94 @@ CREATE TABLE IF NOT EXISTS `uv_page` (
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt` DATETIME NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_comment`
+-- Table `ultraviolet`.`uvtr_comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_comment` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_comment` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `content` TEXT NULL,
   `visible` TINYINT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `uv_article_id` INT NOT NULL,
-  `uv_person_id` INT NOT NULL,
+  `uvtr_article_id` INT NOT NULL,
+  `uvtr_person_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uv_comment_uv_article1_idx` (`uv_article_id` ASC),
-  INDEX `fk_uv_comment_uv_person1_idx` (`uv_person_id` ASC),
-  CONSTRAINT `fk_uv_comment_uv_article1`
-    FOREIGN KEY (`uv_article_id`)
-    REFERENCES `uv_article` (`id`)
+  INDEX `fk_uvtr_comment_uvtr_article1_idx` (`uvtr_article_id` ASC),
+  INDEX `fk_uvtr_comment_uvtr_person1_idx` (`uvtr_person_id` ASC),
+  CONSTRAINT `fk_uvtr_comment_uvtr_article1`
+    FOREIGN KEY (`uvtr_article_id`)
+    REFERENCES `uvtr_article` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_uv_comment_uv_person1`
-    FOREIGN KEY (`uv_person_id`)
-    REFERENCES `uv_person` (`id`)
+  CONSTRAINT `fk_uvtr_comment_uvtr_person1`
+    FOREIGN KEY (`uvtr_person_id`)
+    REFERENCES `uvtr_person` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_page_article`
+-- Table `ultraviolet`.`uvtr_page_article`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_page_article` (
-  `uv_article_id` INT NOT NULL,
-  `uv_page_id` INT NOT NULL,
-  INDEX `fk_uv_truc_uv_article1_idx` (`uv_article_id` ASC),
-  INDEX `fk_uv_truc_uv_page1_idx` (`uv_page_id` ASC),
-  CONSTRAINT `fk_uv_truc_uv_article1`
-    FOREIGN KEY (`uv_article_id`)
-    REFERENCES `uv_article` (`id`)
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_page_article` (
+  `uvtr_article_id` INT NOT NULL,
+  `uvtr_page_id` INT NOT NULL,
+  INDEX `fk_uvtr_page_article_uvtr_article1_idx` (`uvtr_article_id` ASC),
+  INDEX `fk_uvtr_page_article_uvtr_page1_idx` (`uvtr_page_id` ASC),
+  CONSTRAINT `fk_uvtr_page_article_uvtr_article1`
+    FOREIGN KEY (`uvtr_article_id`)
+    REFERENCES `uvtr_article` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_uv_truc_uv_page1`
-    FOREIGN KEY (`uv_page_id`)
-    REFERENCES `uv_page` (`id`)
+  CONSTRAINT `fk_uvtr_page_article_uvtr_page1`
+    FOREIGN KEY (`uvtr_page_id`)
+    REFERENCES `uvtr_page` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `uv_article_production`
+-- Table `ultraviolet`.`uvtr_article_production`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_article_production` (
-  `uv_article_id` INT NOT NULL,
-  `uv_production_id` INT NOT NULL,
-  INDEX `fk_test_copy1_uv_article1_idx` (`uv_article_id` ASC),
-  INDEX `fk_test_copy1_uv_production1_idx` (`uv_production_id` ASC),
-  CONSTRAINT `fk_test_copy1_uv_article1`
-    FOREIGN KEY (`uv_article_id`)
-    REFERENCES `uv_article` (`id`)
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_article_production` (
+  `uvtr_article_id` INT NOT NULL,
+  `uvtr_production_id` INT NOT NULL,
+  INDEX `fk_uvtr_article_production_uvtr_article1_idx` (`uvtr_article_id` ASC),
+  INDEX `fk_uvtr_article_production_uvtr_production1_idx` (`uvtr_production_id` ASC),
+  CONSTRAINT `fk_uvtr_article_production_uvtr_article1`
+    FOREIGN KEY (`uvtr_article_id`)
+    REFERENCES `uvtr_article` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_test_copy1_uv_production1`
-    FOREIGN KEY (`uv_production_id`)
-    REFERENCES `uv_production` (`id`)
+  CONSTRAINT `fk_uvtr_article_production_uvtr_production1`
+    FOREIGN KEY (`uvtr_production_id`)
+    REFERENCES `uvtr_production` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `uv_production_genre`
+-- Table `ultraviolet`.`uvtr_production_genre`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `uv_production_genre` (
-  `uv_production_id` INT NOT NULL,
-  `uv_genre_id` INT NOT NULL,
-  INDEX `fk_uv_bidule_uv_production1_idx` (`uv_production_id` ASC),
-  INDEX `fk_uv_bidule_uv_genre1_idx` (`uv_genre_id` ASC),
-  CONSTRAINT `fk_uv_bidule_uv_production1`
-    FOREIGN KEY (`uv_production_id`)
-    REFERENCES `uv_production` (`id`)
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_genre` (
+  `uvtr_production_id` INT NOT NULL,
+  `uvtr_genre_id` INT NOT NULL,
+  INDEX `fk_uvtr_production_genre_uvtr_production1_idx` (`uvtr_production_id` ASC),
+  INDEX `fk_uvtr_production_genre_uvtr_genre1_idx` (`uvtr_genre_id` ASC),
+  CONSTRAINT `fk_uvtr_production_genre_uvtr_production1`
+    FOREIGN KEY (`uvtr_production_id`)
+    REFERENCES `uvtr_production` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_uv_bidule_uv_genre1`
-    FOREIGN KEY (`uv_genre_id`)
-    REFERENCES `uv_genre` (`id`)
+  CONSTRAINT `fk_uvtr_production_genre_uvtr_genre1`
+    FOREIGN KEY (`uvtr_genre_id`)
+    REFERENCES `uvtr_genre` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
