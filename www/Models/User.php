@@ -242,18 +242,30 @@ class User extends Database
                     "maxLength"=>2,
                     "error"=>"Votre pays doit faire 2 caractères"
                 ],
+                "birthday"=>[
+                    "type"=>"date",
+                    "placeholder"=>"anniversaire",
+                    "label"=>"Mon anniversaire",
+                    "class"=>"form_input",
+                    "min"=>"1970-11-04",
+                    "max"=>"2005-11-04",
+                    "error"=>"Votre anniversaire doit être entre 04-11-1970 et 04-11-2005"
+                ],
 
             ],
             "selects"=>[
                 "cars"=>[
                     "label"=>"Choisissez une voiture : ",
+                    "class_label"=>"",
+                    "class_select"=>"",
                     "error"=>"Choisir une voiture svp",
                     "options"=>[
                         [
                             "value"=>"",
                             "label"=>"Veuiller selectionner une voiture",
                             "disabled"=>"disabled",
-                            "selected"=>"selected"
+                            "selected"=>"selected",
+                            "class"=>"",
                         ],
                         [
                             "value"=>"volvo1",
@@ -300,12 +312,17 @@ class User extends Database
             ],
             "radios"=>[
                 "gender"=> [
+                    "label" => "Votre genre ",
+                    "class_fieldset" => "",
+                    "class_legend" => "",
                     "error" => "Choisissez un genre siouplè !",
                     "options"=>[
                         [
                             "id"=>"male",
                             "value"=>"male",
                             "label"=>"Male",
+                            "class_label" => "",
+                            "class_input" => ""
                         ],
                         [
                             "id"=>"female",
@@ -316,7 +333,6 @@ class User extends Database
                             "id"=>"other",
                             "value"=>"other",
                             "label"=>"Other",
-                            "checked"=>"checked",
                         ],
                         [
                             "id"=>"cactus",
@@ -329,27 +345,42 @@ class User extends Database
             "checkboxes"=>[
                 "transports"=> [
                     "error" => "Choississez un transport siouplè !",
+                    "label" => "Quel transport avez vous ? Choisissez en un ",
+                    "class_fieldset" => "",
+                    "class_legend" => "",
+                    "id" => "",
                     "options"=>[
                         [
+
                             "id"=>"vehicle1",
-                            "name"=>"vehicle1",
                             "value"=>"Bike",
                             "label"=>"I have a bike",
-                            "required"=>true
+                            "class_label" => "",
+                            "class_input" => ""
                         ],
                         [
                             "id"=>"vehicle2",
-                            "name"=>"vehicle2",
                             "value"=>"Car",
                             "label"=>"I have a car",
-                            "checked" => "checked"
                         ],
                         [
                             "id"=>"vehicle3",
-                            "name"=>"vehicle3",
                             "value"=>"Boat",
                             "label"=>"I have a boat",
                         ]
+                    ]
+                ],
+                "rules"=> [
+                    "error" => "Vous devez acceptez le reglement",
+                    "label" => "Regles",
+                    "options"=>[
+                        [
+
+                            "id"=>"rules",
+                            "value"=>"rule",
+                            "label"=>"Acceptez le reglement",
+                            "required" => true
+                        ],
                     ]
                 ]
             ]
@@ -361,65 +392,29 @@ class User extends Database
 
 
 
-/*"inputs"=>[
-    "firstname" => [
-        "type"=>"text",
-        "placeholder"=>"Exemple : Yves",
-        "label"=>"Votre Prénom",
-        "required"=>true,
-        "class"=>"form_input",
-        "minLength"=>2,
-        "maxLength"=>50,
-        "error"=>"Votre prénom doit faire entre 2 et 50 caractères"
-    ],
-    "lastname"=>[
-        "type"=>"text",
-        "placeholder"=>"Exemple : Skrzypczyk",
-        "label"=>"Votre Nom",
-        "required"=>true,
-        "class"=>"form_input",
-        "minLength"=>2,
-        "maxLength"=>100,
-        "error"=>"Votre nom doit faire entre 2 et 100 caractères"
-    ],
-    "email"=>[
-        "type"=>"email",
-        "placeholder"=>"Exemple : nom@gmail.com",
-        "label"=>"Votre Email",
-        "required"=>true,
-        "class"=>"form_input",
-        "minLength"=>8,
-        "maxLength"=>320,
-        "error"=>"Votre email doit faire entre 8 et 320 caractères"
-    ],
-    "pwd"=>[
-        "type"=>"password",
-        "label"=>"Votre mot de passe",
-        "required"=>true,
-        "class"=>"form_input",
-        "minLength"=>8,
-        "error"=>"Votre mot de passe doit faire au minimum 8 caractères"
-    ],
-    "pwdConfirm"=> [
-        "type"=>"password",
-        "label"=>"Confirmation",
-        "required"=>true,
-        "class"=>"form_input",
-        "confirm"=>"pwd",
-        "error"=>"Votre mot de passe de confirmation ne correspond pas"
-    ],
-    "country"=>[
-        "type"=>"text",
-        "placeholder"=>"Exemple : fr",
-        "label"=>"Votre Pays",
-        "required"=>true,
-        "class"=>"form_input",
-        "minLength"=>2,
-        "maxLength"=>2,
-        "error"=>"Votre pays doit faire 2 caractères"
-    ],
-
-],
-*/
-
-
+/*
+ * CHECKBOXES
+ *
+ * Alone
+     *   <div>
+            <input type="checkbox" id="subscribeNews" name="subscribe" value="newsletter">
+            <label for="subscribeNews">Souhaitez-vous vous abonner à la newsletter ?</label>
+         </div>
+        <div>
+            <button type="submit">S'abonner</button>
+        </div>
+ *
+ * Multiples
+ *
+     * <fieldset>
+            <legend>Veuillez sélectionner vos intérêts :</legend>
+            <div>
+                <input type="checkbox" id="coding" name="interest" value="coding">
+                <label for="coding">Développement</label>
+            </div>
+            <div>
+                <input type="checkbox" id="music" name="interest" value="music">
+                <label for="music">Musique</label>
+            </div>
+      </fieldset>
+ * */

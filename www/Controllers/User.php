@@ -16,14 +16,16 @@ class User
 
 	public function registerAction() {
 		$user = new UserModel();
-		$view = new View("register"); 
-
+		$view = new View("register");
 		$form = $user->formBuilderRegister();
-		if(!empty($_POST)) {
-			
-			$errors = FormValidator::check($form, $_POST);
 
-			if(empty($errors)){
+		if(!empty($_POST)) {
+
+            $errors = FormValidator::check($form, $_POST);
+           /* echo "<pre>";
+            print_r($errors);
+            echo "</pre>";*/
+            if(empty($errors)){
 				$user->setFirstname($_POST["firstname"]);
 				$user->setLastname($_POST["lastname"]);
 				$user->setEmail($_POST["email"]);
@@ -32,6 +34,7 @@ class User
 
 				$user->save();
 			}else{
+
                 $view->assign("errors", $errors);
 			}
 		}

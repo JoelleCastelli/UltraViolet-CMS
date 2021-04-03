@@ -1,4 +1,12 @@
 <h2>S'inscrire</h2>
+<br>
+<h2>POST</h2>
+<?php
+echo "<pre>";
+print_r($post);
+echo "</pre>";
+?>
+<br>
 
 <?php if(isset($errors)):?>
 	<?php foreach ($errors as $error):?>

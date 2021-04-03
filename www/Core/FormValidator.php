@@ -6,12 +6,25 @@ class FormValidator
 
 	public static function check($config, $data)
 	{
-	    print_r($data);
+
 
 		$errors = [];
 		$pattern = '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,20}$/';
 
-		if (count($data) != count($config["inputs"])) {
+        $checkboxes = count($config["checkboxes"])??0;
+        $radios = count($config["radios"])??0;
+        $selects = count($config["selects"])??0;
+        $total_inputs =  count($config["inputs"]) + $checkboxes + $radios + $selects;
+
+        echo "<br>";
+        echo "<pre>";
+        print_r(count($_REQUEST));
+        echo "</pre>";
+        echo 'count($data) : ' . count($data) . ' total_inputs : ' . $total_inputs;
+        echo "</br>";
+
+
+		if (count($data) != $total_inputs) {
 			$errors[] = "Tentative de HACK - Faille XSS";
 
 		} else {
@@ -22,19 +35,22 @@ class FormValidator
 					&& is_numeric($configInputs["minLength"])
 					&& strlen($data[$name]) < $configInputs["minLength"]
 					&& !empty($configInputs["required"])
-					) {
+					)
 
 					$errors[] = $configInputs["error"];
 
 				}
 
-				$emailvalidator = self::emailValidator($data["email"]);
+                if($name == "email") {
 
-				if($emailvalidator == false && $name == "email"){
-				
-					$configInputs["error"] = "Votre email n'est pas valide";
-					$errors[] = $configInputs["error"];
-				}
+                    $emailvalidator = self::emailValidator($data["email"]);
+
+                    if($emailvalidator == false){
+
+                        $configInputs["error"] = "Votre email n'est pas valide";
+                        $errors[] = $configInputs["error"];
+                    }
+                }
 
 				if(preg_match($pattern, $data["pwd"] && $name == "pwd")){
 					$errors[] = $configInputs["error"];
@@ -55,7 +71,7 @@ class FormValidator
                 }
 
                 // check date min
-                if (!empty($configInputs["min"]) && self::checkValidDate($configInputs["min"]) && self::checkValidDate($data[$name]) && ($data[$name]) < $configInputs["min"]) {
+                if ( !empty($configInputs["min"]) && self::checkValidDate($configInputs["min"]) && self::checkValidDate($data[$name]) && ($data[$name]) < $configInputs["min"]) {
                     $errors[] = $configInputs["error"];
                 }
 
@@ -102,7 +118,6 @@ class FormValidator
                 }
             }
 
-		}
 		return $errors; //[] vide si ok
 	}
 
@@ -114,5 +129,11 @@ class FormValidator
 
 		return false;
 	}
+
+	public function checkValidDate()
+    {
+        
+        return true;
+    }
 
 }
