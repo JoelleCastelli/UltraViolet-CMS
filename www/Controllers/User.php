@@ -16,7 +16,6 @@ class User
 
 	public function registerAction() {
 		$user = new UserModel();
-		$view = new View("register");
 		$form = $user->formBuilderRegister();
 
 		if(!empty($_POST)) {
@@ -34,11 +33,11 @@ class User
 
 				$user->save();
 			}else{
-
+                $view = new View("register");
                 $view->assign("errors", $errors);
 			}
 		}
-
+        $view = new View("register");
         $view->assign("form", $form);
         $view->assign("post", $_POST);
         $view->assign("formLogin", $user->formBuilderLogin());

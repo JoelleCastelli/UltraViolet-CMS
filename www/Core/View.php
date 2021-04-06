@@ -35,6 +35,7 @@ class View
 	}
 
 	public function __destruct(){
+
 		extract($this->data);
 		include $this->template;
 	}

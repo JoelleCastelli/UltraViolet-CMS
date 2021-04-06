@@ -199,7 +199,9 @@ class User extends Database
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>50,
-                    "error"=>"Votre prénom doit faire entre 2 et 50 caractères"
+                    "error"=>"Votre prénom doit faire entre 2 et 50 caractères",
+                    "required" => true
+
                 ],
                 "lastname"=>[
                     "type"=>"text",
@@ -208,7 +210,9 @@ class User extends Database
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>100,
-                    "error"=>"Votre nom doit faire entre 2 et 100 caractères"
+                    "error"=>"Votre nom doit faire entre 2 et 100 caractères",
+                    "required" => true
+
                 ],
                 "email"=>[
                     "type"=>"email",
@@ -217,21 +221,27 @@ class User extends Database
                     "class"=>"form_input",
                     "minLength"=>8,
                     "maxLength"=>320,
-                    "error"=>"Votre email doit faire entre 8 et 320 caractères"
+                    "error"=>"Votre email doit faire entre 8 et 320 caractères",
+                    "required" => true
+
                 ],
                 "pwd"=>[
                     "type"=>"password",
                     "label"=>"Votre mot de passe",
                     "class"=>"form_input",
                     "minLength"=>8,
-                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères"
+                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères",
+                    "required" => true
+
                 ],
                 "pwdConfirm"=> [
                     "type"=>"password",
                     "label"=>"Confirmation",
                     "class"=>"form_input",
                     "confirm"=>"pwd",
-                    "error"=>"Votre mot de passe de confirmation ne correspond pas"
+                    "error"=>"Votre mot de passe de confirmation ne correspond pas",
+                    "required" => true
+
                 ],
                 "country"=>[
                     "type"=>"text",
@@ -240,7 +250,9 @@ class User extends Database
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>2,
-                    "error"=>"Votre pays doit faire 2 caractères"
+                    "error"=>"Votre pays doit faire 2 caractères",
+                    "required" => true
+
                 ],
                 "birthday"=>[
                     "type"=>"date",
@@ -249,7 +261,9 @@ class User extends Database
                     "class"=>"form_input",
                     "min"=>"1970-11-04",
                     "max"=>"2005-11-04",
-                    "error"=>"Votre anniversaire doit être entre 04-11-1970 et 04-11-2005"
+                    "error"=>"Votre anniversaire doit être entre 04-11-1970 et 04-11-2005",
+                    "required" => true
+
                 ],
 
             ],
