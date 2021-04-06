@@ -38,3 +38,8 @@
 /ma-collection:
   controller: Collection
   action: displayCollection
+
+# PRODUCTIONS
+/productions:
+  controller: Production
+  action: displayProductionList
