@@ -61,6 +61,8 @@ Collection {
 		die;
 		
         $view = new View("displayCollection", "back");
+        $view->assign("title", "Ma collection");
+
     }
 
 }

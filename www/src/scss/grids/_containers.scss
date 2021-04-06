@@ -35,3 +35,8 @@
     flex: none;
     justify-content: flex-start;
 }
+
+.main-content {
+    display: flex;
+    flex-flow: column;
+}

@@ -72,6 +72,8 @@ class User
 		
 		//Affiche la vue users intégrée dans le template du back
 		$view = new View("users", "back"); 
+		$view->assign("title", "Afficher les utilisateurs");
+		$view->assign("user", "Kamal Hennou");
 		
 	}
 	

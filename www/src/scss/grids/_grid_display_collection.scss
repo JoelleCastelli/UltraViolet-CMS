@@ -3,7 +3,7 @@
 .grid-display-collection {
     display: grid;
     height: 100vh;
-    grid-template-rows: 5rem max-content max-content;
+    grid-template-rows: 15rem max-content;
     grid-gap: 30px;
 
     // section:nth-of-type(2) {
@@ -28,6 +28,10 @@
         display: flex;
         justify-content: flex-end;
         margin-top: 30px;
+    }
+
+    @media screen and (max-width: 900px) {
+        grid-template-rows: 30rem max-content;
     }
 }
 

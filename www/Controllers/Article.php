@@ -8,6 +8,7 @@ class Article {
     
     public function modifyArticleAction() {
         $view = new View("modifyArticle", "back");
+        $view->assign("title", "Modifier un article");
     }
 
 }
