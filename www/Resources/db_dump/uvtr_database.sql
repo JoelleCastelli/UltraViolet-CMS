@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production` (
   `releaseDate` VARCHAR(10) NULL DEFAULT NULL,
   `type` ENUM('movie', 'series', 'season', 'episode') NOT NULL,
   `overview` TEXT NULL DEFAULT NULL,
-  `runtime` TINYINT NULL DEFAULT NULL,
+  `runtime` INT NULL DEFAULT NULL,
   `number` TINYINT NULL DEFAULT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL,
