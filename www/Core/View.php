@@ -18,7 +18,7 @@ class View
 		if(file_exists("Views/templates/".$template.".tpl.php")){
 			$this->template = "Views/templates/".$template.".tpl.php";
 		} else {
-			die("Le template n'existe pas");
+			die("Le template Views/templates/".$template.".tpl.php n'existe pas");
 		}
 	}
 
@@ -26,7 +26,7 @@ class View
 		if(file_exists("Views/$template/$view.view.php")) {
 			$this->view = "Views/$template/$view.view.php";
 		} else {
-			die("La vue n'existe pas");
+			die("La vue Views/$template/$view.view.php n'existe pas");
 		}
 	}
 
