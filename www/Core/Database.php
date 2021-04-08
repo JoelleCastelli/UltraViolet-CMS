@@ -1,8 +1,6 @@
 <?php
 namespace App\Core;
 
-use App\Models\User as UserModel;
-
 class Database{
 
 	private $pdo;

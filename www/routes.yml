@@ -38,3 +38,7 @@
 /ma-collection:
   controller: Collection
   action: displayCollection
+
+/ajout-d-une-page:
+  controller: Page
+  action: createPage
