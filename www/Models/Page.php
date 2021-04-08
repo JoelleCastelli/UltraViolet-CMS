@@ -260,9 +260,8 @@ class Page extends Database
                 ],
 				"titleSEO"=>[
                     "type"=>"text",
-                    "placeholder"=>"3",
+                    "placeholder"=>"Titre pour le référencement",
                     "label"=>"titleSEO",
-                    "required"=>true,
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>50,
@@ -271,8 +270,7 @@ class Page extends Database
 				"descriptionSEO"=>[
                     "type"=>"text",
                     "placeholder"=>"3",
-                    "label"=>"descriptionSEO",
-                    "required"=>true,
+                    "label"=>"META description",
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>255,
@@ -281,9 +279,9 @@ class Page extends Database
 				"draft"=>[
                     "type"=>"checkbox",
                     "label"=>"Brouillon",
-                    "required"=>true,
                     "class"=>"form_input",
-                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères"
+                    "value"=>"true",
+                    "name"=>"check"
                 ]
 			]
 		];

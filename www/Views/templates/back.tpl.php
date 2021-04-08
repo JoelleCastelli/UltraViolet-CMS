@@ -9,8 +9,25 @@
 </head>
 <body>
 
-	<!-- afficher la vue -->
-	<?php include $this->view ?>
+	
+
+    <div class="container">
+		
+        <?php include $_SERVER['DOCUMENT_ROOT'].'/Views/components/sidebar.php'; ?>
+
+        <main class="main">
+            
+            <?php include $_SERVER['DOCUMENT_ROOT'].'/Views/components/header.php'; ?>
+
+            <div class="main-content">
+
+                <?php include $this->view ?>
+
+            </div>
+
+        </main>
+
+    </div>
 
     <script type="text/javascript" src="../../dist/main.js"></script>
     <script src="https://cdn.tiny.cloud/1/itne6ytngfhi89x71prh233w7ahp2mgfmc8vwnjxhvue2m6h/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>

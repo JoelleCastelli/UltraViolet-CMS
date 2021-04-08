@@ -1,4 +1,3 @@
-
 # IDE related
 .idea
 .vscode
@@ -18,3 +17,4 @@ www/dist/main.js
 
 # env files
 www/.env*
+!www/.env.example

@@ -16,36 +16,40 @@ class User
 
 	public function registerAction() {
 		$user = new UserModel();
-		$view = new View("register"); 
-
 		$form = $user->formBuilderRegister();
 
 		if(!empty($_POST)) {
-			
-			$errors = FormValidator::check($form, $_POST);
 
-			if(empty($errors)){
+            $errors = FormValidator::check($form, $_POST);
+           /* echo "<pre>";
+            print_r($errors);
+            echo "</pre>";*/
+            if(empty($errors)){
 				$user->setFirstname($_POST["firstname"]);
 				$user->setLastname($_POST["lastname"]);
 				$user->setEmail($_POST["email"]);
 				$user->setPwd($_POST["pwd"]);
-				$user->setCountry($_POST["country"]);
+                $user->setCountry($_POST["country"]);
 
 				$user->save();
 			}else{
-				$view->assign("errors", $errors);
+                $view = new View("register");
+                $view->assign("errors", $errors);
 			}
 		}
-
-		$view->assign("form", $form);
-		$view->assign("formLogin", $user->formBuilderLogin());
+        $view = new View("register");
+        $view->assign("form", $form);
+        $view->assign("post", $_POST);
+        $view->assign("formLogin", $user->formBuilderLogin());
 	}
 
     public function updateAction()
     {
         $user = new UserModel();
-        $user->setId(1);
-        $user->setFirstname("qwerty");
+        $user->setId(3);
+        $user->setFirstname("NON");
+        $user->setCountry("pr");
+        $user->setRole("6");
         $user->save();
     }
 
@@ -65,13 +69,13 @@ class User
 		$view = new View("user"); 
 	}
 
-
-
 	//Method : Action
 	public function showAllAction(){
 		
 		//Affiche la vue users intégrée dans le template du back
 		$view = new View("users", "back"); 
+		$view->assign("title", "Afficher les utilisateurs");
+		$view->assign("user", "Kamal Hennou");
 		
 	}
 	

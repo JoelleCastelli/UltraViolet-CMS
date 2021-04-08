@@ -1,22 +1,24 @@
 <?php
 namespace App\Core;
 
-class Database{
+use App\Models\Production;
+use App\Models\User as UserModel;
 
-	private $pdo;
+class Database {
+
+	protected $pdo;
 	private $table;
 
-	public function __construct(){
-		try{
-			$this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
-		}catch(Exception $e){
-			die("Erreur SQL : ".$e->getMessage());
-		}
+	public function __construct() {
+        try {
+            $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
+        } catch(Exception $e) {
+            die("Erreur SQL : ".$e->getMessage());
+        }
 
-	 	//  jclm_   App\Models\User -> jclm_User
-	 	$classExploded = explode("\\", get_called_class());
-		$this->table = strtolower(DBPREFIXE.end($classExploded)); //jclm_User
-	}
+        $classExploded = explode("\\", get_called_class());
+        $this->table = strtolower(DBPREFIXE.end($classExploded));
+    }
 
 
 	public function save(){
@@ -57,9 +59,14 @@ class Database{
 
         $object = $query->fetch();
 
-        foreach($column as $key => $value)
-        {
+        foreach($column as $key => $value) {
             $this->$key = $object->$key; // assign each value to the current object
         }
+    }
+
+    public function findAll(){
+        $query = $this->pdo->query("SELECT * FROM " . $this->table);
+        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+        return $query->fetchAll();
     }
 }

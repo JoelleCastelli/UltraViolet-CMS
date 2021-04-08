@@ -9,13 +9,9 @@ use App\Models\Page as PageModel;
 class Page
 {
 
-	public function defaultAction() {
-		echo "Page default";
-	}
-
 	public function createPageAction() {
 		$page = new PageModel();
-		$view = new View("front/createPage");
+		$view = new View("page/createPage");
 
 		$form = $page->formBuilderRegister();
 
@@ -27,8 +23,9 @@ class Page
 				$page->setTitle($_POST["title"]);
 				$page->setSlug($_POST["slug"]);
 				$page->setPosition($_POST["position"]);
+				$page->setTitleSeo($_POST["titleSEO"]);
+				$page->setDescriptionSeo($_POST["descriptionSEO"]);
 				$page->setDraft($_POST["draft"]);
-				$page->setPublictionDate($_POST["publictionDate"]);
 
 				$page->save();
 			}else{

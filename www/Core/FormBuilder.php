@@ -11,10 +11,10 @@ class FormBuilder
 	public static function render($config, $show=true){
 
 		$html = "<form 
-				method='".($config["config"]["method"]??"GET")."' 
-				action='".($config["config"]["action"]??"")."'
-				class='".($config["config"]["class"]??"")."'
-				id='".($config["config"]["id"]??"")."'
+                    method='".($config["config"]["method"]??"GET")."' 
+                    action='".($config["config"]["action"]??"")."'
+                    class='".($config["config"]["class"]??"")."'
+                    id='".($config["config"]["id"]??"")."'
 				>";
 
 		foreach ($config["inputs"] as $name => $configInput) {
@@ -24,7 +24,7 @@ class FormBuilder
             // Using just one ternaire for easier code review
             $value = "";
             if (!empty($_POST)) {
-                $value = ($configInput["type"] === "password") ? "" : $_POST[$name];
+                $value = ($configInput["type"] === "password") ? "" : htmlspecialchars($_POST[$name]);
             }
 
 			$html .="<input 
@@ -33,6 +33,8 @@ class FormBuilder
 						value='".$value."'
 						placeholder='".($configInput["placeholder"]??"")."'
 						class='".($configInput["class"]??"")."'
+						min='".($configInput["min"]??"")."'
+						max='".($configInput["max"]??"")."'
 						id='".($configInput["id"]??$name)."'
 						".(!empty($configInput["required"])?"required='required'":"")."
 						 ><br>";

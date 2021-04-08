@@ -42,3 +42,7 @@
 /ajout-d-une-page:
   controller: Page
   action: createPage
+
+/productions:
+  controller: Production
+  action: displayProductionList
