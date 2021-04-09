@@ -38,11 +38,15 @@
 /ma-collection:
   controller: Collection
   action: displayCollection
+# PAGES
+/pages:
+  controller: Page
+  action: index
 
 /ajout-d-une-page:
   controller: Page
   action: createPage
-
+# PRODUCTIONS
 /productions:
   controller: Production
   action: displayProductionList

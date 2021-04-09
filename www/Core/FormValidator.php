@@ -9,9 +9,9 @@ class FormValidator
 
 		$errors = [];
 
-        $checkboxes = count($config["checkboxes"])??0;
-        $radios = count($config["radios"])??0;
-        $selects = count($config["selects"])??0;
+        $checkboxes = isset($config["checkboxes"]) ? count($config["checkboxes"]) : 0;
+        $radios = isset($config["radios"]) ? count($config["radios"]) : 0;
+        $selects = isset($config["selects"]) ? count($config["selects"]) : 0;
         $total_inputs =  count($config["inputs"]) + $checkboxes + $radios + $selects;
 
         // check if numbers of inputs is correct

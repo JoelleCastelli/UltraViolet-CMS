@@ -11,8 +11,7 @@ class Page extends Database
 	protected $title;
 	protected $slug;
 	protected $position;
-	protected $draft;
-	protected $published;
+	protected $state;
 	protected $titleSeo;
 	protected $descriptionSeo;
 	protected $publictionDate;
@@ -91,33 +90,17 @@ class Page extends Database
     /**
      * @return mixed
      */
-    public function getDraft()
+    public function getState()
     {
-        return $this->draft;
+        return $this->state;
     }
 
     /**
-     * @param mixed $draft
+     * @param mixed $state
      */
-    public function setDraft($draft): void
+    public function setState($state): void
     {
-        $this->draft = $draft;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPublished()
-    {
-        return $this->published;
-    }
-
-    /**
-     * @param mixed $published
-     */
-    public function setPublished($published): void
-    {
-        $this->published = $published;
+        $this->state = $state;
     }
 
     /**
@@ -216,6 +199,10 @@ class Page extends Database
         $this->deletedAt = $deletedAt;
     }
 
+    public function findAll() {
+        return parent::findAll();
+    }
+
 	public function formBuilderRegister() 
 	{
 
@@ -230,33 +217,33 @@ class Page extends Database
 			"inputs"=>[
 				"title" => [
 				    "type"=>"text",
-                    "placeholder"=>"Page concernant les animées sous-coté",
+                    "placeholder"=>"Animées",
                     "label"=>"Votre Titre",
-                    "required"=>true,
                     "class"=>"form_input",
                     "minLength"=>2,
-                    "maxLength"=>50,
-                    "error"=>"Votre titre doit faire entre 2 et 50 caractères"
+                    "maxLength"=>25,
+                    "error"=>"Votre titre doit faire entre 2 et 25 caractères",
+                    "required" => true
                 ],
 				"slug"=>[
                     "type"=>"text",
-                    "placeholder"=>"/animées-sous-coté",
-                    "label"=>"Votre lien",
-                    "required"=>true,
+                    "placeholder"=>"Animées",
+                    "label"=>"Votre slug",
                     "class"=>"form_input",
                     "minLength"=>2,
-                    "maxLength"=>100,
-                    "error"=>"Votre lien doit faire entre 2 et 50 caractères"
+                    "maxLength"=>15,
+                    "error"=>"Votre slug doit faire entre 2 et 15 caractères",
+                    "required" => true
                 ],
 				"position"=>[
                     "type"=>"text",
                     "placeholder"=>"3",
                     "label"=>"Position",
-                    "required"=>true,
                     "class"=>"form_input",
                     "minLength"=>1,
                     "maxLength"=>1,
-                    "error"=>"Votre position doit étre entre 1 et 4"
+                    "error"=>"Votre position doit étre entre 1 et 4",
+                    "required"=>true,
                 ],
 				"titleSEO"=>[
                     "type"=>"text",
@@ -265,25 +252,44 @@ class Page extends Database
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>50,
-                    "error"=>"Votre position doit étre entre 1 et 4"
+                    "error"=>"Votre titleSEO doit étre entre 2 et 50"
                 ],
 				"descriptionSEO"=>[
                     "type"=>"text",
-                    "placeholder"=>"3",
+                    "placeholder"=>"META description",
                     "label"=>"META description",
                     "class"=>"form_input",
                     "minLength"=>2,
                     "maxLength"=>255,
-                    "error"=>"Votre position doit étre entre 1 et 4"
+                    "error"=>"Votre descriptionSEO doit étre entre 2 et 255"
                 ],
-				"draft"=>[
-                    "type"=>"checkbox",
-                    "label"=>"Brouillon",
-                    "class"=>"form_input",
-                    "value"=>"true",
-                    "name"=>"check"
+			],
+            "selects"=>[
+                "state"=>[
+                    "label"=>"Choisissez un état : ",
+                    "class_label"=>"",
+                    "class_select"=>"",
+                    "error"=>"Choisir une état svp",
+                    "options"=>[
+                        [
+                            "value"=>"",
+                            "label"=>"Veuiller selectionner un état",
+                            "disabled"=>"disabled",
+                            "selected"=>"selected",
+                            "class"=>"",
+                        ],
+                        [
+                            "value"=>"draft",
+                            "label"=>"draft",
+
+                        ],
+                        [
+                            "value"=>"published",
+                            "label"=>"published",
+                        ],
+                    ]
                 ]
-			]
+            ]
 		];
 	}
 }

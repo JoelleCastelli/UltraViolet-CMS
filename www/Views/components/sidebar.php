@@ -20,7 +20,7 @@
                 <div>Overview</div>
             </li>
         </a>
-        <a href="#">
+        <a href="pages">
             <li>
                 <span class="icon">
                     <i class="fas fa-pager"></i>
