@@ -15,16 +15,19 @@ class User
 	}
 
 	public function registerAction() {
+
+	    $page = Page::getAll();
+
 		$user = new UserModel();
 		$form = $user->formBuilderRegister();
+        $view = new View("register");
 
 		if(!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
-           /* echo "<pre>";
-            print_r($errors);
-            echo "</pre>";*/
+
             if(empty($errors)){
+
 				$user->setFirstname($_POST["firstname"]);
 				$user->setLastname($_POST["lastname"]);
 				$user->setEmail($_POST["email"]);
@@ -32,12 +35,12 @@ class User
                 $user->setCountry($_POST["country"]);
 
 				$user->save();
+
 			}else{
-                $view = new View("register");
+
                 $view->assign("errors", $errors);
 			}
 		}
-        $view = new View("register");
         $view->assign("form", $form);
         $view->assign("post", $_POST);
         $view->assign("formLogin", $user->formBuilderLogin());

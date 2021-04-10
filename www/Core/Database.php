@@ -20,7 +20,6 @@ class Database {
         $this->table = strtolower(DBPREFIXE.end($classExploded));
     }
 
-
 	public function save(){
 
 		//INSERT OU UPDATE
@@ -33,7 +32,7 @@ class Database {
                 (".implode(',', array_keys($column)).") 
                 VALUES 
                 (:".implode(',:', array_keys($column)).") "); //1
-			
+
 		} else {
 			//UPDATE
 

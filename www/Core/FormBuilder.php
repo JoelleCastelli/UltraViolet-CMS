@@ -24,7 +24,7 @@ class FormBuilder
             // Using just one ternaire for easier code review
             $value = "";
             if (!empty($_POST)) {
-                $value = ($configInput["type"] === "password") ? "" : htmlspecialchars($_POST[$name]);
+                $value = ($configInput["type"] === "password") ? "" : htmlspecialchars($_POST[$name], ENT_QUOTES);
             }
 
 			$html .="<input 
@@ -45,7 +45,7 @@ class FormBuilder
             foreach ($config["selects"] as $name => $configSelect)
             {
                 $html .="<label class='" . ($configSelect['class_label']??"") . "' for='".($name)."'>".($configSelect["label"]??"")." </label>";
-                $html .= "<select class='" . ($configSelect['class_select']??"")  . "' name='".$name."' id='".$name."'>";
+                $html .= "<select class='" . ($configSelect['class_select']??"") . "' name='".$name."' id='".$name."'>";
 
                 foreach($configSelect["options"] as $option)
                 {

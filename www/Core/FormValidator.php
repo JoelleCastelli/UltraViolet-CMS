@@ -9,9 +9,9 @@ class FormValidator
 
 		$errors = [];
 
-        $checkboxes = count($config["checkboxes"])??0;
-        $radios = count($config["radios"])??0;
-        $selects = count($config["selects"])??0;
+        $checkboxes = isset($config["checkboxes"]) ? count($config["checkboxes"]) : 0;
+        $radios = isset($config["radios"]) ? count($config["radios"]) : 0;
+        $selects = isset($config["selects"]) ? count($config["selects"]) : 0;
         $total_inputs =  count($config["inputs"]) + $checkboxes + $radios + $selects;
 
         // check if numbers of inputs is correct
@@ -25,7 +25,7 @@ class FormValidator
 
 			foreach ($config["inputs"] as $name => $configInputs) {
 
-                $data[$name] = htmlspecialchars($data[$name]);
+                $data[$name] = htmlspecialchars($data[$name], ENT_QUOTES);
 
 			    // if form has not been changed
 			    if(!isset($data[$name]))
@@ -38,90 +38,29 @@ class FormValidator
 			    if( !empty($configInputs["required"]) || !empty($data[$name]))
                 {
 
+                    echo "BFEORE " . $name . "<br>";
                     if($configInputs["type"] == "text")
-                    {
-
-                        // check string min length
-                        if (!empty($configInputs["minLength"]) && strlen($data[$name]) < $configInputs["minLength"]) {
-                            $errors[] = $configInputs["error"];
-                            continue;
-                        }
-
-                        // check string max length
-                        if (!empty($configInputs["maxLength"]) && strlen($data[$name]) > $configInputs["maxLength"]) {
-                            $errors[] = $configInputs["error"];
-                            continue;
-                        }
-
-                        // check string max length
-                        if (!empty($configInputs["regex"]) && !preg_match($configInputs["regex"], $data[$name])) {
-                            $errors[] = $configInputs["error"];
-                            continue;
-                        }
-
-                    }
+                        self::textValidator($data[$name], $configInputs, $errors);
 
                     if($configInputs["type"] == "number")
-                    {
-                        // check number min length
-                        if (!empty($configInputs["min"]) && is_numeric($configInputs["min"]) && $data[$name] < $configInputs["min"] ) {
-                            $errors[] = $configInputs["error"];
-                            continue;
-                        }
-
-                        // check number max length
-                        if (!empty($configInputs["max"]) && is_numeric($configInputs["max"]) && $data[$name] > $configInputs["max"]) {
-                            $errors[] = $configInputs["error"];
-                            continue;
-
-                        }
-                    }
+                        self::numberValidator($data[$name], $configInputs, $errors);
 
                     //check password match
-                    if ($name == "pwd" && !preg_match($configInputs["regex"], $data["pwd"])  ) {
-                        $errors[] = $configInputs["error"];
-                        continue;
-
-                    }
+                    if ($name == "pwd")
+                        self::passwordValidator($data[$name], $configInputs, $errors);
 
                     //check password confirm
-                    if ($name == "pwdConfirm" && ($data["pwdConfirm"] !== $data[$configInputs["confirm"]])) {
-                        $errors[] = $configInputs["error"];
-                        continue;
-
-                    }
+                    if ($name == "pwdConfirm")
+                        self::passwordConfirmationValidator($data[$name], $data[$configInputs["confirm"]], $configInputs, $errors);
 
                     // check email
-                    if ($configInputs["type"] == "email") {
-
-                        $emailvalidator = self::emailValidator($data["email"]);
-
-                        if ($emailvalidator == false) {
-
-                            $configInputs["error"] = "Votre email n'est pas valide";
-                            $errors[] = $configInputs["error"];
-                            continue;
-
-                        }
-                    }
+                    if ($configInputs["type"] == "email")
+                        self::emailValidator($data["email"], $configInputs, $errors);
 
                     // check date min
                     if($configInputs["type"] == "date")
-                    {
-                        if (!empty($configInputs["min"]) && self::dateValidator($data[$name], "Y-m-d") && new \DateTime($data[$name]) >= new \DateTime($configInputs["min"])) {
-                            $errors[] = $configInputs["error"];
-                            continue;
-
-                        }
-
-                        // check date max
-                        if (!empty($configInputs["max"]) && self::dateValidator($data[$name], "Y-m-d") &&  new \DateTime($data[$name]) <= new \DateTime($configInputs["max"])) {
-                            $errors[] = $configInputs["error"];
-                            continue;
-
-                        }
-
-                    }
+                        self::dateValidator($data[$name], "Y-m-d", $configInputs, $errors);
+                    echo "AFTER" . "<br>";
 
                 }
 
@@ -130,7 +69,7 @@ class FormValidator
             if (isset($config["selects"] )) {
                 foreach ($config["selects"] as $name => $configSelects) {
 
-                    if(!empty($configSelects["required"]) && (isset($data[$name]) || empty($data[$name])))
+                    if(!empty($configSelects["required"]) && (!isset($data[$name]) || empty($data[$name])))
                     {
                         $errors[] = $configSelects["error"];
                     }
@@ -140,7 +79,7 @@ class FormValidator
             if (isset($config["radios"] )) {
                 foreach ($config["radios"] as $name => $configRadios) {
 
-                    if(!empty($configRadios["required"]) && (isset($data[$name]) || empty($data[$name]))
+                    if(!empty($configRadios["required"]) && (!isset($data[$name]) || empty($data[$name]))
                     )
                     {
                         $errors[] = $configRadios["error"];
@@ -151,7 +90,7 @@ class FormValidator
             if (isset($config["checkboxes"] )) {
                 foreach ($config["checkboxes"] as $name => $configCheckboxes) {
 
-                    if(!empty($configCheckboxes["required"]) && (isset($data[$name]) || empty($data[$name])))
+                    if(!empty($configCheckboxes["required"]) && (!isset($data[$name]) || empty($data[$name])))
                     {
                         $errors[] = $configCheckboxes["error"];
                     }
@@ -164,19 +103,83 @@ class FormValidator
 		return $errors; //[] empty if it's all okay
 	}
 
-	public function emailValidator($email)
-	{
-		if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-			return true;
-		}
-
-		return false;
-	}
-
-	public function dateValidator($date, $format)
+    public function textValidator($text, $configInputs, &$errors)
     {
-        $d = \DateTime::createFromFormat($format, $date); // create object date from format a date in string
-        return $d && $d->format($format) == $date;
+        // check string min length
+        if (!empty($configInputs["minLength"]) && strlen($text) < $configInputs["minLength"]) {
+            $errors[] = $configInputs["error"];
+            return;
+        }
+
+        // check string max length
+        if (!empty($configInputs["maxLength"]) && strlen($text) > $configInputs["maxLength"]) {
+            $errors[] = $configInputs["error"];
+            return;
+        }
+
+        // check string max length
+        if (!empty($configInputs["regex"]) && !preg_match($configInputs["regex"], $text)) {
+            $errors[] = $configInputs["error"];
+            return;
+        }
     }
 
+    public function numberValidator($number, $configInputs, &$errors)
+    {
+        // check number min length
+        if (!empty($configInputs["min"]) && is_numeric($configInputs["min"]) && $number < $configInputs["min"] ) {
+            $errors[] = $configInputs["error"];
+            return;
+        }
+
+        // check number max length
+        if (!empty($configInputs["max"]) && is_numeric($configInputs["max"]) && $number > $configInputs["max"]) {
+            $errors[] = $configInputs["error"];
+           return;
+        }
+    }
+
+    public function passwordValidator($password, $configInputs, &$errors) {
+        if (!preg_match($configInputs["regex"], $password)  ) {
+            $errors[] = $configInputs["error"];
+            return;
+        }
+    }
+
+    public function passwordConfirmationValidator($passwordConfirm, $password, $configInputs, &$errors) {
+        if ($passwordConfirm !== $password) {
+            $errors[] = $configInputs["error"];
+            return;
+        }
+    }
+
+	public function emailValidator($email, $configInputs, &$errors)
+	{
+		if(filter_var($email, FILTER_VALIDATE_EMAIL) == false){
+            $configInputs["error"] = "Votre email n'est pas valide";
+            $errors[] = $configInputs["error"];
+            return;
+		}
+	}
+
+	public function dateValidator($date, $format, $configInputs, &$errors)
+    {
+        $d = \DateTime::createFromFormat($format, $date); // create object date from format a date in string
+
+        if( $d && $d->format($format) == $date)
+        {
+            // check date min
+            if (!empty($configInputs["min"]) && (new \DateTime($date) <= new \DateTime($configInputs["min"]))) {
+                $errors[] = $configInputs["error"];
+                return;
+            }
+
+            // check date max
+            if (!empty($configInputs["max"]) && (new \DateTime($date) >= new \DateTime($configInputs["max"]))) {
+                $errors[] = $configInputs["error"];
+                return;
+
+            }
+        }
+    }
 }
