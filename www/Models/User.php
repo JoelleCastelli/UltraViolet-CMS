@@ -200,7 +200,6 @@ class User extends Database
                     "minLength"=>2,
                     "maxLength"=>50,
                     "error"=>"Votre prénom doit faire entre 2 et 50 caractères",
-                    "required" => true
 
                 ],
                 "lastname"=>[
@@ -211,7 +210,6 @@ class User extends Database
                     "minLength"=>2,
                     "maxLength"=>100,
                     "error"=>"Votre nom doit faire entre 2 et 100 caractères",
-                    "required" => true
 
                 ],
                 "email"=>[
@@ -222,7 +220,6 @@ class User extends Database
                     "minLength"=>8,
                     "maxLength"=>320,
                     "error"=>"Votre email doit faire entre 8 et 320 caractères",
-                    "required" => true
 
                 ],
                 "pwd"=>[
@@ -230,8 +227,8 @@ class User extends Database
                     "label"=>"Votre mot de passe",
                     "class"=>"form_input",
                     "minLength"=>8,
-                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères",
-                    "required" => true
+                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères, contenir au moins un chiffre et un caractère spécial",
+                    "regex" => "/(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,20}/"
 
                 ],
                 "pwdConfirm"=> [
@@ -240,7 +237,6 @@ class User extends Database
                     "class"=>"form_input",
                     "confirm"=>"pwd",
                     "error"=>"Votre mot de passe de confirmation ne correspond pas",
-                    "required" => true
 
                 ],
                 "country"=>[
@@ -251,7 +247,6 @@ class User extends Database
                     "minLength"=>2,
                     "maxLength"=>2,
                     "error"=>"Votre pays doit faire 2 caractères",
-                    "required" => true
 
                 ],
                 "birthday"=>[
@@ -259,10 +254,9 @@ class User extends Database
                     "placeholder"=>"anniversaire",
                     "label"=>"Mon anniversaire",
                     "class"=>"form_input",
-                    "min"=>"1970-11-04",
-                    "max"=>"2005-11-04",
-                    "error"=>"Votre anniversaire doit être entre 04-11-1970 et 04-11-2005",
-                    "required" => true
+                    "min"=>"2000-01-01",
+                    "max"=>"2005-01-01",
+                    "error"=>"Votre anniversaire doit être entre 2000-01-01 et 2005-01-01",
 
                 ],
 
@@ -273,6 +267,7 @@ class User extends Database
                     "class_label"=>"",
                     "class_select"=>"",
                     "error"=>"Choisir une voiture svp",
+                    "required" => true,
                     "options"=>[
                         [
                             "value"=>"",
@@ -330,6 +325,7 @@ class User extends Database
                     "class_fieldset" => "",
                     "class_legend" => "",
                     "error" => "Choisissez un genre siouplè !",
+                    "required" => true,
                     "options"=>[
                         [
                             "id"=>"male",
@@ -363,6 +359,7 @@ class User extends Database
                     "class_fieldset" => "",
                     "class_legend" => "",
                     "id" => "",
+                    "required" => "",
                     "options"=>[
                         [
 
@@ -370,7 +367,9 @@ class User extends Database
                             "value"=>"Bike",
                             "label"=>"I have a bike",
                             "class_label" => "",
-                            "class_input" => ""
+                            "class_input" => "",
+                            "error" => "devez cocher la voiture"
+
                         ],
                         [
                             "id"=>"vehicle2",
@@ -401,10 +400,6 @@ class User extends Database
 		];
 	}
 }
-
-
-
-
 
 /*
  * CHECKBOXES
