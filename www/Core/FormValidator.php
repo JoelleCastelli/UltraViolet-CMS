@@ -77,6 +77,7 @@ class FormValidator
             }
 
             if (isset($config["radios"] )) {
+
                 foreach ($config["radios"] as $name => $configRadios) {
 
                     if(!empty($configRadios["required"]) && (!isset($data[$name]) || empty($data[$name]))
@@ -155,11 +156,14 @@ class FormValidator
 
 	public function emailValidator($email, $configInputs, &$errors)
 	{
-		if(filter_var($email, FILTER_VALIDATE_EMAIL) == false){
-            $configInputs["error"] = "Votre email n'est pas valide";
-            $errors[] = $configInputs["error"];
-            return;
-		}
+		    $pattern = "/^[a-zA-Z][\w\-\.]+@([\w-]+\.)+[\w]{2,4}$/";
+		    if(!preg_match($pattern, $email))
+            {
+                $configInputs["error"] = "Votre email n'est pas valide";
+                $errors[] = $configInputs["error"];
+                return;
+            }
+
 	}
 
 	public function dateValidator($date, $format, $configInputs, &$errors)
