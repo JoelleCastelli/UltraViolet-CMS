@@ -10,8 +10,17 @@ class Page
 {
 
 	public function indexAction() {
+		$pages = new PageModel();
+        $pages = $pages->findAll();
+
+		if(!$pages) $pages = [];
+
+		foreach ($pages as $page) {
+            $page->cleanPublictionDate();
+        }
 
         $view = new View("page/index");
+		$view->assign("pages", $pages);
     }
 
 	public function createPageAction() {
@@ -30,6 +39,7 @@ class Page
 				$page->setPosition($_POST["position"]);
 				$page->setTitleSeo($_POST["titleSEO"]);
 				$page->setDescriptionSeo($_POST["descriptionSEO"]);
+				$page->setPublictionDate($_POST["publictionDate"]);
 				$page->setState($_POST["state"]);
 
 				$page->save();

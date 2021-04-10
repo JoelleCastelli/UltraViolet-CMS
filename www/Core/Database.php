@@ -27,8 +27,6 @@ class Database {
 
 		$column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
 
-        var_dump($column);die;
-
 		if (is_null($this->getId())) {
 			//INSERT
 			$query = $this->pdo->prepare("INSERT INTO ".$this->table." 

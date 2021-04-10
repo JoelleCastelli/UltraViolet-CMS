@@ -203,8 +203,14 @@ class Page extends Database
         return parent::findAll();
     }
 
+    public function cleanPublictionDate() {
+        $this->setPublictionDate(date("d/m/Y", strtotime($this->getPublictionDate())));
+    }
+
 	public function formBuilderRegister() 
 	{
+
+        $today = date("Y-m-d");
 
 		return [
 			"config"=>[
@@ -262,6 +268,17 @@ class Page extends Database
                     "minLength"=>2,
                     "maxLength"=>255,
                     "error"=>"Votre descriptionSEO doit étre entre 2 et 255"
+                ],
+                "publictionDate"=>[
+                    "type"=>"date",
+                    "placeholder"=>"publication",
+                    "label"=>"Date de publication",
+                    "class"=>"form_input",
+                    "min"=>$today,
+                    "max"=>"2030-12-31",
+                    "error"=>"Votre date de publication doit être entre".$today." et 31-12-2030",
+                    "required" => true
+
                 ],
 			],
             "selects"=>[
