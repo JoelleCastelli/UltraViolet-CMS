@@ -18,16 +18,25 @@ class FormBuilder
 				>";
 
 		foreach ($config["inputs"] as $name => $configInput) {
-			$html .="<label for='".($configInput["id"]??$name)."'>".($configInput["label"]??"")." </label>";
 
-			// Check previous post
-            // Using just one ternaire for easier code review
-            $value = "";
-            if (!empty($_POST)) {
-                $value = ($configInput["type"] === "password") ? "" : htmlspecialchars($_POST[$name], ENT_QUOTES);
-            }
+		    if($configInput["type"] === "hidden")
+            {
+                $html .="<input 
+						type='hidden' 
+						name='".$name."'
+						value='".($configInput['value'])."'
+						id='".($configInput["id"]??$name)."'
+						 ><br>";
+            }else {
+                $html .="<label for='".($configInput["id"]??$name)."'>".($configInput["label"]??"")." </label>";
 
-			$html .="<input 
+                // Check value data if set
+                $value = "";
+                if (!empty($_POST)) {
+                    $value = ($configInput["type"] === "password") ? "" : htmlspecialchars($_POST[$name], ENT_QUOTES);
+                }
+
+                $html .="<input 
 						type='".($configInput["type"]??"text")."'
 						name='".$name."'
 						value='".$value."'
@@ -38,6 +47,7 @@ class FormBuilder
 						id='".($configInput["id"]??$name)."'
 						".(!empty($configInput["required"])?"required='required'":"")."
 						 ><br>";
+            }
 		}
 		
 		if (isset($config["selects"])) {
