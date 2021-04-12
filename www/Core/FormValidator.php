@@ -7,6 +7,8 @@ class FormValidator
 	public static function check($config, $data)
 	{
 
+	    self::validateCSFRToken($config);
+
 		$errors = [];
 
         $checkboxes = isset($config["checkboxes"]) ? count($config["checkboxes"]) : 0;
@@ -186,4 +188,60 @@ class FormValidator
             }
         }
     }
+
+    public static function getCSRFToken()
+    {
+        $message = '-encyclopedie Anticonstitutionnellement Ceci est une phrase random-';
+        $hash = 'sha256';
+
+        if(empty($_SESSION['csrf_token']))
+        {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+            $_SESSION['csrf_token_time'] = time();
+        }
+
+        $key = $_SESSION['csrf_token'] ;
+        $token = hash_hmac($hash, $message,  $key); // Generate a keyed hash value using the HMAC method
+
+        return $token;
+    }
+
+    public function validateCSFRToken($config){
+
+        $message = '-encyclopedie Anticonstitutionnellement Ceci est une phrase random-';
+        $hash = 'sha256';
+
+        if(isset($_SESSION['csrf_token']) && isset($_SESSION['csrf_token_time']) && isset($config['config']['csrf']))
+        {
+            $token = hash_hmac($hash, $message,  $_SESSION['csrf_token']);
+
+            // check if the session's token equals form's token
+            if(hash_equals($token, $config['config']['csrf']))
+            {
+                // timestamp of 15 minutes
+                $timestamp_ancien = time() - (15*60);
+
+                // check if the timestamp is expired
+                if($_SESSION['csrf_token_time'] >= $timestamp_ancien)
+                {
+                    unset($_SESSION['csrf_token_time']);
+                    unset($_SESSION['csrf_token']);
+                    die();
+                }else{
+                    echo "CSRF ATTACK time not correct";
+                    die();
+                }
+            }else {
+
+                echo "CSRF ATTACK csrf not equal";
+                die();
+            }
+        }else {
+
+            echo "CSRF ATTACK csrf not set";
+            die();
+        }
+
+    }
+
 }
