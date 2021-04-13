@@ -213,6 +213,7 @@ class FormValidator
 
         if(isset($_SESSION['csrf_token']) && isset($_SESSION['csrf_token_time']) && isset($config['config']['csrf']))
         {
+
             $token = hash_hmac($hash, $message,  $_SESSION['csrf_token']);
 
             // check if the session's token equals form's token
