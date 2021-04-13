@@ -1,3 +1,8 @@
+<?php
+
+
+?>
+
 <h2>S'inscrire</h2>
 <br>
 <h2>POST</h2>

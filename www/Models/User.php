@@ -181,7 +181,7 @@ class User extends Database
 		];
 	}
 
-	public function formBuilderRegister(){
+	public function formBuilderRegister($data = []){
 
 		return [
 			"config"=>[
@@ -189,7 +189,9 @@ class User extends Database
 				"action"=>"",
 				"class"=>"form_control",
 				"id"=>"form_register",
-				"submit"=>"S'inscrire"
+				"submit"=>"S'inscrire",
+                "csrf" => \App\Core\FormValidator::getCSRFToken()
+
 			],
             "inputs"=>[
                 "firstname" => [
@@ -256,9 +258,9 @@ class User extends Database
                     "class"=>"form_input",
                     "min"=>"2000-01-01",
                     "max"=>"2005-01-01",
-                    "error"=>"Votre anniversaire doit être entre 2000-01-01 et 2005-01-01",
+                    "error"=>"Votre anniversaire doit être entre 2000-01-01 et 2005-01-01"
 
-                ],
+                ]
 
             ],
             "selects"=>[

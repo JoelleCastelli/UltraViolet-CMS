@@ -15,8 +15,9 @@ class User
 	}
 
 	public function registerAction() {
+        session_start();
 
-	    $page = Page::getAll();
+        $page = Page::getAll();
 
 		$user = new UserModel();
 		$form = $user->formBuilderRegister();
@@ -44,6 +45,7 @@ class User
         $view->assign("form", $form);
         $view->assign("post", $_POST);
         $view->assign("formLogin", $user->formBuilderLogin());
+
 	}
 
     public function updateAction()
