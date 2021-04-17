@@ -1,0 +1,42 @@
+// Alignment of the viewport 
+
+.container {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 100vh;
+}
+
+.container .main-content {
+    flex-basis: 100%;
+}
+
+
+// Alignement of the main content 
+
+.main {
+    display: flex;
+    flex-flow: column nowrap;
+    flex-basis: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 0px 20px;
+}
+
+.main > *:nth-child(n) {
+    flex: none;
+}
+
+// Rare container needed
+
+.filter-container {
+    max-width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    flex: none;
+    justify-content: flex-start;
+}
+
+.main-content {
+    display: flex;
+    flex-flow: column;
+}

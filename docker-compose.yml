@@ -4,7 +4,7 @@ services:
     environment:
       - DEBUG=1
     build: site
-    container_name: apache-3IW
+    container_name: apache
     ports :
      - "8080:80"
     volumes:
@@ -17,27 +17,24 @@ services:
 
   database:
     image: mysql:5.7
-    container_name: mysql-mvc
+    container_name: mysql
     ports :
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: mvcdocker2
+      MYSQL_DATABASE: ultraviolet_db
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
-    container_name: phpmyadmin-mvc
+    container_name: phpmyadmin
     depends_on:
       - database
     ports:
       - 8888:80
     environment:
         - PMA_ARBITRARY=1
-
-      
-      

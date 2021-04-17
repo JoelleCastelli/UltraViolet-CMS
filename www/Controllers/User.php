@@ -10,67 +10,48 @@ use App\Models\Page;
 class User
 {
 
-	//Method : Action
-	public function defaultAction(){
+	public function defaultAction() {
 		echo "User default";
 	}
 
-
-	//Method : Action
-	public function registerAction(){
-		
-		/*
-			$user->setFirstname("Yves");
-			$user->setLastname("SKRZYPCZYK");
-			$user->setEmail("y.skrzypczyk@gmail.com");
-			$user->setPwd("Test1234");
-			$user->setCountry("fr");
-
-			$user->save();
-
-
-
-			$page = new Page();
-			$page->setTitle("Nous contacter");
-			$page->setSlug("/contact");
-			$page->save();
-
-
-
-			$user = new User();
-			$user->setId(2); //Attention on doit populate
-			$user->setFirstname("Toto");
-			$user->save();
-
-		*/
-
-
+	public function registerAction() {
 		$user = new UserModel();
-		$view = new View("register"); 
-
 		$form = $user->formBuilderRegister();
 
-		if(!empty($_POST)){
-			
-			$errors = FormValidator::check($form, $_POST);
+		if(!empty($_POST)) {
 
-			if(empty($errors)){
+            $errors = FormValidator::check($form, $_POST);
+           /* echo "<pre>";
+            print_r($errors);
+            echo "</pre>";*/
+            if(empty($errors)){
 				$user->setFirstname($_POST["firstname"]);
 				$user->setLastname($_POST["lastname"]);
 				$user->setEmail($_POST["email"]);
 				$user->setPwd($_POST["pwd"]);
-				$user->setCountry($_POST["country"]);
+                $user->setCountry($_POST["country"]);
 
 				$user->save();
 			}else{
-				$view->assign("errors", $errors);
+                $view = new View("register");
+                $view->assign("errors", $errors);
 			}
 		}
-
-		$view->assign("form", $form);
-		$view->assign("formLogin", $user->formBuilderLogin());
+        $view = new View("register");
+        $view->assign("form", $form);
+        $view->assign("post", $_POST);
+        $view->assign("formLogin", $user->formBuilderLogin());
 	}
 
+    public function updateAction()
+    {
+        $user = new UserModel();
+        $user->setId(3);
+        $user->setFirstname("NON");
+        $user->setCountry("pr");
+        $user->setRole("6");
+        $user->save();
+    }
 
 	//Method : Action
 	public function addAction(){
@@ -82,20 +63,19 @@ class User
 
 	}
 
-	//Method : Action
 	public function showAction(){
 		
 		//Affiche la vue user intégrée dans le template du front
 		$view = new View("user"); 
 	}
 
-
-
 	//Method : Action
 	public function showAllAction(){
 		
 		//Affiche la vue users intégrée dans le template du back
 		$view = new View("users", "back"); 
+		$view->assign("title", "Afficher les utilisateurs");
+		$view->assign("user", "Kamal Hennou");
 		
 	}
 	

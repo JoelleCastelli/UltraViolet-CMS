@@ -1,0 +1,145 @@
+// PAGE : http://localhost:8080/modifier-un-article
+
+.grid-modify-article {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 5rem 1fr 2fr min-content;
+    grid-gap: 30px;
+    margin: 0px 20px;
+    grid-template-areas:    "header header"
+                            "section1 section2"
+                            "section3 section3"
+                            "btn-section btn-section";
+    header {
+        grid-area: header;
+    }
+
+    section:nth-of-type(1) {
+        grid-area: section1;
+    }
+
+    section:nth-of-type(2) {
+        grid-area: section2;
+    }
+
+    section:nth-of-type(3) {
+        grid-area: section3;
+        
+        textarea {
+            height: 100%;
+        }
+    }
+
+    section:nth-of-type(4) {
+        display: flex;
+        grid-area: btn-section;
+        justify-content: space-between;
+        margin-bottom: 40px;
+    }
+}
+
+
+// CARD : Modifying title and filter tags
+
+.grid-title-modify-article {
+    display: grid;
+    height: 100%;
+    grid-template-columns: max-content 3fr;
+    grid-template-rows: repeat(4, min-content);
+    grid-gap: 30px 10px;
+    align-items: start;
+    grid-template-areas:    "title1 input1"
+                            "title2 input2"
+                            "...... filter-tag"
+                            "...... filter-tag";
+    
+    .filter-container {
+        grid-area: filter-tag;
+        margin-top: -20px;
+    }
+
+    .label-card-1 {
+        grid-area: title1;
+        align-self: center;
+    }
+
+    .label-card-2 {
+        grid-area: title2;
+        align-self: center;
+    }
+}
+
+
+// CARD : Modifying publications values
+
+.grid-publication-modify-article {
+    display: grid;
+    height: 100%;
+    grid-template-columns: max-content 4fr 2fr;
+    grid-template-rows: repeat(3, min-content);
+    align-items: start;
+    justify-content: center;
+    grid-gap: 40px 10px;
+    grid-template-areas:    "title1 radio button1"
+                            "title2 select button2"
+                            "filter-tag filter-tag filter-tag";
+    
+    .label-card-1 {
+        grid-area: title1;
+        align-self: start;
+    }
+    
+    .radio-group {
+        grid-area: radio;
+        display: flex;
+        flex-flow: column;
+        align-self: start;
+    }
+
+    .label-card-2 {
+        grid-area: title2;
+        align-self: center;
+    }
+
+    select {
+        grid-area: select;
+    }
+
+    .filter-container {
+        grid-area: filter-tag;
+        margin-top: -20px;
+    }
+
+    button:nth-of-type(1) {
+        grid-area: button1;
+        align-self: end;
+    }
+
+    button:nth-of-type(2) {
+        grid-area: button2;
+    }
+
+}
+
+@media screen and (max-width: 1500px) {
+    
+    .grid-modify-article {
+        display: flex;
+        flex-flow: column;
+    }
+
+}
+
+@media screen and (max-width: 1000px) {
+
+    .grid-publication-modify-article {
+        grid-template-columns: max-content min-content;
+        grid-template-rows: max-content max-content max-content max-content;
+        grid-template-areas:    "title1 radio"
+                                "title2 select"
+                                "filter-tag filter-tag"
+                                "button1 button2";
+        width: 100%;
+    }
+}

@@ -1,0 +1,39 @@
+.filter-tag {
+    display: flex;
+    align-items: center;
+    align-items: center;
+    font-family: $mulish;
+    font-weight: lighter;
+    border-color: $filter-tag-border-color;
+    background: $filter-tag-bg-color;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    font-size: 15px;
+    margin: 0 5px 5px 0;
+    padding: 2px 4px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    i {
+        font-size: 17px;
+        padding-left: 5px;
+    }
+
+    &:hover {
+        background: $filter-tag-bg-color-hover;
+        transform: translateY(5%);
+    }
+
+    // Other alternatives
+    &.filter-tag--genre {
+        background-color: $filter-tag-genre-bg-color;
+        border-color: $filter-tag-genre-border-color;
+
+        &:hover {
+            filter: brightness(85%);
+        }
+
+    }
+
+}

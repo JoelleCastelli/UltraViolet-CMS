@@ -1,0 +1,120 @@
+// PAGE : http://localhost:8080/ma-collection
+
+.grid-display-collection {
+    display: grid;
+    height: 100vh;
+    grid-template-rows: 15rem max-content;
+    grid-gap: 30px;
+
+    // section:nth-of-type(2) {
+    //     display: flex;
+    //     flex-flow: column nowrap;
+
+    //     & > div {
+    //         display: flex;
+    //         flex-flow: row nowrap;
+    //         justify-content: space-around;
+    //         align-items: center;
+    //         overflow: auto;
+    //     }
+
+    //     & > nav {
+    //        align-self: flex-end;
+    //        margin-top: 20px;
+    //     }
+    // }
+
+    nav {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 30px;
+    }
+
+    @media screen and (max-width: 900px) {
+        grid-template-rows: 30rem max-content;
+    }
+}
+
+
+// Card : Card with sorting and filter features
+
+.grid-display-collection-sorter {
+    display: grid;
+    height: 100%;
+    grid-template-rows: repeat(4, 2rem);
+    grid-template-columns: 1fr 2fr 2fr 2fr 3fr;
+    align-items: center;
+    grid-gap: 20px 10px;
+    grid-template-areas:    "title1 radio radio ..... ....."
+                            "title2 select1 select2 search-bar ....."
+                            "...... filter-tag filter-tag filter-tag ....."
+                            "...... filter-tag filter-tag filter-tag .....";
+    
+    h2:nth-of-type(1) {
+        grid-area: title1;
+    }
+
+    h2:nth-of-type(2) {
+        grid-area: title2;
+    }
+
+    .radio-group-aligned {
+        grid-area: radio;
+    }
+
+    select:nth-of-type(1) {
+        grid-area: select1;
+    }
+
+    select:nth-of-type(2) {
+        grid-area: select2;
+    }
+
+    .search-bar {
+        grid-area: search-bar;
+    }
+
+    .filter-container {
+        grid-area: filter-tag;
+    }
+
+    @media screen and (max-width: 900px) {
+        display: flex;
+        flex-flow: column;
+        align-items: flex-start;
+    }
+
+}
+
+
+// CARD : Section 3
+
+.grid-collection-container {
+    display: grid;
+    grid-template-columns: repeat(5, 200px);
+    justify-content: space-around;
+    grid-row-gap: 50px;
+    align-self: center;
+    align-items: center;
+    
+
+    > article {
+        align-self: center;
+    }
+
+    @media screen and (max-width: 1800px) {
+        grid-template-columns: repeat(4, 200px);
+    }
+
+    @media screen and (max-width: 1500px) {
+        grid-template-columns: repeat(3, 200px);
+    }
+
+    @media screen and (max-width: 1100px) {
+        grid-template-columns: repeat(2, 200px);
+    }
+
+    @media screen and (max-width: 900px) {
+        grid-template-columns: 200px
+    }
+}

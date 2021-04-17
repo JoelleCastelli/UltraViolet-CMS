@@ -1,0 +1,40 @@
+.label-card-1 {
+    font-family: $mulish;
+    display: inline;
+    font-size: 18px;
+    font-weight: bold;
+    color: $title-card-color;
+}
+
+.label-card-2 {
+    font-family: $mulish;
+    display: inline;
+    font-size: 16px;
+    font-weight: bold;
+    color: $title-card-2-color;
+}
+
+.label-item-collection {
+    display: inline-block;
+    font-family: $mulish;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: $title-item-collection-color;
+
+}
+
+.label-date {
+    display: inline-block;
+    font-family: $poppins;
+    font-size: 12px;
+    font-weight: regular;
+    color: $title-date-color;
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

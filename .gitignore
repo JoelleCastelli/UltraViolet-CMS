@@ -1,1 +1,20 @@
+# IDE related
+.idea
+.vscode
+
+# Database related
 db_data
+
+# Local machines related
+.DS_Store
+
+# Node modules
+*node_modules
+
+# builds from the dist directory
+www/dist/main.css
+www/dist/main.js
+
+# env files
+www/.env*
+!www/.env.example

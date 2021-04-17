@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.4-apache
 
 # Install PDO MySQL driver
 # See https://github.com/docker-library/php/issues/62
@@ -9,7 +9,7 @@ RUN apt-get update -y && apt-get install -y libpng-dev libfreetype6-dev libyaml-
 RUN pecl install yamL
 
 RUN docker-php-ext-configure gd \
-        --with-freetype-dir=/usr/include/freetype2 \
+        --with-freetype=/usr/include/freetype2 \
     && docker-php-ext-install gd
 
 

@@ -14,6 +14,9 @@
   controller: User
   action: add
 
+/met-a-jour-utilisateur:
+  controller: User
+  action: update
 
 /s-inscrire:
   controller: User
@@ -27,3 +30,16 @@
 /afficher-les-utilisateurs:
   controller: User
   action: showAll
+
+/modifier-un-article:
+  controller: Article
+  action: modifyArticle
+
+/ma-collection:
+  controller: Collection
+  action: displayCollection
+
+# PRODUCTIONS
+/productions:
+  controller: Production
+  action: displayProductionList

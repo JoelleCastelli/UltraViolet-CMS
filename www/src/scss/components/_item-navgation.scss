@@ -1,0 +1,22 @@
+.item-navigation {
+    font-family: $mulish;
+    color: $item-navigation-font-color;
+    font-size: 14;
+    font-weight: regular;
+
+    button {
+        // text-decoration: none;
+        color: inherit;
+        background-color: $transparent;
+        border-style: none;
+        width: 20px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: scale(2.5);
+            cursor: pointer;
+        }
+    }
+}
+
+// A PEAUFINER
