@@ -257,4 +257,117 @@ class Production extends Database
         }
     }
 
+    public function formBuilderAddProduction(){
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "formAddProduction",
+                "submit" => "Valider"
+            ],
+            "inputs" => [
+                "type" => [
+                    "type" => "select",
+                    "label" => "Type",
+                    "required" => true,
+                    "class" => "form_input",
+                    "error" => "Un type de production est nécessaire"
+                ],
+                "title" => [
+                    "type" => "text",
+                    "placeholder" => "",
+                    "label" => "Titre",
+                    "required" => true,
+                    "class" => "form_input",
+                    "minLength" => 1,
+                    "maxLength" => 100,
+                    "error" => "Le titre doit faire entre 1 et 100 caractères"
+                ],
+                "originalTitle" => [
+                    "type" => "text",
+                    "placeholder" => "",
+                    "label" => "Titre original",
+                    "class" => "form_input",
+                    "maxLength" => 100,
+                    "error" => "Le titre doit faire entre 1 et 100 caractères"
+                ],
+                "releaseDate" => [
+                    "type" => "date",
+                    "label" => "Date de sortie",
+                    "class" => "form_input",
+                    "minLength" => 10,
+                    "maxLength" => 10,
+                    "error" => "Le format de la date est incorrect"
+                ],
+                "overview" => [
+                    "type" => "text",
+                    "placeholder" => "",
+                    "label" => "Résumé",
+                    "class" => "form_input",
+                    "maxLength" => 1000,
+                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
+                ],
+                "runtime" => [
+                    "type" => "number",
+                    "placeholder" => "",
+                    "label" => "Durée (du film ou d'un épisode)",
+                    "class" => "form_input",
+                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
+                ],
+                "number" => [
+                    "type" => "number",
+                    "placeholder" => "",
+                    "label" => "Numéro",
+                    "class" => "form_input",
+                ],
+            ]
+
+        ];
+    }
+
+    public function formBuilderAddProductionTmdb(){
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "tmdb-request",
+                "class" => "form_control",
+                "id" => "formAddProductionTmdb",
+                "submit" => "Valider"
+            ],
+            "inputs" => [
+                "type" => [
+                    "type" => "text",
+                    "label" => "Type",
+                    "class" => "form_input",
+                    "error" => "Le type doit être film, série, saison ou épisode"
+                ],
+                "productionID" => [
+                    "type" => "text",
+                    "label" => "ID du film ou de la série",
+                    "class" => "form_input",
+                    "error" => "Un ID est nécessaire"
+                ],
+                "seasonNb" => [
+                    "type" => "text",
+                    "label" => "Numéro de la saison",
+                    "class" => "form_input",
+                    "error" => "Un type de production est nécessaire"
+                ],
+                "episodeNb" => [
+                    "type" => "text",
+                    "label" => "Numéro de l'épisode",
+                    "class" => "form_input",
+                    "error" => "Un type de production est nécessaire"
+                ],
+                "productionPreviewRequest" => [
+                    "type" => "button",
+                    "label" => "Preview",
+                    "class" => "form_input"
+                ],
+            ]
+        ];
+
+    }
+
 }

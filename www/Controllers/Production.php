@@ -6,7 +6,6 @@ use App\Core\FormValidator;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
 
-
 class Production
 {
 
@@ -43,4 +42,161 @@ class Production
                 $view->assign("errors", $errors);
             }
         }
-    }
+    }
+
+    public function addProductionTmdbAction() {
+        $production = new ProductionModel();
+        $form = $production->formBuilderAddProductionTmdb();
+        $view = new View("production/add-production-tmdb");
+        $view->assign("form", $form);
+    }
+
+    public function tmdbRequestAction() {
+        if(!empty($_POST['type']) && !empty($_POST['productionID'])) {
+            if($_POST['type'] === 'movie' && (!empty($_POST['seasonNb']) || !empty($_POST['episodeNb']))) {
+                echo "Un film ne peut pas avoir de numéro de saison ou d'épisode";
+            } else {
+                $urlArray = $this->getTmdbUrl($_POST);
+                $jsonResponseArray = $this->getApiResponse($urlArray);
+                if (!empty($jsonResponseArray)) {
+                    $this->showProductionPreview($_POST, $jsonResponseArray);
+                } else {
+                    echo "La recherche ne correspond à aucun résultat sur TMDB";
+                }
+            }
+        } else {
+            echo "Un type et un ID de film ou de série sont nécessaires";
+        }
+    }
+
+    public function showProductionPreview($post, $jsonResponseArray) {
+        // index 0: movie or series
+        $item = json_decode($jsonResponseArray[0]);
+        // index 1 if it exists: episode
+        if(isset($jsonResponseArray[1]))
+            $episode = json_decode($jsonResponseArray[1]);
+
+        $production['idTmdb'] = $item->id;
+        $production['type'] = $post['type'];
+        $production['title'] = $item->title ?? $item->name;
+        $production['originalTitle'] = $item->original_title ?? $item->original_name;
+        $production['overview'] = $item->overview;
+        $production['genres'] = $item->genres;
+        $production['cast'] = $item->credits->cast;
+        $production['image'] = "<img src='https://image.tmdb.org/t/p/w200$item->poster_path' />";
+        $production['releaseDate'] = $item->release_date ?? $item->first_air_date;
+        $production['runtime'] = $item->runtime ?? $item->episode_run_time[0];
+
+        switch ($post['type']) {
+            case 'movie':
+                $production['directors'] = '';
+                $production['writers'] = '';
+                foreach ($item->credits->crew as $crew) {
+                    if ($crew->job == 'Director' || $crew->job == 'Screenplay') {
+                        if ($crew->job == 'Director') {
+                            $production['directors'] .= $crew->name;
+                        } else {
+                            $production['writers'] .= $crew->name;
+                        }
+                    }
+                }
+                break;
+            case 'series':
+                $production['nbSeasons'] = $item->seasons[0]->name === "Épisodes spéciaux" ? sizeof($item->seasons) - 1: sizeof($item->seasons);
+                $production['nbEpisodes'] = 0;
+                foreach ($item->seasons as $season) {
+                    $production['nbEpisodes'] += $season->episode_count;
+                }
+                $production['creators'] = '';
+                foreach ($item->created_by as $creator) {
+                    $production['creators'] .= $creator->name.' ';
+                }
+                // Season
+                if(!empty($_POST['seasonNb']) && isset($item->seasons[$post['seasonNb']])) {
+                    $production['nbEpisodes'] = $item->seasons[$post['seasonNb']]->episode_count;
+                    $production['image'] = "<img src='https://image.tmdb.org/t/p/w200".$item->seasons[$post['seasonNb']]->poster_path."' />";
+                    $production['overview'] = $item->seasons[$post['seasonNb']]->overview;
+                    // Episode
+                    if(!empty($episode)) {
+                        $production['title'] = $episode->name;
+                        $production['overview'] = $episode->overview;
+                        $production['image'] = "<img src='https://image.tmdb.org/t/p/w200$episode->still_path' />";
+                        $production['releaseDate'] = $episode->air_date;
+                    }
+                } else {
+                    echo "La saison existe pas";
+                }
+                break;
+        }
+
+
+        foreach ($production as $key => $value) {
+            if($key === 'genres') {
+                echo "- $key : ";
+                foreach ($value as $id => $genre) {
+                    echo "$genre->name ";
+                }
+            } elseif ($key === 'cast') {
+                $count = 1;
+                foreach ($value as $id => $cast) {
+                    if($count++ <= 3) {
+                        echo "<div>$cast->name joue le rôle de $cast->character<br>";
+                        echo "<img src='https://image.tmdb.org/t/p/w200$cast->profile_path' /></div>";
+                    }
+                }
+            } else {
+                echo "<div>- $key : $value</div>";
+            }
+        }
+
+    }
+
+    public function getTmdbUrl($data){
+        if(!$data['type'] || !$data['productionID']) return false;
+        $urlArray = [];
+        switch ($data['type']) {
+            case 'movie':
+                $urlArray['movie'] = TMDB_API_URL . 'movie/' . $data['productionID'].'?api_key=' . TMDB_API_KEY;
+                break;
+            case 'series':
+                // If an episode number is specified, check that season is also specified
+                if(!empty($data['episodeNb']) && empty($data['seasonNb'])) return false;
+                // Series or Season
+                $urlArray['series'] = TMDB_API_URL . 'tv/' . $data['productionID'].'?api_key='.TMDB_API_KEY;
+                // Episode
+                if(!empty($data['episodeNb'])) {
+                    $urlArray['episode'] = TMDB_API_URL . '/tv/' . $data['productionID'] . '/season/' . $data['seasonNb'] . '/episode/'. $data['episodeNb'] . '?api_key=' . TMDB_API_KEY;
+                }
+                break;
+        }
+
+        // French results + credits
+        foreach ($urlArray as $type => $url) {
+            $urlArray[$type] = $url."&language=fr&append_to_response=credits";
+        }
+
+        return $urlArray;
+    }
+
+    public function getApiResponse($urlArray){
+        $results = [];
+        foreach ($urlArray as $url) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Résultat de curl_exec() = string au lieu de l'afficher
+            curl_setopt($ch, CURLOPT_FAILONERROR, 1); // Echoue verbalement si code HTTP >= 400
+            if (curl_exec($ch)) {
+                $results[] = curl_exec($ch);
+                curl_close($ch);
+            } else {
+                curl_close($ch);
+                return false;
+            }
+
+        }
+        if(empty($results)) return false;
+        return $results;
+    }
+
+
+}
