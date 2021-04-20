@@ -19,7 +19,7 @@
   action: update
 
 /s-inscrire:
-  controller: User
+  controller: Person
   action: register
 
 /afficher-un-utilisateur:
@@ -38,6 +38,10 @@
 /ma-collection:
   controller: Collection
   action: displayCollection
+
+/supprimer-utilisateur:
+  controller: Person
+  action: delete
 
 # PRODUCTIONS
 /productions:

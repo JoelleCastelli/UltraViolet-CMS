@@ -4,43 +4,40 @@ namespace App\Core;
 class FormValidator
 {
 
-	public static function check($config, $data)
-	{
+    public static function check($config, $data)
+    {
 
-	    self::validateCSFRToken($config);
-
-		$errors = [];
+        self::validateCSFRToken($config);
+        $errors = [];
 
         $checkboxes = isset($config["checkboxes"]) ? count($config["checkboxes"]) : 0;
         $radios = isset($config["radios"]) ? count($config["radios"]) : 0;
         $selects = isset($config["selects"]) ? count($config["selects"]) : 0;
-        $total_inputs =  count($config["inputs"]) + $checkboxes + $radios + $selects;
+        $inputs = isset($config["inputs"]) ? count($config["inputs"]) : 0;
+        $total_inputs =  $inputs + $checkboxes + $radios + $selects;
 
         // check if numbers of inputs is correct
-		//if (!(count($data) != $total_inputs))
-        if (false)
+        if (count($data) < $config['config']['required_inputs'] || count($data) > $total_inputs)
         {
-			$errors[] = "Tentative de HACK - Faille XSS";
+            $errors[] = "Tentative de HACK - Faille XSS";
+        }
+        else {
 
-		}
-		else {
-
-			foreach ($config["inputs"] as $name => $configInputs) {
+            foreach ($config["inputs"] as $name => $configInputs) {
 
                 $data[$name] = htmlspecialchars($data[$name], ENT_QUOTES);
 
-			    // if form has not been changed
-			    if(!isset($data[$name]))
+                // if form has not been changed
+                if(!isset($data[$name]))
                 {
                     echo "Tentative de hack formulaire";
                     exit;
                 }
 
-			    // if input is required or not empty
-			    if( !empty($configInputs["required"]) || !empty($data[$name]))
+                // if input is required or not empty
+                if( !empty($configInputs["required"]) || !empty($data[$name]))
                 {
 
-                    echo "BFEORE " . $name . "<br>";
                     if($configInputs["type"] == "text")
                         self::textValidator($data[$name], $configInputs, $errors);
 
@@ -62,7 +59,6 @@ class FormValidator
                     // check date min
                     if($configInputs["type"] == "date")
                         self::dateValidator($data[$name], "Y-m-d", $configInputs, $errors);
-                    echo "AFTER" . "<br>";
 
                 }
 
@@ -103,8 +99,8 @@ class FormValidator
 
         }
 
-		return $errors; //[] empty if it's all okay
-	}
+        return $errors; //[] empty if it's all okay
+    }
 
     public function textValidator($text, $configInputs, &$errors)
     {
@@ -138,7 +134,7 @@ class FormValidator
         // check number max length
         if (!empty($configInputs["max"]) && is_numeric($configInputs["max"]) && $number > $configInputs["max"]) {
             $errors[] = $configInputs["error"];
-           return;
+            return;
         }
     }
 
@@ -156,19 +152,19 @@ class FormValidator
         }
     }
 
-	public function emailValidator($email, $configInputs, &$errors)
-	{
-		    $pattern = "/^[a-zA-Z][\w\-\.]+@([\w-]+\.)+[\w]{2,4}$/";
-		    if(!preg_match($pattern, $email))
-            {
-                $configInputs["error"] = "Votre email n'est pas valide";
-                $errors[] = $configInputs["error"];
-                return;
-            }
+    public function emailValidator($email, $configInputs, &$errors)
+    {
+        $pattern = "/^[a-zA-Z][\w\-\.]+@([\w-]+\.)+[\w]{2,4}$/";
+        if(!preg_match($pattern, $email))
+        {
+            $configInputs["error"] = "Votre email n'est pas valide";
+            $errors[] = $configInputs["error"];
+            return;
+        }
 
-	}
+    }
 
-	public function dateValidator($date, $format, $configInputs, &$errors)
+    public function dateValidator($date, $format, $configInputs, &$errors)
     {
         $d = \DateTime::createFromFormat($format, $date); // create object date from format a date in string
 
@@ -208,6 +204,7 @@ class FormValidator
 
     public function validateCSFRToken($config){
 
+
         $message = '-encyclopedie Anticonstitutionnellement Ceci est une phrase random-';
         $hash = 'sha256';
 
@@ -225,9 +222,10 @@ class FormValidator
                 // check if the timestamp is expired
                 if($_SESSION['csrf_token_time'] >= $timestamp_ancien)
                 {
+
                     unset($_SESSION['csrf_token_time']);
                     unset($_SESSION['csrf_token']);
-                    die();
+
                 }else{
                     echo "CSRF ATTACK time not correct";
                     die();

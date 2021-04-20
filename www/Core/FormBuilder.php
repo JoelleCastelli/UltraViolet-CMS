@@ -18,25 +18,16 @@ class FormBuilder
 				>";
 
 		foreach ($config["inputs"] as $name => $configInput) {
+			$html .="<label for='".($configInput["id"]??$name)."'>".($configInput["label"]??"")." </label>";
 
-		    if($configInput["type"] === "hidden")
-            {
-                $html .="<input 
-						type='hidden' 
-						name='".$name."'
-						value='".($configInput['value'])."'
-						id='".($configInput["id"]??$name)."'
-						 ><br>";
-            }else {
-                $html .="<label for='".($configInput["id"]??$name)."'>".($configInput["label"]??"")." </label>";
+			// Check previous post
+            // Using just one ternaire for easier code review
+            $value = "";
+            if (!empty($_POST)) {
+                $value = ($configInput["type"] === "password") ? "" : htmlspecialchars($_POST[$name]);
+            }
 
-                // Check value data if set
-                $value = "";
-                if (!empty($_POST)) {
-                    $value = ($configInput["type"] === "password") ? "" : htmlspecialchars($_POST[$name], ENT_QUOTES);
-                }
-
-                $html .="<input 
+			$html .="<input 
 						type='".($configInput["type"]??"text")."'
 						name='".$name."'
 						value='".$value."'
@@ -47,7 +38,6 @@ class FormBuilder
 						id='".($configInput["id"]??$name)."'
 						".(!empty($configInput["required"])?"required='required'":"")."
 						 ><br>";
-            }
 		}
 		
 		if (isset($config["selects"])) {
@@ -55,7 +45,7 @@ class FormBuilder
             foreach ($config["selects"] as $name => $configSelect)
             {
                 $html .="<label class='" . ($configSelect['class_label']??"") . "' for='".($name)."'>".($configSelect["label"]??"")." </label>";
-                $html .= "<select class='" . ($configSelect['class_select']??"") . "' name='".$name."' id='".$name."'>";
+                $html .= "<select class='" . ($configSelect['class_select']??"")  . "' name='".$name."' id='".$name."'>";
 
                 foreach($configSelect["options"] as $option)
                 {
@@ -134,7 +124,6 @@ class FormBuilder
                 }
 
                 $html .= "</fieldset>";
-
             }
         }
 

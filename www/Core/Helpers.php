@@ -8,4 +8,10 @@ class Helpers{
 		return ucwords(mb_strtolower(trim($firstname)));
 	}
 
+	public static function getCurrentTimestamp(){
+        $dateNow = new \DateTime('now');
+        return $dateNow->format("Y-m-d H:i:s");
+
+    }
+
 }
