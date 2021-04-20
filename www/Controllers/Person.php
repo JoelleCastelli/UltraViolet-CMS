@@ -2,50 +2,60 @@
 
 namespace App\Controller;
 
+use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
-use App\Models\User as UserModel;
+use App\Models\Person as PersonModel;
 use App\Models\Page;
 
-class User
+class Person
 {
 
 	public function defaultAction() {
 		echo "User default";
 	}
 
+	public function deleteAction() {
+	    $user = new PersonModel();
+	    $user->setId(11);
+	    $user->setDeletedAt(Helpers::getCurrentTimestamp());
+	    $user->save();
+    }
+
 	public function registerAction() {
-        session_start();
 
-        $page = Page::getAll();
-
-		$user = new UserModel();
+		$user = new PersonModel();
 		$form = $user->formBuilderRegister();
         $view = new View("register");
 
-		if(!empty($_POST)) {
+        if(!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
-
             if(empty($errors)){
 
-				$user->setFirstname($_POST["firstname"]);
-				$user->setLastname($_POST["lastname"]);
+                $role = $_POST["optin"][0];
+                $dateNow = new \DateTime('now');
+                $updatedAt = $dateNow->format("Y-m-d H:i:s");
+
+				$user->setFullName($_POST["fullName"]);
+				$user->setPseudo($_POST["pseudo"]);
 				$user->setEmail($_POST["email"]);
-				$user->setPwd($_POST["pwd"]);
-                $user->setCountry($_POST["country"]);
+                $user->setPassword($_POST["pwd"]);
+                $user->setRole($_POST["role"]);
+                $user->setOptin($role);
+                $user->setUpdatedAt($updatedAt);
+                $user->setUvtrMediaId(1);
+                $user->setDeletedAt(null);
 
 				$user->save();
-
 			}else{
-
                 $view->assign("errors", $errors);
 			}
 		}
-        $view->assign("form", $form);
-        $view->assign("post", $_POST);
-        $view->assign("formLogin", $user->formBuilderLogin());
 
+        $view->assign("post", $_POST);
+        $view->assign("form", $form);
+        $view->assign("formLogin", $user->formBuilderLogin());
 	}
 
     public function updateAction()
