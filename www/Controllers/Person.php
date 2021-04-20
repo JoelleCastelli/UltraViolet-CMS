@@ -53,7 +53,6 @@ class Person
 			}
 		}
 
-        $view->assign("post", $_POST);
         $view->assign("form", $form);
         $view->assign("formLogin", $user->formBuilderLogin());
 	}
