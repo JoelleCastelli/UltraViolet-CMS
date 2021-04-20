@@ -1,19 +1,28 @@
 <?php
 namespace App\Core;
 
-use App\Models\Production;
-use App\Models\User as UserModel;
-
 class Database {
 
 	protected $pdo;
 	private $table;
 
 	public function __construct() {
-        try {
-            $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
-        } catch(Exception $e) {
-            die("Erreur SQL : ".$e->getMessage());
+
+	    if(ENV === "dev")
+        {
+            try {
+                $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
+                $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            } catch(Exception $e) {
+                die("Erreur SQL : ".$e->getMessage());
+            }
+        } else if (ENV === "prod")
+        {
+            try {
+                $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
+            } catch(Exception $e) {
+                die("Erreur connexion bdd côté production");
+            }
         }
 
         $classExploded = explode("\\", get_called_class());
@@ -22,19 +31,18 @@ class Database {
 
 	public function save(){
 
-		//INSERT OU UPDATE
-
 		$column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
 
+		// INSERT
 		if (is_null($this->getId())) {
-			//INSERT
+
 			$query = $this->pdo->prepare("INSERT INTO ".$this->table." 
                 (".implode(',', array_keys($column)).") 
                 VALUES 
                 (:".implode(',:', array_keys($column)).") "); //1
-
-		} else {
-			//UPDATE
+			
+		}
+		else { //UPDATE
 
             $str = "";
             foreach($column as $key => $value) // build string for update -> "propertie = :propertie"
