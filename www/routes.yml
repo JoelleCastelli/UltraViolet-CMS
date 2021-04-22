@@ -48,7 +48,7 @@
 
 /utilisateur:
   controller: User
-    action: show
+  action: show
 
 /ajout-d-un-utilisateur:
   controller: User
