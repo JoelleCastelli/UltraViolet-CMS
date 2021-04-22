@@ -1,5 +1,5 @@
 <header class="header">
-    <h1><?php if (isset($title)) echo $title; else echo "Titre top bar"; ?></h1>
+    <h1><?= $title ?? ' Titre de la page'?></h1>
     <div class=left-controls>
         <i class="fas fa-bell"></i>
         <div class="user-label">

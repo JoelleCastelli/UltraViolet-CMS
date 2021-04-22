@@ -14,6 +14,7 @@ class Main
 		$sql = new Database();
 		$view = new View("home");
 		$view->assign("pseudo", $pseudo);
+		$view->assign('title', 'Back office');
 		$view->assign('headScript', 'Resources/scripts/headScripts/home.js');
 		$view->assign('bodyScript', 'Resources/scripts/bodyScripts/home.js');
 	}
