@@ -1,3 +1,4 @@
+# GLOBAL
 /:
   controller: Main
   action: default
@@ -6,9 +7,48 @@
   controller: Main
   action: page404
 
+# PAGES
+/pages:
+  controller: Page
+  action: showAll
+
+# ARTICLES
+/articles:
+  controller: Article
+  action: showAll
+
+/modifier-un-article:
+  controller: Article
+  action: modifyArticle
+
+# PRODUCTIONS
+/productions:
+  controller: Production
+  action: showAll
+
+# COMMENTS
+/commentaires:
+  controller: Comment
+  action: showAll
+
+# TEMPLATES
+/templates:
+  controller: Template
+  action: showAll
+
+# STATS
+/statistiques:
+  controller: Stats
+  action: showAll
+
+# USERS
+/utilisateurs:
+  controller: User
+  action: showAll
+
 /utilisateur:
   controller: User
-  action: default
+    action: show
 
 /ajout-d-un-utilisateur:
   controller: User
@@ -18,32 +58,12 @@
   controller: User
   action: update
 
-/s-inscrire:
-  controller: Person
+/inscription:
+  controller: User
   action: register
 
-/afficher-un-utilisateur:
-  controller: User
-  action: show
 
-
-/afficher-les-utilisateurs:
-  controller: User
+# SETTINGS
+/parametres:
+  controller: Settings
   action: showAll
-
-/modifier-un-article:
-  controller: Article
-  action: modifyArticle
-
-/ma-collection:
-  controller: Collection
-  action: displayCollection
-
-/supprimer-utilisateur:
-  controller: Person
-  action: delete
-
-# PRODUCTIONS
-/productions:
-  controller: Production
-  action: displayProductionList
