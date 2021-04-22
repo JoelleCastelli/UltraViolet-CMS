@@ -9,7 +9,7 @@ use App\Models\Production as ProductionModel;
 class Production
 {
 
-    public function displayProductionListAction() {
+    public function showAllAction() {
         $productions = new ProductionModel();
         $productions = $productions->findAll();
 
@@ -21,8 +21,9 @@ class Production
             $production->cleanRuntime();
         }
 
-        $view = new View("production/list");
+        $view = new View("productions/list");
         $view->assign("productions", $productions);
+        $view->assign('title', 'Productions');
     }
 
 }
