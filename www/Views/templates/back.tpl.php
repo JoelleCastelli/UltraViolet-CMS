@@ -16,7 +16,7 @@
 
     <div class="container">
 		
-        <?php /*include $_SERVER['DOCUMENT_ROOT'].'/Views/components/sidebar.php'; */?>
+        <?php include $_SERVER['DOCUMENT_ROOT'].'/Views/components/sidebar.php'; ?>
 
         <main class="main">
             
