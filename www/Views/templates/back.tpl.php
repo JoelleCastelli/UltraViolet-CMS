@@ -15,12 +15,11 @@
 	
 
     <div class="container">
-		
-        <?php include $_SERVER['DOCUMENT_ROOT'].'/Views/components/sidebar.php'; ?>
+        <?php include 'Views/components/sidebar.php' ?>
 
         <main class="main">
             
-            <?php include $_SERVER['DOCUMENT_ROOT'].'/Views/components/header.php'; ?>
+            <?php include 'Views/components/header.php'; ?>
 
             <div class="main-content">
 
