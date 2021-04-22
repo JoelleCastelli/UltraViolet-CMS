@@ -12,8 +12,10 @@ class Main
 	public function defaultAction(){
 		$pseudo = "Prof";
 		$sql = new Database();
-		$view = new View("home"); 
+		$view = new View("home");
 		$view->assign("pseudo", $pseudo);
+		$view->assign('headScript', 'Resources/scripts/headScripts/home.js');
+		$view->assign('bodyScript', 'Resources/scripts/bodyScripts/home.js');
 	}
 
 	public function page404Action(){
