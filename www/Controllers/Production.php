@@ -49,6 +49,7 @@ class Production
         $form = $production->formBuilderAddProductionTmdb();
         $view = new View("production/add-production-tmdb");
         $view->assign("form", $form);
+        $view->assign('headScript', 'Resources/scripts/headScripts/addProduction.js');
     }
 
     public function tmdbRequestAction() {
