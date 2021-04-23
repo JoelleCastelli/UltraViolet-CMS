@@ -53,8 +53,8 @@ class Production
     }
 
     public function tmdbRequestAction() {
-        if(!empty($_POST['type']) && !empty($_POST['productionID'])) {
-            if($_POST['type'] === 'movie' && (!empty($_POST['seasonNb']) || !empty($_POST['episodeNb']))) {
+        if(!empty($_POST['productionType']) && !empty($_POST['productionID'])) {
+            if($_POST['productionType'] === 'movie' && (!empty($_POST['seasonNb']) || !empty($_POST['episodeNb']))) {
                 echo "Un film ne peut pas avoir de numéro de saison ou d'épisode";
             } else {
                 $urlArray = $this->getTmdbUrl($_POST);
@@ -78,7 +78,7 @@ class Production
             $episode = json_decode($jsonResponseArray[1]);
 
         $production['idTmdb'] = $item->id;
-        $production['type'] = $post['type'];
+        $production['productionType'] = $post['productionType'];
         $production['title'] = $item->title ?? $item->name;
         $production['originalTitle'] = $item->original_title ?? $item->original_name;
         $production['overview'] = $item->overview;
@@ -88,7 +88,7 @@ class Production
         $production['releaseDate'] = $item->release_date ?? $item->first_air_date;
         $production['runtime'] = $item->runtime ?? $item->episode_run_time[0];
 
-        switch ($post['type']) {
+        switch ($post['productionType']) {
             case 'movie':
                 $production['directors'] = '';
                 $production['writers'] = '';
@@ -153,9 +153,9 @@ class Production
     }
 
     public function getTmdbUrl($data){
-        if(!$data['type'] || !$data['productionID']) return false;
+        if(!$data['productionType'] || !$data['productionID']) return false;
         $urlArray = [];
-        switch ($data['type']) {
+        switch ($data['productionType']) {
             case 'movie':
                 $urlArray['movie'] = TMDB_API_URL . 'movie/' . $data['productionID'].'?api_key=' . TMDB_API_KEY;
                 break;

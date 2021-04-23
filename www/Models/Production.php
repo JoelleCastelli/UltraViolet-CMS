@@ -336,7 +336,7 @@ class Production extends Database
                 "submit" => "Valider"
             ],
             "inputs" => [
-                "type" => [
+                "productionType" => [
                     "type" => "text",
                     "label" => "Type",
                     "class" => "form_input",
@@ -365,7 +365,7 @@ class Production extends Database
                     "label" => "Preview",
                     "class" => "form_input"
                 ],
-            ]
+            ],
         ];
 
     }
