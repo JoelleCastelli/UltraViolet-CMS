@@ -11,6 +11,11 @@ use App\Models\Page;
 class Person
 {
 
+    public function showAllAction() {
+        $view = new View("users/list");
+        $view->assign('title', 'Utilisateurs');
+    }
+
 	public function defaultAction() {
 		echo "User default";
 	}
@@ -81,16 +86,6 @@ class Person
 		
 		//Affiche la vue user intégrée dans le template du front
 		$view = new View("user"); 
-	}
-
-	//Method : Action
-	public function showAllAction(){
-		
-		//Affiche la vue users intégrée dans le template du back
-		$view = new View("users", "back"); 
-		$view->assign("title", "Afficher les utilisateurs");
-		$view->assign("user", "Kamal Hennou");
-		
 	}
 	
 }

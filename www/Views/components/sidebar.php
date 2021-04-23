@@ -52,6 +52,14 @@
                 <div>Productions</div>
             </li>
         </a>
+        <a href="/utilisateurs">
+            <li>
+                <span class="icon">
+                    <i class="fas fa-users"></i>
+                </span>
+                <div>Utilisateurs</div>
+            </li>
+        </a>
         <a href="/templates">
             <li>
                 <span class="icon">

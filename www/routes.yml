@@ -43,7 +43,7 @@
 
 # USERS
 /utilisateurs:
-  controller: User
+  controller: Person
   action: showAll
 
 /utilisateur:
