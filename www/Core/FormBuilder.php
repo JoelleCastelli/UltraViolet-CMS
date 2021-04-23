@@ -124,7 +124,6 @@ class FormBuilder
                 }
 
                 $html .= "</fieldset>";
-
             }
         }
 

@@ -1,6 +1,6 @@
 <nav id="sidebar">
     <ul>
-        <a href="#">
+        <a href="/">
             <li id="sidebar-label">
                 <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png" width="30px" alt="logo-site"> -->
                 <label id="logo-site"></label>
@@ -12,15 +12,15 @@
                 <i class="fas fa-angle-left"></i>
             </div>
         </li>
-        <a href="#">
+        <a href="/">
             <li>
                 <span class="icon">
                     <i class="fas fa-circle-notch"></i>
                 </span>
-                <div>Overview</div>
+                <div>Dashboard</div>
             </li>
         </a>
-        <a href="#">
+        <a href="/pages">
             <li>
                 <span class="icon">
                     <i class="fas fa-pager"></i>
@@ -28,23 +28,15 @@
                 <div>Pages</div>
             </li>
         </a>
-        <a href="modifier-un-article">
+        <a href="/articles">
             <li>
                 <span class="icon">
                     <i class="fas fa-newspaper"></i>
                 </span>
-                <div>Article</div>
+                <div>Articles</div>
             </li>
         </a>
-        <a href="ma-collection">
-            <li>
-                <span class="icon">
-                    <i class="fas fa-book"></i>
-                </span>
-                <div>Collections</div>
-            </li>
-        </a>
-        <a href="#">
+        <a href="/commentaires">
             <li>
                 <span class="icon">
                     <i class="fas fa-comments"></i>
@@ -52,7 +44,23 @@
                 <div>Commentaires</div>
             </li>
         </a>
-        <a href="#">
+        <a href="/productions">
+            <li>
+                <span class="icon">
+                    <i class="fas fa-book"></i>
+                </span>
+                <div>Productions</div>
+            </li>
+        </a>
+        <a href="/utilisateurs">
+            <li>
+                <span class="icon">
+                    <i class="fas fa-users"></i>
+                </span>
+                <div>Utilisateurs</div>
+            </li>
+        </a>
+        <a href="/templates">
             <li>
                 <span class="icon">
                     <i class="fas fa-paste"></i>
@@ -60,7 +68,7 @@
                 <div>Templates</div>
             </li>
         </a>
-        <a href="#">
+        <a href="/statistiques">
             <li>
                 <span class="icon">
                     <i class="fas fa-chart-line"></i>
@@ -71,20 +79,12 @@
         <li>
             <hr class="grow-separator">
         </li>
-        <a href="#">
+        <a href="/parametres">
             <li>
                 <span class="icon">
                     <i class="fas fa-cogs"></i>
                 </span>
-                <div>Settings</div>
-            </li>
-        </a>
-        <a href="#">
-            <li>
-                <span class="icon">
-                    <i class="fas fa-certificate"></i>
-                </span>
-                <div>Subscription</div>
+                <div>Paramètres</div>
             </li>
         </a>
     </ul>

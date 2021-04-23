@@ -27,7 +27,6 @@ services:
       MYSQL_PASSWORD: user
     volumes:
       - ./db_data:/var/lib/mysql
-    restart: always
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
