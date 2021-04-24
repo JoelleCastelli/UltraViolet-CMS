@@ -281,7 +281,6 @@ class Person extends Database
                     "type" => "email",
                     "placeholder" => "Email",
                     "class" => "input",
-                    "minLength" => 8,
                     "maxLength" => 130,
                     "error" => "Votre email doit faire entre 8 et 130 caractères",
                     "required" => true,
