@@ -32,7 +32,7 @@ class FormValidator
                     self::numberInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::passwordValidator($fieldName, $data[$fieldName], $fieldConfig, $errors);
                     self::passwordConfirmationValidator($fieldName, $data, $fieldConfig, $errors);
-                    self::emailInputValidator($data["email"], $fieldConfig, $errors);
+                    self::emailInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::dateInputValidator($data[$fieldName], "Y-m-d", $fieldConfig, $errors);
                     self::optionsValidator($data[$fieldName], $fieldConfig);
                 }
