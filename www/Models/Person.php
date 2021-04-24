@@ -249,9 +249,7 @@ class Person extends Database
             "fields"=>[
                 "fullName" => [
                     "type"=>"text",
-                    "placeholder"=>"Exemple : Jeanne Dow",
-                    "label"=>"Votre nom et prénom",
-                    "class"=>"",
+                    "placeholder"=>"Prénom et nom",
                     "minLength"=>2,
                     "maxLength"=>50,
                     "error"=>"Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
@@ -259,9 +257,7 @@ class Person extends Database
                 ],
                 "pseudo"=>[
                     "type"=>"text",
-                    "placeholder"=>"Exemple : jeanne-dow-du-77",
-                    "label"=>"Votre Pseudo",
-                    "class"=>"",
+                    "placeholder"=>"Pseudo",
                     "minLength"=>2,
                     "maxLength"=>25,
                     "error"=>"Votre pseudo doit faire entre 2 et 25 caractères"
@@ -269,13 +265,14 @@ class Person extends Database
                 ],
                 "email"=>[
                     "type"=>"email",
-                    "placeholder"=>"Exemple : mon_email@mail.com",
-                    "label"=>"Votre Email",
+                    "placeholder"=>"Email",
                     "class"=>"",
                     "minLength"=>8,
                     "maxLength"=>130,
                     "error"=>"Votre email doit faire entre 8 et 130 caractères",
-                    "required" => true
+                    "required" => true,
+                    "firstTagOpen" =>"<div class='search-bar'>",
+                    "firstTagClose" =>"<i class='fas fa-envelope'></i></div>"
 
                 ],
                 "genre"=>[
@@ -298,20 +295,23 @@ class Person extends Database
                 ],
                 "pwd"=>[
                     "type"=>"password",
-                    "label"=>"Votre mot de passe",
-                    "class"=>"",
+                    "placeholder"=>"Votre email",
                     "minLength"=>8,
                     "regex"=> "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
                     "error"=>"Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
+                    "required" => true,
+                    "firstTagClose" =>"<i class='fas fa-lock'></i></div>"
+
                     "required" => true
                 ],
                 "pwdConfirm"=> [
                     "type"=>"password",
-                    "label"=>"Confirmation",
-                    "class"=>"",
+                    "placeholder" => "Confirmation du mot de passe",
                     "confirm"=>"pwd",
                     "error"=>"Votre mot de passe de confirmation ne correspond pas",
-                    "required" => true
+                    "required" => true,
+                    "firstTagOpen" =>"<div class='search-bar'>",
+                    "firstTagClose" =>"<i class='fas fa-lock'></i></div>"
 
                 ],
                 "csrf_token" => [
