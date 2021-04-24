@@ -2,13 +2,12 @@
     <ul>
         <a href="/">
             <li id="sidebar-label">
-                <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png" width="30px" alt="logo-site"> -->
                 <label id="logo-site"></label>
                 <div>Ultra Violet</div>
             </li>
         </a>
         <li>
-            <div id="cta-toggle-sidebar">
+            <div id="cta-toggle-sidebar" onclick="toggleSidebar();">
                 <i class="fas fa-angle-left"></i>
             </div>
         </li>
