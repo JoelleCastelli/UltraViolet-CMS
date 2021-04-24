@@ -210,7 +210,7 @@ class Person extends Database
 				"id"=>"form_register",
 				"submit"=>"S'inscrire"
 			],
-			"inputs"=>[
+			"fields"=>[
 				"email"=>[
 				    "type"=>"email",
                     "placeholder"=>"Exemple : nom@gmail.com",
@@ -244,9 +244,9 @@ class Person extends Database
 				"id"=>"form_register",
 				"submit"=>"S'inscrire",
                 "required_inputs"=>8,
-                "csrf" => FormValidator::getCSRFToken()
+                "referer" => '/inscription'
 			],
-            "inputs"=>[
+            "fields"=>[
                 "fullName" => [
                     "type"=>"text",
                     "placeholder"=>"Exemple : Jeanne Dow",
@@ -255,9 +255,7 @@ class Person extends Database
                     "minLength"=>2,
                     "maxLength"=>50,
                     "error"=>"Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
-                    //"regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u",
                     "required" => true
-
                 ],
                 "pseudo"=>[
                     "type"=>"text",
@@ -266,8 +264,7 @@ class Person extends Database
                     "class"=>"",
                     "minLength"=>2,
                     "maxLength"=>25,
-                    "error"=>"Votre pseudo doit faire entre 2 et 25 caractères",
-                    "required" => true
+                    "error"=>"Votre pseudo doit faire entre 2 et 25 caractères"
 
                 ],
                 "email"=>[
@@ -281,6 +278,24 @@ class Person extends Database
                     "required" => true
 
                 ],
+                "genre"=>[
+                    "type"=>"radio",
+                    "label"=>"Test",
+                    "class"=>"",
+                    "error"=>"Erreur test",
+                    "required" => true,
+                    "options" => [
+                        [
+                            "value"=>"movie",
+                            "text"=>"Film",
+                        ],
+                        [
+                            "value"=>"series",
+                            "text"=>"Série",
+                        ]
+                    ],
+
+                ],
                 "pwd"=>[
                     "type"=>"password",
                     "label"=>"Votre mot de passe",
@@ -289,7 +304,6 @@ class Person extends Database
                     "regex"=> "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
                     "error"=>"Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
                     "required" => true
-
                 ],
                 "pwdConfirm"=> [
                     "type"=>"password",
@@ -299,129 +313,12 @@ class Person extends Database
                     "error"=>"Votre mot de passe de confirmation ne correspond pas",
                     "required" => true
 
-                ]
-
-            ],
-            "selects"=>[
-                "role"=>[
-                    "label"=>"Définnissez votre rôle : ",
-                    "class_label"=>"",
-                    "class_select"=>"",
-                    "error"=>"Veuillez choisir un rôle.",
-                    "options"=>[
-                        [
-                            "value"=>"",
-                            "label"=>"-- Choisissez un rôle --",
-                            "disabled"=>"disabled",
-                            "selected"=>"selected",
-                            "class"=>"",
-                        ],
-                        [
-                            "value"=>"user",
-                            "label"=>"Utilisateur",
-
-                        ],
-                        [
-                            "value"=>"admin",
-                            "label"=>"Administrateur",
-                        ],
-                        [
-                            "value"=>"editor",
-                            "label"=>"Editeur",
-
-                        ],
-                        [
-                            "value"=>"vip",
-                            "label"=>"V.I.P",
-                        ]
-                    ]
-                ]
-            ],
-            /*"radios"=>[
-                "gender"=> [
-                    "label" => "Votre genre ",
-                    "class_fieldset" => "",
-                    "class_legend" => "",
-                    "error" => "Choisissez un genre siouplè !",
-                    "options"=>[
-                        [
-                            "id"=>"male",
-                            "value"=>"male",
-                            "label"=>"Male",
-                            "class_label" => "",
-                            "class_input" => ""
-                        ],
-                        [
-                            "id"=>"female",
-                            "value"=>"female",
-                            "label"=>"Female",
-                        ],
-                        [
-                            "id"=>"other",
-                            "value"=>"other",
-                            "label"=>"Other",
-                        ],
-                        [
-                            "id"=>"cactus",
-                            "value"=>"cactus",
-                            "label"=>"Je me sens cactus",
-                        ]
-                    ]
-                ]
-            ],*/
-            "checkboxes"=>[
-                "rules"=> [
-                    "error" => "Vous devez accepter le reglement.",
-                    "label" => "",
-                    "options"=>[
-                        [
-                            "id" => "rules",
-                            "value"=>"rule",
-                            "label"=>"Veuillez lire puis accepter le reglement.",
-                            "required" => true
-                        ],
-                    ]
                 ],
-                "optin"=> [
-                    "error" => "Oops ! Un problème se trouve avec votre Optin.",
-                    "label" => "",
-                    "options"=>[
-                        [
-                            "id" => "optin",
-                            "value"=>1,
-                            "label"=>"Acceptez les newsletters."
-                        ],
-
-                    ]
+                "csrf_token" => [
+                    "type"=>"hidden",
+                    "value"=> FormValidator::generateCSRFToken(),
                 ]
             ]
 		];
 	}
 }
-
-/*
- * CHECKBOXES
- *
- * Alone
-     *   <div>
-            <input type="checkbox" id="subscribeNews" name="subscribe" value="newsletter">
-            <label for="subscribeNews">Souhaitez-vous vous abonner à la newsletter ?</label>
-         </div>
-        <div>
-            <button type="submit">S'abonner</button>
-        </div>
- *
- * Multiples
- *
-     * <fieldset>
-            <legend>Veuillez sélectionner vos intérêts :</legend>
-            <div>
-                <input type="checkbox" id="coding" name="interest" value="coding">
-                <label for="coding">Développement</label>
-            </div>
-            <div>
-                <input type="checkbox" id="music" name="interest" value="music">
-                <label for="music">Musique</label>
-            </div>
-      </fieldset>
- * */

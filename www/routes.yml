@@ -59,7 +59,7 @@
   action: update
 
 /inscription:
-  controller: User
+  controller: Person
   action: register
 
 
