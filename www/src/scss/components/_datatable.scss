@@ -1,0 +1,77 @@
+.dataTables_wrapper {
+    font-family: $mulish;
+    font-size: 14px;
+    border: 1px solid #DFE0EB;
+    border-radius: 8px;
+
+    #tableHeader {
+        display: flex;
+        justify-content: space-between;
+        background-color: white;
+        margin-bottom: 20px;
+        padding: 5px;
+        border-radius: 8px;
+
+        & * {
+            height: max-content;
+        }
+
+        .dataTables_filter {
+            width: 50%;
+            background-color: #E7E9F3;
+            border: 2px solid #DFE0EB;
+            height: max-content;
+            border-radius: 5px;
+
+            i {
+                color: $purple;
+                margin-right: 5px;
+                vertical-align: middle;
+            }
+
+            input {
+                border: none;
+                width: 90%;
+                padding-left: 25px;
+            }
+        }
+    }
+
+    .dataTable {
+        background-color: white;
+        padding: 10px;
+        border: 2px solid #DFE0EB;
+        border-radius: 5px;
+
+        &.no-footer{
+            border: none;
+        }
+
+        thead {
+            background-color: white;
+            border: 1px solid #DFE0EB;
+            font-weight: bold;
+            letter-spacing: 0.2px;
+            color: #9FA2B4;
+            tr {
+                height: 20px;
+
+                th {
+                    border: none;
+                }
+            }
+        }
+
+        tr {
+            height: 75px;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+    }
+
+}
+
+
+
