@@ -92,7 +92,7 @@ class Person
                 $user->setUvtrMediaId(1);
                 $user->setDeletedAt(null);
 
-				$user->save();
+				//$user->save();
 			}else{
                 $view->assign("errors", $errors);
 			}
