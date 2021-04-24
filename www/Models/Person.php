@@ -246,7 +246,144 @@ class Person extends Database
                 "required_inputs"=>8,
                 "referer" => '/inscription'
 			],
-            "fields"=>[
+            "fields" => [
+                "fullName" => [
+                    "type"=>"text",
+                    "placeholder"=>"Prénom et nom",
+                    "minLength"=>2,
+                    "maxLength"=>50,
+                    "error"=>"Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
+                    //"regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u",
+                    "required" => true,
+                    "firstTagOpen" =>"<div class='search-bar'>",
+                    "firstTagClose" =>"<i class='fas fa-user'></i></div>"
+                ],
+                "pseudo"=>[
+                    "type"=>"text",
+                    "placeholder"=>"Pseudo",
+                    "minLength"=>2,
+                    "maxLength"=>25,
+                    "error"=>"Votre pseudo doit faire entre 2 et 25 caractères",
+                    "required" => true,
+                    "firstTagOpen" =>"<div class='search-bar'>",
+                    "firstTagClose" =>"<i class='fas fa-user'></i></div>"
+
+                ],
+                "email"=>[
+                    "type"=>"email",
+                    "placeholder"=>"Email",
+                    "class"=>"",
+                    "minLength"=>8,
+                    "maxLength"=>130,
+                    "error"=>"Votre email doit faire entre 8 et 130 caractères",
+                    "required" => true,
+                    "firstTagOpen" =>"<div class='search-bar'>",
+                    "firstTagClose" =>"<i class='fas fa-envelope'></i></div>"
+
+                ],
+                "pwd"=>[
+                    "type"=>"password",
+                    "placeholder"=>"Mot de passe",
+                    "minLength"=>8,
+                    "regex"=> "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
+                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
+                    "required" => true,
+                    "firstTagOpen" =>"<div class='search-bar'>",
+                    "firstTagClose" =>"<i class='fas fa-lock'></i></div>"
+
+                ],
+                "pwdConfirm"=> [
+                    "type"=>"password",
+                    "placeholder" => "Confirmation du mot de passe",
+                    "confirm"=>"pwd",
+                    "error"=>"Votre mot de passe de confirmation ne correspond pas",
+                    "required" => true,
+                    "firstTagOpen" =>"<div class='search-bar'>",
+                    "firstTagClose" =>"<i class='fas fa-lock'></i></div>"
+                ],
+                "role"=>[
+                    "type" => "select",
+                    "required"=> true,
+                    "options" => [
+
+                        "default" => [
+                            "value"=>"",
+                            "text"=>"Choisissez un rôle...",
+                            "disabled"=>true,
+                            "selected"=>true,
+                            "class"=>"",
+                        ],
+                        "user" => [
+                            "text" => "Utilisateur",
+                            "value" =>"user"
+                        ],
+                        "editor" => [
+                            "text" => "Editeur",
+                            "value" =>"editor"
+                        ],
+                        "admin" => [
+                            "text" => "Administrateur",
+                            "value" =>"admin"
+                        ],
+                        "vip" => [
+                            "text" => "V.I.P",
+                            "value" =>"vip"
+                        ]
+                    ]
+                ],
+                "optin"=>[
+                    "type" => "checkbox",
+                    "options" => [
+                        "optin" => [
+                            "error" => "",
+                            "id" => "optin",
+                            "value"=>1,
+                            "required" => true,
+                            "text" => "Accepter la newsletters."
+                        ]
+                    ]
+                ],
+                "rules"=>[
+                    "type" => "checkbox",
+                    "options" => [
+                        "rules" => [
+                            "error" => "Vous devez accepter le reglement.",
+                            "id" => "rules",
+                            "value"=>"rule",
+                            "required" => true,
+                            "text" => "Veuillez lire puis accepter le reglement."
+                        ]
+                    ]
+                ]
+
+            ]
+           /* "checkboxes"=>[
+                "rules"=> [
+                    "error" => "Vous devez accepter le reglement.",
+                    "label" => "",
+                    "options"=>[
+                        [
+                            "id" => "rules",
+                            "value"=>"rule",
+                            "label"=>"Veuillez lire puis accepter le reglement.",
+                            "required" => true
+                        ],
+                    ]
+                ],
+                "optin"=> [
+                    "error" => "Oops ! Un problème se trouve avec votre Optin.",
+                    "label" => "",
+                    "options"=>[
+                        [
+                            "id" => "optin",
+                            "value"=>1,
+                            "label"=>"Acceptez les newsletters."
+                        ],
+
+                    ]
+                ]
+            ],
+            "inputs"=>[
                 "fullName" => [
                     "type"=>"text",
                     "placeholder"=>"Prénom et nom",

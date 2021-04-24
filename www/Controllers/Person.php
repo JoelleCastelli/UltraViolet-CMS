@@ -39,7 +39,11 @@ class Person
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)){
 
-                $role = $_POST["optin"][0];
+                if(isset($_POST["optin"]))
+                    $newletters = $_POST["optin"][0];
+                else
+                    $newletters = 0;
+
                 $dateNow = new \DateTime('now');
                 $updatedAt = $dateNow->format("Y-m-d H:i:s");
 
@@ -48,12 +52,12 @@ class Person
 				$user->setEmail($_POST["email"]);
                 $user->setPassword($_POST["pwd"]);
                 $user->setRole($_POST["role"]);
-                $user->setOptin($role);
+                $user->setOptin($newletters);
                 $user->setUpdatedAt($updatedAt);
                 $user->setUvtrMediaId(1);
                 $user->setDeletedAt(null);
 
-				$user->save();
+				//$user->save();
 			}else{
                 $view->assign("errors", $errors);
 			}

@@ -1,3 +1,10 @@
+<?php
+
+use App\Core\Router;
+
+$array_request = explode("/", mb_strtolower($_SERVER['REQUEST_URI']));
+$request = $array_request[1] ?? "";
+?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -26,9 +33,33 @@
             </main>
         </div>
 
-        <?php if(isset($bodyScript) && !empty($bodyScript)) {
-            echo "<script src='$bodyScript'></script>";
-        }?>
+    <div class="container">
 
-    </body>
+        <?php if($request != "inscription"): ?>
+            <?php include 'Views/components/sidebar.php' ?>
+        <?php endif; ?>
+
+        <main class="main">
+
+            <?php if($request != "inscription"): ?>
+                <?php include 'Views/components/header.php'; ?>
+            <?php endif; ?>
+
+            <div class="main-content">
+
+                <?php include $this->view ?>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <?php if(isset($bodyScript) && !empty($bodyScript)) {
+        echo "<script src='$bodyScript'></script>";
+    }?>
+
+
+
+</body>
 </html>
