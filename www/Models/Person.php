@@ -8,11 +8,11 @@ use App\Core\FormValidator;
 class Person extends Database
 {
 
-	private $id = null;
+    private $id = null;
     private $createdAt;
-	protected $fullName;
-	protected $pseudo;
-	protected $email;
+    protected $fullName;
+    protected $pseudo;
+    protected $email;
     protected $password;
     protected $optin;
     protected $updatedAt;
@@ -20,9 +20,10 @@ class Person extends Database
     protected $role;
     protected $uvtr_media_id;
 
-	public function __construct(){
-		parent::__construct();
-	}
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
      * @return null
@@ -201,261 +202,110 @@ class Person extends Database
         $this->uvtr_media_id = $uvtr_media_id;
     }
 
-	public function formBuilderLogin(){
-		return [
-			"config"=>[
-				"method"=>"POST",
-				"action"=>"",
-				"class"=>"form_control",
-				"id"=>"form_register",
-				"submit"=>"S'inscrire"
-			],
-			"fields"=>[
-				"email"=>[
-				    "type"=>"email",
-                    "placeholder"=>"Exemple : nom@gmail.com",
-                    "label"=>"Votre Email",
-                    "required"=>true,
-                    "class"=>"form_input",
-                    "minLength"=>8,
-                    "maxLength"=>320,
-                    "error"=>"Votre email doit faire entre 8 et 320 caractères"
-                ],
-				"pwd"=>[
-				    "type"=>"password",
-                    "label"=>"Votre mot de passe",
-                    "required"=>true,
-                    "class"=>"form_input",
-                    "minLength"=>8,
-                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères"
-                ]
-			]
-
-		];
-	}
-
-	public function formBuilderRegister(){
-
-		return [
-			"config"=>[
-				"method"=>"POST",
-				"action"=>"",
-				"class"=>"form_control",
-				"id"=>"form_register",
-				"submit"=>"S'inscrire",
-                "required_inputs"=>8,
-                "referer" => '/inscription'
-			],
-            "fields" => [
-                "fullName" => [
-                    "type"=>"text",
-                    "placeholder"=>"Prénom et nom",
-                    "minLength"=>2,
-                    "maxLength"=>50,
-                    "error"=>"Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
-                    //"regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u",
-                    "required" => true,
-                    "firstTagOpen" =>"<div class='search-bar'>",
-                    "firstTagClose" =>"<i class='fas fa-user'></i></div>"
-                ],
-                "pseudo"=>[
-                    "type"=>"text",
-                    "placeholder"=>"Pseudo",
-                    "minLength"=>2,
-                    "maxLength"=>25,
-                    "error"=>"Votre pseudo doit faire entre 2 et 25 caractères",
-                    "required" => true,
-                    "firstTagOpen" =>"<div class='search-bar'>",
-                    "firstTagClose" =>"<i class='fas fa-user'></i></div>"
-
-                ],
-                "email"=>[
-                    "type"=>"email",
-                    "placeholder"=>"Email",
-                    "class"=>"",
-                    "minLength"=>8,
-                    "maxLength"=>130,
-                    "error"=>"Votre email doit faire entre 8 et 130 caractères",
-                    "required" => true,
-                    "firstTagOpen" =>"<div class='search-bar'>",
-                    "firstTagClose" =>"<i class='fas fa-envelope'></i></div>"
-
-                ],
-                "pwd"=>[
-                    "type"=>"password",
-                    "placeholder"=>"Mot de passe",
-                    "minLength"=>8,
-                    "regex"=> "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
-                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
-                    "required" => true,
-                    "firstTagOpen" =>"<div class='search-bar'>",
-                    "firstTagClose" =>"<i class='fas fa-lock'></i></div>"
-
-                ],
-                "pwdConfirm"=> [
-                    "type"=>"password",
-                    "placeholder" => "Confirmation du mot de passe",
-                    "confirm"=>"pwd",
-                    "error"=>"Votre mot de passe de confirmation ne correspond pas",
-                    "required" => true,
-                    "firstTagOpen" =>"<div class='search-bar'>",
-                    "firstTagClose" =>"<i class='fas fa-lock'></i></div>"
-                ],
-                "role"=>[
-                    "type" => "select",
-                    "required"=> true,
-                    "options" => [
-
-                        "default" => [
-                            "value"=>"",
-                            "text"=>"Choisissez un rôle...",
-                            "disabled"=>true,
-                            "selected"=>true,
-                            "class"=>"",
-                        ],
-                        "user" => [
-                            "text" => "Utilisateur",
-                            "value" =>"user"
-                        ],
-                        "editor" => [
-                            "text" => "Editeur",
-                            "value" =>"editor"
-                        ],
-                        "admin" => [
-                            "text" => "Administrateur",
-                            "value" =>"admin"
-                        ],
-                        "vip" => [
-                            "text" => "V.I.P",
-                            "value" =>"vip"
-                        ]
-                    ]
-                ],
-                "optin"=>[
-                    "type" => "checkbox",
-                    "options" => [
-                        "optin" => [
-                            "error" => "",
-                            "id" => "optin",
-                            "value"=>1,
-                            "required" => true,
-                            "text" => "Accepter la newsletters."
-                        ]
-                    ]
-                ],
-                "rules"=>[
-                    "type" => "checkbox",
-                    "options" => [
-                        "rules" => [
-                            "error" => "Vous devez accepter le reglement.",
-                            "id" => "rules",
-                            "value"=>"rule",
-                            "required" => true,
-                            "text" => "Veuillez lire puis accepter le reglement."
-                        ]
-                    ]
-                ]
-
-            ]
-           /* "checkboxes"=>[
-                "rules"=> [
-                    "error" => "Vous devez accepter le reglement.",
-                    "label" => "",
-                    "options"=>[
-                        [
-                            "id" => "rules",
-                            "value"=>"rule",
-                            "label"=>"Veuillez lire puis accepter le reglement.",
-                            "required" => true
-                        ],
-                    ]
-                ],
-                "optin"=> [
-                    "error" => "Oops ! Un problème se trouve avec votre Optin.",
-                    "label" => "",
-                    "options"=>[
-                        [
-                            "id" => "optin",
-                            "value"=>1,
-                            "label"=>"Acceptez les newsletters."
-                        ],
-
-                    ]
-                ]
+    public function formBuilderLogin()
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "form_register",
+                "submit" => "S'inscrire",
+                "referer" => '/connexion'
             ],
-            "inputs"=>[
-                "fullName" => [
-                    "type"=>"text",
-                    "placeholder"=>"Prénom et nom",
-                    "minLength"=>2,
-                    "maxLength"=>50,
-                    "error"=>"Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
-                    "required" => true
-                ],
-                "pseudo"=>[
-                    "type"=>"text",
-                    "placeholder"=>"Pseudo",
-                    "minLength"=>2,
-                    "maxLength"=>25,
-                    "error"=>"Votre pseudo doit faire entre 2 et 25 caractères"
-
-                ],
-                "email"=>[
-                    "type"=>"email",
-                    "placeholder"=>"Email",
-                    "class"=>"",
-                    "minLength"=>8,
-                    "maxLength"=>130,
-                    "error"=>"Votre email doit faire entre 8 et 130 caractères",
-                    "required" => true,
-                    "firstTagOpen" =>"<div class='search-bar'>",
-                    "firstTagClose" =>"<i class='fas fa-envelope'></i></div>"
-
-                ],
-                "genre"=>[
-                    "type"=>"radio",
-                    "label"=>"Test",
-                    "class"=>"",
-                    "error"=>"Erreur test",
-                    "required" => true,
-                    "options" => [
-                        [
-                            "value"=>"movie",
-                            "text"=>"Film",
-                        ],
-                        [
-                            "value"=>"series",
-                            "text"=>"Série",
-                        ]
-                    ],
-
-                ],
-                "pwd"=>[
-                    "type"=>"password",
-                    "placeholder"=>"Votre email",
-                    "minLength"=>8,
-                    "regex"=> "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
-                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
-                    "required" => true,
-                    "firstTagClose" =>"<i class='fas fa-lock'></i></div>"
-
-                    "required" => true
-                ],
-                "pwdConfirm"=> [
-                    "type"=>"password",
-                    "placeholder" => "Confirmation du mot de passe",
-                    "confirm"=>"pwd",
-                    "error"=>"Votre mot de passe de confirmation ne correspond pas",
-                    "required" => true,
-                    "firstTagOpen" =>"<div class='search-bar'>",
-                    "firstTagClose" =>"<i class='fas fa-lock'></i></div>"
-
-                ],
+            "fields" => [
                 "csrf_token" => [
                     "type"=>"hidden",
-                    "value"=> FormValidator::generateCSRFToken(),
-                ]
+                    "value"=>FormValidator::generateCSRFToken()
+                ],
+                "email" => [
+                    "type" => "email",
+                    "placeholder" => "Email",
+                    "class" => "input",
+                    "id" => "email",
+                    "error" => "Votre champ email est vide.",
+                    "required" => true,
+
+                ],
+                "password" => [
+                    "type" => "password",
+                    "placeholder" => "Mot de passe",
+                    "class" => "input",
+                    "error" => "Votre champ mot de passe est vide.",
+                    "required" => true,
+
+                ],
             ]
-		];
-	}
+
+        ];
+    }
+
+    public function formBuilderRegister()
+    {
+
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "form_register",
+                "submit" => "S'inscrire",
+                "referer" => '/inscription'
+            ],
+            "fields" => [
+                "csrf_token" => [
+                    "type"=>"hidden",
+                    "value"=>FormValidator::generateCSRFToken()
+                ],
+                "fullName" => [
+                    "type" => "text",
+                    "placeholder" => "Prénom et nom",
+                    "minLength" => 2,
+                    "maxLength" => 50,
+                    "class" => "input",
+                    "error" => "Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
+                    "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "required" => true,
+                ],
+                "pseudo" => [
+                    "type" => "text",
+                    "placeholder" => "Pseudonyme",
+                    "minLength" => 2,
+                    "maxLength" => 25,
+                    "class" => "input",
+                    "error" => "Votre pseudo doit faire entre 2 et 25 caractères",
+                    "required" => true,
+
+                ],
+                "email" => [
+                    "type" => "email",
+                    "placeholder" => "Email",
+                    "class" => "input",
+                    "minLength" => 8,
+                    "maxLength" => 130,
+                    "error" => "Votre email doit faire entre 8 et 130 caractères",
+                    "required" => true,
+
+                ],
+                "pwd" => [
+                    "type" => "password",
+                    "placeholder" => "Mot de passe",
+                    "minLength" => 8,
+                    "class" => "input",
+                    "regex" => "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
+                    "required" => true,
+
+                ],
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "class" => "input",
+                    "placeholder" => "Confirmation du mot de passe",
+                    "confirm" => "pwd",
+                    "error" => "Votre mot de passe de confirmation ne correspond pas",
+                    "required" => true,
+                ],
+            ]
+        ];
+    }
 }
