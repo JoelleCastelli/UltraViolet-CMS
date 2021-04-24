@@ -12,8 +12,8 @@ class Main
 		$sql = new Database();
 		$view = new View("home");
 		$view->assign('title', 'Back office');
-		$view->assign('headScript', 'Resources/scripts/headScripts/home.js');
-		$view->assign('bodyScript', 'Resources/scripts/bodyScripts/home.js');
+		$view->assign('headScript', 'src/js/headScripts/home.js');
+		$view->assign('bodyScript', 'src/js/bodyScripts/home.js');
 	}
 
 	public function page404Action(){
