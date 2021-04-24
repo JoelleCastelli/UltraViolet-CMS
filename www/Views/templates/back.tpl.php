@@ -9,12 +9,15 @@
     <?php if(isset($headScript) && !empty($headScript)) {
         echo "<script src='$headScript'></script>";
     }?>
+    <script src="./../../dist/main.js"></script>
+
 </head>
 <body>
 
 	
 
     <div class="container">
+    
         <?php include 'Views/components/sidebar.php' ?>
 
         <main class="main">
@@ -34,6 +37,8 @@
     <?php if(isset($bodyScript) && !empty($bodyScript)) {
         echo "<script src='$bodyScript'></script>";
     }?>
+
+
 
 </body>
 </html>
