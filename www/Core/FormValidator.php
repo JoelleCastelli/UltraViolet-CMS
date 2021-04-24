@@ -82,9 +82,9 @@ class FormValidator
         }
     }
 
-    public static function emailInputValidator($email, $fieldConfig, &$errors) {
+    public static function emailInputValidator($field, $fieldConfig, &$errors) {
         if ($fieldConfig["type"] == "email") {
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            if(!filter_var($field, FILTER_VALIDATE_EMAIL)){
                 $errors[] = $fieldConfig["error"];
             }
         }
