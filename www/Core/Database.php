@@ -76,4 +76,11 @@ class Database {
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetchAll();
     }
+
+    public function selectWhere($column, $value) {
+        $query = $this->pdo->query("SELECT * FROM ".$this->table." WHERE ".$column." = '".$value."'");
+        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+        return $query->fetchAll();
+    }
+
 }
