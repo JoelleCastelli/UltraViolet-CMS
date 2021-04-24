@@ -284,7 +284,7 @@ class Page extends Database
 
                 ],
 			],
-            "selects"=>[
+            "select"=>[
                 "state"=>[
                     "label"=>"Choisissez un état : ",
                     "class_label"=>"",
