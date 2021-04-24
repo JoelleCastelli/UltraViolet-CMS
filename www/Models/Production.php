@@ -266,7 +266,7 @@ class Production extends Database
                 "id" => "formAddProduction",
                 "submit" => "Valider"
             ],
-            "inputs" => [
+            "fields" => [
                 "type" => [
                     "type" => "select",
                     "label" => "Type",
@@ -335,11 +335,22 @@ class Production extends Database
                 "id" => "formAddProductionTmdb",
                 "submit" => "Valider"
             ],
-            "inputs" => [
+            "fields" => [
                 "productionType" => [
-                    "type" => "text",
+                    "type" => "radio",
+                    "options" => [
+                        [
+                            "value"=>"movie",
+                            "text"=>"Film",
+                            "selected"=>true
+                        ],
+                        [
+                            "value"=>"series",
+                            "text"=>"Série"
+                        ]
+                    ],
                     "label" => "Type",
-                    "class" => "form_input",
+                    "class" => "form_select",
                     "error" => "Le type doit être film, série, saison ou épisode"
                 ],
                 "productionID" => [
@@ -363,7 +374,8 @@ class Production extends Database
                 "productionPreviewRequest" => [
                     "type" => "button",
                     "label" => "Preview",
-                    "class" => "form_input"
+                    "class" => "form_input",
+                    "value" => "Preview"
                 ],
             ],
         ];
