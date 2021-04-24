@@ -7,7 +7,7 @@ class FormValidator
 
     public static function check($config, $data) {
 
-        self::validateCSFRToken($config);
+        self::validateCSFRToken($config['config'], $data);
         $errors = [];
 
         if(count($data) != count($config["fields"])) {
@@ -129,51 +129,29 @@ class FormValidator
         }
     }
 
-    public static function getCSRFToken() {
-        $message = '-encyclopedie Anticonstitutionnellement Ceci est une phrase random-';
-        $hash = 'sha256';
-
-        if(empty($_SESSION['csrf_token'])) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-            $_SESSION['csrf_token_time'] = time();
+    public static function generateCSRFToken() {
+        if(!isset($_SESSION['csrf_token'])) {
+            $token = bin2hex(random_bytes(32));
+            $_SESSION['csrf_token'] = $token;
+            return $token;
+        } else {
+            return $_SESSION['csrf_token'];
         }
-
-        $key = $_SESSION['csrf_token'] ;
-        $token = hash_hmac($hash, $message,  $key); // Generate a keyed hash value using the HMAC method
-
-        return $token;
     }
 
-    public static function validateCSFRToken($config) {
-
-        $message = '-encyclopedie Anticonstitutionnellement Ceci est une phrase random-';
-        $hash = 'sha256';
-
-        if(isset($_SESSION['csrf_token']) && isset($_SESSION['csrf_token_time']) && isset($config['config']['csrf'])) {
-
-            $token = hash_hmac($hash, $message,  $_SESSION['csrf_token']);
-
-            // check if the session's token equals form's token
-            if(hash_equals($token, $config['config']['csrf'])) {
-                // timestamp of 15 minutes
-                $timestamp_ancien = time() - (15*60);
-
-                // check if the timestamp is expired
-                if($_SESSION['csrf_token_time'] >= $timestamp_ancien) {
-                    unset($_SESSION['csrf_token_time']);
-                    unset($_SESSION['csrf_token']);
-                } else {
-                    echo "CSRF ATTACK time not correct";
-                    die();
+    public static function validateCSFRToken($config, $data) {
+        if(isset($_SESSION['csrf_token']) && isset($data['csrf_token'])) {
+            if($_SESSION['csrf_token'] == $data['csrf_token']) {
+                if($_SERVER['REQUEST_URI'] !== $config['referer']) {
+                    echo "Attaque CSRF : la page source est incorrecte"; exit;
                 }
             } else {
-                echo "CSRF ATTACK csrf not equal";
-                die();
+                echo "Attaque CSRF : les valeurs sont différentes"; exit;
             }
         } else {
-            echo "CSRF ATTACK csrf not set";
-            die();
+            echo "Attaque CSRF: une des valeurs n'est pas présente"; exit;
         }
+        unset($_SESSION['csrf_token']);
     }
 
 }
