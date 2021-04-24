@@ -2,6 +2,10 @@
 
 namespace App;
 
+if(session_id() == ''){
+    session_start();
+}
+
 use App\Core\Router;
 use App\Core\ConstantManager;
 
