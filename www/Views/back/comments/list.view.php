@@ -3,30 +3,26 @@
         <div class="grid-filter-list-comments">
 
             <!-- FILTER -->
-            <article class="grid-filter-container-list-comments">
+            <span class="label-card-1">Par article(s) : </span>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Taper un article...">
+            </div>
 
-                <span class="label-card-1">Par article(s) : </span>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Taper un article...">
-                </div>
+            <span class="label-card-1">Depuis le : </span>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="00/00/0000">
+            </div>
 
-                <span class="label-card-1">Depuis le : </span>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="00/00/0000">
-                </div>
-
-                <span class="label-card-1">Jusqu'au : </span>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="00/00/0000">
-                </div>
-
-            </article>
+            <span class="label-card-1">Jusqu'au : </span>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="00/00/0000">
+            </div>
 
             <!-- TAGS -->
-            <article class="grid-tag-container-list-comments">
+            <div class="filter-container">
                 <button class="filter-tag">
                     <span>Nom de l'oeuvre</span>
                     <i class="fas fa-times"></i>
@@ -39,7 +35,7 @@
                     <span>Oeuvre 3 avec un nom vachement plus long</span>
                     <i class="fas fa-times"></i>
                 </button>
-            </article>
+            </div>
 
         </div>
     </section>

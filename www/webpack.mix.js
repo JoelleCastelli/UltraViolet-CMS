@@ -35,9 +35,9 @@ mix.babel(
 mix.sass('./src/scss/main.scss', './dist/');
 
 module.exports = {
-  //...
-  watch: true,
-  mode: 'production',
+	//...
+	watch: true,
+	mode: 'production',
 };
 
 
