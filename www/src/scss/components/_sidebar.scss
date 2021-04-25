@@ -7,21 +7,18 @@
     flex-direction: column;
     width: 19rem;
     height: 100vh;
-    transition: width 0.4s ease;
+    transition-duration: 0.4s;
+    transition-timing-function: ease;
+   
 
     // &:hover pour le hover de la sidebar
-    &:hover{
-        color: #FFFFFF;
-    }
-
+    
         a{
             text-decoration: none;
             color: inherit;
             display: inline;
-            
         }
 
-                
         li {
             /* background: green; */
             display: flex;
@@ -30,8 +27,15 @@
             height: 3.7rem;
             margin-left: 2rem;
 
+            &:hover{
+                background-color: #9FA2B411;             
+                color: #DDE2FF;
+                
+            }
+
                 i {
                     font-size: 30px;
+                    transition: 0.5s ease;
                 }
                 .icon {
                     width: 40px;
@@ -66,11 +70,11 @@
 }
 
 
-
 /* Ligne du boutton */
 #sidebar li:nth-child(2) {
     justify-content: flex-end;
     padding: 1rem 0;
+    padding-top: 3.5rem;
 }
 
 #sidebar #cta-toggle-sidebar {
@@ -95,8 +99,6 @@
 }
 
 
-/* Les autres liens de la nav */
-
 /* WRAPPED */
 #sidebar.wrapped {
     width: 6rem;
@@ -116,10 +118,10 @@
     transform: rotate(180deg);
 }
 
-
 /* HOVERS */
 #sidebar li:not(:first-child):not(:nth-child(2)):not(:nth-child(10)):hover {
     background: #9FA2B4; /* voir le layer sur figma 8% ? */
     cursor: pointer;
 }
+
 
