@@ -14,6 +14,7 @@ db_data
 # builds from the dist directory
 www/dist/main.css
 www/dist/main.js
+www/dist/mix-manifest.json
 
 # env files
 www/.env*
