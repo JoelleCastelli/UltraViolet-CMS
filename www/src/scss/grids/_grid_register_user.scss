@@ -8,11 +8,12 @@
 
     display: grid;
     height: 100%;
-    grid-template-columns: 1fr [middle-column] 30% 1fr;
-    grid-template-rows: auto;
+    grid-template-columns: 1fr [middle-column]30% 1fr;
+    row-gap: 50px;
 
     .grid-form-register-user {
-        grid-column-start: middle-column;
+        grid-area: middle-column;
+
     }
 
     .title {
@@ -38,8 +39,8 @@
 
     a{
         font-family: $mulish;
-        $font-size: 16px;
-        $font-weight:normal;
+        font-size: 16px;
+        font-weight:normal;
         color: $purple;
     }
 

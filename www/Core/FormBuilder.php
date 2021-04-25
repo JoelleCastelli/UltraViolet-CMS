@@ -67,7 +67,7 @@ class FormBuilder
 
                 $value = $field['value'] ?? '';
                 if (!empty($_POST[$fieldName])) {
-                    $value = ($field['type'] === 'password') ? '' : htmlspecialchars($_POST[$fieldName]);
+                    $value = ($field['type'] === 'password') ? '' : htmlspecialchars($_POST[$fieldName], ENT_QUOTES);
                 }
 
                 $html .="<input
