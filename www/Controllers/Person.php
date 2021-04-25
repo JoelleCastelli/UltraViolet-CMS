@@ -45,11 +45,12 @@ class Person
 
                 $dateNow = new \DateTime('now');
                 $updatedAt = $dateNow->format("Y-m-d H:i:s");
+                $pwd = password_hash($_POST["pwd"], PASSWORD_DEFAULT);
 
 				$user->setFullName($_POST["fullName"]);
 				$user->setPseudo($_POST["pseudo"]);
 				$user->setEmail($_POST["email"]);
-                $user->setPassword($_POST["pwd"]);
+                $user->setPassword($pwd);
                 $user->setRole($_POST["role"]);
                 $user->setOptin($newletters);
                 $user->setUpdatedAt($updatedAt);
