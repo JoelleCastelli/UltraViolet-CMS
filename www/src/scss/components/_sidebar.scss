@@ -7,22 +7,18 @@
     flex-direction: column;
     width: 19rem;
     height: 100vh;
-    transition: width 0.4s ease-out;
+    transition: width 0.4s ease;
 
     // &:hover pour le hover de la sidebar
     &:hover{
         color: #FFFFFF;
     }
 
-        #sidebar-label {
-            
-        }
-
         a{
             text-decoration: none;
             color: inherit;
             display: inline;
-            transition: all 0.3s ease;
+            
         }
 
                 
@@ -53,9 +49,6 @@
                 object-fit: scale-down;
                 margin-top: 3rem;
                 margin-left: -1rem;
-                
-               
-                
             }
 
         hr {
@@ -90,7 +83,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: filter 0.3s ease;
+
 }
 
 #sidebar #cta-toggle-sidebar:hover {
@@ -99,18 +92,10 @@
 
 #sidebar #cta-toggle-sidebar i {
     color: grey;
-    transition: ease-out 0.4s;
 }
 
 
 /* Les autres liens de la nav */
-#sidebar li div:not(#cta-toggle-sidebar) {
-    /* background: yellow; */
-    transition: transform 0.3s ease, 
-                opacity 0.3s ease-out;
-}
-
-
 
 /* WRAPPED */
 #sidebar.wrapped {
@@ -119,7 +104,6 @@
 
 #sidebar.wrapped li div:not(#cta-toggle-sidebar) {
     /* background: yellow; */
-    transform: translateX(-300%);
     opacity: 0;
 }
 
@@ -133,14 +117,9 @@
 }
 
 
-
-
-
 /* HOVERS */
 #sidebar li:not(:first-child):not(:nth-child(2)):not(:nth-child(10)):hover {
     background: #9FA2B4; /* voir le layer sur figma 8% ? */
-    transition: background 0.3s ease-out;
     cursor: pointer;
-    
 }
 
