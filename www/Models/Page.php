@@ -220,8 +220,7 @@ class Page extends Database
 				"class"=>"form_control",
 				"id"=>"form_register",
 				"submit"=>"Ajout d'une page",
-                "required_inputs"=>4,
-                "csrf" => FormValidator::getCSRFToken()
+                "required_inputs"=>5
 			],
 			"fields"=>[
 				"title" => [
@@ -283,33 +282,28 @@ class Page extends Database
                     "required" => true
 
                 ],
-			],
-            "select"=>[
                 "state"=>[
-                    "label"=>"Choisissez un état : ",
-                    "class_label"=>"",
-                    "class_select"=>"",
-                    "error"=>"Choisir une état svp",
-                    "options"=>[
-                        [
-                            "value"=>"",
-                            "label"=>"Veuiller selectionner un état",
-                            "disabled"=>"disabled",
-                            "selected"=>"selected",
-                            "class"=>"",
-                        ],
+                    "type"=>"radio",
+                    "label"=>"state",
+                    "class"=>"",
+                    "error"=>"Erreur test",
+                    "required" => true,
+                    "options" => [
                         [
                             "value"=>"draft",
-                            "label"=>"draft",
-
+                            "text"=>"draft",
                         ],
                         [
                             "value"=>"published",
-                            "label"=>"published",
-                        ],
-                    ]
+                            "text"=>"published",
+                        ]
+                    ],
+                ],
+                "csrf_token" => [
+                    "type"=>"hidden",
+                    "value"=> FormValidator::generateCSRFToken(),
                 ]
-            ]
+			]
 		];
 	}
 
