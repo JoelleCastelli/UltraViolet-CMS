@@ -68,7 +68,7 @@ class FormValidator
 
     public static function passwordValidator($fieldName, $password, $fieldConfig, &$errors) {
         if ($fieldName == "pwd") {
-            if (!preg_match($fieldConfig["regex"], $password)  ) {
+            if (isset($fieldConfig["regex"]) && !preg_match($fieldConfig["regex"], $password)  ) {
                 $errors[] = $fieldConfig["error"];
             }
         }
