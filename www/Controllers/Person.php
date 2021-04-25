@@ -38,22 +38,19 @@ class Person
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)){
 
-                if(isset($_POST["optin"]))
-                    $newletters = $_POST["optin"][0];
-                else
-                    $newletters = 0;
-
                 $dateNow = new \DateTime('now');
                 $updatedAt = $dateNow->format("Y-m-d H:i:s");
                 $pwd = password_hash($_POST["pwd"], PASSWORD_DEFAULT);
 
 				$user->setFullName($_POST["fullName"]);
 				$user->setPseudo($_POST["pseudo"]);
-				$user->setEmail($_POST["email"]);
+                $user->setEmail($_POST["email"]);
                 $user->setPassword($pwd);
-                $user->setRole($_POST["role"]);
-                $user->setOptin($newletters);
                 $user->setUpdatedAt($updatedAt);
+
+                // Default values
+                $user->setRole('user');
+                $user->setOptin(0);
                 $user->setUvtrMediaId(1);
                 $user->setDeletedAt(null);
 

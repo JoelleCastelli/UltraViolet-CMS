@@ -18,24 +18,19 @@
    display: inline-block;
    border-style: none;
    background: #E7E9F3;
-   width: 577px;
    height: 35px;
    border-radius: 5px;
 
    //Text
    font-family: $mulish;
    font-style: normal;
-   font-size: 15px;
+   font-size: 13px;
    line-height: 20px;
    align-items: center;
    color: $grey;
-   padding: 0 0 0 15px;
+   padding-left: 15px;
 
  }
-
-.input::placeholder {
-  //padding-left: 15px;
-}
 
 input[type=date], input[type=time] {
     font-weight: lighter;

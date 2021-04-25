@@ -1,25 +1,20 @@
 // PAGE : http://localhost:8080/s-inscrire
 
-
-* {
-    line-height: 20px;
-}
-
 .grid-register-user {
+
+    & * {
+        line-height: 20px;
+    }
+
     display: grid;
     height: 100%;
-    grid-template-columns: 1fr [middle-column] 2fr 1fr;
+    grid-template-columns: 1fr [middle-column] 30% 1fr;
     grid-template-rows: auto;
-    //grid-gap: 30px;
-    //margin: 0px 20px;
-    //grid-template-areas:    "header header"
-    //                        "section1 section2"
-    //                        "section3 section3"
-    //                        "btn-section btn-section";
 
     .grid-form-register-user {
         grid-column-start: middle-column;
     }
+
     .title {
         font-family: $mulish;
         font-style: normal;
@@ -38,7 +33,7 @@
         font-family: $mulish;
         color: $grey6;
         text-align: center;
-        margin: 20px 0px 30px 0px;
+        margin: 10px 0px 10px 0px;
     }
 
     a{
@@ -54,16 +49,14 @@
             display: grid;
             height: 100%;
             grid-template-columns: 1fr;
-            grid-gap: 5px;
             margin: 0px 40px 10px 40px;
+            grid-row-gap: 10px;
 
-            select {
-                background-color: $grey3;
+            input[type=submit] {
+                margin-top: 10px;
             }
         }
 
     }
-
-
 }
 
