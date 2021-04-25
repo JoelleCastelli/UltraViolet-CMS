@@ -30,7 +30,6 @@ class Person
     public function connectionAction() {
         $user = new PersonModel();
         $view = new View("connection");
-
         $form = $user->formBuilderLogin();
 
         if(!empty($_POST)) {
@@ -43,7 +42,7 @@ class Person
                 {
 
                     $person = $person[0];
-                    if(password_verify($_POST['pwd'], $person->getPassword() ))
+                    if(password_verify($_POST['password'], $person->getPassword()))
                     {
                         echo "connection succed" . "<br>";
                     }else {
@@ -54,6 +53,7 @@ class Person
                 }
 
             }else {
+                $view->assign("errors", $errors);
                 echo "errors". "<br>";
             }
         }
