@@ -3,9 +3,6 @@
 .grid-list-comments {
     display: grid;
     height: 100%;
-/*    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 5rem 1fr 2fr min-content;
-    grid-gap: 30px;*/
 
 }
 
@@ -14,47 +11,31 @@
 .grid-filter-list-comments {
     display: grid;
     height: 100%;
-    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
-    align-items: start;
-    justify-content: center;
-    //grid-gap: 40px 10px;
-    //grid-template-areas:    "title1 radio button1"
-    //                        "title2 select button2"
-    //                        "filter-tag filter-tag filter-tag";
+    grid-template-rows: 1fr [tag-container] 1fr;
+}
 
-    .filter-container {
-        grid-column-start: 1;
-        grid-column-end: 5;
+.grid-filter-container-list-comments {
+
+    display: grid;
+    height: 100%;
+    grid-template-columns:max-content 2fr max-content 1fr max-content 1fr;
+    justify-items: start;
+    align-items: center;
+
+    .search-bar {
+        justify-self: stretch;
+        margin: 0px 20px;
+        height: 38%;
     }
 
-    .label-card-1 {
-        font-family: "Mulish", sans-serif;
-        display: inline;
+    span {
+        justify-self: center;
+        color:$black;
         font-size: 16px;
-        font-weight: bold;
-        color: #424242;
     }
-
 }
 
-@media screen and (max-width: 1500px) {
-    
-    .grid-modify-article {
-        display: flex;
-        flex-flow: column;
-    }
+.grid-tag-container-list-comments {
 
-}
-
-@media screen and (max-width: 1000px) {
-
-    .grid-publication-modify-article {
-        grid-template-columns: max-content min-content;
-        grid-template-rows: max-content max-content max-content max-content;
-        grid-template-areas:    "title1 radio"
-                                "title2 select"
-                                "filter-tag filter-tag"
-                                "button1 button2";
-        width: 100%;
-    }
+    grid-area: tag-container;
 }
