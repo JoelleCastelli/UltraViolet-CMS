@@ -33,7 +33,6 @@ class Person
 		$form = $user->formBuilderRegister();
         $view = new View("register");
 
-
         if(!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
