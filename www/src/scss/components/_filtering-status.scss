@@ -1,0 +1,31 @@
+.filtering-status {
+    display: flex;
+    color: $purple2;
+    background-color: $pure-white;
+    font-style: $mulish;
+    font-weight: 24px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: solid $white2 1px;
+
+    .filtering-btn {
+        
+        padding: 1rem 3rem;
+        transition: all 0.3s ease-out;
+        cursor: pointer;
+        
+
+        &:hover {
+            background-color: $purple-light;
+        }
+    }
+
+    
+
+}
+
+.row-between {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+}

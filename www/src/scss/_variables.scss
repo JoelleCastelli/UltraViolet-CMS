@@ -1,15 +1,3 @@
-// Teacher's course code
-// Let this as it is in order to not breack the components made with these variable.
-// TODO :  Apply our style instead of the default styles here.
-$light-grey: #F2F2F2;
-$dark-grey: #444;
-$red: #ce0a0a;
-$green: #31aa66;
-$phone-width: 800px;
-
-
-
-
 
 /* GLOBAL COLORS */
 $pure-white: #FFFFFF;
@@ -33,10 +21,14 @@ $pure-black: black;
 $black: #14142B;
 $light-black: lighten(black, 26%);
 
+
+
 $purple: #5F2EEA;
 $purple2: #5B1CE0;
 $purple3: #4622ab;
 $purple4: #4622ab;
+
+$purple-light: lighten(#641CFF, 40%);
 
 $orange-light: lighten(#F29400, 25%);
 $orange: #E0861C;
