@@ -17,31 +17,45 @@
         }
 
         .dataTables_filter {
-            width: 50%;
+            width: 35%;
             background-color: #E7E9F3;
-            border: 2px solid #DFE0EB;
+            border: solid $transparent 5px;
             height: max-content;
-            border-radius: 5px;
+            border-radius: 4px;
+            transition: border 0.3s ease;
+            
+            display: flex;
+            justify-items: center;
+
+            // label {
+            //     display: none;
+            // }
 
             i {
+                display: block;
                 color: $purple;
                 margin-right: 5px;
-                vertical-align: middle;
+                transform: translateY(25%);
+                margin-left: 0.5rem;
             }
 
             input {
                 border: none;
-                width: 90%;
-                padding-left: 25px;
+                width: 100%;
             }
+
+            &:focus-within {
+                border-color: $search-bar-icon-color;
+            } 
         }
     }
 
     .dataTable {
         background-color: white;
-        padding: 10px;
+        // padding: 10px;
         // border: 2px solid #DFE0EB;
-        border-radius: 20px;
+        // border-radius: 20px;
+        border-radius: 8px 8px 0 0;
 
         &.no-footer{
             border: none;
@@ -49,10 +63,10 @@
 
         thead {
             background-color: white;
-            border: 1px solid #DFE0EB;
-            font-weight: bold;
-            letter-spacing: 0.2px;
-            color: #9FA2B4;
+            border: 1px solid $white2;
+            font-weight: 700;
+            color: $grey6;
+            font-size: 14px;
             tr {
                 height: 20px;
 
@@ -93,6 +107,35 @@
 
         td {
             vertical-align: middle;
+            // display: flex;
+            // flex-flow: column;
+            // justify-content: center;
+            // align-items: center;
+
+            & > * {
+                // dispslay: block;
+            };
+        }
+    }
+
+    .table-footer {
+        display: flex;
+        justify-content: end;
+        background: $pure-white;
+        padding: 1rem 0;
+        border-radius: 0 0 8px 8px;
+
+        #datatable_paginate {
+            .paginate_button {
+                border: none
+            }
+        }
+        
+        #datatable_info {
+            font-size: 14px;
+            font-weight: 200;
+            color: $grey6;
+            letter-spacing: 0.3px;
         }
     }
 
@@ -100,9 +143,6 @@
         display: none !important;
     }
 
-    #datatable_info {
-        background: green;
-    }
 
 }
 
