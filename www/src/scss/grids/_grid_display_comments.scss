@@ -1,0 +1,60 @@
+// PAGE : http://localhost:8080/commentaires
+
+.grid-list-comments {
+    display: grid;
+    height: 100%;
+/*    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 5rem 1fr 2fr min-content;
+    grid-gap: 30px;*/
+
+}
+
+// CARD : Modifying title and filter tags
+
+.grid-filter-list-comments {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+    align-items: start;
+    justify-content: center;
+    //grid-gap: 40px 10px;
+    //grid-template-areas:    "title1 radio button1"
+    //                        "title2 select button2"
+    //                        "filter-tag filter-tag filter-tag";
+
+    .filter-container {
+        grid-column-start: 1;
+        grid-column-end: 5;
+    }
+
+    .label-card-1 {
+        font-family: "Mulish", sans-serif;
+        display: inline;
+        font-size: 16px;
+        font-weight: bold;
+        color: #424242;
+    }
+
+}
+
+@media screen and (max-width: 1500px) {
+    
+    .grid-modify-article {
+        display: flex;
+        flex-flow: column;
+    }
+
+}
+
+@media screen and (max-width: 1000px) {
+
+    .grid-publication-modify-article {
+        grid-template-columns: max-content min-content;
+        grid-template-rows: max-content max-content max-content max-content;
+        grid-template-areas:    "title1 radio"
+                                "title2 select"
+                                "filter-tag filter-tag"
+                                "button1 button2";
+        width: 100%;
+    }
+}
