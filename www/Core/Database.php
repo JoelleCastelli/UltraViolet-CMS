@@ -3,12 +3,12 @@ namespace App\Core;
 
 class Database {
 
-	protected $pdo;
-	private $table;
+    protected $pdo;
+    private $table;
 
-	public function __construct() {
+    public function __construct() {
 
-	    if(ENV === "dev")
+        if(ENV === "dev")
         {
             try {
                 $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
@@ -31,18 +31,18 @@ class Database {
 
 	public function save(){
 
-		$column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
+        $column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
 
-		// INSERT
-		if (is_null($this->getId())) {
+        // INSERT
+        if (is_null($this->getId())) {
 
-			$query = $this->pdo->prepare("INSERT INTO ".$this->table." 
+            $query = $this->pdo->prepare("INSERT INTO ".$this->table." 
                 (".implode(',', array_keys($column)).") 
                 VALUES 
                 (:".implode(',:', array_keys($column)).") "); //1
-			
-		}
-		else { //UPDATE
+
+        }
+        else { //UPDATE
 
             $str = "";
             foreach($column as $key => $value) // build string for update -> "propertie = :propertie"
@@ -52,12 +52,12 @@ class Database {
             $str = substr($str, 0, -2); // remove the last space and last comma
 
             $query = $this->pdo->prepare("UPDATE ".$this->table." SET " . $str . " WHERE id = " . $this->getId());
-		}
+        }
 
-		$query->execute($column);
-	}
+        $query->execute($column);
+    }
 
-	public function findOneById($id)
+    public function findOneById($id)
     {
         $column = array_diff_key(get_object_vars($this), get_class_vars(get_class())); // get properties of the model
 
