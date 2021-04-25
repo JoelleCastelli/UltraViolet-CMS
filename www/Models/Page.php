@@ -235,7 +235,7 @@ class Page extends Database
                 ],
 				"slug"=>[
                     "type"=>"text",
-                    "placeholder"=>"Animées",
+                    "placeholder"=>"meilleure-serie",
                     "label"=>"Votre slug",
                     "class"=>"form_input",
                     "minLength"=>2,

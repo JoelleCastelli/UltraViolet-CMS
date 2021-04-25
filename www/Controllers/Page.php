@@ -27,6 +27,7 @@ class Page
     public function createPageAction() {
         $page = new PageModel();
         $view = new View("pages/createPage");
+        $view->assign('title', 'Création d\'une page');
 
         $form = $page->formBuilderRegister();
 
