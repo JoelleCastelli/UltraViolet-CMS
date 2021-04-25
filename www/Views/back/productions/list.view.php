@@ -1,30 +1,26 @@
-<?php
-
-if (empty($productions)) {
-    echo "Déso y'a rien dans la DB";
-} else {
-    foreach ($productions as $production) {
-        echo "<div>";
-            echo "<div>Type : ".$production->getType()."</div>";
-            echo "<div>Titre : ".$production->getTitle()."</div>";
-            echo "<div>Titre original : ".$production->getOriginalTitle() ?? $production->getTitle()."</div>";
-            echo "<div>Date de sortie : ".$production->getReleaseDate() ?? "inconnue"."</div>";
-            echo "<div>Durée : ".$production->getRuntime() ?? "y'a rien"."</div>";
-            echo "<div>Résumé : ".$production->getOverview() ?? "y'a rien"."</div>";
-
-            if($production->getType() != ("movie" || "series")) {
-                echo "<div>Numéro : ".($production->getNumber() ?? "y'a rien" )."</div>";
+<table id="datatable" class="display">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Titre</th>
+            <th>Titre original</th>
+            <th>Date de sortie</th>
+            <th>Date</th>
+            <th>Durée</th>
+            <th>Résumé</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+            if (!empty($productions)) {
+                foreach ($productions as $production) {
+                    echo "<td>$production->getType()</td>";
+                    echo "<td>$production->getOriginalTitle() ?? $production->getTitle()</td>";
+                    echo "<td>($production->getReleaseDate() ?? '')</td>";
+                    echo "<td>($production->getRuntime() ?? '')</td>";
+                    echo "<td>($production->getOverview() ?? '')</td>";
+                }
             }
-
-            if($production->getType() == "season") {
-                // n° de la saison
-                // nombre d'épisodes ?
-            }
-
-            if($production->getType() == "episode") {
-                // numéro de l'épisode
-                // numéro de la saison
-            }
-        echo "</div>";
-    }
-}
+        ?>
+    </tbody>
+</table>
