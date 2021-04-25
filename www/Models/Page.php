@@ -226,8 +226,8 @@ class Page extends Database
 				"title" => [
 				    "type"=>"text",
                     "placeholder"=>"Animées",
-                    "label"=>"Votre Titre",
-                    "class"=>"form_input",
+                    "label"=>"Votre Titre :",
+                    "class"=>"search-bar",
                     "minLength"=>2,
                     "maxLength"=>25,
                     "error"=>"Votre titre doit faire entre 2 et 25 caractères",
@@ -236,8 +236,8 @@ class Page extends Database
 				"slug"=>[
                     "type"=>"text",
                     "placeholder"=>"meilleure-serie",
-                    "label"=>"Votre slug",
-                    "class"=>"form_input",
+                    "label"=>"Votre slug :",
+                    "class"=>"search-bar",
                     "minLength"=>2,
                     "maxLength"=>15,
                     "error"=>"Votre slug doit faire entre 2 et 15 caractères",
@@ -246,8 +246,8 @@ class Page extends Database
 				"position"=>[
                     "type"=>"text",
                     "placeholder"=>"3",
-                    "label"=>"Position",
-                    "class"=>"form_input",
+                    "label"=>"Position :",
+                    "class"=>"search-bar",
                     "minLength"=>1,
                     "maxLength"=>1,
                     "error"=>"Votre position doit étre entre 1 et 4",
@@ -256,8 +256,8 @@ class Page extends Database
 				"titleSEO"=>[
                     "type"=>"text",
                     "placeholder"=>"Titre pour le référencement",
-                    "label"=>"titleSEO",
-                    "class"=>"form_input",
+                    "label"=>"titleSEO :",
+                    "class"=>"search-bar",
                     "minLength"=>2,
                     "maxLength"=>50,
                     "error"=>"Votre titleSEO doit étre entre 2 et 50"
@@ -265,8 +265,8 @@ class Page extends Database
 				"descriptionSEO"=>[
                     "type"=>"text",
                     "placeholder"=>"META description",
-                    "label"=>"META description",
-                    "class"=>"form_input",
+                    "label"=>"META description :",
+                    "class"=>"search-bar",
                     "minLength"=>2,
                     "maxLength"=>255,
                     "error"=>"Votre descriptionSEO doit étre entre 2 et 255"
@@ -274,8 +274,8 @@ class Page extends Database
                 "publictionDate"=>[
                     "type"=>"date",
                     "placeholder"=>"publication",
-                    "label"=>"Date de publication",
-                    "class"=>"form_input",
+                    "label"=>"Date de publication :",
+                    "class"=>"search-bar",
                     "min"=>$today,
                     "max"=>"2030-12-31",
                     "error"=>"Votre date de publication doit être entre".$today." et 31-12-2030",
@@ -284,18 +284,18 @@ class Page extends Database
                 ],
                 "state"=>[
                     "type"=>"radio",
-                    "label"=>"state",
+                    "label"=>"État :",
                     "class"=>"",
                     "error"=>"Erreur test",
                     "required" => true,
                     "options" => [
                         [
                             "value"=>"draft",
-                            "text"=>"draft",
+                            "text"=>"Brouillon",
                         ],
                         [
                             "value"=>"published",
-                            "text"=>"published",
+                            "text"=>"Publier",
                         ]
                     ],
                 ],

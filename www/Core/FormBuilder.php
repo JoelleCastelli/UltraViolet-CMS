@@ -84,7 +84,7 @@ class FormBuilder
             }
 		}
 
-        $html .= "<input type='submit' value=\"".($config["config"]["submit"] ?? "Valider")."\">";
+        $html .= "<input type='submit' class='btn' value=\"".($config["config"]["submit"] ?? "Valider")."\">";
 		$html .= "</form>";
 
 		if($show) {
