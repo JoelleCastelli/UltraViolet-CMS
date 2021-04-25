@@ -35,13 +35,13 @@ $request = $array_request[1] ?? "";
 
     <div class="container">
 
-        <?php if($request != "inscription"): ?>
+        <?php if($request != "inscription" && $request != "connexion"): ?>
             <?php include 'Views/components/sidebar.php' ?>
         <?php endif; ?>
 
         <main class="main">
 
-            <?php if($request != "inscription"): ?>
+            <?php if($request != "inscription" && $request != "connexion"): ?>
                 <?php include 'Views/components/header.php'; ?>
             <?php endif; ?>
 

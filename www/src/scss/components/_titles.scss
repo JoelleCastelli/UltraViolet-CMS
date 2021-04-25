@@ -32,6 +32,20 @@
     color: $title-date-color;
 }
 
+.title-form {
+    font-family: $mulish;
+    font-style: normal;
+    font-size: 30px;
+    font-weight: normal;
+
+    letter-spacing: 0.3px;
+    color: $purple2;
+    text-align: center;
+    margin-bottom: 30px;
+    text-transform: none;
+    line-height: 20px;
+}
+
 h1 {
     font-size: 30px;
     font-weight: bold;

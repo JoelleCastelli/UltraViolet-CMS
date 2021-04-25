@@ -66,6 +66,9 @@
   controller: Person
   action: register
 
+/connexion:
+  controller: Person
+  action: connection
 
 # SETTINGS
 /parametres:

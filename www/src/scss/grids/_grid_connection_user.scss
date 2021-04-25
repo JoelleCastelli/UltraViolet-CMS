@@ -1,6 +1,6 @@
 // PAGE : http://localhost:8080/s-inscrire
 
-.grid-register-user {
+.grid-connection-user {
 
     & * {
         line-height: 20px;
@@ -11,16 +11,9 @@
     grid-template-columns: 1fr [middle-column]30% 1fr;
     row-gap: 50px;
 
-    .grid-form-register-user {
+
+    .grid-form-connection-user {
         grid-area: middle-column;
-
-    }
-
-    .title-form-h2 {
-        font-family: $mulish;
-        color: $grey6;
-        text-align: center;
-        margin: 10px 0px 10px 0px;
     }
 
     a{

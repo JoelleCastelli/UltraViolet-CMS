@@ -27,6 +27,41 @@ class Person
 	    $user->save();
     }
 
+    public function connectionAction() {
+        $user = new PersonModel();
+        $view = new View("connection");
+
+        $form = $user->formBuilderLogin();
+
+        if(!empty($_POST)) {
+
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)){
+
+                $person = $user->selectWhere("email",htmlspecialchars($_POST['email']));
+                if(!empty($person))
+                {
+
+                    $person = $person[0];
+                    if(password_verify($_POST['pwd'], $person->getPassword() ))
+                    {
+                        echo "connection succed" . "<br>";
+                    }else {
+                        echo "connection failed". "<br>";
+                    }
+                }else{
+                    echo "person not exist". "<br>";
+                }
+
+            }else {
+                echo "errors". "<br>";
+            }
+        }
+
+        $view->assign("form", $form);
+
+    }
+
 	public function registerAction() {
 
 		$user = new PersonModel();
