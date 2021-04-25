@@ -40,8 +40,8 @@
     .dataTable {
         background-color: white;
         padding: 10px;
-        border: 2px solid #DFE0EB;
-        border-radius: 5px;
+        // border: 2px solid #DFE0EB;
+        border-radius: 20px;
 
         &.no-footer{
             border: none;
@@ -62,6 +62,29 @@
             }
         }
 
+        tbody {
+
+            // .odd, .even {
+                // background: white !important;
+
+                // &:hover {
+                //     background: $purple-light;
+                // }
+            // }
+
+            tr td {
+                text-align: center;
+                font-size: 12px;
+                // background: yellow;
+            }
+
+
+
+        }
+
+
+
+
         tr {
             height: 75px;
         }
@@ -69,6 +92,14 @@
         td {
             vertical-align: middle;
         }
+    }
+
+    &::after {
+        display: none !important;
+    }
+
+    #datatable_info {
+        background: green;
     }
 
 }
