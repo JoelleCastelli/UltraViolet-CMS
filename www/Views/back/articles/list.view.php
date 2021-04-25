@@ -32,7 +32,7 @@
                 <td>Option 4</td>
                 <td>Option 5</td>
                 <td>
-                    BONJORU
+                    <div class="state-switch" onclick="toggleSwitch(this)"></div>
                 </td>
                 <td>
                     <div class="buble-actions">
@@ -48,7 +48,9 @@
                 <td>Option 8</td>
                 <td>Option 9</td>
                 <td>Option 10</td>
-                <td>BONJOUR</td>
+                <td>
+                    <div class="state-switch switched-on" onclick="toggleSwitch(this)"></div>
+                </td>
 
                 <td>
                     <div class="buble-actions">
@@ -65,7 +67,9 @@
                 <td>Option 8</td>
                 <td>Option 9</td>
                 <td>Option 10</td>
-                <td>BONJOUR</td>
+                <td>
+                    <div class="state-switch" onclick="toggleSwitch(this)"></div>
+                </td>
                 <td>
                     <div class="buble-actions">
                         <div></div>
@@ -81,7 +85,9 @@
                 <td>Option 8</td>
                 <td>Option 9</td>
                 <td>Option 10</td>
-                <td>BONJOUR</td>
+                <td>
+                    <div class="state-switch" onclick="toggleSwitch(this)"></div>
+                </td>
                 <td>
                     <div class="buble-actions">
                         <div></div>
@@ -97,7 +103,9 @@
                 <td>Option 8</td>
                 <td>Option 9</td>
                 <td>Option 10</td>
-                <td>BONJOUR</td>
+                <td>
+                    <div class="state-switch" onclick="toggleSwitch(this)"></div>
+                </td>
                 <td>
                     <div class="buble-actions">
                         <div></div>
@@ -113,7 +121,9 @@
                 <td>Option 8</td>
                 <td>Option 9</td>
                 <td>Option 10</td>
-                <td>BONJOUR</td>
+                <td>
+                    <div class="state-switch" onclick="toggleSwitch(this)"></div>
+                </td>
                 <td>
                     <div class="buble-actions">
                         <div></div>
@@ -129,7 +139,9 @@
                 <td>Option 8</td>
                 <td>Option 9</td>
                 <td>Option 10</td>
-                <td>BONJOUR</td>
+                <td>
+                    <div class="state-switch" onclick="toggleSwitch(this)"></div>
+                </td>
                 <td>
                     <div class="buble-actions">
                         <div></div>
