@@ -204,6 +204,10 @@ class Page extends Database
         return parent::findAll();
     }
 
+    public function selectWhere($column, $value) {
+        return parent::selectWhere($column, $value);
+    }
+
     public function cleanPublictionDate() {
         $this->setPublictionDate(date("d/m/Y", strtotime($this->getPublictionDate())));
     }
@@ -306,10 +310,4 @@ class Page extends Database
 			]
 		];
 	}
-
-	public function getAll()
-    {
-        $page = new Page();
-        $page->findAll();
-    }
 }

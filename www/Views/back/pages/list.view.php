@@ -1,3 +1,40 @@
+<div>
+    <div class="articleState" id="published">Publiés</div>
+    <div class="articleState" id="draft">Brouillons</div>
+    <div class="articleState" id="scheduled">Planifiés</div>
+    <div class="articleState" id="trash">Corbeille</div>
+</div>
+
+<a class="btn" href="ajout-d-une-page">add page</a>
+
+<table id="datatable" class="display">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Vues</th>
+            <th>Commentaires</th>
+            <th>Date</th>
+            <th>Publication</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+            if (empty($pages)) {
+                foreach ($pages as $page) {
+                    echo "<td>Titre : ".$page->getTitle()."</td>";
+                    echo "<td>Type : ".$page->getSlug()."</td>";
+                    echo "<td>Titre original : ".$page->getPosition() ?? "inconnue"."</td>";
+                    echo "<td>Durée : ".$page->getPublictionDate() ?? "y'a rien"."</td>";
+                    echo "<td>Résumé : ".$page->getState() ?? "y'a rien"."</td>";
+                }
+            }
+        ?>
+    </tbody>
+</table>
+
+
 <?php
 
 if (empty($pages)) {
