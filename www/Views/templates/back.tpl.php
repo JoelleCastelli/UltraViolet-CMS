@@ -23,43 +23,33 @@ $request = $array_request[1] ?? "";
     </head>
 
     <body>
+
         <div class="container">
-            <?php include 'Views/components/sidebar.php' ?>
-            <main class="main">
-                <?php include 'Views/components/header.php'; ?>
-                <div class="main-content">
-                    <?php include $this->view ?>
-                </div>
-            </main>
-        </div>
-
-    <div class="container">
-
-        <?php if($request != "inscription" && $request != "connexion"): ?>
-            <?php include 'Views/components/sidebar.php' ?>
-        <?php endif; ?>
-
-        <main class="main">
 
             <?php if($request != "inscription" && $request != "connexion"): ?>
-                <?php include 'Views/components/header.php'; ?>
+                <?php include 'Views/components/sidebar.php' ?>
             <?php endif; ?>
 
-            <div class="main-content">
+            <main class="main">
 
-                <?php include $this->view ?>
+                <?php if($request != "inscription" && $request != "connexion"): ?>
+                    <?php include 'Views/components/header.php'; ?>
+                <?php endif; ?>
 
-            </div>
+                <div class="main-content">
 
-        </main>
+                    <?php include $this->view ?>
 
-    </div>
+                </div>
 
-    <?php if(isset($bodyScript) && !empty($bodyScript)) {
-        echo "<script src='$bodyScript'></script>";
-    }?>
+            </main>
 
+        </div>
 
+        <?php if(isset($bodyScript) && !empty($bodyScript)) {
+            echo "<script src='$bodyScript'></script>";
+        }?>
 
-</body>
+    </body>
+
 </html>
