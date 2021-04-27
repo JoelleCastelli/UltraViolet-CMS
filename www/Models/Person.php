@@ -11,19 +11,23 @@ class Person extends Database
 
     private $id = null;
     private $createdAt;
+    private $updatedAt;
     protected $fullName;
     protected $pseudo;
     protected $email;
     protected $password;
     protected $optin;
-    protected $updatedAt;
     protected $deletedAt;
     protected $role;
     protected $uvtr_media_id;
 
+    //foreign properties
+    private $media;
+
     public function __construct()
     {
         parent::__construct();
+        $this->media = new Media();
     }
 
     /**
@@ -41,6 +45,8 @@ class Person extends Database
     {
         $this->id = $id;
         $this->findOneById($this->id); // populate object with all the others values
+        $this->media->setId($this->uvtr_media_id);
+
     }
 
     /**
@@ -202,6 +208,24 @@ class Person extends Database
     {
         $this->uvtr_media_id = $uvtr_media_id;
     }
+
+    /**
+     * @return Media
+     */
+    public function getMedia(): Media
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param Media $media
+     */
+    public function setMedia(Media $media): void
+    {
+        $this->media = $media;
+    }
+
+
 
     public function formBuilderLogin()
     {

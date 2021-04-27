@@ -20,6 +20,14 @@ class Person
 		echo "User default";
 	}
 
+    public function getPersonAction() {
+        $user = new PersonModel();
+        $user->where("fullName", "Coco");
+        $user->andWhere("pseudo", "coco1)-'23");
+        $result = $user->get();
+        Helpers::dd($result);
+    }
+
 	public function deleteAction() {
 	    $user = new PersonModel();
 	    $user->setId(11);

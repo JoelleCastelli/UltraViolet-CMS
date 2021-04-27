@@ -5,6 +5,9 @@ class Database {
 
     protected $pdo;
     private $table;
+    private $query;
+
+    private $order = 0;
 
     public function __construct() {
 
@@ -22,9 +25,10 @@ class Database {
                 die("Erreur connexion bdd côté production");
             }
         }
-
         $classExploded = explode("\\", get_called_class());
         $this->table = strtolower(DBPREFIXE.end($classExploded));
+        $this->query = "SELECT * FROM ". $this->table . " ";
+
     }
 
 	public function save(){
@@ -78,5 +82,34 @@ class Database {
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetchAll();
     }
+
+    public function where($column, $value, $equal = "=" ) {
+        $this->query .= "WHERE " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+    }
+
+    public function andWhere($column, $value, $equal = "=") {
+        echo "<br><br>" . $this->query . "<br><br>";
+        $this->query .= " AND " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+
+    }
+
+    public function order($column, $order = "ASC") {
+
+        if($this->order == 0) {
+            $this->query .= "ORDER BY " . $column . " " . $order . "' ";
+            $this->order++;
+        }
+        else
+            $this->query .= ", " . $column . " ". $order . "' ";
+    }
+
+    public function get() {
+        echo "<br><br>" . $this->query . "<br><br>";
+        $query = $this->pdo->query($this->query);
+        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+        return $query->fetchAll();
+    }
+
+
 
 }

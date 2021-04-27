@@ -86,6 +86,10 @@
   controller: Person
   action: connection
 
+/person:
+  controller: Person
+  action: getPerson
+
 # SETTINGS
 /parametres:
   controller: Settings
