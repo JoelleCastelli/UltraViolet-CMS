@@ -1,0 +1,49 @@
+// PAGE : http://localhost:8080/inscription
+
+.grid-register-user {
+
+    & * {
+        line-height: 20px;
+    }
+
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr [middle-column]30% 1fr;
+    row-gap: 50px;
+
+    .grid-form-register-user {
+        grid-area: middle-column;
+
+    }
+
+    .title-form-h2 {
+        font-family: $mulish;
+        color: $grey6;
+        text-align: center;
+        margin: 10px 0px 10px 0px;
+    }
+
+    a{
+        font-family: $mulish;
+        font-size: 16px;
+        font-weight:normal;
+        color: $purple;
+    }
+
+    .container-form {
+
+        form {
+            display: grid;
+            height: 100%;
+            grid-template-columns: 1fr;
+            margin: 0px 40px 10px 40px;
+            grid-row-gap: 10px;
+
+            input[type=submit] {
+                margin-top: 10px;
+            }
+        }
+
+    }
+}
+

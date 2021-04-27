@@ -67,7 +67,7 @@ class FormBuilder
 
                 $value = $field['value'] ?? '';
                 if (!empty($_POST[$fieldName])) {
-                    $value = ($field['type'] === 'password') ? '' : htmlspecialchars($_POST[$fieldName]);
+                    $value = ($field['type'] === 'password') ? '' : htmlspecialchars($_POST[$fieldName], ENT_QUOTES);
                 }
 
                 $html .="<input
@@ -84,7 +84,7 @@ class FormBuilder
             }
 		}
 
-        $html .= "<input type='submit' value=\"".($config["config"]["submit"] ?? "Valider")."\">";
+        $html .= "<input type='submit' class='btn' value=\"".($config["config"]["submit"]??"Valider")."\">";
 		$html .= "</form>";
 
 		if($show) {

@@ -27,28 +27,68 @@ class Person
 	    $user->save();
     }
 
-	public function registerAction() {
-
-		$user = new PersonModel();
-		$form = $user->formBuilderRegister();
-        $view = new View("register");
+    public function connectionAction() {
+        $user = new PersonModel();
+        $view = new View("connection");
+        $form = $user->formBuilderLogin();
 
         if(!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)){
 
-                $role = $_POST["optin"][0];
+                $person = $user->selectWhere("email",htmlspecialchars($_POST['email']));
+                if(!empty($person))
+                {
+
+                    $person = $person[0];
+                    if(password_verify($_POST['password'], $person->getPassword()))
+                    {
+                        echo "connection succed" . "<br>";
+                    }else {
+                        echo "connection failed". "<br>";
+                    }
+                }else{
+                    echo "person not exist". "<br>";
+                }
+
+            }else {
+                $view->assign("errors", $errors);
+                echo "errors". "<br>";
+            }
+        }
+
+        $view->assign("form", $form);
+
+    }
+
+	public function registerAction() {
+
+		$user = new PersonModel();
+		$form = $user->formBuilderRegister();
+        $view = new View("register");
+
+
+        if(!empty($_POST)) {
+
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)){
+
+                // Init some values
                 $dateNow = new \DateTime('now');
                 $updatedAt = $dateNow->format("Y-m-d H:i:s");
+                $pwd = password_hash(htmlspecialchars($_POST["pwd"]), PASSWORD_DEFAULT);
 
-				$user->setFullName($_POST["fullName"]);
-				$user->setPseudo($_POST["pseudo"]);
-				$user->setEmail($_POST["email"]);
-                $user->setPassword($_POST["pwd"]);
-                $user->setRole($_POST["role"]);
-                $user->setOptin($role);
+                // Required
+				$user->setFullName(htmlspecialchars($_POST["fullName"]));
+				$user->setPseudo(htmlspecialchars($_POST["pseudo"]));
+                $user->setEmail(htmlspecialchars($_POST["email"]));
+                $user->setPassword($pwd);
                 $user->setUpdatedAt($updatedAt);
+
+                // Default
+                $user->setRole('user');
+                $user->setOptin(0);
                 $user->setUvtrMediaId(1);
                 $user->setDeletedAt(null);
 

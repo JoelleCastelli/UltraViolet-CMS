@@ -1,0 +1,41 @@
+// PAGE : http://localhost:8080/commentaires
+
+.grid-list-comments {
+    display: grid;
+    height: 100%;
+
+}
+
+// CARD : Modifying title and filter tags
+
+.grid-filter-list-comments {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 1fr [tag-container] 1fr;
+}
+
+.grid-filter-container-list-comments {
+
+    display: grid;
+    height: 100%;
+    grid-template-columns:max-content 2fr max-content 1fr max-content 1fr;
+    justify-items: start;
+    align-items: center;
+
+    .search-bar {
+        justify-self: stretch;
+        margin: 0px 20px;
+        height: 38%;
+    }
+
+    span {
+        justify-self: center;
+        color:$black;
+        font-size: 16px;
+    }
+}
+
+.grid-tag-container-list-comments {
+
+    grid-area: tag-container;
+}

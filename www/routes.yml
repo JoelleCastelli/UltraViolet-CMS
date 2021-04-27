@@ -21,6 +21,10 @@
   controller: Article
   action: modifyArticle
 
+/tab-change:
+  controller: Article
+  action: tabChange
+
 # PRODUCTIONS
 /productions:
   controller: Production
@@ -62,6 +66,9 @@
   controller: Person
   action: register
 
+/connexion:
+  controller: Person
+  action: connection
 
 # SETTINGS
 /parametres:
