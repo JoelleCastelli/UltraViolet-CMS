@@ -1,0 +1,39 @@
+// PAGE : http://localhost:8080/ajout-d-une-page
+
+
+* {
+    line-height: 20px;
+}
+
+.grid-add-page {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr [middle-column] 2fr 1fr;
+    grid-template-rows: auto;
+
+    .grid-form-add-page {
+        grid-column-start: middle-column;
+    }
+
+    .container-form {
+
+        form {
+            display: grid;
+            height: 100%;
+            grid-template-columns: 1fr;
+            grid-gap: 5px;
+            margin: 0px 40px 10px 40px;
+        }
+
+        label {
+            font-family: $mulish;
+            display: inline;
+            font-size: 16px;
+            font-weight: bold;
+            color: $title-card-2-color;
+        }
+
+    }
+
+
+}

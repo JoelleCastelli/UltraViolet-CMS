@@ -26,7 +26,8 @@ class Page
 
     public function createPageAction() {
         $page = new PageModel();
-        $view = new View("page/createPage");
+        $view = new View("pages/createPage");
+        $view->assign('title', 'Création d\'une page');
 
         $form = $page->formBuilderRegister();
 
@@ -45,7 +46,7 @@ class Page
 
                 $page->save();
             }else{
-                $view = new View("page/createPage");
+                $view = new View("pages/createPage");
                 $view->assign("errors", $errors);
             }
         }

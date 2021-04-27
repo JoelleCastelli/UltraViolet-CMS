@@ -12,6 +12,10 @@
   controller: Page
   action: showAll
 
+/ajout-d-une-page:
+  controller: Page
+  action: createPage
+
 # ARTICLES
 /articles:
   controller: Article

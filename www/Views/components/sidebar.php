@@ -2,8 +2,7 @@
     <ul>
         <a href="/">
             <li id="sidebar-label">
-                <label id="logo-site"></label>
-                <div>Ultra Violet</div>
+                <img src='/src/img/logoSiteMini.png' alt='ultraviolet logo'>
             </li>
         </a>
         <li>

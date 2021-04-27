@@ -1,0 +1,12 @@
+/*
+    Permet de ne pas réecrire betement la meme chose tout le temps.
+    Optimise le CSS en groupant les items avec le meme placeHolder
+
+    utilisation en SCSS : @extend nomDuPlaceHolder
+ */
+
+%flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
