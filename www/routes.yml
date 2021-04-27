@@ -30,7 +30,11 @@
   controller: Production
   action: showAll
 
-/ajout-production:
+/nouvelle-production:
+  controller: Production
+  action: addProduction
+
+/nouvelle-production-tmdb:
   controller: Production
   action: addProductionTmdb
 

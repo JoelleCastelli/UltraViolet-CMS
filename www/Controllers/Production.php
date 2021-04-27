@@ -34,9 +34,20 @@ class Production
 
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
+
             if(empty($errors)) {
-                $production->setTitle($_POST["title"]);
-                $production->setType($_POST["type"]);
+                // Mandatory
+                $production->setTitle(htmlspecialchars($_POST["title"]));
+                $production->setType(htmlspecialchars($_POST["type"]));
+
+                // Optional
+                $production->setTmdbId(htmlspecialchars($_POST["title"]) ?? '');
+                $production->setOriginalTitle(htmlspecialchars($_POST["originalTitle"]) ?? '');
+                $production->setReleaseDate(htmlspecialchars($_POST["releaseDate"]) ?? '');
+                $production->setOverview(htmlspecialchars($_POST["overview"]) ?? '');
+                $production->setRuntime(htmlspecialchars($_POST["runtime"]) ?? '');
+                $production->setNumber(htmlspecialchars($_POST["number"]) ?? '');
+
                 $production->save();
             } else {
                 $view->assign("errors", $errors);

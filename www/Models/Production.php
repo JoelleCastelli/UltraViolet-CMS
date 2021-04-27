@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\FormBuilder;
 
 class Production extends Database
 {
@@ -15,8 +16,6 @@ class Production extends Database
     protected $overview;
     protected $runtime;
     protected $number;
-    protected $createdAt;
-    protected $updatedAt;
     protected $deletedAt;
 
     public function __construct()
@@ -177,30 +176,6 @@ class Production extends Database
     }
 
     /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param mixed $updatedAt
-     */
-    public function setUpdatedAt($updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    /**
      * @return mixed
      */
     public function getDeletedAt()
@@ -264,7 +239,8 @@ class Production extends Database
                 "action" => "",
                 "class" => "form_control",
                 "id" => "formAddProduction",
-                "submit" => "Valider"
+                "submit" => "Valider",
+                "referer" => '/nouvelle-production'
             ],
             "fields" => [
                 "type" => [
@@ -272,7 +248,17 @@ class Production extends Database
                     "label" => "Type",
                     "required" => true,
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire"
+                    "error" => "Un type de production est nécessaire",
+                    "options" => [
+                        [
+                            "value"=>"movie",
+                            "text"=>"Film",
+                        ],
+                        [
+                            "value"=>"series",
+                            "text"=>"Série",
+                        ]
+                    ],
                 ],
                 "title" => [
                     "type" => "text",
@@ -321,6 +307,10 @@ class Production extends Database
                     "label" => "Numéro",
                     "class" => "form_input",
                 ],
+                "csrf_token" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
             ]
 
         ];
@@ -377,6 +367,10 @@ class Production extends Database
                     "class" => "form_input",
                     "value" => "Preview"
                 ],
+                "csrf_token" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
             ],
         ];
 

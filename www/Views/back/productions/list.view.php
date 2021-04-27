@@ -1,3 +1,6 @@
+<a href="/nouvelle-production">Ajouter une production manuellement</a>
+<a href="/nouvelle-production-tmdb">Ajouter une production via TMDB</a>
+
 <table id="datatable" class="display">
     <thead>
         <tr>

@@ -8,16 +8,14 @@ class Database {
 
     public function __construct() {
 
-        if(ENV === "dev")
-        {
+	    if(ENV === "dev") {
             try {
                 $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
                 $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             } catch(Exception $e) {
                 die("Erreur SQL : ".$e->getMessage());
             }
-        } else if (ENV === "prod")
-        {
+        } else if (ENV === "prod") {
             try {
                 $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
             } catch(Exception $e) {
@@ -34,31 +32,29 @@ class Database {
         $column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
 
         // INSERT
-        if (is_null($this->getId())) {
-
-            $query = $this->pdo->prepare("INSERT INTO ".$this->table." 
+		if (is_null($this->getId())) {
+			$query = $this->pdo->prepare("INSERT INTO ".$this->table." 
                 (".implode(',', array_keys($column)).") 
                 VALUES 
                 (:".implode(',:', array_keys($column)).") "); //1
-
-        }
-        else { //UPDATE
-
+		}
+        //UPDATE
+		else {
             $str = "";
-            foreach($column as $key => $value) // build string for update -> "propertie = :propertie"
-            {
-                $str .= $key . " = :" . $key . ", ";
+            // build string for update -> "propertie = :propertie"
+            foreach($column as $key => $value) {
+                $str .= $key." = :".$key.", ";
             }
-            $str = substr($str, 0, -2); // remove the last space and last comma
+            // remove the last space and last comma
+            $str = substr($str, 0, -2);
 
             $query = $this->pdo->prepare("UPDATE ".$this->table." SET " . $str . " WHERE id = " . $this->getId());
-        }
-
+		}
+		
         $query->execute($column);
     }
 
-    public function findOneById($id)
-    {
+	public function findOneById($id){
         $column = array_diff_key(get_object_vars($this), get_class_vars(get_class())); // get properties of the model
 
         $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id); // get one row by the id
