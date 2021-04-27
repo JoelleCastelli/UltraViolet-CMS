@@ -11,7 +11,12 @@ class Helpers{
 	public static function getCurrentTimestamp(){
         $dateNow = new \DateTime('now');
         return $dateNow->format("Y-m-d H:i:s");
+    }
 
+    public static function dd($data) {
+        echo "<pre>";
+        var_dump($data);die;
+        echo "</pre>";
     }
 
 }
