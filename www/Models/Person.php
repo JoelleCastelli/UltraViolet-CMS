@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\FormBuilder;
 use App\Core\FormValidator;
 
 class Person extends Database
@@ -214,10 +215,6 @@ class Person extends Database
                 "referer" => '/connexion'
             ],
             "fields" => [
-                "csrf_token" => [
-                    "type"=>"hidden",
-                    "value"=>FormValidator::generateCSRFToken()
-                ],
                 "email" => [
                     "type" => "email",
                     "placeholder" => "Email",
@@ -234,6 +231,10 @@ class Person extends Database
                     "error" => "Votre champ mot de passe est vide.",
                     "required" => true,
 
+                ],
+                "csrf_token" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
                 ],
             ]
 
@@ -254,8 +255,8 @@ class Person extends Database
             ],
             "fields" => [
                 "csrf_token" => [
-                    "type"=>"hidden",
-                    "value"=>FormValidator::generateCSRFToken()
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
                 ],
                 "fullName" => [
                     "type" => "text",
