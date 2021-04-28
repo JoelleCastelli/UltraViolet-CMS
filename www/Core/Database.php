@@ -8,6 +8,7 @@ class Database {
     private $query;
 
     private $order = 0;
+    private $like = 0;
 
     public function __construct() {
 
@@ -27,10 +28,9 @@ class Database {
         }
         $classExploded = explode("\\", get_called_class());
         $this->table = strtolower(DBPREFIXE.end($classExploded));
-        $this->query = "SELECT * FROM ". $this->table . " ";
-
     }
 
+    /* GENERAL QUERY */
 	public function save(){
 
         $column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
@@ -83,14 +83,77 @@ class Database {
         return $query->fetchAll();
     }
 
+    /* BUILDING QUERY */
+
+
+    // QUERY BEGINNING
+    public function select() {
+        $this->query = "SELECT * FROM " . $this->table . " ";
+        return $this; // Activate chaining
+    }
+
+    public function delete() {
+        $this->query = "DELETE FROM " . $this->table . " ";
+        return $this;
+    }
+
+    public function count($column = "*")
+    {
+        $this->query = "SELECT COUNT(" . $column . ") ";
+        return $this;
+    }
+
+
+    public function customQuery($string)
+    {
+        $this->query .= $string . " ";
+        return $this;
+    }
+
+    // WHERE
     public function where($column, $value, $equal = "=" ) {
         $this->query .= "WHERE " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        return $this;
     }
 
     public function andWhere($column, $value, $equal = "=") {
-        echo "<br><br>" . $this->query . "<br><br>";
-        $this->query .= " AND " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        $this->query .= "AND " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        return $this;
+    }
 
+    public function orWhere($column, $value, $equal = "=") {
+        $this->query .= "OR " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        return $this;
+    }
+
+    public function whereIn($column, $value) {
+        $this->query .= "WHERE " . $column . " IN " . $value . " ";
+        return $this;
+    }
+
+    // OTHERS
+    public function groupBy()
+    {
+        $this->query .= "GROUP BY " . $column . " ";
+        return $this;
+    }
+
+    public function limit($limit = 10, $offset = 0)
+    {
+        // Use syntax the offset syntax because of the compatibility with others DBMS (database management system)
+        $this->query .= "LIMIT " . $value . " OFFSET " . $offset . " ";
+        return $this;
+    }
+
+    public function like($column, $value, $escape = "") {
+        if($this->like == 0) { 
+            $this->query .= "WHERE " . $column . " LIKE '" . $value . "' " . $escape . " ";
+            $this->like++;
+
+        } else{
+            $this->query .= "AND " . $column . " LIKE '" . $value . "' " . $escape . " ";
+        }
+        return $this;
     }
 
     public function order($column, $order = "ASC") {
@@ -101,15 +164,22 @@ class Database {
         }
         else
             $this->query .= ", " . $column . " ". $order . "' ";
+        return $this;
     }
 
-    public function get() {
+    public function get(){
+
         echo "<br><br>" . $this->query . "<br><br>";
+
         $query = $this->pdo->query($this->query);
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
+
         return $query->fetchAll();
     }
 
-
-
+    public function getQueryString()
+    {
+        return $this->query;
+    }
 }
