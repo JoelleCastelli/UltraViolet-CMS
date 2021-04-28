@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\FormBuilder;
 
 class Article extends Database
 {
@@ -204,6 +205,54 @@ class Article extends Database
 
     public function selectWhere($column, $value) {
         return parent::selectWhere($column, $value);
+    }
+
+    // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
+    public function formBuilderCreateArticle() {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "form_create_article",
+                "submit" => "Créer un article",
+                "referer" => '/creer-un-article'
+            ],
+            "fields" => [
+                "csrf_token" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
+                ],
+                "title" => [
+                    "type" => "text",
+                    "placeholder" => "Titre de l'article",
+                    "minLength" => 2,
+                    "maxLength" => 100,
+                    "class" => "input",
+                    "error" => "Le longueur du titre doit être comprise entre 2 et 100 caractères",
+                    // "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "required" => true,
+                ],
+                "description" => [
+                    "type" => "text",
+                    "placeholder" => "Description de l'article",
+                    "minLength" => 2,
+                    "maxLength" => 255,
+                    "class" => "input",
+                    "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
+                    "required" => true,
+                ],
+                "content" => [
+                    "type" => "text",
+                    "placeholder" => "Contenu de l'article",
+                    "minLength" => 2,
+                    // "maxLength" => 255,
+                    "class" => "input",
+                    "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
+                    "required" => true,
+                ],
+            ]
+        ];
     }
 
 }
