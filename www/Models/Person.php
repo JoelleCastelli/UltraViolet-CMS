@@ -211,7 +211,7 @@ class Person extends Database
                 "action" => "",
                 "class" => "form_control",
                 "id" => "form_register",
-                "submit" => "S'inscrire",
+                "submit" => "Se connecter",
                 "referer" => '/connexion'
             ],
             "fields" => [
@@ -258,13 +258,23 @@ class Person extends Database
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],
-                "fullName" => [
+                "firstName" => [
                     "type" => "text",
-                    "placeholder" => "Prénom et nom",
+                    "placeholder" => "Prénom",
                     "minLength" => 2,
                     "maxLength" => 50,
                     "class" => "input",
                     "error" => "Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
+                    "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "required" => true,
+                ],
+                "name" => [
+                    "type" => "text",
+                    "placeholder" => "Nom",
+                    "minLength" => 2,
+                    "maxLength" => 50,
+                    "class" => "input",
+                    "error" => "Votre nom doit faire entre 2 et 50 caractères et écrit correctement",
                     "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
                     "required" => true,
                 ],

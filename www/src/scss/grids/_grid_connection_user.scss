@@ -2,24 +2,35 @@
 
 .grid-connection-user {
 
+    .input{
+        background: #FFFFFF;
+    }
+
     & * {
         line-height: 20px;
     }
 
     display: grid;
-    height: 100%;
+    height: 100vh;
     grid-template-columns: 1fr [middle-column]30% 1fr;
-    row-gap: 50px;
+    
 
     .grid-form-connection-user {
         grid-area: middle-column;
+    }
+
+    .title-form-h2 {
+        font-family: $mulish;
+        color: $title-form;
+        text-align: center;
+        margin: 10px 0px 10px 0px;
     }
 
     a{
         font-family: $mulish;
         font-size: 16px;
         font-weight:normal;
-        color: $purple;
+        color: $purple2;
     }
 
     .container-form {
@@ -32,7 +43,7 @@
             grid-row-gap: 10px;
 
             input[type=submit] {
-                margin-top: 10px;
+                
             }
 
             /* not working yet */
@@ -43,7 +54,14 @@
                 content: "\f0e0";
             }*/
         }
+    }
 
+    .links {
+        padding-top: 20px ;
+        display: grid;
+        height: 100%;
+        grid-template-columns: 1fr;
+        margin: 0px 40px 10px 40px;
     }
 }
 

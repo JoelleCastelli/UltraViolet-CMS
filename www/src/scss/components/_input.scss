@@ -18,21 +18,30 @@
    display: inline-block;
    border-style: none;
    background: #E7E9F3;
-   height: 35px;
+   height: 41px;
+   border: 1px solid #E9ECEF;
+   box-sizing: border-box;
+   box-shadow: 1px 6px 20px -4px rgba(17, 17, 17, 0.05);
    border-radius: 5px;
 
    //Text
    font-family: $mulish;
    font-style: normal;
-   font-size: 13px;
+   font-size: 16px;
+   font-weight: normal;
    line-height: 20px;
    align-items: center;
    color: $grey;
    padding-left: 15px;
 
+   .input__transparent{
+    background: red;
+   }
+
  }
 
 input[type=date], input[type=time] {
     font-weight: lighter;
-    font-size: 14px;
-}
+    font-size: 16px;
+    }
+
