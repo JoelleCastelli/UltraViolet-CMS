@@ -7,7 +7,9 @@
             <div class="filtering-btn articleState" id="scheduled">Planifiés</div>
             <div class="filtering-btn articleState" id="trash">Corbeille</div>
         </div>
-        <button class="btn">Ajouter un article</button>
+
+        <a class="btn" href="creer-un-article" >Ajouter un article</a>
+
     </section>
 
     <section>

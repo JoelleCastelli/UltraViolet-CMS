@@ -1,0 +1,1 @@
+<h2>Création d'un article...</h2>

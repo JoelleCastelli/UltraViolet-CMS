@@ -27,4 +27,9 @@ class Article {
         $view->assign("title", "Modifier un article");
     }
 
+    public function createArticleAction() {
+        $view = new View("articles/createArticle");
+        $view->assign("title", "Créer un article");
+    }
+
 }
