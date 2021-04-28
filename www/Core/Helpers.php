@@ -21,8 +21,11 @@ class Helpers{
 
     public static function dd($data) {
         echo "<pre>";
-        print_r($data);die;
+        echo "<br>";
+        print_r($data);
+        echo "<br>";
         echo "</pre>";
+        die();
     }
 
 }

@@ -22,12 +22,10 @@ class Person
 
     public function getPersonAction() {
         $user = new PersonModel();
-        $a = $user->customQuery("");
-        $b = $user->select()->where("pseudo", "Coraline")->andWhere("id", 3)->get();
-        $c = $user->select()->like("password", "%KEY3vNd1I7QH4%")->get();
-        Helpers::dd($a);
-        //Helpers::dd($b);
-        //Helpers::dd($c);
+        // get user 
+        //$result = $user->select()->where("pseudo", "Coraline")->andWhere("id", 3)->get()[0];
+        $user->setId(2);
+        Helpers::dd($user);
     }
 
 	public function deleteAction() {

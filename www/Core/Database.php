@@ -58,16 +58,37 @@ class Database {
         $query->execute($column);
     }
 
-	public function findOneById($id){
-        $column = array_diff_key(get_object_vars($this), get_class_vars(get_class())); // get properties of the model
+	public function populate($id){
 
-        $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id); // get one row by the id
-        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this)); // return instance
+        if(!empty($id) && is_numeric($id)) {
 
-        $object = $query->fetch();
+            $column = array_diff_key(get_object_vars($this), get_class_vars(get_class())); // get properties of the model
 
-        foreach($column as $key => $value) {
-            $this->$key = $object->$key; // assign each value to the current object
+            echo "<pre>";
+
+            $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id); // get one row by the id
+            $query->setFetchMode(\PDO::FETCH_INTO, $this); // return instance
+
+            $object = $query->fetch();
+
+            if(!empty($object))
+            {
+                echo "success query";
+                //Helpers::dd($object);
+                // foreach($column as $key => $value) {
+                //     $this->$key = $object->$key; // assign each value to the current object
+                // }
+
+                return $object;
+
+            }else {
+                echo "failed 1 query";
+                return false;
+            }
+
+        }else{
+                echo "failed 2 query";
+                return false;
         }
     }
 

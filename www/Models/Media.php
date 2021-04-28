@@ -19,6 +19,11 @@ class Media extends Database
         parent::__construct();
     }
 
+    public function populate($id): bool
+    {
+        return $this->findOneById($this->id); // populate object with all the others values
+    }
+
     /**
      * @return null
      */
@@ -33,7 +38,6 @@ class Media extends Database
     public function setId($id): void
     {
         $this->id = $id;
-        $this->findOneById($this->id); // populate object with all the others values
     }
 
     /**

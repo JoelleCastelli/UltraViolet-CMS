@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Core\Helpers;
 use App\Core\Database;
 use App\Core\FormBuilder;
 use App\Core\FormValidator;
@@ -41,12 +42,21 @@ class Person extends Database
     /**
      * @param null $id
      */
-    public function setId($id): void
+    public function setId($id): bool
     {
         $this->id = $id;
-        $this->findOneById($this->id); // populate object with all the others values
-        $this->media->setId($this->uvtr_media_id);
+        //$object = $this->populate($this->id);
+        //$ddb = new Database();
+        echo "<pre>";
+        $classExploded = explode("\\", get_called_class());
+        $table = strtolower(DBPREFIXE.end($classExploded));
 
+        $query = $this->pdo->query("SELECT * FROM " . $table . " WHERE id= " . $id); // get one row by the id
+        $query->setFetchMode(\PDO::FETCH_INTO, ($this)); // return instance
+        $query->fetch(\PDO::FETCH_INTO);
+        return true;
+        //Helpers::dd($query->fetch());
+       // Helpers::dd($this);
     }
 
     /**
@@ -214,6 +224,8 @@ class Person extends Database
      */
     public function getMedia(): Media
     {
+        if(!empty($this->uvtr_media_id) && is_numeric($this->uvtr_media_id))
+            $this->media->setId($this->uvtr_media_id);
         return $this->media;
     }
 
@@ -224,9 +236,6 @@ class Person extends Database
     {
         $this->media = $media;
     }
-
-
-
     public function formBuilderLogin()
     {
         return [
