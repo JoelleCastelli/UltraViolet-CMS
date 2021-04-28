@@ -225,7 +225,7 @@ class Article extends Database
                 ],
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Titre de l'article",
+                    "placeholder" => "Titre de l article",
                     "minLength" => 2,
                     "maxLength" => 100,
                     "class" => "input",
@@ -235,7 +235,7 @@ class Article extends Database
                 ],
                 "description" => [
                     "type" => "text",
-                    "placeholder" => "Description de l'article",
+                    "placeholder" => "Description de l article",
                     "minLength" => 2,
                     "maxLength" => 255,
                     "class" => "input",
@@ -244,7 +244,7 @@ class Article extends Database
                 ],
                 "content" => [
                     "type" => "text",
-                    "placeholder" => "Contenu de l'article",
+                    "placeholder" => "Contenu de l article",
                     "minLength" => 2,
                     // "maxLength" => 255,
                     "class" => "input",
