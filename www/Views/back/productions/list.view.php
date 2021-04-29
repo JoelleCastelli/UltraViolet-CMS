@@ -16,12 +16,13 @@
     <tbody>
         <?php
             if (!empty($productions)) {
+
                 foreach ($productions as $production) {
-                    echo "<td>$production->getType()</td>";
-                    echo "<td>$production->getOriginalTitle() ?? $production->getTitle()</td>";
-                    echo "<td>($production->getReleaseDate() ?? '')</td>";
-                    echo "<td>($production->getRuntime() ?? '')</td>";
-                    echo "<td>($production->getOverview() ?? '')</td>";
+                    echo "<td>" . $production->getType() . "</td>";
+                    echo "<td>" . $production->getOriginalTitle() ?? $production->getTitle() . "</td>";
+                    echo "<td>" . ($production->getReleaseDate() ?? '') . "</td>";
+                    echo "<td>" . ($production->getRuntime() ?? '') . "</td>";
+                    echo "<td>" . ($production->getOverview() ?? '') . "</td>";
                 }
             }
         ?>
