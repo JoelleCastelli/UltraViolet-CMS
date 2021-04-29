@@ -24,12 +24,13 @@ class Production
         $view = new View("productions/list");
         $view->assign("productions", $productions);
         $view->assign('title', 'Productions');
+        $view->assign('headScript', 'src/js/headScripts/productions.js');
     }
 
     public function addProductionAction() {
         $production = new ProductionModel();
         $form = $production->formBuilderAddProduction();
-        $view = new View("production/add-production");
+        $view = new View("productions/add-production");
         $view->assign("form", $form);
 
         if(!empty($_POST)) {
@@ -57,7 +58,7 @@ class Production
     public function addProductionTmdbAction() {
         $production = new ProductionModel();
         $form = $production->formBuilderAddProductionTmdb();
-        $view = new View("production/add-production-tmdb");
+        $view = new View("productions/add-production-tmdb");
         $view->assign("form", $form);
         $view->assign('headScript', 'Resources/scripts/headScripts/addProduction.js');
     }
@@ -207,6 +208,11 @@ class Production
         }
         if(empty($results)) return false;
         return $results;
+    }
+
+    public function tabChangeAction() {
+        $production = new ProductionModel();
+        echo json_encode($production->selectWhere('type', $_POST['productionType']));
     }
 
 

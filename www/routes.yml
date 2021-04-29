@@ -25,7 +25,7 @@
   controller: Article
   action: modifyArticle
 
-/tab-change:
+/articles-tab-change:
   controller: Article
   action: tabChange
 
@@ -45,6 +45,10 @@
 /tmdb-request:
   controller: Production
   action: tmdbRequest
+
+/productions-tab-change:
+  controller: Production
+  action: tabChange
 
 # COMMENTS
 /commentaires:

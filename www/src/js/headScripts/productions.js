@@ -1,10 +1,10 @@
 $(document).ready(function(){
-    $(".articleState").click(function() {
-        articleState = $(this).attr('id');
+    $(".productionType").click(function() {
+        productionType = $(this).attr('id');
         $.ajax({
             type: 'POST',
-            url: '/articles-tab-change',
-            data: {articleState},
+            url: '/productions-tab-change',
+            data: {productionType},
             success: function(response) {
                 console.log(response)
             },
