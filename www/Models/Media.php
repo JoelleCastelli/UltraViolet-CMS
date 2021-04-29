@@ -3,25 +3,23 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\Traits\ModelsTrait;
 
 class Media extends Database
 {
+    use ModelsTrait;
 
     private $id = null;
+    private $createdAt;
+    private $updatedAt;
     protected $title;
     protected $path;
     protected $video = 0;
-    protected $createdAt;
     protected $deletedAt;
 
     public function __construct()
     {
         parent::__construct();
-    }
-
-    public function populate($id): bool
-    {
-        return $this->findOneById($this->id); // populate object with all the others values
     }
 
     /**
@@ -30,14 +28,6 @@ class Media extends Database
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param null $id
-     */
-    public function setId($id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -97,14 +87,6 @@ class Media extends Database
     }
 
     /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
      * @return mixed
      */
     public function getDeletedAt()
@@ -119,7 +101,4 @@ class Media extends Database
     {
         $this->deletedAt = $deletedAt;
     }
-
-
-
 }

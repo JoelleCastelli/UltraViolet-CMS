@@ -22,15 +22,19 @@ class Person
 
     public function getPersonAction() {
         $user = new PersonModel();
-        // get user 
-        //$result = $user->select()->where("pseudo", "Coraline")->andWhere("id", 3)->get()[0];
-        $user->setId(2);
-        Helpers::dd($user);
+        $user->setId(5);
+        $user->getMedia();
+        $user->select()->where("id", "3")->get();
+        //$user->delete();
+        //$user->setPseudo("tempt");
+        //$check = $user->save();
+        //echo $check ? "true" : "false <br>";
+        //echo $check;
     }
 
 	public function deleteAction() {
 	    $user = new PersonModel();
-	    $user->setId(11);
+	    $user->setId(3);
 	    $user->setDeletedAt(Helpers::getCurrentTimestamp());
 	    $user->save();
     }
@@ -75,7 +79,6 @@ class Person
 		$user = new PersonModel();
 		$form = $user->formBuilderRegister();
         $view = new View("register");
-
 
         if(!empty($_POST)) {
 

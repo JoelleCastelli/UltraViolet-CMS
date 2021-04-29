@@ -1,6 +1,8 @@
 <?php
 namespace App\Core;
 
+use mysql_xdevapi\DatabaseObject;
+
 class Database {
 
     protected $pdo;
@@ -26,6 +28,7 @@ class Database {
                 die("Erreur connexion bdd côté production");
             }
         }
+
         $classExploded = explode("\\", get_called_class());
         $this->table = strtolower(DBPREFIXE.end($classExploded));
     }
@@ -35,61 +38,71 @@ class Database {
 
         $column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
 
+        //if column is foreign object, unset it
+        foreach($column as $key => $value)
+        {
+            if(is_object($value))
+            {
+                unset($column[$key]);
+            }
+        }
         // INSERT
-		if (is_null($this->getId())) {
-			$query = $this->pdo->prepare("INSERT INTO ".$this->table." 
-                (".implode(',', array_keys($column)).") 
-                VALUES 
-                (:".implode(',:', array_keys($column)).") "); //1
-		}
-        //UPDATE
-		else {
+        if (is_null($this->getId())) {
+            $query = $this->pdo->prepare("INSERT INTO " . $this->table . " 
+            (" . implode(',', array_keys($column)) . ") 
+            VALUES 
+            (:" . implode(',:', array_keys($column)) . ") "); //1
+        } //UPDATE
+        else {
             $str = "";
             // build string for update -> "propertie = :propertie"
-            foreach($column as $key => $value) {
-                $str .= $key." = :".$key.", ";
+            foreach ($column as $key => $value) {
+                $str .= $key . " = :" . $key . ", ";
             }
             // remove the last space and last comma
             $str = substr($str, 0, -2);
 
-            $query = $this->pdo->prepare("UPDATE ".$this->table." SET " . $str . " WHERE id = " . $this->getId());
-		}
-		
-        $query->execute($column);
+            $query = $this->pdo->prepare("UPDATE " . $this->table . " SET " . $str . " WHERE id = " . $this->getId());
+        }
+
+        try {
+
+            return $query->execute($column);
+
+        } catch (\Exception $e) {
+
+            echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
+            die();
+        }
     }
 
-	public function populate($id){
-
+    public function populate($id)
+    {
         if(!empty($id) && is_numeric($id)) {
 
-            $column = array_diff_key(get_object_vars($this), get_class_vars(get_class())); // get properties of the model
-
-            echo "<pre>";
-
-            $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id); // get one row by the id
-            $query->setFetchMode(\PDO::FETCH_INTO, $this); // return instance
-
+            // query
+            $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id);
+            $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this)); // return instance
             $object = $query->fetch();
 
-            if(!empty($object))
-            {
-                echo "success query";
-                //Helpers::dd($object);
-                // foreach($column as $key => $value) {
-                //     $this->$key = $object->$key; // assign each value to the current object
-                // }
+            // populate
+            if (!empty($object)) {
 
                 return $object;
 
-            }else {
-                echo "failed 1 query";
+            } else {
                 return false;
             }
-
-        }else{
-                echo "failed 2 query";
-                return false;
+        } else {
+            return false;
         }
+    }
+
+    public function findOneBy($column, $value)
+    {
+        $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE " . $column . " = " . $value);
+        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+        return $query->fetchAll();
     }
 
     public function findAll(){
@@ -106,7 +119,6 @@ class Database {
 
     /* BUILDING QUERY */
 
-
     // QUERY BEGINNING
     public function select() {
         $this->query = "SELECT * FROM " . $this->table . " ";
@@ -114,16 +126,33 @@ class Database {
     }
 
     public function delete() {
-        $this->query = "DELETE FROM " . $this->table . " ";
-        return $this;
-    }
+
+        if ($this->getDeletedAt()) // hard
+        {
+
+            $query = $this->pdo->prepare("DELETE FROM " . $this->table . " WHERE id=" . $this->getId());
+            try {
+
+                return $query->execute();
+
+            }catch (\Exception $e) {
+                echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
+                die();
+            }
+
+        } else { // soft
+            $this->setDeletedAt(Helpers::getCurrentTimestamp());
+            $this->save();
+        }
+
+
+}
 
     public function count($column = "*")
     {
         $this->query = "SELECT COUNT(" . $column . ") ";
         return $this;
     }
-
 
     public function customQuery($string)
     {
@@ -152,8 +181,29 @@ class Database {
         return $this;
     }
 
+    //JOINS
+    public function innerJoin($table, $statement) {
+        $this->query .= "INNER JOIN " . $table . " ON " . htmlspecialchars($statement, ENT_QUOTES) . " ";
+        return $this;
+    }
+
+    public function leftJoin($table, $statement) {
+        $this->query .= "LEFT JOIN " . $table . " ON " . htmlspecialchars($statement, ENT_QUOTES) . " ";
+        return $this;
+    }
+
+    public function rightJoin($table, $statement) {
+        $this->query .= "RIGHT JOIN " . $table . " ON " . htmlspecialchars($statement, ENT_QUOTES) . " ";
+        return $this;
+    }
+
+    public function fullJoin($table, $statement) {
+        $this->query .= "FULL JOIN " . $table . " ON " . htmlspecialchars($statement, ENT_QUOTES) . " ";
+        return $this;
+    }
+
     // OTHERS
-    public function groupBy()
+    public function groupBy($column)
     {
         $this->query .= "GROUP BY " . $column . " ";
         return $this;
@@ -162,7 +212,7 @@ class Database {
     public function limit($limit = 10, $offset = 0)
     {
         // Use syntax the offset syntax because of the compatibility with others DBMS (database management system)
-        $this->query .= "LIMIT " . $value . " OFFSET " . $offset . " ";
+        $this->query .= "LIMIT " . $limit . " OFFSET " . $offset . " ";
         return $this;
     }
 
@@ -177,7 +227,7 @@ class Database {
         return $this;
     }
 
-    public function order($column, $order = "ASC") {
+    public function orderBy($column, $order = "ASC") {
 
         if($this->order == 0) {
             $this->query .= "ORDER BY " . $column . " " . $order . "' ";
@@ -190,17 +240,17 @@ class Database {
 
     public function get(){
 
-        echo "<br><br>" . $this->query . "<br><br>";
-
         $query = $this->pdo->query($this->query);
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
 
+        try {
 
-        return $query->fetchAll();
+            return $query->fetchAll();
+
+        }catch (\Exception $e) {
+            echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
+            die();
+        }
     }
 
-    public function getQueryString()
-    {
-        return $this->query;
-    }
 }

@@ -6,9 +6,12 @@ use App\Core\Helpers;
 use App\Core\Database;
 use App\Core\FormBuilder;
 use App\Core\FormValidator;
+use App\Core\Traits\ModelsTrait;
+
 
 class Person extends Database
 {
+    use ModelsTrait;
 
     private $id = null;
     private $createdAt;
@@ -23,7 +26,7 @@ class Person extends Database
     protected $uvtr_media_id;
 
     //foreign properties
-    private $media;
+    public $media;
 
     public function __construct()
     {
@@ -37,26 +40,6 @@ class Person extends Database
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param null $id
-     */
-    public function setId($id): bool
-    {
-        $this->id = $id;
-        //$object = $this->populate($this->id);
-        //$ddb = new Database();
-        echo "<pre>";
-        $classExploded = explode("\\", get_called_class());
-        $table = strtolower(DBPREFIXE.end($classExploded));
-
-        $query = $this->pdo->query("SELECT * FROM " . $table . " WHERE id= " . $id); // get one row by the id
-        $query->setFetchMode(\PDO::FETCH_INTO, ($this)); // return instance
-        $query->fetch(\PDO::FETCH_INTO);
-        return true;
-        //Helpers::dd($query->fetch());
-       // Helpers::dd($this);
     }
 
     /**
@@ -161,14 +144,6 @@ class Person extends Database
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): void
-    {
-        $this->createdAt = $createdAt;
     }
 
     /**
