@@ -7,7 +7,7 @@ class FormValidator
 
     public static function check($config, $data) {
 
-        self::validateCSFRToken($config['config'], $data);
+        self::validateCSRFToken($config['config'], $data);
         $errors = [];
 
         if(count($data) != count($config["fields"])) {
@@ -129,7 +129,7 @@ class FormValidator
         }
     }
 
-    public static function validateCSFRToken($config, $data) {
+    public static function validateCSRFToken($config, $data) {
         if(isset($_SESSION['csrf_token']) && isset($data['csrf_token'])) {
             if($_SESSION['csrf_token'] == $data['csrf_token']) {
                 if($_SERVER['REQUEST_URI'] !== $config['referer']) {
