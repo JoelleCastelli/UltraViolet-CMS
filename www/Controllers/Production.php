@@ -41,7 +41,6 @@ class Production
                 $production->setType(htmlspecialchars($_POST["type"]));
 
                 // Optional
-                $production->setTmdbId(htmlspecialchars($_POST["title"]) ?? '');
                 $production->setOriginalTitle(htmlspecialchars($_POST["originalTitle"]) ?? '');
                 $production->setReleaseDate(htmlspecialchars($_POST["releaseDate"]) ?? '');
                 $production->setOverview(htmlspecialchars($_POST["overview"]) ?? '');

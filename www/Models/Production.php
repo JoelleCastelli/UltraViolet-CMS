@@ -8,7 +8,9 @@ use App\Core\FormBuilder;
 class Production extends Database
 {
     private $id = null;
-    protected $tmdbId;
+    private $createdAt;
+    private $updatedAt;
+    protected $tmdbId = null;
     protected $title;
     protected $originalTitle;
     protected $releaseDate;
