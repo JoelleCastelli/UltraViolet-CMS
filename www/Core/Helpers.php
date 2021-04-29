@@ -15,8 +15,12 @@ class Helpers{
 
    public static function dd($data) {
         echo "<pre>";
-        var_dump($data);die;
+            var_dump($data);die;
         echo "</pre>";
+    }
+
+    public static function sanitizeString($url) {
+        return htmlspecialchars(strip_tags($url));
     }
 
 }

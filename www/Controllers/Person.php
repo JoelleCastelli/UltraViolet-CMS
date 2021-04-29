@@ -39,9 +39,9 @@ class Person
 	    $user->save();
     }
 
-    public function connectionAction() {
+    public function loginAction() {
         $user = new PersonModel();
-        $view = new View("connection");
+        $view = new View("login", "front");
         $form = $user->formBuilderLogin();
 
         if(!empty($_POST)) {
@@ -49,22 +49,19 @@ class Person
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)){
 
-                $person = $user->selectWhere("email",htmlspecialchars($_POST['email']));
-                if(!empty($person))
-                {
+                $person = $user->selectWhere("email", htmlspecialchars($_POST['email']));
+                if(!empty($person)) {
 
                     $person = $person[0];
-                    if(password_verify($_POST['password'], $person->getPassword()))
-                    {
+                    if(password_verify($_POST['password'], $person->getPassword())) {
                         echo "connection succed" . "<br>";
-                    }else {
+                    } else {
                         echo "connection failed". "<br>";
                     }
-                }else{
+                } else {
                     echo "person not exist". "<br>";
                 }
-
-            }else {
+            } else {
                 $view->assign("errors", $errors);
                 echo "errors". "<br>";
             }

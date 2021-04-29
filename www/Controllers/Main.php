@@ -10,7 +10,7 @@ class Main
 
 	public function defaultAction(){
 		$sql = new Database();
-		$view = new View("home");
+		$view = new View("dashboard");
 		$view->assign('title', 'Back office');
 		$view->assign('headScript', 'src/js/headScripts/home.js');
 		$view->assign('bodyScript', 'src/js/bodyScripts/home.js');

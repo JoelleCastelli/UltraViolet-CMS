@@ -2,16 +2,17 @@
 
 namespace App\Core;
 
-class Router{
+class Router {
 
 	private $slug;
 	private $action;
 	private $controller;
-	private $routePath = "routes.yml";
+	private $middleware;
+	private $routePath = "routesAdmin.yml";
 	private $listOfRoutes = [];
 	private $listOfSlugs = [];
 
-	/*	
+	/*
 		- On passe le slug en attribut
 		- Execution de la methode loadYaml
 		- Vérifie si le slug existe dans nos routes -> SINON appel la methode exception4040
@@ -25,6 +26,9 @@ class Router{
 
 		$this->setController($this->listOfRoutes[$this->slug]["controller"]);
 		$this->setAction($this->listOfRoutes[$this->slug]["action"]);
+		if(isset($this->listOfRoutes[$this->slug]["middleware"])) {
+            $this->setMiddleware($this->listOfRoutes[$this->slug]["middleware"]);
+        }
 	}
 
 	public function loadYaml(){
@@ -59,5 +63,13 @@ class Router{
 	public function exception404(){
 		die("Erreur 404");
 	}
+
+    public function getMiddleware(){
+        return $this->middleware;
+    }
+
+    public function setMiddleware($middleware){
+        $this->middleware = $middleware;
+    }
 
 }
