@@ -1,3 +1,4 @@
+
 const wrapDatatablesFooter = () => {
     const toAdd = document.querySelectorAll("#datatable_info, #datatable_paginate");
     
@@ -8,8 +9,19 @@ const wrapDatatablesFooter = () => {
     document.querySelector('#datatable').after(newFooter);
 }
 
+
+
 $(document).ready( function () {
     $('#datatable').DataTable( {
+
+        columns: [
+            { data: 'Titre' },
+            { data: 'Titre original' },
+            { data: 'Date de sortie' },
+            { data: 'Durée' },
+            { data: 'Résumé' },
+            { data: 'Actions' }
+        ],
         language: {
             "sEmptyTable":     "Aucune donnée disponible dans le tableau",
             "sInfo":           "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",

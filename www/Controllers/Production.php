@@ -10,6 +10,20 @@ use App\Models\Production as ProductionModel;
 class Production
 {
 
+
+    protected $columnsTable;
+
+    public function __construct() {
+        $this->columnsTable = [
+            "title" => 'Titre',
+            "originalTitle" => 'Titre original',
+            "releaseDate" => 'Date de sortie',
+            "runtime" => 'Durée',
+            "overview" => 'Résumé',
+            "actions" => 'Actions'
+        ];
+    }
+
     public function showAllAction() {
         $productions = new ProductionModel();
         $productions = $productions->findAll();
@@ -25,6 +39,7 @@ class Production
         $view = new View("productions/list");
         $view->assign("productions", $productions);
         $view->assign('title', 'Productions');
+        $view->assign('columnsTable', $this->columnsTable);
         $view->assign('headScript', 'src/js/headScripts/productions.js');
     }
 
@@ -212,13 +227,16 @@ class Production
     }
 
     public function tabChangeAction() {
+
+        // Get the productions
         $production = new ProductionModel();
         $productions = $production->selectWhere('type', $_POST['productionType']);
 
+        // populate in arrays
         $productionArray = [];
         foreach ($productions as $production)
         {
-            $productionArray[] = array(
+            /*$productionArray[] = array(
                 "id" => $production->getId(),
                 "title" => $production->getTitle(),
                 "originalTitle" => $production->getOriginalTitle(),
@@ -230,15 +248,25 @@ class Production
                 "createdAt" => $production->getCreatedAt(),
                 "delatedAt" => $production->getDeletedAt(),
                 "tmdbId" => $production->getTmdbId(),
+            );*/
+
+            $productionArray[] = array(
+                $this->columnsTable['title'] => $production->getTitle(),
+                $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
+                $this->columnsTable['overview'] => $production->getOverview(),
+                $this->columnsTable['releaseDate'] => $production->getReleaseDate(),
+                $this->columnsTable['runtime'] => $production->getRuntime(),
+                $this->columnsTable['actions'] =>"",
             );
         }
 
+        // send data
         $data = array(
             "productions" => $productionArray,
+            "columns" => $this->columnsTable,
             "type" => $_POST['productionType']
         );
 
-        //Helpers::dd($data);
         echo json_encode($data);
     }
 
