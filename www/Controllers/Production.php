@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\FormValidator;
+use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
 
@@ -212,7 +213,33 @@ class Production
 
     public function tabChangeAction() {
         $production = new ProductionModel();
-        echo json_encode($production->selectWhere('type', $_POST['productionType']));
+        $productions = $production->selectWhere('type', $_POST['productionType']);
+
+        $productionArray = [];
+        foreach ($productions as $production)
+        {
+            $productionArray[] = array(
+                "id" => $production->getId(),
+                "title" => $production->getTitle(),
+                "originalTitle" => $production->getOriginalTitle(),
+                "overview" => $production->getOverview(),
+                "releaseDate" => $production->getReleaseDate(),
+                "number" => $production->getNumber(),
+                "type" => $production->getType(),
+                "runtime" => $production->getRuntime(),
+                "createdAt" => $production->getCreatedAt(),
+                "delatedAt" => $production->getDeletedAt(),
+                "tmdbId" => $production->getTmdbId(),
+            );
+        }
+
+        $data = array(
+            "productions" => $productionArray,
+            "type" => $_POST['productionType']
+        );
+
+        //Helpers::dd($data);
+        echo json_encode($data);
     }
 
 
