@@ -187,24 +187,34 @@ var objects = [
 ];
 $(document).ready(function(){
 
-    var table = $('#datatable').DataTable();
+    $.ajax({
+        type: 'POST',
+        url: '/productions-data',
+        dataType: 'json',
+        success: function(response) {
+            table.clear();
+            table.rows.add(response).draw();
+        },
+        error: function(){
+            alert("error");
+        }
+    });
+
+    let table = $('#datatable').DataTable();
 
     $(".productionType").click(function() {
         let productionType = $(this).attr('id');
+
 
         $.ajax({
             type: 'POST',
             url: '/productions-tab-change',
             data: {productionType},
+            dataType: 'json',
             success: function(response) {
 
-                let data = JSON.parse(response);
                 table.clear();
-                table.rows.add(data.productions).draw();
-
-                b = JSON.parse(response);
-                console.log(JSON.parse(response));
-
+                table.rows.add(response.productions).draw();
             },
             error: function(){
                 alert("error");

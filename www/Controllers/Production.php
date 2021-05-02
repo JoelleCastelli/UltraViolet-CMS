@@ -43,6 +43,32 @@ class Production
         $view->assign('headScript', 'src/js/headScripts/productions.js');
     }
 
+    public function showAllDataAction()
+    {
+        $productions = new ProductionModel();
+        $productions = $productions->findAll();
+
+        //if(!$productions) $productions = [];
+
+        $productionArray = [];
+        foreach ($productions as $production) {
+            $production->cleanReleaseDate();
+            $production->translateType();
+            $production->cleanRuntime();
+
+            $productionArray[] = array(
+                $this->columnsTable['title'] => $production->getTitle(),
+                $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
+                $this->columnsTable['overview'] => $production->getOverview(),
+                $this->columnsTable['releaseDate'] => $production->getReleaseDate(),
+                $this->columnsTable['runtime'] => $production->getRuntime(),
+                $this->columnsTable['actions'] =>"",
+            );
+        }
+        //echo json_encode("Hello");
+        echo json_encode($productionArray);
+    }
+
     public function addProductionAction() {
         $production = new ProductionModel();
         $form = $production->formBuilderAddProduction();
