@@ -21,6 +21,7 @@
                 <?php foreach ($columnsTable as $key => $value): ?>
                     <th><?= $value ?></th>
                 <?php endforeach; ?>
+
             </tr>
         </thead>
             <!-- <tbody>

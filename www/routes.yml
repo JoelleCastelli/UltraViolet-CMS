@@ -34,10 +34,6 @@
   controller: Production
   action: showAll
 
-/productions-data:
-  controller: Production
-  action: showAllData
-
 /nouvelle-production:
   controller: Production
   action: addProduction
@@ -50,9 +46,9 @@
   controller: Production
   action: tmdbRequest
 
-/productions-tab-change:
+/productions-data:
   controller: Production
-  action: tabChange
+  action: getProductions
 
 # COMMENTS
 /commentaires:
