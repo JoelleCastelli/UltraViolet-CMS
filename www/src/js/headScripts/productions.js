@@ -187,6 +187,7 @@ var objects = [
 ];
 $(document).ready(function(){
 
+    // display all producctions
     $.ajax({
         type: 'POST',
         url: '/productions-data',
@@ -202,10 +203,15 @@ $(document).ready(function(){
 
     let table = $('#datatable').DataTable();
 
+    // display production by type
     $(".productionType").click(function() {
         let productionType = $(this).attr('id');
 
+        // add activate section
+        $(".productionType").removeClass('activate');
+        $(this).addClass('activate');
 
+        // request productions
         $.ajax({
             type: 'POST',
             url: '/productions-tab-change',
