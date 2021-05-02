@@ -12,8 +12,8 @@ use App\Core\ConstantManager;
 
 require 'Autoload.php';
 Autoload::register();
-Request::init();
 new ConstantManager();
+Request::init();
 
 $slug = mb_strtolower($_SERVER['REQUEST_URI']);
 $route = new Router($slug);
