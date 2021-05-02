@@ -1,0 +1,7 @@
+/connexion:
+  controller: Person
+  action:     login
+
+/404:
+  controller: Main
+  action:     page404

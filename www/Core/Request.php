@@ -9,7 +9,7 @@ class Request {
     private static $uri = null;
     private static $type = null;
     private static $segments = null;
-    private static $user = null;
+    private static $user;
 
      // Prevent the class from being called 'non-statically'
     private function __construct() {}
@@ -24,10 +24,9 @@ class Request {
         self::$uri = '/'.Helpers::sanitizeString(rtrim(substr($_SERVER["REQUEST_URI"], 1), '/'));
         self::$type = $_SERVER['REQUEST_METHOD'];
         self::$segments = explode('/', self::$uri);
-
+        self::$user = new Person();
         if(isset($_SESSION['user_id'])) {
-            $user = new Person();
-            self::$user = $user->findOneById($_SESSION['user_id']);
+            self::$user = self::$user->findOneById($_SESSION['user_id']);
         }
     }
 
@@ -44,17 +43,7 @@ class Request {
     }
 
     public static function getUser() {
-        if(isset($_SESSION['user_id'])) {
-            $user = new Person();
-            $loggedUser = $user->findOneById($_SESSION['user_id']);
-            if ($loggedUser) {
-                self::$user = $loggedUser;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+        return self::$user;
     }
 
 }

@@ -2,21 +2,11 @@
 /admin:
   controller: Main
   action:     default
-  middleware: Admin
-
-/connexion:
-  controller: Person
-  action:     login
-
-/404:
-  controller: Main
-  action:     page404
 
 # PAGES
 /admin/pages:
   controller: Page
   action:     showAll
-  middleware: Admin
 
 /admin/pages/creation:
   controller: Page
@@ -26,7 +16,6 @@
 /admin/articles:
   controller: Article
   action:     showAll
-  middleware: Admin
 
 /admin/articles/modification:
   controller: Article
@@ -86,3 +75,4 @@
 /admin/parametres:
   controller: Settings
   action: showAll
+  middleware: Admin, Editor

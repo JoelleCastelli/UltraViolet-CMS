@@ -21,7 +21,7 @@ class Person extends Database
     protected $password;
     protected $optin;
     protected $deletedAt;
-    protected $role;
+    protected $role = 'user';
     protected $uvtr_media_id;
 
     //foreign properties
@@ -201,6 +201,12 @@ class Person extends Database
         if(!empty($this->uvtr_media_id) && is_numeric($this->uvtr_media_id))
             $this->media->setId($this->uvtr_media_id);
         return $this->media;
+    public function isLogged(): bool {
+        if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -212,6 +218,55 @@ class Person extends Database
     }
     public function formBuilderLogin()
     {
+    public function canAccessBackOffice(): bool {
+        if(in_array($this->getRole(), ['admin', 'editor', 'moderator'])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function isAdmin(): bool {
+        if($this->getRole() === 'admin') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isEditor(): bool {
+        if($this->getRole() === 'editor') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isModerator(): bool {
+        if($this->getRole() === 'moderator') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isVIP(): bool {
+        if($this->getRole() === 'vip') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isUser(): bool {
+        if($this->getRole() === 'user') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function formBuilderLogin(): array {
         return [
             "config" => [
                 "method" => "POST",
@@ -248,9 +303,7 @@ class Person extends Database
         ];
     }
 
-    public function formBuilderRegister()
-    {
-
+    public function formBuilderRegister(): array {
         return [
             "config" => [
                 "method" => "POST",
@@ -325,4 +378,5 @@ class Person extends Database
             ]
         ];
     }
+
 }

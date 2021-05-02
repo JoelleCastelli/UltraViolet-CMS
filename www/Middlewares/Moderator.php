@@ -4,13 +4,13 @@ namespace App\Middleware;
 
 use App\Core\Request;
 
-class Admin {
+class Moderator {
 
     // TODO : assigner les erreurs + vérifier la connexion
     public function handle() {
         $user = Request::getUser();
-        if (!($user && $user->isLogged() && $user->isAdmin())) {
-            die("Il faut avoir les droits admin");
+        if (!($user && $user->isLogged() && $user->isModerator() || $user->isEditor() || $user->isAdmin())) {
+            die("Il faut avoir les droits moderator");
         }
     }
 
