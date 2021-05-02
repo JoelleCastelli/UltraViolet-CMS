@@ -283,6 +283,27 @@ class Article extends Database
                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
                     "required" => true,
                 ],
+                "state"=>[
+                    "type"=>"radio",
+                    "label"=>"État :",
+                    "class"=>"",
+                    "error"=>"Erreur test",
+                    "required" => true,
+                    "options" => [
+                        [
+                            "value"=>"draft",
+                            "text"=>"Brouillon",
+                        ],
+                        [
+                            "value"=>"scheduled",
+                            "text"=>"Planifié",
+                        ],
+                        [
+                            "value"=>"published",
+                            "text"=>"Publié",
+                        ],
+                    ],
+                ],
             ]
         ];
     }

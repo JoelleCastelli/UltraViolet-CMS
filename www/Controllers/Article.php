@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Core\View;
 use App\Core\Helpers;
 use App\Core\FormValidator;
-use App\Core\View;
 use App\Models\Article as ArticleModel;
 
 class Article {
@@ -40,10 +40,36 @@ class Article {
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
+            
             if (empty($errors)) {
-                // TODO : Remplir les champs de l'objet article
+
+                // echo "AVANT :";
+                // echo "<pre>";
+                // var_dump($article);
+                // echo "</pre>";
+
+                // Date value
+                $dateNow = new \DateTime('now');
+                $updatedAt = $dateNow->format("Y-m-d H:i:s");
+
+                $title = htmlspecialchars($_POST["title"]);
+
+                $article->setTitle($title);
+                $article->setSlug(Helpers::slugify($title));
+                $article->setDescription(htmlspecialchars($_POST["description"]));
+                $article->setContent(htmlspecialchars($_POST["content"]));
+                $article->setState(htmlspecialchars($_POST["state"]));
+
+                // $article->save
+
+                echo "APRÈS :";
+                echo "<pre>";
+                var_dump($article);
+                echo "</pre>";
+
             } 
-            else $view->assign("errors", $errors);
+            else 
+                $view->assign("errors", $errors);
         }
 
         $view->assign("title", "Créer un article");
