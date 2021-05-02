@@ -75,4 +75,4 @@
 /admin/parametres:
   controller: Settings
   action: showAll
-  middleware: Admin, Editor
+  middleware: Admin, Editor, Moderator

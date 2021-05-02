@@ -23,4 +23,9 @@ class Helpers{
         return htmlspecialchars(strip_tags($url));
     }
 
+    public static function redirect($url, $statusCode = 303) {
+        header('Location: ' . $url, true, $statusCode);
+        die();
+    }
+
 }
