@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\Traits\ModelsTrait;
 use App\Core\FormBuilder;
 
 class Article extends Database
 {
+    use ModelsTrait;
+
     private $id = null;
     protected $title;
     protected $description;
@@ -19,8 +22,13 @@ class Article extends Database
     protected $descriptionSeo;
     protected $contentUpdatedAt;
 
+    public $media;
+    public $person;
+
     public function __construct() {
         parent::__construct();
+        $this->media = new Media;
+        $this->person = new Person;
     }
 
     /**
@@ -29,14 +37,6 @@ class Article extends Database
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param null $id
-     */
-    public function setId($id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -197,6 +197,38 @@ class Article extends Database
     public function setContentUpdatedAt($contentUpdatedAt): void
     {
         $this->contentUpdatedAt = $contentUpdatedAt;
+    }
+
+    /**
+     * @return Media
+     */
+    public function getMedia(): Media
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param Media $media
+     */
+    public function setMedia(Media $media): void
+    {
+        $this->media = $media;
+    }
+
+    /**
+     * @return Person
+     */
+    public function getPerson(): Person
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param Person $person
+     */
+    public function setPerson(Person $person): void
+    {
+        $this->person = $person;
     }
 
     public function findAll() {

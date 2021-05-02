@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\Helpers;
+use App\Core\FormValidator;
 use App\Core\View;
 use App\Models\Article as ArticleModel;
 
@@ -38,7 +39,7 @@ class Article {
 
         if (!empty($_POST)) {
 
-            $errors = FormBuilder::check($form, $_POST);
+            $errors = FormValidator::check($form, $_POST);
             if (empty($errors)) {
                 // TODO : Remplir les champs de l'objet article
             } 
