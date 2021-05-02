@@ -43,15 +43,6 @@ class Article {
             
             if (empty($errors)) {
 
-                // echo "AVANT :";
-                // echo "<pre>";
-                // var_dump($article);
-                // echo "</pre>";
-
-                // Date value
-                $dateNow = new \DateTime('now');
-                $updatedAt = $dateNow->format("Y-m-d H:i:s");
-
                 $title = htmlspecialchars($_POST["title"]);
 
                 $article->setTitle($title);
@@ -60,18 +51,15 @@ class Article {
                 $article->setContent(htmlspecialchars($_POST["content"]));
                 $article->setState(htmlspecialchars($_POST["state"]));
 
-                // $article->save
+                // TODO : Get real connected Person and Media used
+                $article->setUvtrMediaId(1);
+                $article->setUvtrPersonId(1);
 
-                echo "APRÈS :";
-                echo "<pre>";
-                var_dump($article);
-                echo "</pre>";
-
+                $article->save();
             } 
             else 
                 $view->assign("errors", $errors);
         }
-
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
     }

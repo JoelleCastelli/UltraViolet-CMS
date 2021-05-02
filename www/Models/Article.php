@@ -21,6 +21,8 @@ class Article extends Database
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
+    protected $uvtr_media_id;
+    protected $uvtr_person_id;
 
     public $media;
     public $person;
@@ -229,6 +231,38 @@ class Article extends Database
     public function setPerson(Person $person): void
     {
         $this->person = $person;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUvtrMediaId()
+    {
+        return $this->uvtr_media_id;
+    }
+
+    /**
+     * @param mixed $uvtr_media_id
+     */
+    public function setUvtrMediaId($uvtr_media_id): void
+    {
+        $this->uvtr_media_id = $uvtr_media_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUvtrPersonId()
+    {
+        return $this->uvtr_person_id;
+    }
+
+    /**
+     * @param mixed $uvtr_media_id
+     */
+    public function setUvtrPersonId($uvtr_person_id): void
+    {
+        $this->uvtr_person_id = $uvtr_person_id;
     }
 
     public function findAll() {
