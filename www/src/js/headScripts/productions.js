@@ -8,7 +8,6 @@ $(document).ready(function(){
             url: '/productions-data',
             dataType: 'json',
             success: function(response) {
-                b = response;
 
                 table.clear();
                 table.rows.add(response.productions).draw();
@@ -27,7 +26,6 @@ $(document).ready(function(){
             data: {productionType},
             dataType: 'json',
             success: function(response) {
-                b = response;
                 table.clear();
                 table.rows.add(response.productions).draw();
             },

@@ -238,7 +238,7 @@ class Production
         }else { // get productions by type
 
             $production = new ProductionModel();
-            $productions = $production->selectWhere('type', $_POST['productionType']);
+            $productions = $production->selectWhere('type',htmlspecialchars($_POST['productionType']));
 
         }
 
