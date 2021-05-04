@@ -220,9 +220,9 @@ class Person extends Database
     {
     public function canAccessBackOffice(): bool {
         if(in_array($this->getRole(), ['admin', 'editor', 'moderator'])) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 
