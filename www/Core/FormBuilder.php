@@ -14,6 +14,7 @@ class FormBuilder
                        action = '".($config["config"]["action"] ?? "")."'
                        class = '".($config["config"]["class"] ?? "")."'
                        id = '".($config["config"]["id"] ?? "")."'
+                       enctype = '".($config["config"]["enctype"] ?? "")."'
 				>";
 
 		foreach ($config["fields"] as $fieldName => $field) {
