@@ -11,7 +11,7 @@
 .grid-filter-list-comments {
     display: grid;
     height: 100%;
-    grid-template-rows: 1fr [tag-container] 1fr;
+    grid-template-rows: 1fr 1fr;
 }
 
 .grid-filter-container-list-comments {
@@ -36,6 +36,6 @@
 }
 
 .grid-tag-container-list-comments {
-
-    grid-area: tag-container;
+    display: flex;
+    flex-wrap: wrap;
 }

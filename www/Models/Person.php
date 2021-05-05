@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Core\Helpers;
 use App\Core\Database;
 use App\Core\FormBuilder;
-use App\Core\FormValidator;
 use App\Core\Traits\ModelsTrait;
 
 
