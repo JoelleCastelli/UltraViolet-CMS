@@ -11,7 +11,5 @@ const wrapDatatablesFooter = () => {
 
 $(document).ready( function () {
 
-    $("#datatable_filter label").before( "<i class='fas fa-search'>" );
-    $(".dataTables_wrapper").children().slice(0,2).wrapAll( "<div id='tableHeader'></div>" );
-    wrapDatatablesFooter();
+
 } );
