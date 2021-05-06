@@ -1,3 +1,7 @@
+/:
+  controller: Main
+  action:     frontHome
+
 /connexion:
   controller: Person
   action:     login

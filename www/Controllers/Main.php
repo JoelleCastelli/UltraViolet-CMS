@@ -18,4 +18,8 @@ class Main
 		$view = new View("404", "front");
 	}
 
+	public function frontHomeAction(){
+        $view = new View("home", "front");
+    }
+
 }

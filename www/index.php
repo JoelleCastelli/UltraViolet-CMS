@@ -2,9 +2,7 @@
 
 namespace App;
 
-if(session_id() == ''){
-    session_start();
-}
+session_start();
 
 use App\Core\Request;
 use App\Core\Router;

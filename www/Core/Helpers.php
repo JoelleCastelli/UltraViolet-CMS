@@ -23,7 +23,7 @@ class Helpers{
         return htmlspecialchars(strip_tags($url));
     }
 
-    public static function redirect($url, $statusCode = 303) {
+    public static function redirect($url, $statusCode = 0) {
         header('Location: ' . $url, true, $statusCode);
         die();
     }
@@ -49,8 +49,8 @@ class Helpers{
             } else {
                 echo "<div class='flash-$key'>".$_SESSION['flash'][$key]."</div>";
             }
+            unset($_SESSION['flash']);
         }
-        unset($_SESSION['flash'][$key]);
     }
 
 }

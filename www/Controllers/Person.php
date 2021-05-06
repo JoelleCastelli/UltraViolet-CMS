@@ -6,7 +6,6 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Models\Person as PersonModel;
-use App\Models\Page;
 
 class Person
 {
@@ -53,7 +52,9 @@ class Person
                     $person = $person[0];
                     if(password_verify($_POST['password'], $person->getPassword())) {
                         $_SESSION['loggedIn'] = true;
-                        echo "connection succed" . "<br>";
+                        $_SESSION['user_id'] = $person->getId();
+                        Helpers::setFlashMessage('success', "Bienvenue ".$person->getFullName());
+                        Helpers::redirect('/');
                     } else {
                         echo "connection failed". "<br>";
                     }

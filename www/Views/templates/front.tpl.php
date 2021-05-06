@@ -1,3 +1,5 @@
+<?php use App\Core\Helpers;?>
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -17,7 +19,12 @@
         <div class="container">
             <main class="main">
                 <div class="main-content">
-                    <?php include $this->view ?>
+                    <?php
+                        Helpers::getFlashMessage('success');
+                        Helpers::getFlashMessage('errors');
+                        Helpers::getFlashMessage('info');
+                        include $this->view;
+                    ?>
                 </div>
             </main>
         </div>
