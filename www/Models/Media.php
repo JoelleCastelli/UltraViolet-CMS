@@ -113,9 +113,10 @@ class Media extends Database
             ],
             "fields" => [
 
-                "media" => [
+                "media[]" => [
                     "type" => "file",
                     "required" => true,
+                    "multiple" => true,
                 ],
 
               /*  "test" => [

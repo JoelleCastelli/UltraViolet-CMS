@@ -21,6 +21,7 @@ class FormBuilder
 
             $required = isset($field["required"]) && $field["required"] == true ? "required" : '';
             $disabled = isset($field["disabled"]) && $field["disabled"] == true ? "disabled" : '';
+            $multiple = isset($field["multiple"]) && $field["multiple"] == true ? "multiple" : '';
 
             $html .= "<label for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
 
@@ -80,7 +81,7 @@ class FormBuilder
                     min='".($field["min"] ?? "")."'
                     max='".($field["max"] ?? "")."'
                     id='".($field["id"] ?? $fieldName)."'
-                    $required $disabled
+                    $required $disabled $multiple
                 >";
             }
 		}

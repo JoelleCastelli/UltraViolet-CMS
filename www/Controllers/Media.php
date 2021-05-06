@@ -21,13 +21,12 @@ class Media
 
     public function uploadAction()
     {
-        //Helpers::dd($_POST);
+        echo "<pre>";
+
 
         if (!empty($_FILES)) {
-            echo "file";
-            echo "<pre>";
 
-            print_r($_FILES['media']);
+            print_r($_FILES);
             new MediaManager($_FILES['media']);
             die();
         }else {

@@ -4,75 +4,112 @@ namespace App\Core;
 
 class MediaManager
 {
-    protected $file;
+    protected $files;
     protected $video;
     protected $errors = [];
 
-    public function __construct(array $file)
+    public function __construct(array $files)
     {
-        $this->file = $file;
-       // Helpers::dd($file);
-        $this->typeValidator();
-        if($this->video === false)
-        {
-            $this->imageSizeValidator();
-            $this->uploadFile();
+        $this->files = $this->formatArrayFiles($files);
+        print_r($this->files);
 
-        }else if($this->video === true) {
+        foreach ($this->files as $file) {
 
+            if($file['error'] != UPLOAD_ERR_OK)
+            {
+                return "error file oops";
+            }
 
+            //init
+            $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $fileSize = $file['size'];
 
-        }else {
-            $this->errors[] = "Veuillez envoyer une image ou vidéo.";
+            // validate files
+            $this->typeValidator($fileExtension);
+
+            if ($this->video === false) {
+                $this->imageSizeValidator($fileSize);
+
+                if (!empty($this->errors))
+                    return $this->errors;
+
+            } elseif ($this->video === true) {
+                echo "file video";
+
+            } else {
+                return $this->errors;
+            }
+
+        }
+
+        foreach ($this->files as $file) {
+
+            //init
+            $fileName = md5(time() . htmlspecialchars($file['name'])) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filePath = "dist/images/back/" . $fileName;
+            $fileTempPath = $file['tmp_name'];
+
+            $this->uploadFile($fileName, $filePath, $fileTempPath);
+
         }
     }
 
-    public function typeValidator()
+    public function typeValidator($fileExtension)
     {
-        $extension = pathinfo($this->file['name'], PATHINFO_EXTENSION);
-
         $imageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg');
         $videoExtensions = array('mp4', 'mov', 'avi', 'flv', 'wmv');
-        if (in_array($extension, $imageExtensions)) {
+
+        if (in_array($fileExtension, $imageExtensions))
             $this->video = false;
-        } elseif (in_array($extension, $videoExtensions)) {
+        elseif (in_array($fileExtension, $videoExtensions))
             $this->video = true;
-        }   else {
-            $this->video = null;
-        }
+        else
+            $this->errors = "Veuillez envoyer seulement les vidéos ou photos";
     }
 
-    public function imageSizeValidator()
+    public function imageSizeValidator($fileSize)
     {
-        $size = $this->file['size'];
+        $oneMegabytesInBytes = 1048576;
+        $max = 10 * $oneMegabytesInBytes;
 
-        if($size > 10485760) {
-            $this->errors[] = "Votre image est de taille supérieur à 10MB";
-            echo "error size";
-        } else {
-            echo "size good";
+        if($fileSize > $max) {
+            $this->errors = "Votre image est de taille supérieur à 10MB";
         }
 
     }
 
-    public function uploadFile() {
-        if(empty($this->errors))
-        {
-            $fileName = md5(time() . htmlspecialchars($this->file['name'])) . '.' . pathinfo($this->file['name'], PATHINFO_EXTENSION);
-            $this->file['name'] = $fileName;
-            $check = move_uploaded_file($this->file['tmp_name'], "dist/images/back/" . $fileName);
+    public function uploadFile($fileName, $filePath, $fileTempPath) {
 
-            if($check) {
-                echo "file upload success";
-                return true;
+        try {
+            move_uploaded_file($fileTempPath, $filePath);
 
-            }else {
-                echo "cannot move uploaded file oops";
-                return $this->errors;
+        }catch (\Exception $e) {
+            $this->errors = "oops, problème au déplacement des fichiers exception " . $e;
 
+        }
+    }
+
+    public function formatArrayFiles(&$file_post){
+
+        //init
+        $isMulti = is_array($file_post['name']);
+        $fileCount = $isMulti?count($file_post['name']):1;
+        $fileKeys = array_keys($file_post);
+
+        //build array
+        $fileArr = [];
+        for( $i = 0; $i < $fileCount; $i++) {
+
+            foreach ($fileKeys as $key) {
+                if ($isMulti)
+                    $fileArr[$i][$key] = $file_post[$key][$i];
+                else
+                    $fileArr[$i][$key] = $file_post[$key];
             }
         }
+        return $fileArr;
     }
+
     // check type and extension
         //video or image
     // check size
