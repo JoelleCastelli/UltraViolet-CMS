@@ -8,185 +8,100 @@ class FormBuilder
 	public function __construct(){
 	}
 
-	public static function render($config, $show=true){
+	public static function render($config, $show = true){
 
-		$html = "<form 
-                    method='".($config["config"]["method"]??"GET")."' 
-                    action='".($config["config"]["action"]??"")."'
-                    class='".($config["config"]["class"]??"")."'
-                    id='".($config["config"]["id"]??"")."'
+		$html = "<form method = '".($config["config"]["method"] ?? "GET")."' 
+                       action = '".($config["config"]["action"] ?? "")."'
+                       class = '".($config["config"]["class"] ?? "")."'
+                       id = '".($config["config"]["id"] ?? "")."'
 				>";
 
-		foreach ($config["inputs"] as $name => $configInput) {
-			$html .="<label for='".($configInput["id"]??$name)."'>".($configInput["label"]??"")." </label>";
+		foreach ($config["fields"] as $fieldName => $field) {
 
-			// Check previous post
-            // Using just one ternaire for easier code review
-            $value = "";
-            if (!empty($_POST)) {
-                $value = ($configInput["type"] === "password") ? "" : htmlspecialchars($_POST[$name]);
+            $required = isset($field["required"]) && $field["required"] == true ? "required" : '';
+            $disabled = isset($field["disabled"]) && $field["disabled"] == true ? "disabled" : '';
+
+            $html .= "<label for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
+
+            // SELECT
+		    if ($field["type"] == "select") {
+
+                $html .= "<select name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
+                foreach($field["options"] as $option) {
+                    $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
+                    $html .= "<option value='".$option["value"]."' $selected $disabled>".$option["text"]."</option>";
+                }
+                $html .= "</select>";
+
+            // RADIO
+            } elseif($field['type'] == 'radio') {
+                $html .= "<fieldset id='".($field["id"] ?? $fieldName)."'>";
+                foreach($field["options"] as $option) {
+                    $disabledOption = isset($option["disabled"]) && $option["disabled"] == true ? "disabled" : '';
+                    $checked = isset($option["checked"]) && $option["checked"] == true ? "checked" : '';
+                    if (!empty($_POST[$fieldName]) && $_POST[$fieldName] == $option["value"]) {
+                        $checked = "checked";
+                    }
+                    $html .= "<input type='radio' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
+                    $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
+                }
+                $html .= "</fieldset>";
+
+            // CHECKBOX
+            } elseif ($field['type'] == 'checkbox') {
+
+                $html .= "<fieldset id='".($field["id"] ?? $fieldName)."'>";
+                foreach($field["options"] as $option) {
+                    $disabledOption = isset($option["disabled"]) &&  $option["disabled"] == true ? "disabled" : '';
+                    $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
+                    if (!empty($_POST[$fieldName]) && in_array($option['value'], $_POST[$fieldName])) {
+                        $selected = "checked";
+                    }
+                    $html .= "<input type='checkbox' name='".$fieldName."[]' value='".$option["value"]."' $selected $disabledOption>";
+                    $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
+                }
+                $html .= "</fieldset>";
+
+            // OTHER INPUTS
+            } else {
+
+                $value = $field['value'] ?? '';
+                if (!empty($_POST[$fieldName])) {
+                    $value = ($field['type'] === 'password') ? '' : htmlspecialchars($_POST[$fieldName], ENT_QUOTES);
+                }
+
+                $html .="<input
+                    type='".($field["type"] ?? "text")."'
+                    name='".$fieldName."'
+                    value='".$value."'
+                    placeholder='".($field["placeholder"] ?? "")."'
+                    class='".($field["class"] ?? "")."'
+                    min='".($field["min"] ?? "")."'
+                    max='".($field["max"] ?? "")."'
+                    id='".($field["id"] ?? $fieldName)."'
+                    $required $disabled
+                >";
             }
-
-			$html .="<input 
-						type='".($configInput["type"]??"text")."'
-						name='".$name."'
-						value='".$value."'
-						placeholder='".($configInput["placeholder"]??"")."'
-						class='".($configInput["class"]??"")."'
-						min='".($configInput["min"]??"")."'
-						max='".($configInput["max"]??"")."'
-						id='".($configInput["id"]??$name)."'
-						".(!empty($configInput["required"])?"required='required'":"")."
-						 ><br>";
 		}
-		
-		if (isset($config["selects"])) {
 
-            foreach ($config["selects"] as $name => $configSelect)
-            {
-                $html .="<label class='" . ($configSelect['class_label']??"") . "' for='".($name)."'>".($configSelect["label"]??"")." </label>";
-                $html .= "<select class='" . ($configSelect['class_select']??"")  . "' name='".$name."' id='".$name."'>";
-
-                foreach($configSelect["options"] as $option)
-                {
-
-                    // Check previous post
-                    // Using just one ternaire for easier code review
-                    $value = false;
-                    if (!empty($_POST[$name])) {
-                        $value = $_POST[$name] === $option["value"];
-                    }
-
-                    if($value)
-                    {
-                        $html .= "<option 
-                                value='" . $option["value"] . "'" .
-                            ($option["disabled"]??"") ." " .
-                            "selected " .
-                            "class ='" . ($option['class']??"") . "' " .
-                            ">".
-                            $option["label"].
-                            "</option>";
-                    } else {
-                        $html .= "<option 
-                                value='" . $option["value"] . "'" .
-                            ($option["disabled"]??"") ." " .
-                            ($option["selected"]??"") . " " .
-                            "class ='" . ($option['class']??"") . "' " .
-                            ">".
-                            $option["label"].
-                            "</option>";
-                    }
-                }
-
-                $html .= "</select><br>";
-            }
-        }
-
-        if (isset($config["radios"])) {
-            foreach ($config["radios"] as $name => $configRadio)
-            {
-                $html .= "<fieldset class='". ($configRadio['class_fieldset']??"") . "' id='" . ($configRadio['id']??"") . "'>";
-                $html .= "<legend class='" . ($configRadio['class_legend']??"") . "'>" . $configRadio['label'] . "</legend>";
-
-                foreach($configRadio["options"] as $option)
-                {
-
-                    // Check previous post
-                    // Using just one ternaire for easier code review
-                    $value = false;
-                    if (!empty($_POST[$name])) {
-                        $value = $_POST[$name] === $option["value"];
-                    }
-
-                    if($value)
-                    {
-
-                        $html .= "<input 
-                                type='radio' 
-                                id='" . $option['id'] . "' 
-                                name='" . $name . "' 
-                                value='".$option["value"] . "'
-                                class='".($option["class_input"]??"")."' checked" .
-                            ">";
-                    }else {
-                        $html .= "<input 
-                                type='radio' 
-                                id='" . $option['id'] . "' 
-                                name='" . $name . "' 
-                                value='".$option["value"] . "'
-                                class='".($option["class_input"]??"")."' " .
-                            ($option["checked"]??"") .
-                            ">";
-                    }
-
-                    $html .= "<label for='" . $option['id'] . "' class='" . ( $option['class_label']??"") . "'>" . $option['label'] . "</label><br>";
-                }
-
-                $html .= "</fieldset>";
-            }
-        }
-
-        if (isset($config["checkboxes"])) {
-
-            foreach ($config["checkboxes"] as $name => $configCheckbox)
-            {
-                $html .= "<fieldset class='". ($configCheckbox['class_fieldset']??"") . "' id='" . ($configCheckbox['id']??"") . "'>";
-                $html .= "<legend class='" . ($configCheckbox['class_legend']??"") . "'>" . $configCheckbox['label'] . "</legend>";
-
-                foreach($configCheckbox["options"] as $option)
-                {
-
-                    // Check previous post
-                    // Using just one ternaire for easier code review
-                    $value = false;
-                    if (!empty($_POST[$name])) {
-
-                        foreach ($_POST[$name] as $key => $val)
-                        {
-                            $value = $_POST[$name][$key] === $option['value'];
-
-                            if($value)
-                                break;
-                        }
-                    }
-
-                    if($value)
-                    {
-                        $html .= "<input 
-                                type='checkbox' 
-                                id='" . $option['id'] . "' 
-                                name='" . $name . "[]' 
-                                value='".$option["value"] . "'
-                                class='".($option["class_input"]??"")."' " .
-                            (!empty($option["required"])?"required='required'":"") . " checked" .
-                            ">";
-                    } else {
-                        $html .= "<input 
-                                type='checkbox' 
-                                id='" . $option['id'] . "' 
-                                name='" . $name . "[]' 
-                                value='".$option["value"] . "'
-                                class='".($option["class_input"]??"")."' " .
-                            (!empty($option["required"])?"required='required'":"") . " " .
-                            ($option["checked"]??"") .
-                            ">";
-                    }
-                    $html .= "<label for='" . $option['id'] . "' class='" . ($option['class_label']??"") . "'>" . $option['label'] . "</label><br>";
-                }
-
-                $html .= "</fieldset>";
-            }
-        }
-
-        $html .= "<input type='submit' value=\"".($config["config"]["submit"]??"Valider")."\">";
+        $html .= "<input type='submit' class='btn' value=\"".($config["config"]["submit"]??"Valider")."\">";
 		$html .= "</form>";
 
-		if($show){
+		if($show) {
 			echo $html;
-		}else{
+		} else {
 			return $html;
 		}
 	}
+
+    public static function generateCSRFToken() {
+        if(!isset($_SESSION['csrf_token'])) {
+            $token = bin2hex(random_bytes(32));
+            $_SESSION['csrf_token'] = $token;
+            return $token;
+        } else {
+            return $_SESSION['csrf_token'];
+        }
+    }
 
 }

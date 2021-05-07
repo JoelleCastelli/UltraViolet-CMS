@@ -1,0 +1,35 @@
+.state-switch {
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-color: $grey3;
+    width: 35px;
+    height: 14px;
+    border-radius: 30px;
+    transition: all .3s ease;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    &::after {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: $purple;
+        transition: all .3s ease;
+    }
+}
+
+.switched-on {
+    background: $purple-light;
+    
+
+    &::after {
+        transform: translateX(80%);
+    }
+}

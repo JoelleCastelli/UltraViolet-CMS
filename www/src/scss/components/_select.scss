@@ -1,4 +1,12 @@
 select {
+    // reset
+    border:none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -ms-appearance: none; 
+    outline: none;
+
     font-family: $mulish;
     font-size: 16px;
     font-weight: lighter;

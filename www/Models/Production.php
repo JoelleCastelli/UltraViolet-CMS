@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\FormBuilder;
 
 class Production extends Database
 {
     private $id = null;
-    protected $tmdbId;
+    private $createdAt;
+    private $updatedAt;
+    protected $tmdbId = null;
     protected $title;
     protected $originalTitle;
     protected $releaseDate;
@@ -15,8 +18,6 @@ class Production extends Database
     protected $overview;
     protected $runtime;
     protected $number;
-    protected $createdAt;
-    protected $updatedAt;
     protected $deletedAt;
 
     public function __construct()
@@ -177,30 +178,6 @@ class Production extends Database
     }
 
     /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param mixed $updatedAt
-     */
-    public function setUpdatedAt($updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    /**
      * @return mixed
      */
     public function getDeletedAt()
@@ -255,6 +232,150 @@ class Production extends Database
         } else {
             $this->setRuntime($this->getRuntime()." minutes");
         }
+    }
+
+    public function formBuilderAddProduction(){
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "formAddProduction",
+                "submit" => "Valider",
+                "referer" => '/nouvelle-production'
+            ],
+            "fields" => [
+                "type" => [
+                    "type" => "select",
+                    "label" => "Type",
+                    "required" => true,
+                    "class" => "form_input",
+                    "error" => "Un type de production est nécessaire",
+                    "options" => [
+                        [
+                            "value"=>"movie",
+                            "text"=>"Film",
+                        ],
+                        [
+                            "value"=>"series",
+                            "text"=>"Série",
+                        ]
+                    ],
+                ],
+                "title" => [
+                    "type" => "text",
+                    "placeholder" => "",
+                    "label" => "Titre",
+                    "required" => true,
+                    "class" => "form_input",
+                    "minLength" => 1,
+                    "maxLength" => 100,
+                    "error" => "Le titre doit faire entre 1 et 100 caractères"
+                ],
+                "originalTitle" => [
+                    "type" => "text",
+                    "placeholder" => "",
+                    "label" => "Titre original",
+                    "class" => "form_input",
+                    "maxLength" => 100,
+                    "error" => "Le titre doit faire entre 1 et 100 caractères"
+                ],
+                "releaseDate" => [
+                    "type" => "date",
+                    "label" => "Date de sortie",
+                    "class" => "form_input",
+                    "minLength" => 10,
+                    "maxLength" => 10,
+                    "error" => "Le format de la date est incorrect"
+                ],
+                "overview" => [
+                    "type" => "text",
+                    "placeholder" => "",
+                    "label" => "Résumé",
+                    "class" => "form_input",
+                    "maxLength" => 1000,
+                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
+                ],
+                "runtime" => [
+                    "type" => "number",
+                    "placeholder" => "",
+                    "label" => "Durée (du film ou d'un épisode)",
+                    "class" => "form_input",
+                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
+                ],
+                "number" => [
+                    "type" => "number",
+                    "placeholder" => "",
+                    "label" => "Numéro",
+                    "class" => "form_input",
+                ],
+                "csrf_token" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
+            ]
+
+        ];
+    }
+
+    public function formBuilderAddProductionTmdb(){
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "tmdb-request",
+                "class" => "form_control",
+                "id" => "formAddProductionTmdb",
+                "submit" => "Valider"
+            ],
+            "fields" => [
+                "productionType" => [
+                    "type" => "radio",
+                    "options" => [
+                        [
+                            "value"=>"movie",
+                            "text"=>"Film",
+                            "selected"=>true
+                        ],
+                        [
+                            "value"=>"series",
+                            "text"=>"Série"
+                        ]
+                    ],
+                    "label" => "Type",
+                    "class" => "form_select",
+                    "error" => "Le type doit être film, série, saison ou épisode"
+                ],
+                "productionID" => [
+                    "type" => "text",
+                    "label" => "ID du film ou de la série",
+                    "class" => "form_input",
+                    "error" => "Un ID est nécessaire"
+                ],
+                "seasonNb" => [
+                    "type" => "text",
+                    "label" => "Numéro de la saison",
+                    "class" => "form_input",
+                    "error" => "Un type de production est nécessaire"
+                ],
+                "episodeNb" => [
+                    "type" => "text",
+                    "label" => "Numéro de l'épisode",
+                    "class" => "form_input",
+                    "error" => "Un type de production est nécessaire"
+                ],
+                "productionPreviewRequest" => [
+                    "type" => "button",
+                    "label" => "Preview",
+                    "class" => "form_input",
+                    "value" => "Preview"
+                ],
+                "csrf_token" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
+            ],
+        ];
+
     }
 
 }

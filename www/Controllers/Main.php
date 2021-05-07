@@ -3,21 +3,23 @@
 namespace App\Controller;
 
 use App\Core\View;
-use App\Core\Database;
 
 class Main
 {
 
 	public function defaultAction(){
-		$sql = new Database();
-		$view = new View("home");
+		$view = new View("dashboard");
 		$view->assign('title', 'Back office');
-		$view->assign('headScript', 'Resources/scripts/headScripts/home.js');
-		$view->assign('bodyScript', 'Resources/scripts/bodyScripts/home.js');
+		$view->assign('headScript', 'src/js/headScripts/home.js');
+		$view->assign('bodyScript', 'src/js/bodyScripts/home.js');
 	}
 
 	public function page404Action(){
-		$view = new View("404"); 
+		$view = new View("404", "front");
 	}
+
+	public function frontHomeAction(){
+        $view = new View("home", "front");
+    }
 
 }

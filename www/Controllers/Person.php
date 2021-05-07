@@ -6,7 +6,6 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Models\Person as PersonModel;
-use App\Models\Page;
 
 class Person
 {
@@ -20,11 +19,51 @@ class Person
 		echo "User default";
 	}
 
+    public function getPersonAction() {
+        $user = new PersonModel();
+        $user->setId(5);
+        $user->getMedia();
+        $user->select()->where("id", "3")->get();
+        //$user->delete();
+        //$user->setPseudo("tempt");
+        //$check = $user->save();
+        //echo $check ? "true" : "false <br>";
+        //echo $check;
+    }
+
 	public function deleteAction() {
 	    $user = new PersonModel();
-	    $user->setId(11);
+	    $user->setId(3);
 	    $user->setDeletedAt(Helpers::getCurrentTimestamp());
 	    $user->save();
+    }
+
+    public function loginAction() {
+        $user = new PersonModel();
+        $view = new View("login", "front");
+        $form = $user->formBuilderLogin();
+        $view->assign("form", $form);
+
+        if(!empty($_POST)) {
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)){
+                $person = $user->selectWhere("email", htmlspecialchars($_POST['email']));
+                if(!empty($person)) {
+                    $person = $person[0];
+                    if(password_verify($_POST['password'], $person->getPassword())) {
+                        $_SESSION['loggedIn'] = true;
+                        $_SESSION['user_id'] = $person->getId();
+                        Helpers::setFlashMessage('success', "Bienvenue ".$person->getFullName());
+                        Helpers::redirect('/');
+                    } else {
+                        echo "connection failed". "<br>";
+                    }
+                }
+            } else {
+                $view->assign("errors", $errors);
+                echo "errors". "<br>";
+            }
+        }
     }
 
 	public function registerAction() {
@@ -38,17 +77,21 @@ class Person
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)){
 
-                $role = $_POST["optin"][0];
+                // Init some values
                 $dateNow = new \DateTime('now');
                 $updatedAt = $dateNow->format("Y-m-d H:i:s");
+                $pwd = password_hash(htmlspecialchars($_POST["pwd"]), PASSWORD_DEFAULT);
 
-				$user->setFullName($_POST["fullName"]);
-				$user->setPseudo($_POST["pseudo"]);
-				$user->setEmail($_POST["email"]);
-                $user->setPassword($_POST["pwd"]);
-                $user->setRole($_POST["role"]);
-                $user->setOptin($role);
+                // Required
+				$user->setFullName(htmlspecialchars($_POST["fullName"]));
+				$user->setPseudo(htmlspecialchars($_POST["pseudo"]));
+                $user->setEmail(htmlspecialchars($_POST["email"]));
+                $user->setPassword($pwd);
                 $user->setUpdatedAt($updatedAt);
+
+                // Default
+                $user->setRole('user');
+                $user->setOptin(0);
                 $user->setUvtrMediaId(1);
                 $user->setDeletedAt(null);
 

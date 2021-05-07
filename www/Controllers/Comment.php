@@ -12,4 +12,6 @@ class Comment
         $view->assign('title', 'Commentaires');
     }
 
+
+
 }

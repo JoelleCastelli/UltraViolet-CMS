@@ -3,425 +3,290 @@
 namespace App\Models;
 
 use App\Core\Database;
-use App\Core\FormValidator;
+use App\Core\FormBuilder;
+use App\Core\Traits\ModelsTrait;
+
 
 class Person extends Database
 {
+    use ModelsTrait;
 
-	private $id = null;
-    private $createdAt;
-	protected $fullName;
-	protected $pseudo;
-	protected $email;
-    protected $password;
-    protected $optin;
-    protected $updatedAt;
-    protected $deletedAt;
-    protected $role;
-    protected $uvtr_media_id;
+    private $id = null;
+    private string$createdAt;
+    private string $updatedAt;
+    protected string $fullName;
+    protected string $pseudo;
+    protected string $email;
+    protected string $password;
+    protected bool $optin;
+    protected string $deletedAt;
+    protected string $role = 'user';
+    protected int $uvtr_media_id;
+    // Foreign properties
+    public Media $media;
 
-	public function __construct(){
-		parent::__construct();
-	}
+    public function __construct() {
+        parent::__construct();
+        $this->media = new Media();
+    }
 
-    /**
-     * @return null
-     */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
-    /**
-     * @param null $id
-     */
-    public function setId($id): void
-    {
-        $this->id = $id;
-        $this->findOneById($this->id); // populate object with all the others values
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFullName()
-    {
+    public function getFullName() {
         return $this->fullName;
     }
 
-    /**
-     * @param mixed $fullName
-     */
-    public function setFullName($fullName): void
-    {
+    public function setFullName($fullName): void {
         $this->fullName = $fullName;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPseudo()
-    {
+    public function getPseudo() {
         return $this->pseudo;
     }
 
-    /**
-     * @param mixed $pseudo
-     */
-    public function setPseudo($pseudo): void
-    {
+    public function setPseudo($pseudo): void {
         $this->pseudo = $pseudo;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
+    public function getEmail() {
         return $this->email;
     }
 
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email): void
-    {
+    public function setEmail($email): void {
         $this->email = $email;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPassword()
-    {
+    public function getPassword() {
         return $this->password;
     }
 
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password): void
-    {
+    public function setPassword($password): void {
         $this->password = $password;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getOptin()
-    {
+    public function getOptin() {
         return $this->optin;
     }
 
-    /**
-     * @param mixed $optin
-     */
-    public function setOptin($optin): void
-    {
+    public function setOptin($optin): void {
         $this->optin = $optin;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
-    /**
-     * @param mixed $updatedAt
-     */
-    public function setUpdatedAt($updatedAt): void
-    {
+    public function setUpdatedAt($updatedAt): void {
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDeletedAt()
-    {
+    public function getDeletedAt() {
         return $this->deletedAt;
     }
 
-    /**
-     * @param mixed $deletedAt
-     */
-    public function setDeletedAt($deletedAt): void
-    {
+    public function setDeletedAt($deletedAt): void {
         $this->deletedAt = $deletedAt;
     }
 
-    /**
-     * @return string
-     */
-    public function getRole(): string
-    {
+    public function getRole(): string {
         return $this->role;
     }
 
-    /**
-     * @param string $role
-     */
-    public function setRole(string $role): void
-    {
+    public function setRole(string $role): void {
         $this->role = $role;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUvtrMediaId()
-    {
+    public function getUvtrMediaId() {
         return $this->uvtr_media_id;
     }
 
-    /**
-     * @param mixed $uvtr_media_id
-     */
-    public function setUvtrMediaId($uvtr_media_id): void
-    {
+    public function setUvtrMediaId($uvtr_media_id): void {
         $this->uvtr_media_id = $uvtr_media_id;
     }
 
-	public function formBuilderLogin(){
-		return [
-			"config"=>[
-				"method"=>"POST",
-				"action"=>"",
-				"class"=>"form_control",
-				"id"=>"form_register",
-				"submit"=>"S'inscrire"
-			],
-			"inputs"=>[
-				"email"=>[
-				    "type"=>"email",
-                    "placeholder"=>"Exemple : nom@gmail.com",
-                    "label"=>"Votre Email",
-                    "required"=>true,
-                    "class"=>"form_input",
-                    "minLength"=>8,
-                    "maxLength"=>320,
-                    "error"=>"Votre email doit faire entre 8 et 320 caractères"
-                ],
-				"pwd"=>[
-				    "type"=>"password",
-                    "label"=>"Votre mot de passe",
-                    "required"=>true,
-                    "class"=>"form_input",
-                    "minLength"=>8,
-                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères"
-                ]
-			]
+    public function getMedia(): Media {
+        if (!empty($this->uvtr_media_id) && is_numeric($this->uvtr_media_id))
+            $this->media->setId($this->uvtr_media_id);
+        return $this->media;
+    }
 
-		];
-	}
+    public function isLogged(): bool {
+        if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	public function formBuilderRegister(){
+    public function setMedia(Media $media): void {
+        $this->media = $media;
+    }
 
-		return [
-			"config"=>[
-				"method"=>"POST",
-				"action"=>"",
-				"class"=>"form_control",
-				"id"=>"form_register",
-				"submit"=>"S'inscrire",
-                "required_inputs"=>8,
-                "csrf" => FormValidator::getCSRFToken()
-			],
-            "inputs"=>[
-                "fullName" => [
-                    "type"=>"text",
-                    "placeholder"=>"Exemple : Jeanne Dow",
-                    "label"=>"Votre nom et prénom",
-                    "class"=>"",
-                    "minLength"=>2,
-                    "maxLength"=>50,
-                    "error"=>"Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
-                    //"regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u",
-                    "required" => true
+    public function canAccessBackOffice(): bool {
+        if(in_array($this->getRole(), ['admin', 'editor', 'moderator'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                ],
-                "pseudo"=>[
-                    "type"=>"text",
-                    "placeholder"=>"Exemple : jeanne-dow-du-77",
-                    "label"=>"Votre Pseudo",
-                    "class"=>"",
-                    "minLength"=>2,
-                    "maxLength"=>25,
-                    "error"=>"Votre pseudo doit faire entre 2 et 25 caractères",
-                    "required" => true
+    public function isAdmin(): bool {
+        if($this->getRole() === 'admin') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                ],
-                "email"=>[
-                    "type"=>"email",
-                    "placeholder"=>"Exemple : mon_email@mail.com",
-                    "label"=>"Votre Email",
-                    "class"=>"",
-                    "minLength"=>8,
-                    "maxLength"=>130,
-                    "error"=>"Votre email doit faire entre 8 et 130 caractères",
-                    "required" => true
+    public function isEditor(): bool {
+        if($this->getRole() === 'editor') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                ],
-                "pwd"=>[
-                    "type"=>"password",
-                    "label"=>"Votre mot de passe",
-                    "class"=>"",
-                    "minLength"=>8,
-                    "regex"=> "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
-                    "error"=>"Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
-                    "required" => true
+    public function isModerator(): bool {
+        if($this->getRole() === 'moderator') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                ],
-                "pwdConfirm"=> [
-                    "type"=>"password",
-                    "label"=>"Confirmation",
-                    "class"=>"",
-                    "confirm"=>"pwd",
-                    "error"=>"Votre mot de passe de confirmation ne correspond pas",
-                    "required" => true
+    public function isVIP(): bool {
+        if($this->getRole() === 'vip') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                ]
+    public function isUser(): bool {
+        if($this->getRole() === 'user') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    public function formBuilderLogin(): array {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "form_register",
+                "submit" => "Se connecter",
+                "referer" => '/connexion'
             ],
-            "selects"=>[
-                "role"=>[
-                    "label"=>"Définnissez votre rôle : ",
-                    "class_label"=>"",
-                    "class_select"=>"",
-                    "error"=>"Veuillez choisir un rôle.",
-                    "options"=>[
-                        [
-                            "value"=>"",
-                            "label"=>"-- Choisissez un rôle --",
-                            "disabled"=>"disabled",
-                            "selected"=>"selected",
-                            "class"=>"",
-                        ],
-                        [
-                            "value"=>"user",
-                            "label"=>"Utilisateur",
+            "fields" => [
+                "email" => [
+                    "type" => "email",
+                    "placeholder" => "Email",
+                    "class" => "input",
+                    "id" => "email",
+                    "error" => "Votre champ email est vide.",
+                    "required" => true,
 
-                        ],
-                        [
-                            "value"=>"admin",
-                            "label"=>"Administrateur",
-                        ],
-                        [
-                            "value"=>"editor",
-                            "label"=>"Editeur",
-
-                        ],
-                        [
-                            "value"=>"vip",
-                            "label"=>"V.I.P",
-                        ]
-                    ]
-                ]
-            ],
-            /*"radios"=>[
-                "gender"=> [
-                    "label" => "Votre genre ",
-                    "class_fieldset" => "",
-                    "class_legend" => "",
-                    "error" => "Choisissez un genre siouplè !",
-                    "options"=>[
-                        [
-                            "id"=>"male",
-                            "value"=>"male",
-                            "label"=>"Male",
-                            "class_label" => "",
-                            "class_input" => ""
-                        ],
-                        [
-                            "id"=>"female",
-                            "value"=>"female",
-                            "label"=>"Female",
-                        ],
-                        [
-                            "id"=>"other",
-                            "value"=>"other",
-                            "label"=>"Other",
-                        ],
-                        [
-                            "id"=>"cactus",
-                            "value"=>"cactus",
-                            "label"=>"Je me sens cactus",
-                        ]
-                    ]
-                ]
-            ],*/
-            "checkboxes"=>[
-                "rules"=> [
-                    "error" => "Vous devez accepter le reglement.",
-                    "label" => "",
-                    "options"=>[
-                        [
-                            "id" => "rules",
-                            "value"=>"rule",
-                            "label"=>"Veuillez lire puis accepter le reglement.",
-                            "required" => true
-                        ],
-                    ]
                 ],
-                "optin"=> [
-                    "error" => "Oops ! Un problème se trouve avec votre Optin.",
-                    "label" => "",
-                    "options"=>[
-                        [
-                            "id" => "optin",
-                            "value"=>1,
-                            "label"=>"Acceptez les newsletters."
-                        ],
+                "password" => [
+                    "type" => "password",
+                    "placeholder" => "Mot de passe",
+                    "class" => "input",
+                    "error" => "Votre champ mot de passe est vide.",
+                    "required" => true,
 
-                    ]
-                ]
+                ],
+                "csrf_token" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
+                ],
             ]
-		];
-	}
-}
 
-/*
- * CHECKBOXES
- *
- * Alone
-     *   <div>
-            <input type="checkbox" id="subscribeNews" name="subscribe" value="newsletter">
-            <label for="subscribeNews">Souhaitez-vous vous abonner à la newsletter ?</label>
-         </div>
-        <div>
-            <button type="submit">S'abonner</button>
-        </div>
- *
- * Multiples
- *
-     * <fieldset>
-            <legend>Veuillez sélectionner vos intérêts :</legend>
-            <div>
-                <input type="checkbox" id="coding" name="interest" value="coding">
-                <label for="coding">Développement</label>
-            </div>
-            <div>
-                <input type="checkbox" id="music" name="interest" value="music">
-                <label for="music">Musique</label>
-            </div>
-      </fieldset>
- * */
+        ];
+    }
+
+    public function formBuilderRegister(): array {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "form_register",
+                "submit" => "S'inscrire",
+                "referer" => '/inscription'
+            ],
+            "fields" => [
+                "csrf_token" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
+                ],
+                "firstName" => [
+                    "type" => "text",
+                    "placeholder" => "Prénom",
+                    "minLength" => 2,
+                    "maxLength" => 50,
+                    "class" => "input",
+                    "error" => "Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
+                    "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "required" => true,
+                ],
+                "name" => [
+                    "type" => "text",
+                    "placeholder" => "Nom",
+                    "minLength" => 2,
+                    "maxLength" => 50,
+                    "class" => "input",
+                    "error" => "Votre nom doit faire entre 2 et 50 caractères et écrit correctement",
+                    "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "required" => true,
+                ],
+                "pseudo" => [
+                    "type" => "text",
+                    "placeholder" => "Pseudonyme",
+                    "minLength" => 2,
+                    "maxLength" => 25,
+                    "class" => "input",
+                    "error" => "Votre pseudo doit faire entre 2 et 25 caractères",
+                    "required" => true,
+
+                ],
+                "email" => [
+                    "type" => "email",
+                    "placeholder" => "Email",
+                    "class" => "input",
+                    "maxLength" => 130,
+                    "error" => "Votre email doit faire entre 8 et 130 caractères",
+                    "required" => true,
+
+                ],
+                "pwd" => [
+                    "type" => "password",
+                    "placeholder" => "Mot de passe",
+                    "minLength" => 8,
+                    "class" => "input",
+                    "regex" => "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
+                    "required" => true,
+
+                ],
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "class" => "input",
+                    "placeholder" => "Confirmation du mot de passe",
+                    "confirm" => "pwd",
+                    "error" => "Votre mot de passe de confirmation ne correspond pas",
+                    "required" => true,
+                ],
+            ]
+        ];
+    }
+
+}

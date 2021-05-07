@@ -1,15 +1,3 @@
-// Teacher's course code
-// Let this as it is in order to not breack the components made with these variable.
-// TODO :  Apply our style instead of the default styles here.
-$light-grey: #F2F2F2;
-$dark-grey: #444;
-$red: #ce0a0a;
-$green: #31aa66;
-$phone-width: 800px;
-
-
-
-
 
 /* GLOBAL COLORS */
 $pure-white: #FFFFFF;
@@ -26,6 +14,7 @@ $grey3: #E7E9F3;
 $grey4: #b5b5b5;
 $grey5: #EFF0F6;
 $grey6: #9FA2B4;
+$grey7: #737A87;
 $light-grey: lighten(#252733, 25%);
 $light-grey2: lighten(#E3E3E3, 25%);
 
@@ -33,10 +22,14 @@ $pure-black: black;
 $black: #14142B;
 $light-black: lighten(black, 26%);
 
+
+
 $purple: #5F2EEA;
 $purple2: #5B1CE0;
 $purple3: #4622ab;
 $purple4: #4622ab;
+
+$purple-light: #b898ff;
 
 $orange-light: lighten(#F29400, 25%);
 $orange: #E0861C;
@@ -50,8 +43,6 @@ $red2: #c94949;
 $blue: #3751FF;
 
 $transparent: rgba($color: #000000, $alpha: 0.0);
-
-
 
 // TODO : Remove the lines below when the final colors will be defined
 
@@ -95,6 +86,7 @@ $title-card-color: $purple3;
 $title-card-2-color: $light-black;
 $title-item-collection-color: $pure-black;
 $title-date-color: $light-grey;
+$title-form: $grey7;
 
 // Select
 $select-font-color: $black;

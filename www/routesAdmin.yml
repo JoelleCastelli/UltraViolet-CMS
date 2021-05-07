@@ -1,0 +1,78 @@
+# GLOBAL
+/admin:
+  controller: Main
+  action:     default
+
+# PAGES
+/admin/pages:
+  controller: Page
+  action:     showAll
+
+/admin/pages/creation:
+  controller: Page
+  action:     createPage
+
+# ARTICLES
+/admin/articles:
+  controller: Article
+  action:     showAll
+
+/admin/articles/modification:
+  controller: Article
+  action:     modifyArticle
+
+/admin/tab-change:
+  controller: Article
+  action:     tabChange
+
+# PRODUCTIONS
+/admin/productions:
+  controller: Production
+  action:     showAll
+
+/admin/productions/creation:
+  controller: Production
+  action:     addProduction
+
+/admin/productions/creation-tmdb:
+  controller: Production
+  action:     addProductionTmdb
+
+/admin/production/tmdb-request:
+  controller: Production
+  action:     tmdbRequest
+
+# COMMENTS
+/admin/commentaires:
+  controller: Comment
+  action:     showAll
+
+# TEMPLATES
+/admin/templates:
+  controller: Template
+  action:     showAll
+
+# STATS
+/admin/statistiques:
+  controller: Stats
+  action:     showAll
+
+# USERS
+/admin/utilisateurs:
+  controller: Person
+  action:     showAll
+
+/admin/utilisateur:
+  controller: User
+  action:     show
+
+/admin/utilisateurs/creation:
+  controller: User
+  action:     add
+
+
+# SETTINGS
+/admin/parametres:
+  controller: Settings
+  action: showAll
+  middleware: Admin, Editor, Moderator

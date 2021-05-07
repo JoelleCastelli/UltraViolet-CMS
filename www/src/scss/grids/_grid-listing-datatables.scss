@@ -1,0 +1,19 @@
+.grid-listing-datatables {
+
+    display: grid;
+    grid-template-columns: "1f";
+    grid-template-rows: "min-content 1fr";
+    grid-template-areas:    "status status"
+                            "table table";
+    
+    section:nth-of-type(1) {
+        grid-area: status;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    section:nth-of-type(2) {
+        grid-area: table;
+    }
+}

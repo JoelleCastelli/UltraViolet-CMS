@@ -1,69 +1,11 @@
-# GLOBAL
 /:
   controller: Main
-  action: default
+  action:     frontHome
+
+/connexion:
+  controller: Person
+  action:     login
 
 /404:
   controller: Main
-  action: page404
-
-# PAGES
-/pages:
-  controller: Page
-  action: showAll
-
-# ARTICLES
-/articles:
-  controller: Article
-  action: showAll
-
-/modifier-un-article:
-  controller: Article
-  action: modifyArticle
-
-# PRODUCTIONS
-/productions:
-  controller: Production
-  action: showAll
-
-# COMMENTS
-/commentaires:
-  controller: Comment
-  action: showAll
-
-# TEMPLATES
-/templates:
-  controller: Template
-  action: showAll
-
-# STATS
-/statistiques:
-  controller: Stats
-  action: showAll
-
-# USERS
-/utilisateurs:
-  controller: Person
-  action: showAll
-
-/utilisateur:
-  controller: User
-  action: show
-
-/ajout-d-un-utilisateur:
-  controller: User
-  action: add
-
-/met-a-jour-utilisateur:
-  controller: User
-  action: update
-
-/inscription:
-  controller: User
-  action: register
-
-
-# SETTINGS
-/parametres:
-  controller: Settings
-  action: showAll
+  action:     page404
