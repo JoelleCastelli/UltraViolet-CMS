@@ -6,10 +6,10 @@ use App\Models\Person;
 
 class Request {
 
-    private static $uri = null;
-    private static $type = null;
-    private static $segments = null;
-    private static $user = null;
+    private static ?string $uri = null;
+    private static ?string $type = null;
+    private static ?array $segments = null;
+    private static ?Person $user = null;
 
      // Prevents the class from being called 'non-statically'
     private function __construct() {}
@@ -30,19 +30,19 @@ class Request {
         }
     }
 
-    public static function getURI() {
+    public static function getURI(): ?string {
         return self::$uri;
     }
 
-    public static function getType() {
+    public static function getType(): ?string {
         return self::$type;
     }
 
-    public static function getSegments() {
+    public static function getSegments(): ?array {
         return self::$segments;
     }
 
-    public static function getUser() {
+    public static function getUser(): ?Person {
         return self::$user;
     }
 
