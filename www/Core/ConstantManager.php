@@ -4,12 +4,12 @@ namespace App\Core;
 
 class ConstantManager {
 
-	private $envFile = ".env";
-	private $data = [];
+	private string $envFile = ".env";
+	private array $data = [];
 
-	public function __construct(){
+	public function __construct() {
 		if(!file_exists($this->envFile))
-			die("Le fichier ".$this->envFile." n'existe pas");
+			die("File ".$this->envFile." doesn't exist");
 
 		$this->parsingEnv($this->envFile);
 
@@ -17,14 +17,11 @@ class ConstantManager {
 			$newFile = $this->envFile.".".$this->data["ENV"];
 
 			if(!file_exists($newFile))
-				die("Le fichier ".$newFile." n'existe pas");
+				die("File ".$newFile." doesn't exist");
 
 			$this->parsingEnv($newFile);
 		}
-
-
 		$this->defineConstants();
-
 	}
 
 	private function defineConstants(){
@@ -33,32 +30,25 @@ class ConstantManager {
 		}
 	}
 
-
 	public static function defineConstant($key, $value){
-		if(!defined($key)){
+		if(!defined($key)) {
 			define($key, $value);
-		}else{
-			die("Attention vous avez utilisé une constante reservée à ce framework ".$key);
+		} else {
+			die("Caution: you have used a constant reserved for this framework: ".$key);
 		}
 	}
 
-
-	public function parsingEnv($file){
-
+	public function parsingEnv($file) {
 		$handle = fopen($file, "r");
 		$regex = "/([^=]*)=([^#]*)/";
-
 		if(!empty($handle)){
 			while (!feof($handle)) {
-				
 				$line = fgets($handle);
 				preg_match($regex, $line, $results);
 				if(!empty($results[1]) && !empty($results[2]))
 					$this->data[mb_strtoupper($results[1])] = trim($results[2]);
-
 			}
 		}
-
 	}
 
 }
