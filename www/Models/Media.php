@@ -107,8 +107,8 @@ class Media extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "/chargement",
-                "referer" => '/media',
+                "action" => "medias/chargement",
+                "referer" => 'admin/medias',
                 "enctype" => "multipart/form-data"
             ],
             "fields" => [

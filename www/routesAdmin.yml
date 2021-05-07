@@ -70,6 +70,14 @@
   controller: User
   action:     add
 
+# MEDIAS
+/admin/medias:
+  controller: Media
+  action:     showAll
+
+/admin/medias/chargement:
+  controller: Media
+  action: upload
 
 # SETTINGS
 /admin/parametres:
