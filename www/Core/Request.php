@@ -11,10 +11,10 @@ class Request {
     private static $segments = null;
     private static $user = null;
 
-     // Prevent the class from being called 'non-statically'
+     // Prevents the class from being called 'non-statically'
     private function __construct() {}
 
-    //Returns the Request object, so it can be used as a dependency
+    // Returns the Request object, so it can be used as a dependency
     public static function getRequest() {
         return new self;
     }
@@ -26,7 +26,7 @@ class Request {
         self::$segments = explode('/', self::$uri);
         if(isset($_SESSION['user_id'])) {
             self::$user = new Person();
-            self::$user = self::$user->findOneById($_SESSION['user_id']);
+            self::$user = self::$user->findOneBy('id', $_SESSION['user_id']);
         }
     }
 
