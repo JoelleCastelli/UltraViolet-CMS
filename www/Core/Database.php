@@ -1,19 +1,17 @@
 <?php
-namespace App\Core;
 
-use mysql_xdevapi\DatabaseObject;
+namespace App\Core;
 
 class Database {
 
-    protected $pdo;
-    private $table;
-    private $query;
+    protected \PDO $pdo;
+    private string $table;
+    private string $query;
 
-    private $order = 0;
-    private $like = 0;
+    private int $order = 0;
+    private int $like = 0;
 
     public function __construct() {
-
 	    if(ENV === "dev") {
             try {
                 $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
@@ -34,18 +32,15 @@ class Database {
     }
 
     /* GENERAL QUERY */
-	public function save(){
-
+	public function save() {
         $column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
-
         //if column is foreign object, unset it
-        foreach($column as $key => $value)
-        {
-            if(is_object($value))
-            {
+        foreach($column as $key => $value) {
+            if(is_object($value)) {
                 unset($column[$key]);
             }
         }
+
         // INSERT
         if (is_null($this->getId())) {
             $query = $this->pdo->prepare("INSERT INTO " . $this->table . " 
@@ -61,25 +56,19 @@ class Database {
             }
             // remove the last space and last comma
             $str = substr($str, 0, -2);
-
             $query = $this->pdo->prepare("UPDATE " . $this->table . " SET " . $str . " WHERE id = " . $this->getId());
         }
 
         try {
-
             return $query->execute($column);
-
         } catch (\Exception $e) {
-
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
         }
     }
 
-    public function populate($id)
-    {
+    public function populate($id) {
         if(!empty($id) && is_numeric($id)) {
-
             // query
             $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE id= " . $id);
             $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this)); // return instance
@@ -87,24 +76,19 @@ class Database {
 
             // populate
             if (!empty($object)) {
-
                 return $object;
-
             } else {
                 return false;
             }
         } else {
             return false;
         }
-
-        return $object;
     }
 
-    public function findOneBy($column, $value)
-    {
-        $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE " . $column . " = " . $value);
+    public function findOneBy($column, $value)  {
+        $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE " . $column . " = '" . $value . "'");
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
-        return $query->fetchAll();
+        return $query->fetch();
     }
 
     public function findAll(){
