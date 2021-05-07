@@ -27,10 +27,14 @@ class Media
         if (!empty($_FILES)) {
 
             print_r($_FILES);
-            new MediaManager($_FILES['media']);
+
+            $mediaManager = new MediaManager();
+            $result = $mediaManager->check($_FILES['media']);
+            print_r($result);
             die();
         }else {
             echo "empty file";
+            print_r($_FILES);
         }
 
 

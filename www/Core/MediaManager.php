@@ -6,13 +6,24 @@ class MediaManager
 {
     protected $files;
     protected $video;
-    protected $errors = [];
+    protected $result = [];
 
-    public function __construct(array $files)
+    public function __construct()
     {
+        $this->result = [
+            "errors" => [],
+            "files" => []
+        ];
+
+    }
+
+    public function check($files) {
+
+        // init array files correctly
         $this->files = $this->formatArrayFiles($files);
         print_r($this->files);
 
+        // verifications files
         foreach ($this->files as $file) {
 
             if($file['error'] != UPLOAD_ERR_OK)
@@ -21,40 +32,48 @@ class MediaManager
             }
 
             //init
-            $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
             $fileSize = $file['size'];
+            $fileName = md5(time() . htmlspecialchars($file['name'])) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filePath = "dist/images/back/" . $fileName;
+            $fileTempPath = $file['tmp_name'];
+            $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
 
             // validate files
-            $this->typeValidator($fileExtension);
+            $this->typeAndExtensionValidator($fileExtension);
 
-            if ($this->video === false) {
+            $this->result['files'][] =  [
+                "video" => $this->video,
+                "path" => $filePath,
+                "title" => $fileName,
+                "tempPath" => $fileTempPath
+            ];
+
+            if ($this->video === false) { // file is image
                 $this->imageSizeValidator($fileSize);
 
-                if (!empty($this->errors))
-                    return $this->errors;
+                if (!empty($this->result['errors']))
+                    return $this->result;
 
-            } elseif ($this->video === true) {
+            } elseif ($this->video === true) { // file is video
                 echo "file video";
 
             } else {
-                return $this->errors;
+                return $this->result;
             }
 
         }
 
-        foreach ($this->files as $file) {
-
-            //init
-            $fileName = md5(time() . htmlspecialchars($file['name'])) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
-            $filePath = "dist/images/back/" . $fileName;
-            $fileTempPath = $file['tmp_name'];
-
-            $this->uploadFile($fileName, $filePath, $fileTempPath);
-
+        // upload files
+        foreach ($this->result['files'] as $file) {
+            $this->uploadFile($file['title'], $file['path'], $file['tempPath']);
         }
-    }
 
-    public function typeValidator($fileExtension)
+        print_r($this->result);
+
+        return $this->result;
+
+    }
+    public function typeAndExtensionValidator($fileExtension)
     {
         $imageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg');
         $videoExtensions = array('mp4', 'mov', 'avi', 'flv', 'wmv');
@@ -64,7 +83,7 @@ class MediaManager
         elseif (in_array($fileExtension, $videoExtensions))
             $this->video = true;
         else
-            $this->errors = "Veuillez envoyer seulement les vidéos ou photos";
+            $this->result['errors'] = "Veuillez envoyer seulement les vidéos ou photos";
     }
 
     public function imageSizeValidator($fileSize)
@@ -73,7 +92,7 @@ class MediaManager
         $max = 10 * $oneMegabytesInBytes;
 
         if($fileSize > $max) {
-            $this->errors = "Votre image est de taille supérieur à 10MB";
+            $this->result['errors'] = "Votre image est de taille supérieur à 10MB";
         }
 
     }
@@ -84,7 +103,7 @@ class MediaManager
             move_uploaded_file($fileTempPath, $filePath);
 
         }catch (\Exception $e) {
-            $this->errors = "oops, problème au déplacement des fichiers exception " . $e;
+            $this->result['errors'] = "oops, problème au déplacement des fichiers exception " . $e;
 
         }
     }
@@ -110,53 +129,4 @@ class MediaManager
         return $fileArr;
     }
 
-    // check type and extension
-        //video or image
-    // check size
-    // sanitize name
-    // insert in specific folder
-
-/*
-
-
-    $allowed_image_extension = array(
-        "png",
-        "jpg",
-        "jpeg"
-    );
-
-    // Get image file extension
-    $file_extension = pathinfo($_FILES["file-input"]["name"], PATHINFO_EXTENSION);
-
-    // Validate image extension
-    if (!in_array($file_extension, $allowed_image_extension))
-    {
-        return array(
-            "type" => "error",
-            "message" => "Seuls les extensions JPG, PNG et JPEG sont autorisées"
-        );
-    }
-    // Validate image file size
-    else if (($_FILES["file-input"]["size"] > 100000000))
-    {
-        return array(
-            "type" => "error",
-            "message" => "L'image excède 100MB"
-        );
-    }
-    else
-    {
-        $target = PUBLIC_PATH . '/images/user/' . basename($_FILES["file-input"]["name"]);
-        if (move_uploaded_file($_FILES["file-input"]["tmp_name"], $target)) {
-            return array(
-                "type" => "success",
-                "message" => "Image bien sauvegardée"
-            );
-        } else {
-            return array(
-                "type" => "error",
-                "message" => "Erreur ! Problème avec l'image"
-            );
-        }
-    }*/
 }
