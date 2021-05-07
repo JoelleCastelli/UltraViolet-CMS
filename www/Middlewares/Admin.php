@@ -11,7 +11,7 @@ class Admin {
         $user = Request::getUser();
         if (!($user && $user->isLogged() && $user->isAdmin())) {
             Helpers::setFlashMessage('errors', "Accès interdit : vous n'avez pas les droits d'administration");
-            Helpers::redirect($_SERVER['HTTP_REFERER']);
+            Helpers::redirect('/admin');
         }
     }
 
