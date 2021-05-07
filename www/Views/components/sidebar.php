@@ -10,7 +10,7 @@
                 <i class="fas fa-angle-left"></i>
             </div>
         </li>
-        <a href="/">
+        <a href="/admin">
             <li>
                 <span class="icon">
                     <i class="fas fa-circle-notch"></i>
@@ -18,7 +18,7 @@
                 <div>Dashboard</div>
             </li>
         </a>
-        <a href="/pages">
+        <a href="/admin/pages">
             <li>
                 <span class="icon">
                     <i class="fas fa-pager"></i>
@@ -26,7 +26,7 @@
                 <div>Pages</div>
             </li>
         </a>
-        <a href="/articles">
+        <a href="/admin/articles">
             <li>
                 <span class="icon">
                     <i class="fas fa-newspaper"></i>
@@ -34,7 +34,7 @@
                 <div>Articles</div>
             </li>
         </a>
-        <a href="/commentaires">
+        <a href="/admin/commentaires">
             <li>
                 <span class="icon">
                     <i class="fas fa-comments"></i>
@@ -42,7 +42,7 @@
                 <div>Commentaires</div>
             </li>
         </a>
-        <a href="/productions">
+        <a href="/admin/productions">
             <li>
                 <span class="icon">
                     <i class="fas fa-book"></i>
@@ -50,7 +50,7 @@
                 <div>Productions</div>
             </li>
         </a>
-        <a href="/utilisateurs">
+        <a href="/admin/utilisateurs">
             <li>
                 <span class="icon">
                     <i class="fas fa-users"></i>
@@ -58,7 +58,7 @@
                 <div>Utilisateurs</div>
             </li>
         </a>
-        <a href="/templates">
+        <a href="/admin/templates">
             <li>
                 <span class="icon">
                     <i class="fas fa-paste"></i>
@@ -66,7 +66,7 @@
                 <div>Templates</div>
             </li>
         </a>
-        <a href="/statistiques">
+        <a href="/admin/statistiques">
             <li>
                 <span class="icon">
                     <i class="fas fa-chart-line"></i>
@@ -77,7 +77,7 @@
         <li>
             <hr class="grow-separator">
         </li>
-        <a href="/parametres">
+        <a href="/admin/parametres">
             <li>
                 <span class="icon">
                     <i class="fas fa-cogs"></i>

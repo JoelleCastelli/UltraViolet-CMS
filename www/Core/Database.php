@@ -96,6 +96,8 @@ class Database {
         } else {
             return false;
         }
+
+        return $object;
     }
 
     public function findOneBy($column, $value)

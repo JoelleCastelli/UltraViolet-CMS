@@ -1,100 +1,11 @@
-# GLOBAL
 /:
   controller: Main
-  action: default
-
-/404:
-  controller: Main
-  action: page404
-
-# PAGES
-/pages:
-  controller: Page
-  action: showAll
-
-/ajout-d-une-page:
-  controller: Page
-  action: createPage
-
-# ARTICLES
-/articles:
-  controller: Article
-  action: showAll
-
-/modifier-un-article:
-  controller: Article
-  action: modifyArticle
-
-/articles-tab-change:
-  controller: Article
-  action: tabChange
-
-# PRODUCTIONS
-/productions:
-  controller: Production
-  action: showAll
-
-/nouvelle-production:
-  controller: Production
-  action: addProduction
-
-/nouvelle-production-tmdb:
-  controller: Production
-  action: addProductionTmdb
-
-/tmdb-request:
-  controller: Production
-  action: tmdbRequest
-
-/productions-data:
-  controller: Production
-  action: getProductions
-
-# COMMENTS
-/commentaires:
-  controller: Comment
-  action: showAll
-
-# TEMPLATES
-/templates:
-  controller: Template
-  action: showAll
-
-# STATS
-/statistiques:
-  controller: Stats
-  action: showAll
-
-# USERS
-/utilisateurs:
-  controller: Person
-  action: showAll
-
-/utilisateur:
-  controller: User
-  action: show
-
-/ajout-d-un-utilisateur:
-  controller: User
-  action: add
-
-/met-a-jour-utilisateur:
-  controller: User
-  action: update
-
-/inscription:
-  controller: Person
-  action: register
+  action:     frontHome
 
 /connexion:
   controller: Person
-  action: connection
+  action:     login
 
-/person:
-  controller: Person
-  action: getPerson
-
-# SETTINGS
-/parametres:
-  controller: Settings
-  action: showAll
+/404:
+  controller: Main
+  action:     page404

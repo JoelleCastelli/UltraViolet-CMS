@@ -2,43 +2,71 @@
 
 namespace App;
 
-if(session_id() == ''){
-    session_start();
-}
+session_start();
 
+use App\Core\Request;
 use App\Core\Router;
 use App\Core\ConstantManager;
 
 require 'Autoload.php';
 Autoload::register();
-
 new ConstantManager();
+Request::init();
 
-// Récupération du slug dans la variable super globale SERVER
 $slug = mb_strtolower($_SERVER['REQUEST_URI']);
-
-// Instance de la classe router (dossier CORE) avec le slug en paramètre
 $route = new Router($slug);
 $controller = $route->getController();
 $action = $route->getAction();
+$middlewares = $route->getMiddleware();
+$routeFile = $route->getRoutesFile();
 
-// Vérification que le fichier du controller existe
+// Check privileges
+if($routeFile == 'back') {
+    $user = Request::getUser();
+    if (!($user && $user->isLogged() && $user->canAccessBackOffice())) {
+        header('Location: /404');
+    }
+}
+
+// Check if controller file exists
 if(file_exists('./Controllers/'.$controller.'.php')) {
 	include './Controllers/'.$controller.'.php';
     $controller = 'App\\Controller\\'.$controller;
 
-    // Vérification que la classe du controller existe
-	if(class_exists($controller)){
+    // Check if controller class exists
+	if(class_exists($controller)) {
 		$controllerObject = new $controller();
-        // Vérification que l'action existe
+
+        // Check if action exists
 		if(method_exists($controllerObject, $action)) {
-			$controllerObject->$action();
+
+		    if(!empty($middlewares)) {
+		        foreach ($middlewares as $middleware) {
+
+                    // Check if middleware file exists
+                    if(file_exists('./Middlewares/'.$middleware.'.php')) {
+                        include './Middlewares/'.$middleware.'.php';
+                        $middleware = 'App\\Middleware\\'.$middleware;
+
+                        // Check if middleware class exists
+                        if(class_exists($middleware)) {
+                            $middlewareObject = new $middleware();
+                            $middlewareObject->handle();
+                        } else {
+                            die('Error: class '.$middleware.' doesn\'t exist in file Middlewares/'.$middleware.'.php');
+                        }
+                    } else {
+                        die('Error: file Middlewares/'.$middleware.'.php doesn\'t exist');
+                    }
+                }
+            }
+            $controllerObject->$action();
 		} else {
-			die('Erreur : la méthode '.$action.' n\'existe pas.');
+			die('Error: method '.$action.' doesn\'t exist');
 		}
 	} else {
-		die('Erreur : la classe '.$controller.' n\'existe pas dans le fichier '.$controller.'.php');
+		die('Error: class '.$controller.' doesn\'t exist in file Controllers/'.$controller.'.php');
 	}
 } else {
-	die('Erreur : le fichier www/Controllers/'.$controller.' n\'existe pas.');
+	die('Error: file Controllers/'.$controller.'.php doesn\'t exist');
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Core\Helpers;
 use App\Core\Database;
 use App\Core\FormBuilder;
 use App\Core\Traits\ModelsTrait;
@@ -13,205 +12,171 @@ class Person extends Database
     use ModelsTrait;
 
     private $id = null;
-    private $createdAt;
-    private $updatedAt;
-    protected $fullName;
-    protected $pseudo;
-    protected $email;
-    protected $password;
-    protected $optin;
-    protected $deletedAt;
-    protected $role;
-    protected $uvtr_media_id;
+    private string$createdAt;
+    private string $updatedAt;
+    protected string $fullName;
+    protected string $pseudo;
+    protected string $email;
+    protected string $password;
+    protected bool $optin;
+    protected string $deletedAt;
+    protected string $role = 'user';
+    protected int $uvtr_media_id;
+    // Foreign properties
+    public Media $media;
 
-    //foreign properties
-    public $media;
-
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->media = new Media();
     }
 
-    /**
-     * @return null
-     */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFullName()
-    {
+    public function getFullName() {
         return $this->fullName;
     }
 
-    /**
-     * @param mixed $fullName
-     */
-    public function setFullName($fullName): void
-    {
+    public function setFullName($fullName): void {
         $this->fullName = $fullName;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPseudo()
-    {
+    public function getPseudo() {
         return $this->pseudo;
     }
 
-    /**
-     * @param mixed $pseudo
-     */
-    public function setPseudo($pseudo): void
-    {
+    public function setPseudo($pseudo): void {
         $this->pseudo = $pseudo;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
+    public function getEmail() {
         return $this->email;
     }
 
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email): void
-    {
+    public function setEmail($email): void {
         $this->email = $email;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPassword()
-    {
+    public function getPassword() {
         return $this->password;
     }
 
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password): void
-    {
+    public function setPassword($password): void {
         $this->password = $password;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getOptin()
-    {
+    public function getOptin() {
         return $this->optin;
     }
 
-    /**
-     * @param mixed $optin
-     */
-    public function setOptin($optin): void
-    {
+    public function setOptin($optin): void {
         $this->optin = $optin;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
-    /**
-     * @param mixed $updatedAt
-     */
-    public function setUpdatedAt($updatedAt): void
-    {
+    public function setUpdatedAt($updatedAt): void {
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getDeletedAt()
-    {
+    public function getDeletedAt() {
         return $this->deletedAt;
     }
 
-    /**
-     * @param mixed $deletedAt
-     */
-    public function setDeletedAt($deletedAt): void
-    {
+    public function setDeletedAt($deletedAt): void {
         $this->deletedAt = $deletedAt;
     }
 
-    /**
-     * @return string
-     */
-    public function getRole(): string
-    {
+    public function getRole(): string {
         return $this->role;
     }
 
-    /**
-     * @param string $role
-     */
-    public function setRole(string $role): void
-    {
+    public function setRole(string $role): void {
         $this->role = $role;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUvtrMediaId()
-    {
+    public function getUvtrMediaId() {
         return $this->uvtr_media_id;
     }
 
-    /**
-     * @param mixed $uvtr_media_id
-     */
-    public function setUvtrMediaId($uvtr_media_id): void
-    {
+    public function setUvtrMediaId($uvtr_media_id): void {
         $this->uvtr_media_id = $uvtr_media_id;
     }
 
-    /**
-     * @return Media
-     */
-    public function getMedia(): Media
-    {
-        if(!empty($this->uvtr_media_id) && is_numeric($this->uvtr_media_id))
+    public function getMedia(): Media {
+        if (!empty($this->uvtr_media_id) && is_numeric($this->uvtr_media_id))
             $this->media->setId($this->uvtr_media_id);
         return $this->media;
     }
 
-    /**
-     * @param Media $media
-     */
-    public function setMedia(Media $media): void
-    {
+    public function isLogged(): bool {
+        if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function setMedia(Media $media): void {
         $this->media = $media;
     }
-    public function formBuilderLogin()
-    {
+
+    public function canAccessBackOffice(): bool {
+        if(in_array($this->getRole(), ['admin', 'editor', 'moderator'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isAdmin(): bool {
+        if($this->getRole() === 'admin') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isEditor(): bool {
+        if($this->getRole() === 'editor') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isModerator(): bool {
+        if($this->getRole() === 'moderator') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isVIP(): bool {
+        if($this->getRole() === 'vip') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isUser(): bool {
+        if($this->getRole() === 'user') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function formBuilderLogin(): array {
         return [
             "config" => [
                 "method" => "POST",
@@ -248,9 +213,7 @@ class Person extends Database
         ];
     }
 
-    public function formBuilderRegister()
-    {
-
+    public function formBuilderRegister(): array {
         return [
             "config" => [
                 "method" => "POST",
@@ -325,4 +288,5 @@ class Person extends Database
             ]
         ];
     }
+
 }
