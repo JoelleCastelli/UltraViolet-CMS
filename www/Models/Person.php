@@ -11,15 +11,15 @@ class Person extends Database
 {
     use ModelsTrait;
 
-    private $id = null;
-    private string$createdAt;
-    private string $updatedAt;
-    protected string $fullName;
-    protected string $pseudo;
-    protected string $email;
-    protected string $password;
+    private ?int $id = null;
+    private string $createdAt;
+    private ?string $updatedAt;
+    protected ?string $fullName;
+    protected ?string $pseudo;
+    protected ?string $email;
+    protected ?string $password;
     protected bool $optin;
-    protected string $deletedAt;
+    protected ?string $deletedAt;
     protected string $role = 'user';
     protected int $uvtr_media_id;
     // Foreign properties
@@ -30,11 +30,11 @@ class Person extends Database
         $this->media = new Media();
     }
 
-    public function getId() {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getFullName() {
+    public function getFullName(): ?string {
         return $this->fullName;
     }
 
@@ -42,7 +42,7 @@ class Person extends Database
         $this->fullName = $fullName;
     }
 
-    public function getPseudo() {
+    public function getPseudo(): ?string {
         return $this->pseudo;
     }
 
@@ -50,7 +50,7 @@ class Person extends Database
         $this->pseudo = $pseudo;
     }
 
-    public function getEmail() {
+    public function getEmail(): ?string {
         return $this->email;
     }
 
@@ -58,7 +58,7 @@ class Person extends Database
         $this->email = $email;
     }
 
-    public function getPassword() {
+    public function getPassword(): ?string {
         return $this->password;
     }
 
@@ -66,7 +66,7 @@ class Person extends Database
         $this->password = $password;
     }
 
-    public function getOptin() {
+    public function getOptin(): bool {
         return $this->optin;
     }
 
@@ -74,7 +74,7 @@ class Person extends Database
         $this->optin = $optin;
     }
 
-    public function getUpdatedAt() {
+    public function getUpdatedAt(): ?string {
         return $this->updatedAt;
     }
 
@@ -82,11 +82,11 @@ class Person extends Database
         $this->updatedAt = $updatedAt;
     }
 
-    public function getCreatedAt() {
+    public function getCreatedAt(): string {
         return $this->createdAt;
     }
 
-    public function getDeletedAt() {
+    public function getDeletedAt(): ?string {
         return $this->deletedAt;
     }
 
@@ -102,7 +102,7 @@ class Person extends Database
         $this->role = $role;
     }
 
-    public function getUvtrMediaId() {
+    public function getUvtrMediaId(): int {
         return $this->uvtr_media_id;
     }
 
