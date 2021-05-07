@@ -1,6 +1,6 @@
 <?php
-namespace App\Core;
 
+namespace App\Core;
 
 class Helpers{
 
@@ -13,9 +13,9 @@ class Helpers{
         return $dateNow->format("Y-m-d H:i:s");
     }
 
-   public static function dd($data) {
+    public static function dd($data) {
         echo "<pre>";
-            var_dump($data);die;
+        var_dump($data);die;
         echo "</pre>";
     }
 
