@@ -115,6 +115,9 @@ class Media extends Database
 
                 "media[]" => [
                     "type" => "file",
+                    "classLabel" => "btn",
+                    "class" => "hiddenInputFile",
+                    "label" => "Cliquez pour ajouter un document",
                     "required" => true,
                     "multiple" => true,
                 ],

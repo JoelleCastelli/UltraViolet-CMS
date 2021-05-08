@@ -23,7 +23,7 @@ class FormBuilder
             $disabled = isset($field["disabled"]) && $field["disabled"] == true ? "disabled" : '';
             $multiple = isset($field["multiple"]) && $field["multiple"] == true ? "multiple" : '';
 
-            $html .= "<label for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
+            $html .= "<label class='".($field["classLabel"] ?? "")."' for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
 
             // SELECT
 		    if ($field["type"] == "select") {

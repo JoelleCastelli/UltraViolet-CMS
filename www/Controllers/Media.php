@@ -17,6 +17,8 @@ class Media
         $media = new MediaModels();
         $form = $media->formBuilderUpload();
         $view->assign("form", $form);
+
+
     }
 
     public function uploadAction()
