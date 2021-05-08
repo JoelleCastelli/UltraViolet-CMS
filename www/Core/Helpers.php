@@ -25,7 +25,7 @@ class Helpers{
 
     public static function redirect($url, $statusCode = 0) {
         header('Location: ' . $url, true, $statusCode);
-        die();
+        exit;
     }
 
     public static function setFlashMessage($key, $msg) {
@@ -35,21 +35,6 @@ class Helpers{
             }
         } else {
             $_SESSION['flash'][$key] = $msg;
-        }
-    }
-
-    public static function getFlashMessage($key) {
-        if(isset($_SESSION['flash'][$key])) {
-            if(gettype($_SESSION['flash'][$key]) == 'array') {
-                echo "<div class='flash-$key'>";
-                foreach ($_SESSION['flash'][$key] as $item) {
-                    echo "<li>$item</li>";
-                }
-                echo "</div>";
-            } else {
-                echo "<div class='flash-$key'>".$_SESSION['flash'][$key]."</div>";
-            }
-            unset($_SESSION['flash']);
         }
     }
 

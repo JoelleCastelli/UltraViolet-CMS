@@ -24,9 +24,7 @@
                 <?php include 'Views/components/header.php'; ?>
                 <div class="main-content">
                     <?php
-                        Helpers::getFlashMessage('errors');
-                        Helpers::getFlashMessage('success');
-                        Helpers::getFlashMessage('info');
+                        if(isset($flash)) $this->displayFlash($flash);
                         include $this->view;
                     ?>
                 </div>

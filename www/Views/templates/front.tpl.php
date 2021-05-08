@@ -20,9 +20,7 @@
             <main class="main">
                 <div class="main-content">
                     <?php
-                        Helpers::getFlashMessage('success');
-                        Helpers::getFlashMessage('errors');
-                        Helpers::getFlashMessage('info');
+                        if(isset($flash)) $this->displayFlash($flash);
                         include $this->view;
                     ?>
                 </div>
