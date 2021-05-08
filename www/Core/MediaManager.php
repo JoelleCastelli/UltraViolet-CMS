@@ -6,6 +6,8 @@ class MediaManager
 {
     protected $files;
     protected $video;
+    protected $oneMegabytesInBytes = 1048576;
+
     protected $result = [];
 
     public function __construct()
@@ -14,14 +16,12 @@ class MediaManager
             "errors" => [],
             "files" => []
         ];
-
     }
 
     public function check($files) {
 
         // init array files correctly
         $this->files = $this->formatArrayFiles($files);
-        print_r($this->files);
 
         // verifications files
         foreach ($this->files as $file) {
@@ -55,7 +55,10 @@ class MediaManager
                     return $this->result;
 
             } elseif ($this->video === true) { // file is video
-                echo "file video";
+                $this->videoSizeValidator($fileSize);
+
+                if (!empty($this->result['errors']))
+                    return $this->result;
 
             } else {
                 return $this->result;
@@ -65,14 +68,13 @@ class MediaManager
 
         // upload files
         foreach ($this->result['files'] as $file) {
-            $this->uploadFile($file['title'], $file['path'], $file['tempPath']);
+            $this->uploadFile($file['path'], $file['tempPath']);
         }
-
-        print_r($this->result);
 
         return $this->result;
 
     }
+
     public function typeAndExtensionValidator($fileExtension)
     {
         $imageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg');
@@ -88,8 +90,7 @@ class MediaManager
 
     public function imageSizeValidator($fileSize)
     {
-        $oneMegabytesInBytes = 1048576;
-        $max = 10 * $oneMegabytesInBytes;
+        $max = 10 * $this->oneMegabytesInBytes;
 
         if($fileSize > $max) {
             $this->result['errors'] = "Votre image est de taille supérieur à 10MB";
@@ -97,7 +98,17 @@ class MediaManager
 
     }
 
-    public function uploadFile($fileName, $filePath, $fileTempPath) {
+    public function videoSizeValidator($fileSize)
+    {
+        $max = 30 * $this->oneMegabytesInBytes;
+
+        if($fileSize > $max) {
+            $this->result['errors'] = "Votre vidéo est de taille supérieur à 30MB";
+        }
+
+    }
+
+    public function uploadFile($filePath, $fileTempPath) {
 
         try {
             move_uploaded_file($fileTempPath, $filePath);
