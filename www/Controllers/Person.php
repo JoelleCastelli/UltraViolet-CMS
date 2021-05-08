@@ -47,21 +47,20 @@ class Person
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)){
-                $person = $user->selectWhere("email", htmlspecialchars($_POST['email']));
-                if(!empty($person)) {
-                    $person = $person[0];
-                    if(password_verify($_POST['password'], $person->getPassword())) {
+                $user = $user->findOneBy("email", htmlspecialchars($_POST['email']));
+                if(!empty($user)) {
+                    if(password_verify($_POST['password'], $user->getPassword())) {
                         $_SESSION['loggedIn'] = true;
-                        $_SESSION['user_id'] = $person->getId();
-                        Helpers::setFlashMessage('success', "Bienvenue ".$person->getFullName());
+                        $_SESSION['user_id'] = $user->getId();
+                        Helpers::setFlashMessage('success', "Bienvenue ".$user->getPseudo());
                         Helpers::redirect('/');
                     } else {
-                        echo "connection failed". "<br>";
+                        $errors[] = "Les identifiants ne sont pas reconnus";
+                        $view->assign("errors", $errors);
                     }
                 }
             } else {
                 $view->assign("errors", $errors);
-                echo "errors". "<br>";
             }
         }
     }
