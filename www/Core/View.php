@@ -12,6 +12,7 @@ class View
 	public function __construct($view, $template = "back"){
 		$this->setTemplate($template);
 		$this->setView($view, $template);
+		$this->assignFlash();
 	}
 
 	public function setTemplate($template) {

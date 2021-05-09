@@ -10,7 +10,6 @@ class Main
 	public function defaultAction(){
 		$view = new View("dashboard");
 		$view->assign('title', 'Back office');
-        $view->assignFlash();
 		$view->assign('headScript', 'src/js/headScripts/home.js');
 		$view->assign('bodyScript', 'src/js/bodyScripts/home.js');
 	}
@@ -21,7 +20,6 @@ class Main
 
 	public function frontHomeAction(){
         $view = new View("home", "front");
-        $view->assignFlash();
     }
 
 }
