@@ -42,6 +42,10 @@
   controller: Production
   action:     tmdbRequest
 
+/admin/production/productions-data:
+  controller: Production
+  action:     getProductions
+
 # COMMENTS
 /admin/commentaires:
   controller: Comment

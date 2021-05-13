@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Core\Helpers;
 use App\Core\View;
 
 class Main
@@ -11,8 +12,8 @@ class Main
 		$view = new View("dashboard");
 		$view->assign('title', 'Back office');
         $view->assignFlash();
-		$view->assign('headScript', 'src/js/headScripts/home.js');
-		$view->assign('bodyScript', 'src/js/bodyScripts/home.js');
+		$view->assign('headScript', Helpers::urlJS('headScripts/home'));
+		$view->assign('bodyScript',  Helpers::urlJS('bodyScripts/home'));
 	}
 
 	public function page404Action(){

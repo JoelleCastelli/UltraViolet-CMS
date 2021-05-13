@@ -38,4 +38,14 @@ class Helpers{
         }
     }
 
+    /* URL Helpers */
+
+    public static function urlBase()
+    {
+        return  $_SERVER['REQUEST_SCHEME'] .'://'. $_SERVER['HTTP_HOST'] . '/';
+    }
+
+    public static function urlJS(string $url) {
+        return self::urlBase() . "src/js/" . $url . ".js";
+    }
 }
