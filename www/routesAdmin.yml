@@ -184,6 +184,10 @@ media_upload:
   controller: Media
   action:     upload
 
+/admin/medias/medias-data:
+  controller: Media
+  action: getMedias
+
 # SETTINGS
 settings:
   path:       /admin/parametres
