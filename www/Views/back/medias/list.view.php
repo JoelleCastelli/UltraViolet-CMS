@@ -13,7 +13,7 @@
             <article class="grid-search-bar-container-list-medias">
                 <label class="radio-line">
                     <label class="radio-btn-outline">
-                        <input type="radio" name="publication-radio" value="now" checked>
+                        <input class="media-type" type="checkbox" name="publication-radio" checked>
                         <span class="radio-btn-checkmark">
 							<span class=radio-btn-checkmark-inside></span>
 						</span>
@@ -23,22 +23,12 @@
 
                 <label class="radio-line">
                     <label class="radio-btn-outline">
-                        <input type="radio" name="publication-radio" value="now" checked>
+                        <input class="media-type" type="checkbox" name="publication-radio" checked>
                         <span class="radio-btn-checkmark">
 							<span class=radio-btn-checkmark-inside></span>
 						</span>
                     </label>
-                    <span class="radio-label">Image</span>
-                </label>
-
-                <label class="radio-line">
-                    <label class="radio-btn-outline">
-                        <input type="radio" name="publication-radio" value="now" checked>
-                        <span class="radio-btn-checkmark">
-							<span class=radio-btn-checkmark-inside></span>
-						</span>
-                    </label>
-                    <span class="radio-label">Image</span>
+                    <span class="radio-label">Vidéo</span>
                 </label>
 
             </article>
@@ -47,6 +37,8 @@
     </section>
 
     <section class="card">
+
+        <!-- Upload form-->
         <article class="upload-medias-container">
             <?php App\Core\FormBuilder::render($form, true); ?>
 

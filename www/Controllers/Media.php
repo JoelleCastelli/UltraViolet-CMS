@@ -17,7 +17,7 @@ class Media
         $media = new MediaModels();
         $form = $media->formBuilderUpload();
         $view->assign("form", $form);
-
+        $view->assign('bodyScript', 'src/js/bodyScripts/medias.js');
 
     }
 
