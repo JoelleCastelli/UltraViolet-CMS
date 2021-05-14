@@ -130,18 +130,19 @@ class FormValidator
     }
 
     public static function validateCSRFToken($config, $data) {
-        if(isset($_SESSION['csrf_token']) && isset($data['csrf_token'])) {
-            if($_SESSION['csrf_token'] == $data['csrf_token']) {
+        if(isset($_SESSION['csrfTokens']) && isset($data['csrfToken'])) {
+            $key = array_search($data['csrfToken'], $_SESSION['csrfTokens']);
+            if($key) {
                 if($_SERVER['REQUEST_URI'] !== $config['referer']) {
-                    echo "Attaque CSRF : la page source est incorrecte"; exit;
+                    trigger_error("CSRF attack: incorrect referer", E_USER_ERROR);
                 }
             } else {
-                echo "Attaque CSRF : les valeurs sont différentes"; exit;
+                trigger_error("CSRF attack: values are different", E_USER_ERROR);
             }
         } else {
-            echo "Attaque CSRF: une des valeurs n'est pas présente"; exit;
+            trigger_error("CSRF attack: one of the values is not present", E_USER_ERROR);
         }
-        unset($_SESSION['csrf_token']);
+        unset($_SESSION['csrfToken'][$key]);
     }
 
 }

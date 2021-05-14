@@ -309,7 +309,7 @@ class Production extends Database
                     "label" => "Numéro",
                     "class" => "form_input",
                 ],
-                "csrf_token" => [
+                "csrfToken" => [
                     "type"=>"hidden",
                     "value"=> FormBuilder::generateCSRFToken(),
                 ]
@@ -369,7 +369,7 @@ class Production extends Database
                     "class" => "form_input",
                     "value" => "Preview"
                 ],
-                "csrf_token" => [
+                "csrfToken" => [
                     "type"=>"hidden",
                     "value"=> FormBuilder::generateCSRFToken(),
                 ]

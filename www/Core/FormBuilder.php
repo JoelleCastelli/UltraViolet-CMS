@@ -95,13 +95,9 @@ class FormBuilder
 	}
 
     public static function generateCSRFToken() {
-        if(!isset($_SESSION['csrf_token'])) {
-            $token = bin2hex(random_bytes(32));
-            $_SESSION['csrf_token'] = $token;
-            return $token;
-        } else {
-            return $_SESSION['csrf_token'];
-        }
+        $token = bin2hex(random_bytes(32)).time();
+        $_SESSION['csrfTokens'][] = $token;
+        return $token;
     }
 
 }

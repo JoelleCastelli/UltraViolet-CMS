@@ -204,7 +204,7 @@ class Person extends Database
                     "required" => true,
 
                 ],
-                "csrf_token" => [
+                "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],
@@ -224,7 +224,7 @@ class Person extends Database
                 "referer" => '/inscription'
             ],
             "fields" => [
-                "csrf_token" => [
+                "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],

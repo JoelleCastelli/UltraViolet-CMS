@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
-use App\Core\FormValidator;
+use App\Core\FormBuilder;
 
 class Page extends Database
 {
@@ -299,9 +299,9 @@ class Page extends Database
                         ]
                     ],
                 ],
-                "csrf_token" => [
+                "csrfToken" => [
                     "type"=>"hidden",
-                    "value"=> FormValidator::generateCSRFToken(),
+                    "value"=> FormBuilder::generateCSRFToken(),
                 ]
 			]
 		];
