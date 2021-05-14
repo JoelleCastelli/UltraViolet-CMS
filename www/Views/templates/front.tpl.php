@@ -1,5 +1,3 @@
-<?php use App\Core\Helpers;?>
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -20,6 +18,15 @@
             <main class="main">
                 <div class="main-content">
                     <?php
+                        if(\App\Core\Request::getUser()->isLogged()) {
+                            echo "<a href='/deconnexion'>Déconnexion</a>";
+                            if(\App\Core\Request::getUser()->canAccessBackOffice()) {
+                                echo "<a href='/admin'>Administration</a>";
+                            }
+                        } else {
+                            echo "<a href='/connexion'>Connexion</a>";
+                            echo "<a href='/inscription'>Inscription</a>";
+                        }
                         if(isset($flash)) $this->displayFlash($flash);
                         include $this->view;
                     ?>
