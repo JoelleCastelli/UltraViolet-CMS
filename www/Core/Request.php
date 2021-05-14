@@ -15,7 +15,7 @@ class Request {
     private function __construct() {}
 
     // Returns the Request object, so it can be used as a dependency
-    public static function getRequest() {
+    public static function getRequest(): Request {
         return new self;
     }
 
@@ -26,7 +26,9 @@ class Request {
         self::$segments = explode('/', self::$uri);
         if(isset($_SESSION['user_id'])) {
             self::$user = new Person();
-            self::$user = self::$user->findOneBy('id', $_SESSION['user_id']);
+            if(isset($_SESSION['user_id']) && self::$user->findOneBy('id', $_SESSION['user_id'])) {
+                self::$user = self::$user->findOneBy('id', $_SESSION['user_id']);
+            }
         }
     }
 
