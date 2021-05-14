@@ -6,6 +6,14 @@
   controller: Person
   action:     login
 
+/inscription:
+  controller: Person
+  action: register
+
+/deconnexion:
+  controller: Person
+  action: logout
+
 /404:
   controller: Main
   action:     page404

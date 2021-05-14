@@ -15,7 +15,7 @@
                 <span class="icon">
                     <i class="fas fa-circle-notch"></i>
                 </span>
-                <div>Dashboard</div>
+                <div>Tableau de bord</div>
             </li>
         </a>
         <a href="/admin/pages">
@@ -83,6 +83,15 @@
                     <i class="fas fa-cogs"></i>
                 </span>
                 <div>Paramètres</div>
+            </li>
+        </a>
+        <!-- temporary -->
+        <a href="/deconnexion">
+            <li>
+                <span class="icon">
+                    <i class="fas fa-circle-notch"></i>
+                </span>
+                <div>Deconnexion</div>
             </li>
         </a>
     </ul>

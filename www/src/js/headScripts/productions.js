@@ -66,7 +66,7 @@ $(document).ready(function(){
     {
         $.ajax({
             type: 'POST',
-            url: '/productions-data',
+            url: '/admin/production/productions-data',
             dataType: 'json',
             success: function(response) {
 
@@ -83,7 +83,7 @@ $(document).ready(function(){
     {
         $.ajax({
             type: 'POST',
-            url: '/productions-data',
+            url: '/admin/production/productions-data',
             data: {productionType},
             dataType: 'json',
             success: function(response) {

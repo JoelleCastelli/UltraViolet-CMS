@@ -40,7 +40,7 @@ class Production
         $view->assign("productions", $productions);
         $view->assign('title', 'Productions');
         $view->assign('columnsTable', $this->columnsTable);
-        $view->assign('headScript', 'src/js/headScripts/productions.js');
+        $view->assign('headScript', Helpers::urlJS('headScripts/productions'));
     }
 
     public function addProductionAction() {

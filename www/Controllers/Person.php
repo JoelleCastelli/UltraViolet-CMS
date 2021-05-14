@@ -19,18 +19,6 @@ class Person
 		echo "User default";
 	}
 
-    public function getPersonAction() {
-        $user = new PersonModel();
-        $user->setId(5);
-        $user->getMedia();
-        $user->select()->where("id", "3")->get();
-        //$user->delete();
-        //$user->setPseudo("tempt");
-        //$check = $user->save();
-        //echo $check ? "true" : "false <br>";
-        //echo $check;
-    }
-
 	public function deleteAction() {
 	    $user = new PersonModel();
 	    $user->setId(3);
@@ -53,7 +41,7 @@ class Person
                         $_SESSION['loggedIn'] = true;
                         $_SESSION['user_id'] = $user->getId();
                         Helpers::setFlashMessage('success', "Bienvenue ".$user->getPseudo());
-                        Helpers::redirect('/');
+                        Helpers::redirect('/admin');
                     } else {
                         $errors[] = "Les identifiants ne sont pas reconnus";
                         $view->assign("errors", $errors);
@@ -69,7 +57,7 @@ class Person
 
 		$user = new PersonModel();
 		$form = $user->formBuilderRegister();
-        $view = new View("register");
+        $view = new View("register", "front");
 
         if(!empty($_POST)) {
 
@@ -103,6 +91,11 @@ class Person
         $view->assign("form", $form);
         $view->assign("formLogin", $user->formBuilderLogin());
 	}
+
+	public function logoutAction() {
+        session_destroy();
+        Helpers::redirect('/');
+    }
 
     public function updateAction()
     {

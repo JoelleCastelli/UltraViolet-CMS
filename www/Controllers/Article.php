@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Article as ArticleModel;
 
@@ -12,7 +13,7 @@ class Article {
         $articles = $article->selectWhere('state', 'published');
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
-        $view->assign('headScript', 'src/js/headScripts/articles.js');
+        $view->assign('headScript', Helpers::urlJS('headScripts/articles'));
         $view->assign('articles', $articles);
     }
 

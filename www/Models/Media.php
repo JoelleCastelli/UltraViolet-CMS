@@ -101,4 +101,33 @@ class Media extends Database
     {
         $this->deletedAt = $deletedAt;
     }
+
+    public function formBuilderUpload()
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "medias/chargement",
+                "referer" => 'admin/medias',
+                "enctype" => "multipart/form-data"
+            ],
+            "fields" => [
+
+                "media[]" => [
+                    "type" => "file",
+                    "classLabel" => "btn",
+                    "class" => "hiddenInputFile",
+                    "label" => "Cliquez pour ajouter un document",
+                    "required" => true,
+                    "multiple" => true,
+                ],
+
+              /*  "test" => [
+                    "type" => "hidden",
+                    "value" => "here",
+                    "required" => true,
+                ],*/
+            ]
+        ];
+    }
 }
