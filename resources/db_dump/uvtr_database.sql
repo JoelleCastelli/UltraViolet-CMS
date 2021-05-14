@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_person` (
   `deletedAt` DATETIME NULL DEFAULT NULL,
   `mediaId` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_person_uvtr_media1_idx` (`mediaId` ASC) VISIBLE,
+  INDEX `fk_uvtr_person_uvtr_media1_idx` (`mediaId` ASC),
   CONSTRAINT `fk_uvtr_person_uvtr_media1`
     FOREIGN KEY (`mediaId`)
     REFERENCES `ultraviolet`.`uvtr_media` (`id`)
@@ -81,8 +81,8 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_article` (
   `mediaId` INT NOT NULL,
   `personId` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_article_uvtr_media1_idx` (`mediaId` ASC) VISIBLE,
-  INDEX `fk_uvtr_article_uvtr_person1_idx` (`personId` ASC) VISIBLE,
+  INDEX `fk_uvtr_article_uvtr_media1_idx` (`mediaId` ASC),
+  INDEX `fk_uvtr_article_uvtr_person1_idx` (`personId` ASC),
   CONSTRAINT `fk_uvtr_article_uvtr_media1`
     FOREIGN KEY (`mediaId`)
     REFERENCES `ultraviolet`.`uvtr_media` (`id`)
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production` (
   `deletedAt` DATETIME NULL DEFAULT NULL,
   `productionId` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_production_uvtr_production1_idx` (`productionId` ASC) VISIBLE,
+  INDEX `fk_uvtr_production_uvtr_production1_idx` (`productionId` ASC),
   CONSTRAINT `fk_uvtr_production_uvtr_production1`
     FOREIGN KEY (`productionId`)
     REFERENCES `ultraviolet`.`uvtr_production` (`id`)
@@ -183,8 +183,8 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_comment` (
   `articleId` INT NOT NULL,
   `personId` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_comment_uvtr_article1_idx` (`articleId` ASC) VISIBLE,
-  INDEX `fk_uvtr_comment_uvtr_person1_idx` (`personId` ASC) VISIBLE,
+  INDEX `fk_uvtr_comment_uvtr_article1_idx` (`articleId` ASC),
+  INDEX `fk_uvtr_comment_uvtr_person1_idx` (`personId` ASC),
   CONSTRAINT `fk_uvtr_comment_uvtr_article1`
     FOREIGN KEY (`articleId`)
     REFERENCES `ultraviolet`.`uvtr_article` (`id`)
@@ -205,8 +205,8 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_page_article` (
   `articleId` INT NOT NULL,
   `pageId` INT NOT NULL,
-  INDEX `fk_uvtr_page_article_uvtr_article1_idx` (`articleId` ASC) VISIBLE,
-  INDEX `fk_uvtr_page_article_uvtr_page1_idx` (`pageId` ASC) VISIBLE,
+  INDEX `fk_uvtr_page_article_uvtr_article1_idx` (`articleId` ASC),
+  INDEX `fk_uvtr_page_article_uvtr_page1_idx` (`pageId` ASC),
   CONSTRAINT `fk_uvtr_page_article_uvtr_article1`
     FOREIGN KEY (`articleId`)
     REFERENCES `ultraviolet`.`uvtr_article` (`id`)
@@ -227,8 +227,8 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_genre` (
   `productionId` INT NOT NULL,
   `genreId` INT NOT NULL,
-  INDEX `fk_uvtr_production_genre_uvtr_production1_idx` (`productionId` ASC) VISIBLE,
-  INDEX `fk_uvtr_production_genre_uvtr_genre1_idx` (`genreId` ASC) VISIBLE,
+  INDEX `fk_uvtr_production_genre_uvtr_production1_idx` (`productionId` ASC),
+  INDEX `fk_uvtr_production_genre_uvtr_genre1_idx` (`genreId` ASC),
   CONSTRAINT `fk_uvtr_production_genre_uvtr_production1`
     FOREIGN KEY (`productionId`)
     REFERENCES `ultraviolet`.`uvtr_production` (`id`)
@@ -251,8 +251,8 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_media` (
   `productionId` INT NOT NULL,
   `key_art` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_production_media_uvtr_media1_idx` (`mediaId` ASC) VISIBLE,
-  INDEX `fk_uvtr_production_media_uvtr_production1_idx` (`productionId` ASC) VISIBLE,
+  INDEX `fk_uvtr_production_media_uvtr_media1_idx` (`mediaId` ASC),
+  INDEX `fk_uvtr_production_media_uvtr_production1_idx` (`productionId` ASC),
   CONSTRAINT `fk_uvtr_production_media_uvtr_media1`
     FOREIGN KEY (`mediaId`)
     REFERENCES `ultraviolet`.`uvtr_media` (`id`)
@@ -276,8 +276,8 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_person` (
   `department` VARCHAR(15) NOT NULL,
   `character` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_production_person_uvtr_person1_idx` (`personId` ASC) VISIBLE,
-  INDEX `fk_uvtr_production_person_uvtr_production1_idx` (`productionId` ASC) VISIBLE,
+  INDEX `fk_uvtr_production_person_uvtr_person1_idx` (`personId` ASC),
+  INDEX `fk_uvtr_production_person_uvtr_production1_idx` (`productionId` ASC),
   CONSTRAINT `fk_uvtr_production_person_uvtr_person1`
     FOREIGN KEY (`personId`)
     REFERENCES `ultraviolet`.`uvtr_person` (`id`)
@@ -299,8 +299,8 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_article` (
   `productionId` INT NOT NULL,
   `articleId` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_production_article_uvtr_production1_idx` (`productionId` ASC) VISIBLE,
-  INDEX `fk_uvtr_production_article_uvtr_article1_idx` (`articleId` ASC) VISIBLE,
+  INDEX `fk_uvtr_production_article_uvtr_production1_idx` (`productionId` ASC),
+  INDEX `fk_uvtr_production_article_uvtr_article1_idx` (`articleId` ASC),
   CONSTRAINT `fk_uvtr_production_article_uvtr_production1`
     FOREIGN KEY (`productionId`)
     REFERENCES `ultraviolet`.`uvtr_production` (`id`)
