@@ -16,18 +16,18 @@
     </head>
 
     <body>
-        <div class="container">
-            <?php include 'Views/components/sidebar.php' ?>
-            <main class="main">
-                <?php include 'Views/components/header.php'; ?>
-                <div class="main-content">
-                    <?php
-                        if(isset($flash)) $this->displayFlash($flash);
-                        include $this->view;
-                    ?>
-                </div>
-            </main>
-        </div>
+        <?php include 'Views/components/sidebar.php' ?>
+
+        <main class="main">
+            <?php include 'Views/components/header.php'; ?>
+            <div class="main-content">
+                <?php
+                    if(isset($flash)) $this->displayFlash($flash);
+                    include $this->view;
+                ?>
+            </div>
+        </main>
+        
         <?php if(isset($bodyScript) && !empty($bodyScript)) {
             echo "<script src='$bodyScript'></script>";
         }?>
