@@ -3,8 +3,8 @@
     <div class=left-controls>
         <i class="fas fa-bell"></i>
         <div class="user-label">
-            <span><?= $user->name ?? 'Utilisateur inconnu'?></span>
-            <img src="https://randomuser.me/api/portraits/men/93.jpg" alt="profile-picture">
+            <span><?= \App\Core\Request::getUser()->getPseudo() ?></span>
+            <img src="src/img/<?= \App\Core\Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
         </div>
     </div>
 </header>

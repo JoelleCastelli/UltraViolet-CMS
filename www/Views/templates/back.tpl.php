@@ -1,5 +1,3 @@
-<?php use App\Core\Helpers; ?>
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
