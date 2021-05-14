@@ -34,62 +34,57 @@ class Person
 
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
-            if(empty($errors)){
-                $user = $user->findOneBy("email", htmlspecialchars($_POST['email']));
+            if(empty($errors)) {
+                $user = $user->findOneBy("email", $_POST['email']);
                 if(!empty($user)) {
                     if(password_verify($_POST['password'], $user->getPassword())) {
-                        $_SESSION['loggedIn'] = true;
-                        $_SESSION['user_id'] = $user->getId();
-                        Helpers::setFlashMessage('success', "Bienvenue ".$user->getPseudo());
-                        Helpers::redirect('/admin');
+                        if($user->isEmailConfirmed()) {
+                            $_SESSION['loggedIn'] = true;
+                            $_SESSION['user_id'] = $user->getId();
+                            Helpers::setFlashMessage('success', "Bienvenue ".$user->getPseudo());
+                            Helpers::redirect('/');
+                        } else {
+                            $errors[] = "Merci de confirmer votre adresse e-mail. Renvoyer l'email de confirmation";
+                        }
                     } else {
                         $errors[] = "Les identifiants ne sont pas reconnus";
-                        $view->assign("errors", $errors);
                     }
+                } else {
+                    $errors[] = "Les identifiants ne sont pas reconnus";
                 }
-            } else {
-                $view->assign("errors", $errors);
             }
+            $view->assign("errors", $errors);
         }
     }
 
 	public function registerAction() {
-
 		$user = new PersonModel();
-		$form = $user->formBuilderRegister();
-        $view = new View("register", "front");
+        $view = new View('register', 'front');
+        $form = $user->formBuilderRegister();
+        $view->assign("form", $form);
 
         if(!empty($_POST)) {
-
             $errors = FormValidator::check($form, $_POST);
-            if(empty($errors)){
-
-                // Init some values
-                $dateNow = new \DateTime('now');
-                $updatedAt = $dateNow->format("Y-m-d H:i:s");
-                $pwd = password_hash(htmlspecialchars($_POST["pwd"]), PASSWORD_DEFAULT);
-
-                // Required
-				$user->setFullName(htmlspecialchars($_POST["fullName"]));
-				$user->setPseudo(htmlspecialchars($_POST["pseudo"]));
-                $user->setEmail(htmlspecialchars($_POST["email"]));
-                $user->setPassword($pwd);
-                $user->setUpdatedAt($updatedAt);
-
-                // Default
-                $user->setRole('user');
-                $user->setOptin(0);
-                $user->setUvtrMediaId(1);
-                $user->setDeletedAt(null);
-
-				$user->save();
-			}else{
-                $view->assign("errors", $errors);
+            if(empty($errors)) {
+                if($user->findOneBy("pseudo", $_POST['pseudo'])) {
+                    $errors[] = 'Ce pseudonyme est indisponible';
+                }
+                if($user->findOneBy("email", $_POST['email'])) {
+                    $errors[] = 'Cette adresse e-mail est déjà utilisée';
+                }
+                if(empty($errors)) {
+                    $user->setPseudo(htmlspecialchars($_POST['pseudo']));
+                    $user->setEmail(htmlspecialchars($_POST['email']));
+                    $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
+                    $user->setDefaultProfilePicture();
+                    $user->save();
+                    Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
+                    vous a été envoyé sur " .$_POST['email'].". Cliquez sur le lien dans ce mail avant de vous connecter.");
+                    Helpers::redirect('/connexion');
+                }
 			}
+            $view->assign("errors", $errors);
 		}
-
-        $view->assign("form", $form);
-        $view->assign("formLogin", $user->formBuilderLogin());
 	}
 
 	public function logoutAction() {

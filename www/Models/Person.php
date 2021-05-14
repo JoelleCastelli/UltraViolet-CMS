@@ -18,11 +18,13 @@ class Person extends Database
     protected ?string $pseudo;
     protected ?string $email;
     protected ?string $password;
-    protected bool $optin;
+    protected bool $optin = true;
     protected ?string $deletedAt;
     protected string $role = 'user';
-    protected int $uvtr_media_id;
+    protected bool $emailConfirmed = false;
+
     // Foreign properties
+    protected int $mediaId;
     public Media $media;
 
     public function __construct() {
@@ -102,17 +104,25 @@ class Person extends Database
         $this->role = $role;
     }
 
-    public function getUvtrMediaId(): int {
-        return $this->uvtr_media_id;
+    public function isEmailConfirmed(): bool {
+        return $this->emailConfirmed;
     }
 
-    public function setUvtrMediaId($uvtr_media_id): void {
-        $this->uvtr_media_id = $uvtr_media_id;
+    public function setEmailConfirmed(bool $emailConfirmed): void {
+        $this->emailConfirmed = $emailConfirmed;
+    }
+
+    public function getMediaId(): int {
+        return $this->mediaId;
+    }
+
+    public function setMediaId($mediaId): void {
+        $this->mediaId = $mediaId;
     }
 
     public function getMedia(): Media {
-        if (!empty($this->uvtr_media_id) && is_numeric($this->uvtr_media_id))
-            $this->media->setId($this->uvtr_media_id);
+        if (!empty($this->mediaId) && is_numeric($this->mediaId))
+            $this->media->setId($this->mediaId);
         return $this->media;
     }
 
@@ -176,6 +186,20 @@ class Person extends Database
         }
     }
 
+    public function setDefaultProfilePicture() {
+        if(file_exists(PATH_TO_IMG.'default.jpg')) {
+            $media = new Media();
+            if($media->findOneBy('path', 'default.jpg')) {
+                $defaultImage = $media->findOneBy('path', 'default.jpg');
+                $this->setMediaId($defaultImage->getId());
+            } else {
+                die("Default image is not in database");
+            }
+        } else {
+            die("Default image file does not existe");
+        }
+    }
+
     public function formBuilderLogin(): array {
         return [
             "config" => [
@@ -192,7 +216,7 @@ class Person extends Database
                     "placeholder" => "Email",
                     "class" => "input",
                     "id" => "email",
-                    "error" => "Votre champ email est vide.",
+                    "error" => "Le format du champ e-mail est incorrect",
                     "required" => true,
 
                 ],
@@ -220,33 +244,13 @@ class Person extends Database
                 "action" => "",
                 "class" => "form_control",
                 "id" => "form_register",
-                "submit" => "S'inscrire",
+                "submit" => "Valider",
                 "referer" => '/inscription'
             ],
             "fields" => [
                 "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
-                ],
-                "firstName" => [
-                    "type" => "text",
-                    "placeholder" => "Prénom",
-                    "minLength" => 2,
-                    "maxLength" => 50,
-                    "class" => "input",
-                    "error" => "Votre prénom doit faire entre 2 et 50 caractères et écrit correctement",
-                    "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
-                    "required" => true,
-                ],
-                "name" => [
-                    "type" => "text",
-                    "placeholder" => "Nom",
-                    "minLength" => 2,
-                    "maxLength" => 50,
-                    "class" => "input",
-                    "error" => "Votre nom doit faire entre 2 et 50 caractères et écrit correctement",
-                    "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
-                    "required" => true,
                 ],
                 "pseudo" => [
                     "type" => "text",
@@ -256,7 +260,6 @@ class Person extends Database
                     "class" => "input",
                     "error" => "Votre pseudo doit faire entre 2 et 25 caractères",
                     "required" => true,
-
                 ],
                 "email" => [
                     "type" => "email",
