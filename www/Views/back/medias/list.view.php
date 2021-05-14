@@ -13,7 +13,7 @@
             <article class="grid-search-bar-container-list-medias">
                 <label class="radio-line">
                     <label class="radio-btn-outline">
-                        <input class="media-type" type="checkbox" name="publication-radio" checked>
+                        <input class="media-type" value="0" type="checkbox" name="publication-radio" checked>
                         <span class="radio-btn-checkmark">
 							<span class=radio-btn-checkmark-inside></span>
 						</span>
@@ -23,7 +23,7 @@
 
                 <label class="radio-line">
                     <label class="radio-btn-outline">
-                        <input class="media-type" type="checkbox" name="publication-radio" checked>
+                        <input class="media-type" value="1" type="checkbox" name="publication-radio" checked>
                         <span class="radio-btn-checkmark">
 							<span class=radio-btn-checkmark-inside></span>
 						</span>

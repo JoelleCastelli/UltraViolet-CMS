@@ -36,7 +36,7 @@ class Media
 
     public function getMediasAction() {
 
-        if(empty($_POST['mediaType'])) // get all medias
+        if(empty($_POST['mediaTypes'])) // get all medias
         {
             $media = new MediaModels();
             $medias = $media->findAll();
@@ -45,8 +45,7 @@ class Media
 
         }else { // get medias by type
 
-            echo 'oops';
-
+            $mediaArray = $_POST;
         }
 
         // populate in arrays
@@ -65,7 +64,7 @@ class Media
         $data = array(
             "medias" => $mediaArray,
             "columns" => $this->columnsTable,
-            "type" => $_POST['mediaType']??""
+            "type" => $_POST['mediaTypes']??""
         );
 
         echo json_encode($data);
