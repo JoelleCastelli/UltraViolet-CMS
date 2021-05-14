@@ -18,7 +18,7 @@
     <body>
         <?php include 'Views/components/sidebar.php' ?>
 
-        <main class="main">
+        <main id="main">
             <?php include 'Views/components/header.php'; ?>
             <div class="main-content">
                 <?php

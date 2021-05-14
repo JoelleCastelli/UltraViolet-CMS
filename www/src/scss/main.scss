@@ -36,3 +36,15 @@
 @import "components/filtering-status";
 @import "components/buble-actions";
 @import "components/state-switch";
+
+#main {
+    height: 100%;
+    margin-left: $sidebarFullWidth;
+    padding-left: 30px;
+    padding-right: 30px;
+
+    &.sidebarWrapped {
+        margin-left: $sidebarWrappedWidth;
+        transition: margin 0.4s;
+    }
+}
