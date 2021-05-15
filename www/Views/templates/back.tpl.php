@@ -15,7 +15,7 @@
         }?>
     </head>
 
-    <body>
+    <body class="preload">
         <?php include 'Views/components/sidebar.php' ?>
 
         <main id="main">

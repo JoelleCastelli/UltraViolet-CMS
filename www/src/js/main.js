@@ -1,3 +1,7 @@
+window.addEventListener("load", function(event) {
+    document.getElementsByTagName('body')[0].classList.remove("preload");
+});
+
 const toggleSwitch = (element) => element.classList.toggle("switched-on");
 
 function toggleSidebar() {
