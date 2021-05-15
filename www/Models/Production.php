@@ -193,10 +193,6 @@ class Production extends Database
         $this->deletedAt = $deletedAt;
     }
 
-    public function findAll() {
-        return parent::findAll();
-    }
-
     public function cleanReleaseDate() {
         $this->setReleaseDate(date("d/m/Y", strtotime($this->getReleaseDate())));
     }
