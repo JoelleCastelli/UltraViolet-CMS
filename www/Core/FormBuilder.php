@@ -27,7 +27,6 @@ class FormBuilder
 
             // SELECT
 		    if ($field["type"] == "select") {
-
                 $html .= "<select name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
@@ -51,7 +50,6 @@ class FormBuilder
 
             // CHECKBOX
             } elseif ($field['type'] == 'checkbox') {
-
                 $html .= "<fieldset id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $disabledOption = isset($option["disabled"]) &&  $option["disabled"] == true ? "disabled" : '';
@@ -63,6 +61,19 @@ class FormBuilder
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
                 }
                 $html .= "</fieldset>";
+
+            } elseif ($field['type'] == 'textarea') {
+
+                $value = $field['value'] ?? '';
+                if (!empty($_POST[$fieldName])) {
+                    $value = htmlspecialchars($_POST[$fieldName], ENT_QUOTES);
+                }
+
+                $html .="<textarea name='".$fieldName."'
+                                   placeholder='".($field["placeholder"] ?? "")."'
+                                   class='".($field["class"] ?? "")."'
+                                   id='".($field["id"] ?? $fieldName)."'
+                                   $required $disabled>$value</textarea>";
 
             // OTHER INPUTS
             } else {
