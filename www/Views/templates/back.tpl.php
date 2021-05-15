@@ -10,8 +10,10 @@
         <link rel="stylesheet" href="../../dist/main.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
         <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-        <?php if(isset($headScript) && !empty($headScript)) {
-            echo "<script src='$headScript'></script>";
+        <?php if(isset($headScripts) && !empty($headScripts)) {
+            foreach ($headScripts as $script) {
+                echo "<script src='$script'></script>";
+            }
         }?>
     </head>
 
@@ -28,8 +30,10 @@
             </div>
         </main>
         
-        <?php if(isset($bodyScript) && !empty($bodyScript)) {
-            echo "<script src='$bodyScript'></script>";
+        <?php if(isset($bodyScripts) && !empty($bodyScripts)) {
+            foreach ($bodyScripts as $script) {
+                echo "<script src='$script'></script>";
+            }
         }?>
     </body>
 
