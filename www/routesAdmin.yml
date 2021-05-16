@@ -38,11 +38,11 @@
   controller: Production
   action:     addProductionTmdb
 
-/admin/production/tmdb-request:
+/admin/productions/tmdb-request:
   controller: Production
   action:     tmdbRequest
 
-/admin/production/productions-data:
+/admin/productions/productions-data:
   controller: Production
   action:     getProductions
 

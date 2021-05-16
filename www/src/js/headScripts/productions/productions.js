@@ -1,7 +1,7 @@
 /* BUILD DATATABLES */
 $(document).ready( function () {
 
-    $('#datatable').DataTable( {
+    let table = $('#datatable').DataTable( {
 
         columns: [
             { data: 'Titre' },
@@ -13,12 +13,8 @@ $(document).ready( function () {
         ],
 
         columnDefs: [{
-            targets:5,
-            data:"name",
-            render: function(data,type,full,meta)
-            {
-                return "<button>Add</button>"
-            },
+            targets: 5,
+            data: "name",
             searchable: false,
             orderable: false
         }],
@@ -57,66 +53,30 @@ $(document).ready( function () {
     $("#datatable_filter label").before( "<i class='fas fa-search'>" );
     $(".dataTables_wrapper").children().slice(0,2).wrapAll( "<div id='tableHeader'></div>" );
     wrapDatatablesFooter();
-} );
 
-/* PRODUCTIONS DISPLAY */
-$(document).ready(function(){
+    // On page load, display movies
+    getProductionsByType('movie');
 
-    function getAllProductions()
-    {
-        $.ajax({
-            type: 'POST',
-            url: '/admin/production/productions-data',
-            dataType: 'json',
-            success: function(response) {
-
-                table.clear();
-                table.rows.add(response.productions).draw();
-            },
-            error: function(){
-                alert("error");
-            }
-        });
-    }
-
-    function getProductionsByType(productionType)
-    {
-        $.ajax({
-            type: 'POST',
-            url: '/admin/production/productions-data',
-            data: {productionType},
-            dataType: 'json',
-            success: function(response) {
-                table.clear();
-                table.rows.add(response.productions).draw();
-            },
-            error: function(){
-                alert("error");
-            }
-        });
-    }
-
-    let table = $('#datatable').DataTable();
-
-    // display all productions
-    getAllProductions();
-
-    // display production by type
-    $(".productionType").click(function() {
-        let productionType = $(this).attr('id');
-
-        if($(this).hasClass('activate'))
-        {
-
-            $(this).removeClass('activate');
-            getAllProductions();
-
-        }else {
-
-            $(".productionType").removeClass('activate');
-            $(this).addClass('activate');
-
-            getProductionsByType(productionType);
-        }
+    // Display different types on filtering button click
+    $(".filtering-btn").click(function() {
+        $(".filtering-btn").removeClass('active');
+        $(this).addClass('active');
+        getProductionsByType(this.id)
     });
-});
+
+    function getProductionsByType(productionType) {
+        $.ajax({
+            type: 'POST',
+            url: '/admin/productions/productions-data',
+            data: { productionType },
+            dataType: 'json',
+            success: function(response) {
+                table.clear();
+                table.rows.add(response.productions).draw();
+            },
+            error: function(){
+                console.log("Erreur dans la récupération des productions de type " + productionType);
+            }
+        });
+    }
+} );

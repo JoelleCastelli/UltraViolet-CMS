@@ -10,7 +10,6 @@ use App\Models\Production as ProductionModel;
 class Production
 {
 
-
     protected $columnsTable;
 
     public function __construct() {
@@ -26,21 +25,14 @@ class Production
 
     public function showAllAction() {
         $productions = new ProductionModel();
-        $productions = $productions->findAll();
+        $productions = $productions->selectWhere('type', 'movie');
 
         if(!$productions) $productions = [];
 
-        foreach ($productions as $production) {
-            $production->cleanReleaseDate();
-            $production->translateType();
-            $production->cleanRuntime();
-        }
-
         $view = new View("productions/list");
-        $view->assign("productions", $productions);
         $view->assign('title', 'Productions');
         $view->assign('columnsTable', $this->columnsTable);
-        $view->assign('headScript', Helpers::urlJS('headScripts/productions'));
+        $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/productions.js']);
     }
 
     public function addProductionAction() {
@@ -228,62 +220,28 @@ class Production
     }
 
     public function getProductionsAction() {
-
-        if(empty($_POST['productionType'])) // get all productions
-        {
+        if(!empty($_POST['productionType'])) {
             $productions = new ProductionModel();
-            $productions = $productions->findAll();
-
+            $productions = $productions->selectWhere('type', htmlspecialchars($_POST['productionType']));
             if(!$productions) $productions = [];
 
-        }else { // get productions by type
+            $productionArray = [];
+            foreach ($productions as $production) {
+                $productionArray[] = [
+                    $this->columnsTable['title'] => $production->getTitle(),
+                    $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
+                    $this->columnsTable['overview'] => $production->getOverview(),
+                    $this->columnsTable['releaseDate'] => date("d/m/Y", strtotime($production->getReleaseDate())),
+                    $this->columnsTable['runtime'] => $production->getRuntime()." minutes",
+                    $this->columnsTable['actions'] => '<div class="bubble-actions"></div>',
+                ];
+            }
 
-            $production = new ProductionModel();
-            $productions = $production->selectWhere('type',htmlspecialchars($_POST['productionType']));
-
+            echo json_encode([
+                "productions" => $productionArray,
+                "columns" => $this->columnsTable,
+            ]);
         }
-
-        // populate in arrays
-        $productionArray = [];
-
-        foreach ($productions as $production) {
-            $production->cleanReleaseDate();
-            $production->translateType();
-            $production->cleanRuntime();
-
-            /*$productionArray[] = array(
-                "id" => $production->getId(),
-                "title" => $production->getTitle(),
-                "originalTitle" => $production->getOriginalTitle(),
-                "overview" => $production->getOverview(),
-                "releaseDate" => $production->getReleaseDate(),
-                "number" => $production->getNumber(),
-                "type" => $production->getType(),
-                "runtime" => $production->getRuntime(),
-                "createdAt" => $production->getCreatedAt(),
-                "delatedAt" => $production->getDeletedAt(),
-                "tmdbId" => $production->getTmdbId(),
-            );*/
-
-            $productionArray[] = array(
-                $this->columnsTable['title'] => $production->getTitle(),
-                $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
-                $this->columnsTable['overview'] => $production->getOverview(),
-                $this->columnsTable['releaseDate'] => $production->getReleaseDate(),
-                $this->columnsTable['runtime'] => $production->getRuntime(),
-            );
-        }
-
-        // send data
-        $data = array(
-            "productions" => $productionArray,
-            "columns" => $this->columnsTable,
-            "type" => $_POST['productionType']??""
-        );
-
-        echo json_encode($data);
-
     }
-
 
 }

@@ -3,7 +3,6 @@
     color: $purple2;
     background-color: $pure-white;
     font-style: $mulish;
-    font-weight: 24px;
     font-weight: 700;
     border-radius: 8px;
     border: solid $white2 1px;
@@ -14,7 +13,7 @@
         transition: all 0.3s ease-out;
         cursor: pointer;
 
-        &.activate {
+        &.active {
             background-color: $purple-light;
         }
 

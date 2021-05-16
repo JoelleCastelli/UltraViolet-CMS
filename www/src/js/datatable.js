@@ -1,4 +1,3 @@
-
 const wrapDatatablesFooter = () => {
     const toAdd = document.querySelectorAll("#datatable_info, #datatable_paginate");
     
@@ -8,8 +7,3 @@ const wrapDatatablesFooter = () => {
     toAdd.forEach((element) => newFooter.appendChild(element));
     document.querySelector('#datatable').after(newFooter);
 }
-
-$(document).ready( function () {
-
-
-} );
