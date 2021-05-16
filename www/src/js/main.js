@@ -13,3 +13,20 @@ function toggleSidebar() {
         }
     });
 }
+
+var waitForElement = function(selector, callback) {
+    if (jQuery(selector).length) {
+        callback();
+    } else {
+        setTimeout(function() {
+            waitForElement(selector, callback);
+        }, 100);
+    }
+};
+
+waitForElement("#datatable", function() {
+    $("#datatable_filter label").before( "<i class='fas fa-search'>" );
+    let wrapper = $(".dataTables_wrapper");
+    wrapper.children().slice(0,2).wrapAll("<div id='tableHeader'></div>");
+    wrapper.children().slice(2,4).wrapAll("<div id='tableFooter'></div>");
+});

@@ -9,7 +9,7 @@
         justify-content: space-between;
         background-color: white;
         margin-bottom: 20px;
-        padding: 5px;
+        padding: 5px 1rem;
         border-radius: 8px;
 
         & * {
@@ -52,16 +52,14 @@
             }
 
             &:focus-within {
-                border-color: $search-bar-icon-color;
+                border-color: $purple;
             } 
         }
     }
 
     .dataTable {
         background-color: white;
-        // padding: 10px;
-        // border: 2px solid #DFE0EB;
-        // border-radius: 20px;
+        border: 2px solid #DFE0EB;
         border-radius: 8px 8px 0 0;
 
         &.no-footer{
@@ -84,20 +82,9 @@
         }
 
         tbody {
-
-            // .odd, .even {
-                // background: white !important;
-
-                // &:hover {
-                //     background: $purple-light;
-                // }
-            // }
-
             tr td {
                 text-align: center;
                 font-size: 12px;
-                // background: yellow;
-                // display: block;
                 position: relative;
             }
         }
@@ -111,12 +98,12 @@
         }
     }
 
-    .table-footer {
+    #tableFooter {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         background: $pure-white;
-        padding: 1rem 0;
+        padding: 1rem 1rem;
         border-radius: 0 0 8px 8px;
 
         font-size: 14px;
