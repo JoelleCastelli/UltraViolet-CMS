@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_person` (
   `pseudo` VARCHAR(25) NULL DEFAULT NULL,
   `email` VARCHAR(130) NULL DEFAULT NULL,
   `emailConfirmed` TINYINT NULL DEFAULT '0',
+  `emailkey` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NULL DEFAULT NULL,
   `role` ENUM('user', 'admin', 'editor', 'vip') NULL DEFAULT 'user',
   `optin` TINYINT NULL DEFAULT '1',
