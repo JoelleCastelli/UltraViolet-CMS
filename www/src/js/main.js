@@ -29,4 +29,9 @@ waitForElement("#datatable", function() {
     let wrapper = $(".dataTables_wrapper");
     wrapper.children().slice(0,2).wrapAll("<div id='tableHeader'></div>");
     wrapper.children().slice(2,4).wrapAll("<div id='tableFooter'></div>");
+
+    $(".bubble-actions").click(function() {
+        $(this).toggleClass( "active" );
+        $('.bubble-actions').not(this).removeClass('active');
+    });
 });

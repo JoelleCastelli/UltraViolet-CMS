@@ -1,15 +1,21 @@
-// TODO : animation stylé
-
 .bubble-actions {
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    transition: all .3s ease;
 
     &::after {
         content: '\2807';
         font-size: 25px;
         color: $purple;
+        transition: all .3s ease;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.active::after {
+        transform: rotate(90deg) translate(3px, 3px);
     }
 }

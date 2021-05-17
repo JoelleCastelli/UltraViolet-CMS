@@ -1,12 +1,14 @@
 .dataTables_wrapper {
     font-family: $mulish;
     font-size: 14px;
+    margin-bottom: 30px;
     border: 1px solid #DFE0EB;
     border-radius: 8px;
 
     #tableHeader {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         background-color: white;
         margin-bottom: 20px;
         padding: 5px 1rem;
@@ -16,14 +18,22 @@
             height: max-content;
         }
 
+        #datatable_length select {
+            border: solid $transparent 2px;
+            transition: border 0.3s ease;
+            text-align-last:center;
+            &:hover {
+                border-color: $purple;
+            }
+        }
+
         .dataTables_filter {
             width: 35%;
             background-color: #E7E9F3;
-            border: solid $transparent 3px;
+            border: solid $transparent 2px;
             height: max-content;
             border-radius: 4px;
             transition: border 0.3s ease;
-                        
             display: flex;
             justify-items: center;
 
@@ -83,8 +93,9 @@
 
         tbody {
             tr td {
+                font-family: inherit;
                 text-align: center;
-                font-size: 12px;
+                font-size: 14px;
                 position: relative;
             }
         }
@@ -115,18 +126,13 @@
             padding: 0;
         }
 
-        #datatable_paginate {
-            padding: 0;
-            
-            .paginate_button {
-                border: none;
-                min-width: 0;
-                padding: 0;
+        a.paginate_button {
+            padding: .2em .5em;
+
+            &.current {
+                border: 1px solid $purple;
             }
         }
     }
 
-    &::after {
-        display: none !important;
-    }
 }
