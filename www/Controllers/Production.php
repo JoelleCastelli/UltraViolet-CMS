@@ -11,6 +11,7 @@ class Production
 {
 
     protected $columnsTable;
+    protected $actions;
 
     public function __construct() {
         $this->columnsTable = [
@@ -20,6 +21,11 @@ class Production
             "runtime" => 'Durée',
             "overview" => 'Résumé',
             "actions" => 'Actions'
+        ];
+
+        $this->actions = [
+            ['name' => 'Modifier', 'url' => '/admin/productions/modifier'],
+            ['name' => 'Supprimer', 'url' => '/admin/productions/modifier'],
         ];
     }
 
@@ -224,6 +230,11 @@ class Production
             $productions = new ProductionModel();
             $productions = $productions->selectWhere('type', htmlspecialchars($_POST['productionType']));
             if(!$productions) $productions = [];
+            $actions = "<div class='actionsDropdown'>";
+            foreach ($this->actions as $action) {
+                $actions .= "<a href='".$action['url']."'>".$action['name']."</a>";
+            }
+            $actions .= "</div>";
 
             $productionArray = [];
             foreach ($productions as $production) {
@@ -233,7 +244,7 @@ class Production
                     $this->columnsTable['overview'] => $production->getOverview(),
                     $this->columnsTable['releaseDate'] => date("d/m/Y", strtotime($production->getReleaseDate())),
                     $this->columnsTable['runtime'] => $production->getRuntime()." minutes",
-                    $this->columnsTable['actions'] => '<div class="bubble-actions"></div>',
+                    $this->columnsTable['actions'] => "<div class='bubble-actions'>$actions</div>",
                 ];
             }
 
