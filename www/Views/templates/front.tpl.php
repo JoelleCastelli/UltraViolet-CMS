@@ -24,8 +24,8 @@
                                 echo "<a href='/admin'>Administration</a>";
                             }
                         } else {
-                            echo "<a href='/connexion'>Connexion</a>";
-                            echo "<a href='/inscription'>Inscription</a>";
+                            echo "<a href='/connexion'>Connexion</a><br>";
+                            echo "<a href='/inscription'>Inscription</a><br><br>";
                         }
                         if(isset($flash)) $this->displayFlash($flash);
                         include $this->view;
