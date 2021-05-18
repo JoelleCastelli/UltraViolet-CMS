@@ -255,4 +255,11 @@ class Production
         }
     }
 
+    public function updateProductionAction($mot, $id) {
+        $view = new View("productions/update");
+        $view->assign('title', 'Update de production');
+        $view->assign('param1', $mot);
+        $view->assign('param2', $id);
+    }
+
 }

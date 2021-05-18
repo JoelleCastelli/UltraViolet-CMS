@@ -4,113 +4,131 @@ namespace App\Core;
 
 class Router {
 
-	private string $slug;
+	private string $requestedUri;
 	private string $action;
 	private string $controller;
-	private array $middleware = [];
-    private string $routesFile;
-
-	private string $backRoutesPath = "routesAdmin.yml";
-    private array $backRoutes = [];
-    private array $backSlugs = [];
-
-    private string $frontRoutesPath = "routes.yml";
-    private array $frontRoutes = [];
-    private array $frontSlugs = [];
+	private string $office;
+	private array $middlewares = [];
+	private array $parameters = [];
+    private array $routes = [];
+    private array $slugs = [];
 
 	public function __construct($slug){
-		$this->slug = $slug;
+		$this->requestedUri = $slug;
 		$this->loadYaml();
 
-		// Check for duplicates
-        if(!empty($this->backRoutes[$this->slug]) && !empty($this->frontRoutes[$this->slug]))
-            die("Error: route $this->slug is in both front and back routes files");
+		// Check if route is not in both files
+        if(!empty($this->routes['back'][$this->requestedUri]) && !empty($this->routes['front'][$this->requestedUri]))
+            die("Error: route $this->requestedUri is in both front and back routes files");
 
-        // Check if route exists and in which file
-		if(empty($this->backRoutes[$this->slug])) {
-		    if(empty($this->frontRoutes[$this->slug]))
-                $this->exception404();
-            else
-                $this->setRoutesFile('front');
+        // Find route and get info
+        if($this->matchRoute($this->routes)) {
+            $routeData = $this->matchRoute($this->routes);
+            $this->setOffice($routeData['office']);
+            $this->setController($routeData["controller"]);
+            $this->setAction($routeData["action"]);
+            if(isset($routeData['params']))
+                $this->setParameters($routeData['params']);
+            if(isset($routeData["middleware"]))
+                $this->setMiddlewares($routeData["middleware"]);
         } else {
-		    $this->setRoutesFile('back');
-        }
-
-        // Set controller, action and middleware
-		if($this->routesFile == 'front') {
-            $this->setController($this->frontRoutes[$this->slug]["controller"]);
-            $this->setAction($this->frontRoutes[$this->slug]["action"]);
-            if(isset($this->frontRoutes[$this->slug]["middleware"]))
-                $this->setMiddleware($this->frontRoutes[$this->slug]["middleware"]);
-        } else {
-            $this->setController($this->backRoutes[$this->slug]["controller"]);
-            $this->setAction($this->backRoutes[$this->slug]["action"]);
-            if(isset($this->backRoutes[$this->slug]["middleware"]))
-                $this->setMiddleware($this->backRoutes[$this->slug]["middleware"]);
+            Helpers::redirect('/404', 404);
         }
 	}
 
 	public function loadYaml() {
-        $this->backRoutes = yaml_parse_file($this->backRoutesPath);
-        foreach ($this->backRoutes as $slug => $route) {
-			if(empty($route["controller"]) || empty($route["action"]))
+	    $backRoutes = yaml_parse_file(PATH_TO_ADMIN_ROUTES);
+        foreach ($backRoutes as $slug => $routeData) {
+			if(empty($routeData["controller"]) || empty($routeData["action"]))
 				die("Back routes file: YAML parsing error");
-			$this->backSlugs[$route["controller"]][$route["action"]] = $slug;
+			$this->slugs['back'][$routeData["controller"]][$routeData["action"]] = $slug;
 		}
 
-        $this->frontRoutes = yaml_parse_file($this->frontRoutesPath);
-        foreach ($this->frontRoutes as $slug => $route) {
-            if(empty($route["controller"]) || empty($route["action"]))
+        $frontRoutes = yaml_parse_file(PATH_TO_ROUTES);
+        foreach ($frontRoutes as $slug => $routeData) {
+            if(empty($routeData["controller"]) || empty($routeData["action"]))
                 die("Front routes file: YAML parsing error");
-            $this->frontSlugs[$route["controller"]][$route["action"]] = $slug;
+            $this->slugs[$routeData["controller"]][$routeData["action"]] = $slug;
         }
+
+        $this->routes['back'] = $backRoutes;
+        $this->routes['front'] = $frontRoutes;
 	}
 
+    protected function matchRoute($routesArray) {
+        foreach ($routesArray as $office => $routes) {
+            foreach ($routes as $routeSlug => $routeData) {
+
+                $routeData['office'] = $office;
+                if ($routeSlug == $this->requestedUri) return $routeData;
+
+                // If route has parameters, replace name by regex value
+                if (strpos($routeSlug, '{')) {
+                    $cleanRoute = str_replace('/', '\/', $routeSlug) ;
+                    foreach ($routeData as $paramName => $regex) {
+                        if(!in_array($paramName, ['controller', 'action', 'middleware', 'office'])) {
+                            $cleanRoute = str_replace('{' . $paramName . '}', '(' . $regex . ')', $cleanRoute);
+                        }
+                    }
+                    // If requested url matches route pattern, return route
+                    preg_match('~^' . $cleanRoute . '$~', $this->requestedUri, $matches);
+                    if (isset($matches[1])) {
+                        array_shift($matches);
+                        $routeData['params'] = $matches;
+                        return $routeData;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 	public function getSlug($controller = "Main", $action = "default"): string {
-	    if($this->routesFile == 'front')
-    		return $this->frontSlugs[$controller][$action];
-	    else
-            return $this->backSlugs[$controller][$action];
+        return $this->slugs[$this->office][$controller][$action];
 	}
+
+    public function getController(): string {
+        return $this->controller;
+    }
 
 	public function setController($controller): void {
 		$this->controller = ucfirst($controller);
 	}
 
+    public function getAction(): string {
+        return $this->action;
+    }
+
 	public function setAction($action): void {
 		$this->action = $action."Action";
 	}
 
-	public function getController(): string {
-		return $this->controller;
-	}
-
-	public function getAction(): string {
-		return $this->action;
-	}
-
-	public function exception404($message = null) {
-		die("Erreur 404");
-	}
-
-    public function getMiddleware(): array {
-        return $this->middleware;
+    public function getMiddlewares(): array {
+        return $this->middlewares;
     }
 
-    public function setMiddleware($middleware): void {
-	    if(strpos($middleware, ',')) {
-            $this->middleware = array_map('trim', explode(',', $middleware));
+    public function setMiddlewares($middlewares): void {
+        if(strpos($middlewares, ',')) {
+            $this->middlewares = array_map('trim', explode(',', $middlewares));
         } else {
-            $this->middleware[] = $middleware;
+            $this->middlewares[] = $middlewares;
         }
     }
 
-    public function getRoutesFile(): string {
-        return $this->routesFile;
+    public function getOffice(): string {
+        return $this->office;
     }
 
-    public function setRoutesFile(string $routesFile): void {
-        $this->routesFile = $routesFile;
+    public function setOffice($office): void {
+        $this->office = $office;
+    }
+
+    public function getParameters(): array {
+        return $this->parameters;
+    }
+
+    public function setParameters(array $parameters): void {
+        $this->parameters = $parameters;
     }
 
 }

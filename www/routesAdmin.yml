@@ -46,6 +46,13 @@
   controller: Production
   action:     getProductions
 
+/admin/productions/modification/{id}-{name}:
+  controller: Production
+  action:     updateProduction
+  middleware: Editor
+  id:         \d+
+  name:        ([a-zA-Z]+)
+
 # COMMENTS
 /admin/commentaires:
   controller: Comment

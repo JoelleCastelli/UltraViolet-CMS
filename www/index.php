@@ -4,6 +4,7 @@ namespace App;
 
 session_start();
 
+use App\Core\Helpers;
 use App\Core\Request;
 use App\Core\Router;
 use App\Core\ConstantManager;
@@ -13,18 +14,19 @@ Autoload::register();
 new ConstantManager();
 Request::init();
 
-$slug = mb_strtolower($_SERVER['REQUEST_URI']);
+$slug = mb_strtolower(Request::getURI());
 $route = new Router($slug);
 $controller = $route->getController();
 $action = $route->getAction();
-$middlewares = $route->getMiddleware();
-$routeFile = $route->getRoutesFile();
+$middlewares = $route->getMiddlewares();
+$office = $route->getOffice();
+$params = $route->getParameters();
 
 // Check privileges
-if($routeFile == 'back') {
+if($office == 'back') {
     $user = Request::getUser();
     if (!($user && $user->isLogged() && $user->canAccessBackOffice())) {
-        header('Location: /404');
+        Helpers::redirect('/404', 404);
     }
 }
 
@@ -60,7 +62,7 @@ if(file_exists('./Controllers/'.$controller.'.php')) {
                     }
                 }
             }
-            $controllerObject->$action();
+		    empty($params) ? $controllerObject->$action() : $controllerObject->$action(...$params);
 		} else {
 			die('Error: method '.$action.' doesn\'t exist');
 		}
