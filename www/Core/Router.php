@@ -65,15 +65,20 @@ class Router {
                 // If route has parameters, replace name by regex value
                 if (strpos($routeSlug, '{')) {
                     $cleanRoute = str_replace('/', '\/', $routeSlug) ;
+                    $yamlParams = [];
                     foreach ($routeData as $paramName => $regex) {
                         if(!in_array($paramName, ['controller', 'action', 'middleware', 'office'])) {
-                            $cleanRoute = str_replace('{' . $paramName . '}', '(' . $regex . ')', $cleanRoute);
+                            $yamlParams[] = $paramName;
+                            $cleanRoute = str_replace('{' . $paramName . '}', $regex, $cleanRoute);
                         }
                     }
                     // If requested url matches route pattern, return route
                     preg_match('~^' . $cleanRoute . '$~', $this->requestedUri, $matches);
                     if (isset($matches[1])) {
                         array_shift($matches);
+                        //Check if number of params in URI = number of params in route
+                        if(sizeof($matches) != sizeof($yamlParams)) die("Incorrect number of parameters");
+
                         $routeData['params'] = $matches;
                         return $routeData;
                     }

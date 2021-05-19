@@ -50,8 +50,8 @@
   controller: Production
   action:     updateProduction
   middleware: Editor
-  id:         \d+
-  name:        ([a-zA-Z]+)
+  id:         (\d+)
+  name:       ([a-zA-Z]+)
 
 # COMMENTS
 /admin/commentaires:
