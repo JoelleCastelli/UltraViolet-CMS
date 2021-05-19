@@ -4,31 +4,35 @@ namespace App\Core;
 
 class Database {
 
-    protected \PDO $pdo;
+    protected ?\PDO $pdo = null;
     private string $table;
     private string $query;
 
     private int $order = 0;
     private int $like = 0;
 
-    public function __construct() {
-	    if(ENV === "dev") {
-            try {
-                $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
-                $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            } catch(Exception $e) {
-                die("Erreur SQL : ".$e->getMessage());
-            }
-        } else if (ENV === "prod") {
-            try {
-                $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";port=".DBPORT , DBUSER , DBPWD );
-            } catch(Exception $e) {
-                die("Erreur connexion bdd côté production");
+    protected function __construct() {
+
+        if ($this->pdo === null) {
+
+            if (ENV === "dev") {
+                try {
+                    $this->pdo = new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
+                    $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+                } catch (Exception $e) {
+                    die("Erreur SQL : " . $e->getMessage());
+                }
+            } else if (ENV === "prod") {
+                try {
+                    $this->pdo = new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
+                } catch (Exception $e) {
+                    die("Erreur connexion bdd côté production");
+                }
             }
         }
 
         $classExploded = explode("\\", get_called_class());
-        $this->table = strtolower(DBPREFIXE.end($classExploded));
+        $this->table = strtolower(DBPREFIXE . end($classExploded));
     }
 
     /* GENERAL QUERY */
@@ -98,7 +102,7 @@ class Database {
     }
 
     public function selectWhere($column, $value) {
-        $query = $this->pdo->query("SELECT * FROM ".$this->table." WHERE ".$column." = '".$value."'");
+        $query = $this->pdo->query("SELECT * FROM ".$this->table." WHERE ".$column." = '".$value."' LIMIT 100");
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetchAll();
     }
