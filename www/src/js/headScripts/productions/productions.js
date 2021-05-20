@@ -1,6 +1,6 @@
-/* BUILD DATATABLES */
 $(document).ready( function () {
 
+    /* BUILD DATATABLES */
     let table = $('#datatable').DataTable( {
         
         // All columns    
@@ -70,7 +70,8 @@ $(document).ready( function () {
         },
     });
 
-    // On page load, display movies
+    /* FILTERS */
+    // On start, display movies
     getProductionsByType('movie');
 
     // Display different types on filtering button click

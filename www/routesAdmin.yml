@@ -15,6 +15,10 @@ page_creation:
   controller: Page
   action:     createPage
 
+/admin/pages/pages-data:
+  controller: Page
+  action:     getPages
+
 # ARTICLES
 articles_list:
   path:       /admin/articles
@@ -29,7 +33,7 @@ article_update:
 article_tab_change:
   path:       /admin/tab-change
   controller: Article
-  action:     tabChange
+  action: tabChange
 
 # PRODUCTIONS
 productions_list:
