@@ -7,27 +7,28 @@ $(document).ready(function () {
         columns: [
             {
                 data: 'Nom de la page',
-                className: 'datatable-column-title'
             },
             {
                 data: 'URL de la page',
-                className: 'datatable-column-original-title'
+
             },
             {
                 data: 'Ordre',
-                className: 'datatable-column-release-date'
+                width: "10%"
+
             },
             {
                 data: 'Nombre d\'articles',
-                className: 'datatable-column-runtime'
+                width: "15%"
+
             },
             {
                 data: 'Visibilité',
-                className: 'datatable-column-overview'
+                width: "10%"
             },
             {
                 data: 'Actions',
-                className: 'datatable-column-actions'
+                width: "10%"
             }
         ],
 

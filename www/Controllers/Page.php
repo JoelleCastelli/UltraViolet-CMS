@@ -67,7 +67,7 @@ class Page
                     $this->columnsTable['slug'] => $page->getSlug(),
                     $this->columnsTable['position'] => $page->getPosition(),
                     $this->columnsTable['articles'] => 43,
-                    $this->columnsTable['state'] => $page->getState() == "hidden" ? true : false,
+                    $this->columnsTable['state'] => $page->getState() == "hidden" ? '<div class="state-switch" onclick="toggleSwitch(this)"></div>' : '<div class="state-switch switched-on" onclick="toggleSwitch(this)"></div>',
                     $this->columnsTable['actions'] => "<div class='bubble-actions'>$actions</div>"
                 ];
             }
