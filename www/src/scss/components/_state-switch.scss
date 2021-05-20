@@ -8,11 +8,6 @@
     border-radius: 30px;
     transition: all .3s ease;
 
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-
     &::after {
         content: "";
         position: absolute;
