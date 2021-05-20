@@ -1,0 +1,22 @@
+#datatable {
+
+    .datatable-column-overview { 
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .datatable-column-actions, .datatable-column-runtime {
+        width: 10%;
+    }
+
+    .datatable-column-release-date {
+        width: 13%;
+    }
+
+    .datatable-column-title, .datatable-column-original-title {
+        width: 20%;
+    }
+}
+
