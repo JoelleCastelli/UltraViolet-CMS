@@ -15,7 +15,7 @@ class Page extends Database
 	protected $state;
 	protected $titleSeo;
 	protected $descriptionSeo;
-	protected $publictionDate;
+	protected $publicationDate;
 	protected $createdAt;
 	protected $updatedAt;
 	protected $deletedAt;
@@ -139,17 +139,17 @@ class Page extends Database
     /**
      * @return mixed
      */
-    public function getPublictionDate()
+    public function getPublicationDate()
     {
-        return $this->publictionDate;
+        return $this->publicationDate;
     }
 
     /**
-     * @param mixed $publictionDate
+     * @param mixed $publicationDate
      */
-    public function setPublictionDate($publictionDate): void
+    public function setPublicationDate($publicationDate): void
     {
-        $this->publictionDate = $publictionDate;
+        $this->publicationDate = $publicationDate;
     }
 
     /**
@@ -208,8 +208,8 @@ class Page extends Database
         return parent::selectWhere($column, $value);
     }
 
-    public function cleanPublictionDate() {
-        $this->setPublictionDate(date("d/m/Y", strtotime($this->getPublictionDate())));
+    public function cleanPublicationDate() {
+        $this->setPublicationDate(date("d/m/Y", strtotime($this->getPublicationDate())));
     }
 
 	public function formBuilderRegister() 
@@ -275,7 +275,7 @@ class Page extends Database
                     "maxLength"=>255,
                     "error"=>"Votre descriptionSEO doit étre entre 2 et 255"
                 ],
-                "publictionDate"=>[
+                "publicationDate"=>[
                     "type"=>"date",
                     "placeholder"=>"publication",
                     "label"=>"Date de publication :",
