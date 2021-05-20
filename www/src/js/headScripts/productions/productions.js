@@ -2,19 +2,39 @@
 $(document).ready( function () {
 
     let table = $('#datatable').DataTable( {
-
+        
+        // All columns    
         columns: [
-            { data: 'Titre' },
-            { data: 'Titre original' },
-            { data: 'Date de sortie' },
-            { data: 'Durée' },
-            { data: 'Résumé' },
-            { data: 'Actions' }
+            { 
+                data: 'Titre',
+                className: 'datatable-column-title'
+            },
+            { 
+                data: 'Titre original',
+                className: 'datatable-column-original-title'
+            },
+            { 
+                data: 'Date de sortie',
+                className: 'datatable-column-release-date'
+            },
+            { 
+                data: 'Durée',
+                className: 'datatable-column-runtime'
+            },
+            { 
+                data: 'Résumé',
+                className: 'datatable-column-overview'
+            },
+            { 
+                data: 'Actions',
+                className: 'datatable-column-actions'
+            }
         ],
 
+        // Column Actions 
         columnDefs: [{
             targets: 5,
-            data: "name",
+            data: "Actions",
             searchable: false,
             orderable: false
         }],
