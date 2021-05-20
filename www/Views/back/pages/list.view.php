@@ -15,9 +15,6 @@
     //     }
     // }
     ?>
- <div class="state-switch" onclick="toggleSwitch(this)"></div>
-
- <a href="ajout-d-une-page">add page</a>
 
  <div class="grid-listing-datatables">
 
@@ -29,7 +26,8 @@
              <div class="filtering-btn" id="trash">Corbeille</div>
          </div>
 
-         <button class="btn">Ajouter une page</button>
+         <button class="btn"> <a href="/admin/pages/creation">Ajouter une page</a></button>
+
      </section>
 
      <section>
@@ -45,12 +43,8 @@
                         ?>
                  </tr>
              </thead>
-             <tbody>
+             <tbody> 
              </tbody>
          </table>
-     </section>
-     <section>
-         <div class="state-switch" onclick="toggleSwitch(this)"></div>
-
      </section>
  </div>
