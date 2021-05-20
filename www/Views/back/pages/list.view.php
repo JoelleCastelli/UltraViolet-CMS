@@ -1,51 +1,56 @@
  <?php
 
-// if (empty($pages)) {
-//     echo "Déso y'a rien dans la DB";
-// } else {
-//     foreach ($pages as $page) {
-//         echo "<div>";
-//         echo "<div>Titre : " . $page->getTitle() . "</div>";
-//         echo "<div>Type : " . $page->getSlug() . "</div>";
-//         echo "<div>Titre original : " . $page->getPosition() ?? "inconnue" . "</div>";
-//         echo "<div>Durée : " . $page->getPublicationDate() ?? "y'a rien" . "</div>";
-//         echo "<div>Résumé : " . $page->getState() ?? "y'a rien" . "</div>";
-//         echo "</div>";
-//         echo "&nbsp;";
-//     }
-// }
-?> 
-<a href="ajout-d-une-page">add page</a>
+    // if (empty($pages)) {
+    //     echo "Déso y'a rien dans la DB";
+    // } else {
+    //     foreach ($pages as $page) {
+    //         echo "<div>";
+    //         echo "<div>Titre : " . $page->getTitle() . "</div>";
+    //         echo "<div>Type : " . $page->getSlug() . "</div>";
+    //         echo "<div>Titre original : " . $page->getPosition() ?? "inconnue" . "</div>";
+    //         echo "<div>Durée : " . $page->getPublicationDate() ?? "y'a rien" . "</div>";
+    //         echo "<div>Résumé : " . $page->getState() ?? "y'a rien" . "</div>";
+    //         echo "</div>";
+    //         echo "&nbsp;";
+    //     }
+    // }
+    ?>
+ <div class="state-switch" onclick="toggleSwitch(this)"></div>
 
-<div class="grid-listing-datatables">
+ <a href="ajout-d-une-page">add page</a>
 
-    <section>
-        <div class="filtering-status">
-            <div class="filtering-btn" id="published">Publiés</div>
-            <div class="filtering-btn" id="draft">Brouillons</div>
-            <div class="filtering-btn" id="scheduled">Planifiés</div>
-            <div class="filtering-btn" id="trash">Corbeille</div>
-        </div>
+ <div class="grid-listing-datatables">
 
-        <button class="btn">Ajouter une page</button>
-    </section>
+     <section>
+         <div class="filtering-status">
+             <div class="filtering-btn" id="published">Publiés</div>
+             <div class="filtering-btn" id="draft">Brouillons</div>
+             <div class="filtering-btn" id="scheduled">Planifiés</div>
+             <div class="filtering-btn" id="trash">Corbeille</div>
+         </div>
 
-    <section>
-        <table id="datatable" class="display">
-            <thead>
-                <tr>
-                    <?php
-                    if(isset($columnsTable)){
-                        foreach ($columnsTable as $key => $value) {
-                            echo "<th>$value</th>";
+         <button class="btn">Ajouter une page</button>
+     </section>
+
+     <section>
+         <table id="datatable" class="display">
+             <thead>
+                 <tr>
+                     <?php
+                        if (isset($columnsTable)) {
+                            foreach ($columnsTable as $key => $value) {
+                                echo "<th>$value</th>";
+                            }
                         }
-                    }
-                    ?>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </section>
+                        ?>
+                 </tr>
+             </thead>
+             <tbody>
+             </tbody>
+         </table>
+     </section>
+     <section>
+         <div class="state-switch" onclick="toggleSwitch(this)"></div>
 
-</div>
+     </section>
+ </div>
