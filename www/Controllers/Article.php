@@ -9,16 +9,14 @@ use App\Models\Article as ArticleModel;
 
 class Article {
 
-    // TODO : Checker que l'user à les droits et est connecté, et qu'une page existe pour y attacher l'article
-    // TODO : Faire une fonction globale permettant de slugifier un article en fonction de son titre
-
     public function showAllAction() {
         $article = new ArticleModel;
         $articles = $article->selectWhere('state', 'published');
+        
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
-        $view->assign('headScript', Helpers::urlJS('headScripts/articles'));
         $view->assign('articles', $articles);
+        $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/articles/articles.js']);
     }
 
     public function tabChangeAction() {
