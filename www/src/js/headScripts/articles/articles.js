@@ -50,6 +50,24 @@ $(document).ready( function () {
         },
     });
 
+    getArticleByState();
+
+    function getArticleByState(state = "any") {
+        $.ajax({
+            type: 'POST',
+            url: '/admin/articles/articles-data',
+            data: { state },
+            dataType: 'json',
+            success: function(response) {
+                table.clear();
+                table.rows.add(response.articles).draw();
+            },
+            error: function(){
+                console.log("Erreur dans la récupération des articles :" + state);
+            }
+        });
+    }
+
 
    
 });
