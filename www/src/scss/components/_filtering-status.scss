@@ -17,12 +17,22 @@
             background-color: $purple-light;
         }
 
+        &:first-child {
+            border-radius: 8px 0px 0px 8px;
+        }
+
+        &:last-child {
+            border-radius: 0px 8px 8px 0px;
+        }
+
         &:hover {
             background-color: $purple-light;
         }
     }
 
-    
+     &:first-child {
+        border-radius: inherit 0px 0px inherit;
+    }
 
 }
 

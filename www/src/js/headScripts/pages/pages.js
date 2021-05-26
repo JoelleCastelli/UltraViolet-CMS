@@ -74,6 +74,7 @@ $(document).ready(function () {
     /* FILTERS */
     // On start, display published pages
     getPagesByType('published');
+    $("#published").addClass('active');
 
     // Display different types on filtering button click
     $(".filtering-btn").click(function () {
