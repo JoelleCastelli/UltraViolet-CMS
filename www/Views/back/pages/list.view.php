@@ -26,7 +26,7 @@
              <div class="filtering-btn" id="trash">Corbeille</div>
          </div>
 
-         <button id="btnPopup" class="btn btnPopup">Ajouter une page</button>
+         <button id="btnPopup" class="btn btnPopup" data-toggle="modal" data-target="#add-page-modal">Ajouter une page</button>
 
      </section>
 
@@ -49,26 +49,20 @@
      </section>
  </div>
 
-
-
-
- <div id="modal" class="modal">
-     <div id="overlay" class="overlay"></div>
-     <div class="wrapper">
-         <div class="header">
-             <h2>
+ <div id="add-page-modal" class="modal modal-hidden">
+     <div class="wrapper-modal">
+         <div class="header-modal">
+             <h2 class="title-modal">
                  Exemple simple de popup
-                 <span id="btnClose" class="btnClose">&times;</span>
              </h2>
+             <span class="btn-close-modal"><i class="fas fa-times"></i></span>
          </div>
-         <div class="content">
+         <div class="content-modal">
              <p>
-                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a nulla
-                 a massa interdum imperdiet sed nec nibh. Proin porttitor euismod nulla ut
-                 interdum. Cras elementum placerat aliquam.
+                 Modal 1
              </p>
          </div>
-         <div class="footer">
+         <div class="footer-modal">
              <div>
                  <button class="btn">Fermer</button>
                  <button class="btn">Envoyer formulaire</button>
@@ -76,60 +70,3 @@
          </div>
      </div>
  </div>
-
- <style>
-     .modal {
-         display: none;
-         z-index: 200;
-         position: fixed;
-         left: 0px;
-         top: 0px;
-         width: 100%;
-         height: 100%;
-
-     }
-
-     .overlay {
-
-
-         filter: blur(20%);
-         background-color: aquamarine;
-         
-     }
-
-     .wrapper {
-         margin: 10% auto;
-         width: 50%;
-         background-color: rgb(243, 243, 243);
-         padding: 1em;
-         box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
-         border-radius: 5px;
-         z-index: 201;
-     }
-
-     .btnClose {
-         float: right;
-         font-size: 16pt;
-         cursor: pointer;
-         color: rgb(26, 26, 26);
-     }
- </style>
-
- <script>
-     var btnPopup = document.getElementById('btnPopup');
-     var modal = document.getElementById('modal');
-     btnPopup.addEventListener('click', modal);
-     $(btnPopup).click(function() {
-
-         console.log(this);
-         modal.style.display = 'block';
-
-     })
-
-
-     function openMoadl() {
-         console.log('click');
-         console.log(this);
-         modal.style.display = 'block';
-     }
- </script>
