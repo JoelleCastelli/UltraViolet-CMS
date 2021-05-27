@@ -35,3 +35,40 @@ waitForElement("#datatable", function() {
         $('.bubble-actions').not(this).removeClass('active');
     });
 });
+
+
+$(document).ready(function () { 
+
+    a = 0;
+    b = 0;
+    /******* MODAL ******/
+
+    // Open modal
+    $('button[data-toggle="modal"]').click(function () {
+        let idModal = $(this).data('target');
+
+        if ($(idModal).length > 0) {
+            a = $(idModal)[0];
+            $($(idModal)[0]).removeClass('modal-hidden');
+            $($(idModal)[0]).addClass('modal-visible');
+            $('body').addClass('blurred');
+
+            console.log('open modal');
+        }
+    });
+
+    // Close modal
+    $('.modal .btn-close-modal').click(function (){
+        let modal = $(this).parents('.modal');
+
+        ($(modal).length > 0)
+        {
+            $($(modal)[0]).removeClass('modal-visible');
+            $($(modal)[0]).addClass('modal-hidden');
+            $('body').removeClass('blurred');
+            console.log('close modal');
+
+        }
+    });
+
+})
