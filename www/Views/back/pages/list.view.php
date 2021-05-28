@@ -58,15 +58,18 @@
              <span class="btn-close-modal"><i class="fas fa-times"></i></span>
          </div>
          <div class="content-modal">
-             <p>
-                 Modal 1
-             </p>
+             <?php App\Core\FormBuilder::render($formCreatePage);  ?>
          </div>
          <div class="footer-modal">
-             <div>
-                 <button class="btn">Fermer</button>
-                 <button class="btn">Envoyer formulaire</button>
+
+             <div class="container-message">
+                
              </div>
+
          </div>
      </div>
  </div>
+
+ <style>
+
+ </style>

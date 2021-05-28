@@ -13,7 +13,7 @@ pages_list:
 page_creation:
   path:       /admin/pages/creation
   controller: Page
-  action:     createPage
+  action:     addPage
 
 /admin/pages/pages-data:
   controller: Page
