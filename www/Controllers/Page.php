@@ -30,8 +30,9 @@ class Page
     }
 
     public function showAllAction() {
-        $pages = new PageModel();
-        $pages = $pages->findAll();
+        $page = new PageModel();
+        $formCreatePage = $page->formBuilderRegister();
+        $pages = $page->findAll();
 
         if(!$pages) $pages = [];
 
@@ -40,8 +41,10 @@ class Page
         }
 
         $view = new View("pages/list");
+
         $view->assign('title', 'Pages');
-        $view->assign("pages", $pages);
+        $view->assign('pages', $pages);
+        $view->assign('formCreatePage', $formCreatePage);
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('headScripts', [PATH_TO_SCRIPTS . 'headScripts/pages/pages.js']);
 
@@ -108,5 +111,16 @@ class Page
 
         $view->assign("form", $form);
     }
+
+    public function addPageAction()
+    {
+        echo json_encode([
+            'post' => $_POST,
+            'seo' => $_POST['titleSEO'],
+            'success' => false,
+            'message' => 'Votre page s\'est crée youpiyoupi yeah wallah'
+        ]);
+    }
+
 
 }

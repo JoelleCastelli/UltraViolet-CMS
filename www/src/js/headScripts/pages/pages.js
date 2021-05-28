@@ -99,4 +99,53 @@ $(document).ready(function () {
             }
         });
     }
+
+    /* FORM */
+
+    $('.form-add-page').submit(function (event) {
+        event.preventDefault();
+
+        if ($('#add-page-modal').hasClass('modal-visible')) {
+
+            console.log('form submit lol');
+            console.log($(this).serialize());
+            console.log($(this));
+
+            $.ajax({
+                type: 'POST',
+                url: '/admin/pages/creation',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log('success');
+                    console.log(response);
+
+                    if (response['success'])
+                        $('#add-page-modal .container-message').html(successMessageForm(response['message']));
+                    else 
+                        $('#add-page-modal .container-message').html(errorMessageForm(response['message']));
+
+                },
+                error: function (data) {
+                    console.log('error');
+                    console.log(data);
+
+                }
+            });
+        } 
+    })
+
+    function successMessageForm(message) {
+        return '<p class="success-message-form">' + 
+                    '<i class="fas fa-check icon-message-form"></i>' +
+                    message +
+                '</p>';
+    }
+
+    function errorMessageForm(message) {
+        return '<p class="error-message-form">' +
+                    '<i class="fas fa-times icon-message-form"></i>' +
+                    message +
+                '</p>';
+    }
 });

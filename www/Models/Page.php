@@ -212,7 +212,7 @@ class Page extends Database
         $this->setPublicationDate(date("d/m/Y", strtotime($this->getPublicationDate())));
     }
 
-	public function formBuilderRegister() 
+    /* public function formBuilderRegister() 
 	{
 
         $today = date("Y-m-d");
@@ -221,7 +221,7 @@ class Page extends Database
 			"config"=>[
 				"method"=>"POST",
 				"action"=>"",
-				"class"=>"form_control",
+				"class"=>"form_control form-add-page",
 				"id"=>"form_register",
 				"submit"=>"Ajout d'une page",
                 "required_inputs"=>5
@@ -310,4 +310,87 @@ class Page extends Database
 			]
 		];
 	}
+    */
+
+    public function formBuilderRegister()
+    {
+
+        $today = date("Y-m-d");
+
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control form-add-page",
+                "id" => "form_register",
+                "submit" => "Ajout d'une page",
+                "required_inputs" => 5
+            ],
+            "fields" => [
+                "title" => [
+                    "type" => "text",
+                    "placeholder" => "Animées",
+                    "label" => "Votre Titre :",
+                    "class" => "search-bar",
+                    "error" => "Votre titre doit faire entre 2 et 25 caractères",
+                ],
+                "slug" => [
+                    "type" => "text",
+                    "placeholder" => "meilleure-serie",
+                    "label" => "Votre slug :",
+                    "class" => "search-bar",
+                    "error" => "Votre slug doit faire entre 2 et 15 caractères",
+                ],
+                "position" => [
+                    "type" => "text",
+                    "placeholder" => "3",
+                    "label" => "Position :",
+                    "class" => "search-bar",
+                    "error" => "Votre position doit étre entre 1 et 4",
+                ],
+                "titleSEO" => [
+                    "type" => "text",
+                    "placeholder" => "Titre pour le référencement",
+                    "label" => "titleSEO :",
+                    "class" => "search-bar",
+                    "error" => "Votre titleSEO doit étre entre 2 et 50"
+                ],
+                "descriptionSEO" => [
+                    "type" => "text",
+                    "placeholder" => "META description",
+                    "label" => "META description :",
+                    "class" => "search-bar",
+                    "error" => "Votre descriptionSEO doit étre entre 2 et 255"
+                ],
+                "publicationDate" => [
+                    "type" => "date",
+                    "placeholder" => "publication",
+                    "label" => "Date de publication :",
+                    "class" => "search-bar",
+                    "error" => "Votre date de publication doit être entre" . $today . " et 31-12-2030",
+
+                ],
+                "state" => [
+                    "type" => "radio",
+                    "label" => "État :",
+                    "class" => "",
+                    "error" => "Erreur test",
+                    "options" => [
+                        [
+                            "value" => "draft",
+                            "text" => "Brouillon",
+                        ],
+                        [
+                            "value" => "published",
+                            "text" => "Publier",
+                        ]
+                    ],
+                ],
+                "csrfToken" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken(),
+                ]
+            ]
+        ];
+    }
 }
