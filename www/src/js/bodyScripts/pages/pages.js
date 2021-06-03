@@ -1,6 +1,4 @@
-let a = 0;
-let b = 0;
-$(document).ready(function() {
+$(document).ready(function () {
 
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable({
@@ -136,13 +134,17 @@ $(document).ready(function() {
         }
     })
 
-    /* CHANGE VISIBILITY PAGE */
-    $('.switch-visibily-page').click(function() {
-        // console.log('yes');
-    });
+    function successMessageForm(message) {
+        return '<p class="success-message-form">' + 
+                    '<i class="fas fa-check icon-message-form"></i>' +
+                    message +
+                '</p>';
+    }
 
-    $('bubble-actions').click(function() {
-        console.log('click');
-    });
-
+    function errorMessageForm(message) {
+        return '<p class="error-message-form">' +
+                    '<i class="fas fa-times icon-message-form"></i>' +
+                    message +
+                '</p>';
+    }
 });
