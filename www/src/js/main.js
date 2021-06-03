@@ -53,7 +53,6 @@ $(document).ready(function () {
             $($(idModal)[0]).addClass('modal-visible');
             $('body').addClass('blurred');
 
-            console.log('open modal');
         }
     });
 
@@ -66,9 +65,21 @@ $(document).ready(function () {
             $($(modal)[0]).removeClass('modal-visible');
             $($(modal)[0]).addClass('modal-hidden');
             $('body').removeClass('blurred');
-            console.log('close modal');
-
         }
     });
+
+    function successMessageForm(message) {
+        return '<p class="success-message-form">' +
+            '<i class="fas fa-check icon-message-form"></i>' +
+            message +
+            '</p>';
+    }
+
+    function errorMessageForm(message) {
+        return '<p class="error-message-form">' +
+            '<i class="fas fa-times icon-message-form"></i>' +
+            message +
+            '</p>';
+    }
 
 })
