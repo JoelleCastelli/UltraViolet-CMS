@@ -4,8 +4,9 @@ namespace App\Models;
 
 use App\Core\Database;
 use App\Core\FormBuilder;
+use JsonSerializable;
 
-class Page extends Database
+class Page extends Database implements JsonSerializable
 {
 
 	private $id = null;
@@ -212,6 +213,36 @@ class Page extends Database
         $this->setPublicationDate(date("d/m/Y", strtotime($this->getPublicationDate())));
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "title" => $this->getTitle(),
+            "slug" => $this->getSlug(),
+            "position" => $this->getPosition(),
+            "state" => $this->getState(),
+            "titleSeo" => $this->getTitleSeo(),
+            "descriptionSeo" => $this->getDescriptionSeo(),
+            "publicationDate" => $this->getPublicationDate(),
+            "createdAt" => $this->getCreatedAt(),
+            "updatedAt" => $this->getUpdatedAt(),
+            "deletedAt" => $this->getDeletedAt()
+        ];
+    }
+
+    public function checkState() {
+        if(
+            $this->getState() != 'draft' &&
+            $this->getState() != 'scheduled' &&
+            $this->getState() != 'published' &&
+            $this->getState() != 'hidden' &&
+            $this->getState() != 'deleted'
+          )
+            return false;
+        else
+            return true;
+    }
+
     /* public function formBuilderRegister() 
 	{
 
@@ -362,17 +393,9 @@ class Page extends Database
                     "class" => "search-bar",
                     "error" => "Votre descriptionSEO doit étre entre 2 et 255"
                 ],
-                "publicationDate" => [
-                    "type" => "date",
-                    "placeholder" => "publication",
-                    "label" => "Date de publication :",
-                    "class" => "search-bar",
-                    "error" => "Votre date de publication doit être entre" . $today . " et 31-12-2030",
-
-                ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État :",
+                    // "label" => "État :",
                     "class" => "",
                     "error" => "Erreur test",
                     "options" => [
@@ -382,9 +405,17 @@ class Page extends Database
                         ],
                         [
                             "value" => "published",
-                            "text" => "Publier",
+                            "text" => "Publier maintenant",
                         ]
                     ],
+                ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "placeholder" => "publication",
+                    "label" => "Ou plus tard : ",
+                    "class" => "search-bar",
+                    "error" => "Votre date de publication doit être entre " . $today . " et 31-12-2030",
+
                 ],
                 "csrfToken" => [
                     "type" => "hidden",

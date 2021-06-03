@@ -1,3 +1,5 @@
+let a = 0;
+let b = 0;
 $(document).ready(function () {
 
     /* BUILD DATATABLES */
@@ -100,16 +102,11 @@ $(document).ready(function () {
         });
     }
 
-    /* FORM */
-
+    /* FORM ADD PAGE*/
     $('.form-add-page').submit(function (event) {
         event.preventDefault();
 
         if ($('#add-page-modal').hasClass('modal-visible')) {
-
-            console.log('form submit lol');
-            console.log($(this).serialize());
-            console.log($(this));
 
             $.ajax({
                 type: 'POST',
@@ -117,35 +114,27 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 dataType: 'json',
                 success: function (response) {
-                    console.log('success');
-                    console.log(response);
-
                     if (response['success'])
                         $('#add-page-modal .container-message').html(successMessageForm(response['message']));
                     else 
                         $('#add-page-modal .container-message').html(errorMessageForm(response['message']));
 
                 },
-                error: function (data) {
-                    console.log('error');
-                    console.log(data);
-
+                error: function (response, statut, erreur) {
+                    $('#add-page-modal .container-message').html(errorMessageForm(response.responseText));
                 }
             });
         } 
     })
 
-    function successMessageForm(message) {
-        return '<p class="success-message-form">' + 
-                    '<i class="fas fa-check icon-message-form"></i>' +
-                    message +
-                '</p>';
-    }
+    /* CHANGE VISIBILITY PAGE */
 
-    function errorMessageForm(message) {
-        return '<p class="error-message-form">' +
-                    '<i class="fas fa-times icon-message-form"></i>' +
-                    message +
-                '</p>';
-    }
+    $('.switch-visibily-page').click(function(){
+        console.log('yes');
+    });
+
+    $('bubble-actions').click(function(){
+        console.log('click');
+    });
+
 });
