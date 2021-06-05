@@ -128,7 +128,6 @@ $(document).ready(function () {
     })
 
     /* CHANGE VISIBILITY PAGE */
-
     $('.switch-visibily-page').click(function(){
         console.log('yes');
     });

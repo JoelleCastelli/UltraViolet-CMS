@@ -67,19 +67,18 @@ $(document).ready(function () {
             $('body').removeClass('blurred');
         }
     });
-
-    function successMessageForm(message) {
-        return '<p class="success-message-form">' +
-            '<i class="fas fa-check icon-message-form"></i>' +
-            message +
-            '</p>';
-    }
-
-    function errorMessageForm(message) {
-        return '<p class="error-message-form">' +
-            '<i class="fas fa-times icon-message-form"></i>' +
-            message +
-            '</p>';
-    }
-
 })
+
+function successMessageForm(message) {
+    return '<p class="success-message-form">' +
+        '<i class="fas fa-check icon-message-form"></i>' +
+        message +
+        '</p>';
+}
+
+function errorMessageForm(message) {
+    return '<p class="error-message-form">' +
+        '<i class="fas fa-times icon-message-form"></i>' +
+        message +
+        '</p>';
+}
