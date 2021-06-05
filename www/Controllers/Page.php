@@ -51,7 +51,7 @@ class Page
         $view->assign('pages', $pages);
         $view->assign('formCreatePage', $formCreatePage);
         $view->assign('columnsTable', $this->columnsTable);
-        $view->assign('headScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
 
     }
 
