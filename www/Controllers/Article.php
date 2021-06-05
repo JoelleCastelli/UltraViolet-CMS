@@ -45,13 +45,14 @@ class Article {
         foreach ($articles as $article) {
             $articlesArray[] = [
                 "Titre" => $article->getTitle(),
-                "Auteur" => $article->getPerson()->getFullName(),
+                "Auteur" => $article->getPerson()->getPseudo(),
                 "Vues" => $article->getTotalViews(),
                 "Commentaire" => "[NOMBRE COMMENTAIRE]",
                 // "Created At" => $article->getContentCreatedAt(), // ! ne marche pas, renvoie null
-                "Updated At" => $article->getContentUpdatedAt(),
+                // "Date" => $article->getContentUpdatedAt(), // ! marche pas non plus 
+                "Date" => "[DATE]",
                 "Publication" => $article->getState(),
-                "Action" => "[CHOIX DES ACTIONS]"
+                "Actions" => "[CHOIX DES ACTIONS]"
             ];
         }
 

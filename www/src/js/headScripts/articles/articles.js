@@ -5,15 +5,16 @@ $(document).ready( function () {
 
         columns: [
             { data: 'Titre' },
-            { data: 'Description' },
-            { data: 'Note' },
+            { data: 'Auteur' },
             { data: 'Vues' },
-            { data: 'Etat' },
+            { data: 'Commentaire' },
+            { data: 'Date' },
+            { data: 'Publication' },
             { data: 'Actions' }
         ],
 
         columnDefs: [{
-            targets: 6,
+            targets: 5,
             data: "name",
             searchable: false,
             orderable: false
@@ -60,7 +61,7 @@ $(document).ready( function () {
             dataType: 'json',
             success: function(response) {
                 console.log("Requete réussis");
-                console.log(response);
+                console.log(response.articles);
                 table.clear();
                 table.rows.add(response.articles).draw();
             },
