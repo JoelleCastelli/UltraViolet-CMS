@@ -50,9 +50,9 @@ $(document).ready( function () {
         },
     });
 
-    // getArticleByState("testouille");
+    getArticleByState("published");
 
-    function getArticleByState(state = "any") {
+    function getArticleByState(state) {
         $.ajax({
             type: 'POST',
             url: '/admin/articles/articles-data',
@@ -60,11 +60,12 @@ $(document).ready( function () {
             dataType: 'json',
             success: function(response) {
                 console.log("Requete réussis");
+                console.log(response);
                 // table.clear();
                 // table.rows.add(response.articles).draw();
             },
-            error: function(){
-                console.log("Erreur dans la récupération des articles :" + state);
+            error: function(error){
+                console.log("Erreur dans la récupération des articles :" + error);
             }
         });
     }

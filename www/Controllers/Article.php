@@ -33,11 +33,18 @@ class Article {
     }
 
     public function getArticlesAction() {
-        echo json_encode("OUI BONJOUR");
-        die();  
-        Helper::dd("COUCOU AJAX ARTICLE");
-        if (empty($_POST["state"])) return;
-        $state = $_POST["state"];
+        if (empty($_POST['state'])) return;
+        
+        $state = $_POST['state'];
+        $articles = new ArticleModel();
+
+
+        $articles = $articles->selectWhere('state', htmlspecialchars($_POST['state']));
+
+        echo json_encode([
+            "state" => $state,
+            "test" => $articles[0]
+        ]);
     }
 
     public function tabChangeAction() {

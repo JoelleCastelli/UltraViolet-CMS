@@ -273,6 +273,23 @@ class Article extends Database
         return parent::selectWhere($column, $value);
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "title" => $this->getTitle(),
+            "description" => $this->getDescription(),
+            "content" => $this->getContent(),
+            "rating" => $this->getRating(),
+            "slug" => $this->getSlug(),
+            "state" => $this->getState(),
+            "totalViews" => $this->getTotalViews(),
+            "titleSeo" => $this->getTitleSeo(),
+            "descriptionSeo" => $this->getDescriptionSeo(),
+            "contentUpdatedAt" => $this->getContentUpdatedAt(),
+        ];
+    }
+
     // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
     public function formBuilderCreateArticle() {
         return [
