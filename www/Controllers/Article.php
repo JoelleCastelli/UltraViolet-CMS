@@ -38,12 +38,26 @@ class Article {
         $state = $_POST['state'];
         $articles = new ArticleModel();
 
-
         $articles = $articles->selectWhere('state', htmlspecialchars($_POST['state']));
+        if (!$articles) $articles = [];
+
+        $articlesArray = [];
+        foreach ($articles as $article) {
+            $articlesArray[] = [
+                "Titre" => $article->getTitle(),
+                "Auteur" => $article->getPerson()->getFullName(),
+                "Vues" => $article->getTotalViews(),
+                "Commentaire" => "[NOMBRE COMMENTAIRE]",
+                // "Created At" => $article->getContentCreatedAt(), // ! ne marche pas, renvoie null
+                "Updated At" => $article->getContentUpdatedAt(),
+                "Publication" => $article->getState(),
+                "Action" => "[CHOIX DES ACTIONS]"
+            ];
+        }
 
         echo json_encode([
             "state" => $state,
-            "test" => $articles[0]
+            "articles" => $articlesArray
         ]);
     }
 

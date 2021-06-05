@@ -5,8 +5,9 @@ namespace App\Models;
 use App\Core\Database;
 use App\Core\Traits\ModelsTrait;
 use App\Core\FormBuilder;
+use JsonSerializable;
 
-class Article extends Database
+class Article extends Database implements JsonSerializable
 {
     use ModelsTrait;
 
@@ -21,8 +22,11 @@ class Article extends Database
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
+    protected $contentCreatedAt;
+    protected $contentDeletedAt;
     protected $uvtr_media_id;
-    protected $uvtr_person_id;
+    protected $personId;
+
 
     public $media;
     public $person;
@@ -172,6 +176,22 @@ class Article extends Database
     /**
      * @return mixed
      */
+    public function getPersonId()
+    {
+        return $this->personId;
+    }
+
+    /**
+     * @param mixed $titleSeo
+     */
+    public function setPersonId($personId): void
+    {
+        $this->personId = $personId;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getDescriptionSeo()
     {
         return $this->descriptionSeo;
@@ -202,6 +222,38 @@ class Article extends Database
     }
 
     /**
+     * @return mixed
+     */
+    public function getContentCreatedAt()
+    {
+        return $this->contentCreatedAt;
+    }
+
+    /**
+     * @param mixed $contentCreatedAt
+     */
+    public function setContentCreatedAt($contentCreatedAt): void
+    {
+        $this->contentCreatedAt = $contentCreatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContentDeletedAt()
+    {
+        return $this->contentDeletedAt;
+    }
+
+    /**
+     * @param mixed $contentDeletedAt
+     */
+    public function setContentDeletedAt($contentDeletedAt): void
+    {
+        $this->contentDeletedAt = $contentDeletedAt;
+    }
+
+    /**
      * @return Media
      */
     public function getMedia(): Media
@@ -222,6 +274,8 @@ class Article extends Database
      */
     public function getPerson(): Person
     {
+        if (!empty($this->personId) && is_numeric($this->personId))
+            $this->person->setId($this->personId);
         return $this->person;
     }
 

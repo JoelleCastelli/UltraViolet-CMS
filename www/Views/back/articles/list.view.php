@@ -28,15 +28,7 @@
             <tbody>
                 <!-- <?php
                     if (!empty($articles)) {
-                        foreach ($articles as $article) {
-                            echo "<td>$article->title</td>";
-                            echo "<td>$article->author</td>";
-                            echo "<td>$article->totalViews</td>";
-                            echo "<td>$article->totalComments</td>";
-                            echo "<td>$article->publicationDate</td>";
-                            echo "<td>$article->publicationToggle</td>";
-                            echo "<td>$article->actions</td>";
-                        }
+                        
                     }
                 ?> -->
             </tbody>

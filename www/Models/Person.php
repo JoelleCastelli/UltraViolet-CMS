@@ -6,9 +6,10 @@ use App\Core\Database;
 use App\Core\FormBuilder;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
+use JsonSerializable;
 
 
-class Person extends Database
+class Person extends Database implements JsonSerializable
 {
     use ModelsTrait;
 
@@ -234,6 +235,23 @@ class Person extends Database
         } else {
             return false;
         }
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "fullName" => $this->getFullName(),
+            "pseudo" => $this->getPseudo(),
+            "email" => $this->getEmail(),
+            "optin" => $this->getOptin(),
+            "updatedAt" => $this->getUpdatedAt(),
+            "createdAt" => $this->getCreatedAt(),
+            "deletedAt" => $this->getDeletedAt(),
+            "role" => $this->getRole(),
+            "isEmailConfirmed" => $this->isEmailConfirmed(),
+            "mediaId" => $this->getMediaId(),
+        ];
     }
 
     public function checkRights($role): bool {

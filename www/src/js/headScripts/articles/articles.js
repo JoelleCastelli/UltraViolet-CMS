@@ -61,11 +61,12 @@ $(document).ready( function () {
             success: function(response) {
                 console.log("Requete réussis");
                 console.log(response);
-                // table.clear();
-                // table.rows.add(response.articles).draw();
+                table.clear();
+                table.rows.add(response.articles).draw();
             },
-            error: function(error){
-                console.log("Erreur dans la récupération des articles :" + error);
+            error: function(response){
+                console.log("Erreur dans la récupération des articles");
+                console.log(response);
             }
         });
     }
