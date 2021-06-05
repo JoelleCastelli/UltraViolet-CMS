@@ -13,7 +13,7 @@ $(document).ready( function () {
         ],
 
         columnDefs: [{
-            targets: 5,
+            targets: 6,
             data: "name",
             searchable: false,
             orderable: false
@@ -50,7 +50,7 @@ $(document).ready( function () {
         },
     });
 
-    getArticleByState();
+    // getArticleByState("testouille");
 
     function getArticleByState(state = "any") {
         $.ajax({
@@ -59,8 +59,9 @@ $(document).ready( function () {
             data: { state },
             dataType: 'json',
             success: function(response) {
-                table.clear();
-                table.rows.add(response.articles).draw();
+                console.log("Requete réussis");
+                // table.clear();
+                // table.rows.add(response.articles).draw();
             },
             error: function(){
                 console.log("Erreur dans la récupération des articles :" + state);
@@ -68,6 +69,4 @@ $(document).ready( function () {
         });
     }
 
-
-   
 });

@@ -33,6 +33,9 @@ class Article {
     }
 
     public function getArticlesAction() {
+        echo json_encode("OUI BONJOUR");
+        die();  
+        Helper::dd("COUCOU AJAX ARTICLE");
         if (empty($_POST["state"])) return;
         $state = $_POST["state"];
     }

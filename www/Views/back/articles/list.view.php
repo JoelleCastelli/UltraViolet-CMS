@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
+                <!-- <?php
                     if (!empty($articles)) {
                         foreach ($articles as $article) {
                             echo "<td>$article->title</td>";
@@ -38,7 +38,7 @@
                             echo "<td>$article->actions</td>";
                         }
                     }
-                ?>
+                ?> -->
             </tbody>
         </table>
     </section>
