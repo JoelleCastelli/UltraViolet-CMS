@@ -3,7 +3,8 @@
 namespace App\Core;
 
 use App\Core\PhpMailer\PHPMailer;
-require "PHPMailer/PHPMailerAutoload.php";
+use App\Core\PhpMailer\SMTP;
+use App\Core\PhpMailer\Exception;
 
 class Mail
 {
@@ -41,6 +42,9 @@ class Mail
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AddAddress($to);
+
+        $mail->send();
+
         if(!$mail->Send())
         {
             $error ="Please try Later, Error Occured while Processing...";
