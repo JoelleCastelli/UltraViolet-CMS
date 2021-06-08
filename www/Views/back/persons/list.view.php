@@ -1,1 +1,29 @@
-<h2>C'est parti pour le contenu de la page !</h2>
+<?php
+
+?>
+
+<div class="grid-listing-datatables">
+
+
+ <section>
+     <table id="datatable" class="display">
+         <thead>
+             <tr>
+                 <?php
+                    if (isset($columnsTable)) {
+                        foreach ($columnsTable as $key => $value) {
+                            echo "<th>$value</th>";
+                        }
+                    }
+                    ?>
+             </tr>
+         </thead>
+         <tbody>
+         </tbody>
+     </table>
+ </section>
+</div>
+
+
+
+<div class='bubble-actions'>actions</div>

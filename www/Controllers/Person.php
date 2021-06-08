@@ -10,6 +10,30 @@ use App\Models\Person as PersonModel;
 
 class Person
 {
+    protected $columnsTable;
+    protected $actions;
+
+    public function __construct()
+    {
+        $this->columnsTable = [
+            "ID" => 'ID de la personne',
+            "name" => 'Nom et prénom',
+            "subname" => 'Pseudonyme',
+            "mail" => 'Email',
+            "checkMail" => 'Visibilité',
+            "role" => 'Role de la personne',
+            "action" => 'Actions'
+        ];
+
+        $this->actions = [
+            ['name' => 'Changer de role', 'url' => '/admin/person/modifier'],
+            ['name' => 'Changer d\'email', 'url' => '/admin/person/modifier'],
+            ['name' => 'Changer de nom', 'url' => '/admin/person/modifier'],
+            ['name' => 'Changer de pseudo', 'url' => '/admin/person/modifier'],
+            ['name' => 'Supprimer', 'url' => '/admin/person/modifier']
+
+        ];
+    }
 
     public function showAllAction() {
         $view = new View("persons/list");
