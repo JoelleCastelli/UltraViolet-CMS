@@ -76,7 +76,10 @@ class Person
                     $user->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $user->setEmail(htmlspecialchars($_POST['email']));
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
-                    $user->setDefaultProfilePicture();
+                    
+                    //$user->setDefaultProfilePicture();
+                    $user->setMediaId(1);
+                    $user->setEmailConfirmed(1);
 
                     // set emailkey
                     $lengthkey = 15;
@@ -86,9 +89,12 @@ class Person
                     }
                     $user->setEmailKey($key);
 
+                    //Helpers::dd($user);
+
                     $user->save();
+                
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
-                    vous a été envoyé sur " .$_POST['email'].". Cliquez sur le lien dans ce mail avant de vous connecter.");
+                    vous a été envoyé sur " .$_POST['email'].". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
                     Helpers::redirect('/connexion');
                 }
 			}
@@ -120,6 +126,8 @@ class Person
 		//Affichage du résultat
 
 	}
+
+    
 
 	public function showAction(){
 		
