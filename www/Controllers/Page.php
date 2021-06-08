@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Models\Page as PageModel;
