@@ -8,7 +8,7 @@
             <div class="filtering-btn articleState" id="trash">Corbeille</div>
         </div>
 
-        <a class="btn" href="creer-un-article" >Ajouter un article</a>
+        <a class="btn" href="articles/creation" >Ajouter un article</a>
 
     </section>
 
@@ -26,11 +26,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- <?php
-                    if (!empty($articles)) {
-                        
-                    }
-                ?> -->
             </tbody>
         </table>
     </section>
