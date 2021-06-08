@@ -86,7 +86,7 @@ class FormBuilder
                                    $required $disabled>$value</textarea>";
 
             // OTHER INPUTS
-            else {
+            } else {
 
                 $value = $field['value'] ?? '';
                 
