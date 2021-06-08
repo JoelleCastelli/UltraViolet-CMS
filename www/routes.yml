@@ -14,6 +14,13 @@
   controller: Person
   action: logout
 
+/utilisateurs/verification/{pseudo}-{key}:
+  controller: Person
+  action:     verification
+  middleware: Editor
+  pseudo:     ([a-zA-Z]+)
+  emailkey:   (\d+)
+
 /404:
   controller: Main
   action:     page404
