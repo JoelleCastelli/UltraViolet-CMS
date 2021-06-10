@@ -243,4 +243,19 @@ class Database {
         }
     }
 
+    public function first(){
+
+        $query = $this->pdo->query($this->query);
+        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
+        try {
+
+            return $query->fetch();
+
+        }catch (\Exception $e) {
+            echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
+            die();
+        }
+    }
+
 }

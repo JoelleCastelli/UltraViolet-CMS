@@ -92,12 +92,11 @@ class Person
                     $to   = $_POST['email'];
                     $from = 'ultravioletcms@gmail.com';
                     $name = 'Ultaviolet';
-                    $subj = 'PHPMailer 5.2 testing from DomainRacer';
-                    $msg = 'This is mail about testing mailing using PHP.';
-
-                    $mail = new Mail();
+                    $subj = 'Confirmation mail';
+                    $msg = $user->verificationMail($_POST['pseudo'], $key);
                     
-                    $mail->setMail($to, $from, $name, $subj, $msg);
+                    $mail = new Mail();
+                    $mail->sendMail($to, $from, $name, $subj, $msg);
 
                     $user->save();
 
@@ -140,5 +139,31 @@ class Person
 		//Affiche la vue user intégrée dans le template du front
 		$view = new View("user"); 
 	}
-	
+
+    public function verificationAction($pseudo, $key){
+
+        $view = new View("userVerification", "front");
+        $user = new PersonModel();
+        $user = $user->select()->where("pseudo", $pseudo)->andWhere("emailkey", $key)->first();
+        
+        if(!empty($user))
+        {
+            if($user->isEmailConfirmed() != true)
+            {
+                $user->setEmailConfirmed(1);
+
+                $user->save();
+                Helpers::setFlashMessage('success', "Votre compte à bien était activée.");
+                Helpers::redirect('/connexion');
+            }else
+            {
+                Helpers::setFlashMessage('error', "Votre compte est déja activée");
+            }
+
+        }else 
+        {
+            Helpers::setFlashMessage('error', "Aucun utilisateur trouvé");
+        }
+
+	}	
 }

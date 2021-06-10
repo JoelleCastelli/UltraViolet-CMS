@@ -16,44 +16,40 @@ class Mail
 	private string $Password;
 
 	public function __construct(){
-		$this->Host = 'smpt.gmail.com';
-		$this->Port = 465;
-        $this->SMTPSecure = 'ssl';
+		$this->Host = 'smtp.gmail.com';
+		$this->Port = 587;
+        $this->SMTPSecure = 'tls';
 		$this->Username = 'ultravioletcms@gmail.com';
 		$this->Password = 'Ultraviolet123';
 	}
 
-	public function setMail($to, $from, $from_name, $subject, $body) {
+	public function sendMail($to, $from, $from_name, $subject, $msg) {
 		$mail = new PHPMailer();
-        $mail->IsSMTP();
-        $mail->SMTPAuth = true;
+        try {
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                      
+            $mail->SMTPAuth = true;
 
-        $mail->SMTPSecure = $this->SMTPSecure; 
-        $mail->Host = $this->Host;
-        $mail->Port = $this->Port;  
-        $mail->Username = $this->Username;
-        $mail->Password = $this->Password;
-        
-        $mail->IsHTML(true);
-        $mail->From=$this->Username;
-        $mail->FromName=$from_name;
-        $mail->Sender=$from;
-        $mail->AddReplyTo($from, $from_name);
-        $mail->Subject = $subject;
-        $mail->Body = $body;
-        $mail->AddAddress($to);
+            $mail->SMTPSecure = $this->SMTPSecure; 
+            $mail->Host = $this->Host;
+            $mail->Port = $this->Port;  
+            $mail->Username = $this->Username;
+            $mail->Password = $this->Password;
+            
+            $mail->IsHTML(true);
+            $mail->From=$this->Username;
+            $mail->FromName=$from_name;
+            $mail->Sender=$from;
+            $mail->AddReplyTo($from, $from_name);
+            $mail->Subject = $subject;
+            $mail->Body = $msg;
+            $mail->AddAddress($to);
+            $mail->send();
+            Helpers::dd($mail);
 
-        $mail->send();
-
-        if(!$mail->Send())
-        {
-            $error ="Please try Later, Error Occured while Processing...";
-            return $error; 
-        }
-        else 
-        {
-            $error = "Thanks You !! Your email is sent.";  
-            return $error;
+            echo 'Message has been sent';
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
 	}
 

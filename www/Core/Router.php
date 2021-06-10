@@ -61,7 +61,6 @@ class Router {
 
                 $routeData['office'] = $office;
                 if ($routeSlug == $this->requestedUri) return $routeData;
-
                 // If route has parameters, replace name by regex value
                 if (strpos($routeSlug, '{')) {
                     $cleanRoute = str_replace('/', '\/', $routeSlug) ;
