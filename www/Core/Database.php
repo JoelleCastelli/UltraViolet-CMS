@@ -243,4 +243,18 @@ class Database {
         }
     }
 
+    public function generateActionsMenu(): string {
+        $classPath = explode('\\', get_class($this));
+        $class = mb_strtolower(end($classPath));
+
+        $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
+        foreach ($this->getActions() as $action) {
+            if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
+                $actions .= "<a id='".$class.'-'.$action['action'].'-'.$this->getId()."' href='".$action['url']."'>".$action['name']."</a>";
+            }
+        }
+        $actions .= "</div></div>";
+        return $actions;
+    }
+
 }

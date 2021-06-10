@@ -58,13 +58,20 @@ productions_data:
   action:     getProductions
 
 production_update:
-  path:       /admin/productions/modification/{id}-{slug}
+  path:       /admin/productions/modification/{id}
   controller: Production
   action:     updateProduction
   middleware: Editor
   requirements:
     id:       (\d+)
-    slug:     ([a-zA-Z]+)
+
+production_delete:
+  path:       /admin/productions/supprimer/{id}
+  controller: Production
+  action:     deleteProduction
+  middleware: Editor
+  requirements:
+    id:       (\d+)
 
 # COMMENTS
 comments_list:

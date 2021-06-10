@@ -4,197 +4,152 @@ namespace App\Models;
 
 use App\Core\Database;
 use App\Core\FormBuilder;
+use App\Core\Helpers;
 
 class Production extends Database
 {
-    private $id = null;
+    private ?int $id = null;
+    protected ?int $tmdbId = null;
+    protected string $title;
+    protected ?string $originalTitle;
+    protected ?string $releaseDate;
+    protected string $type;
+    protected ?string $overview;
+    protected ?int $runtime;
+    protected ?int $number;
+    protected $deletedAt;
     private $createdAt;
     private $updatedAt;
-    protected $tmdbId = null;
-    protected $title;
-    protected $originalTitle;
-    protected $releaseDate;
-    protected $type;
-    protected $overview;
-    protected $runtime;
-    protected $number;
-    protected $deletedAt;
+    protected ?array $actions = [];
 
     public function __construct()
     {
         parent::__construct();
+        $this->actions = [
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('production_update', ['id' => $this->id])],
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('production_delete', ['id' => $this->id]), 'role' => 'admin'],
+        ];
     }
 
-    /**
-     * @return null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param null $id
-     */
     public function setId($id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTmdbId()
+    public function getTmdbId(): ?int
     {
         return $this->tmdbId;
     }
 
-    /**
-     * @param mixed $tmdbId
-     */
     public function setTmdbId($tmdbId): void
     {
         $this->tmdbId = $tmdbId;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param mixed $title
-     */
     public function setTitle($title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getOriginalTitle()
+    public function getOriginalTitle(): ?string
     {
         return $this->originalTitle;
     }
 
-    /**
-     * @param mixed $originalTitle
-     */
     public function setOriginalTitle($originalTitle): void
     {
         $this->originalTitle = $originalTitle;
     }
 
-    /**
-     * @return mixed
-     */
     public function getReleaseDate()
     {
         return $this->releaseDate;
     }
 
-    /**
-     * @param mixed $releaseDate
-     */
     public function setReleaseDate($releaseDate): void
     {
         $this->releaseDate = $releaseDate;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param mixed $type
-     */
     public function setType($type): void
     {
         $this->type = $type;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getOverview()
+    public function getOverview(): ?string
     {
         return $this->overview;
     }
 
-    /**
-     * @param mixed $overview
-     */
     public function setOverview($overview): void
     {
         $this->overview = $overview;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRuntime()
+    public function getRuntime(): ?int
     {
         return $this->runtime;
     }
 
-    /**
-     * @param mixed $runtime
-     */
     public function setRuntime($runtime): void
     {
         $this->runtime = $runtime;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getNumber()
+    public function getNumber(): ?int
     {
         return $this->number;
     }
 
-    /**
-     * @param mixed $number
-     */
     public function setNumber($number): void
     {
         $this->number = $number;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): string
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getDeletedAt()
+    public function getDeletedAt(): string
     {
         return $this->deletedAt;
     }
 
-    /**
-     * @param mixed $deletedAt
-     */
     public function setDeletedAt($deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
 
+    public function getActions(): ?array {
+        return $this->actions;
+    }
+
+    public function setActions(?array $actions): void {
+        $this->actions = $actions;
+    }
+
     public function cleanReleaseDate() {
         $this->setReleaseDate(date("d/m/Y", strtotime($this->getReleaseDate())));
+    }
+
+    public function getCleanReleaseDate() {
+        return date("d/m/Y", strtotime($this->getReleaseDate()));
     }
 
     public function translateType() {
@@ -230,6 +185,10 @@ class Production extends Database
         }
     }
 
+    public function getCleanRuntime() {
+        return $this->getRuntime()." minutes";
+    }
+
     public function formBuilderAddProduction(){
         return [
             "config" => [
@@ -238,7 +197,7 @@ class Production extends Database
                 "class" => "form_control",
                 "id" => "formAddProduction",
                 "submit" => "Valider",
-                "referer" => '/nouvelle-production'
+                "referer" => '/admin/productions/creation'
             ],
             "fields" => [
                 "type" => [
