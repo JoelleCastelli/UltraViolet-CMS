@@ -10,20 +10,20 @@ class Router {
 	private string $office;
 	private array $middlewares = [];
 	private array $parameters = [];
-    private array $routes = [];
     private array $slugs = [];
+    private string $path;
+    private string $name;
+    public static array $routes = [];
 
 	public function __construct($slug){
 		$this->requestedUri = $slug;
-		$this->loadYaml();
-
-		// Check if route is not in both files
-        if(!empty($this->routes['back'][$this->requestedUri]) && !empty($this->routes['front'][$this->requestedUri]))
-            die("Error: route $this->requestedUri is in both front and back routes files");
+        $this->loadYaml();
 
         // Find route and get info
-        if($this->matchRoute($this->routes)) {
-            $routeData = $this->matchRoute($this->routes);
+        if($this->matchRoute(self::$routes)) {
+            $routeData = $this->matchRoute(self::$routes);
+            $this->setPath($routeData['path']);
+            $this->setName($routeData['routeName']);
             $this->setOffice($routeData['office']);
             $this->setController($routeData["controller"]);
             $this->setAction($routeData["action"]);
@@ -32,7 +32,7 @@ class Router {
             if(isset($routeData["middleware"]))
                 $this->setMiddlewares($routeData["middleware"]);
         } else {
-            Helpers::redirect('/404', 404);
+            Helpers::redirect(Helpers::callRoute('404'), 404);
         }
 	}
 
@@ -51,26 +51,49 @@ class Router {
             $this->slugs[$routeData["controller"]][$routeData["action"]] = $slug;
         }
 
-        $this->routes['back'] = $backRoutes;
-        $this->routes['front'] = $frontRoutes;
+        self::$routes['back'] = $backRoutes;
+        self::$routes['front'] = $frontRoutes;
+
+        $this->checkDuplicatedRoutes(self::$routes);
 	}
+
+    public function checkDuplicatedRoutes($routes) {
+        // Check if front and back routes have common names
+        $duplicatedNames = array_intersect_key($routes['back'], $routes['front']);
+        if(empty($duplicatedNames)) {
+            // Check if path is in both back and front routes
+            $duplicatedPaths = [];
+            foreach ($routes['back'] as $name => $backRouteData) {
+                foreach ($routes['front'] as $name => $frontRouteData) {
+                    if($backRouteData['path'] == $frontRouteData['path']) {
+                        $duplicatedPaths[] = $frontRouteData['path'];
+                        break;
+                    }
+                }
+            }
+            if (!empty($duplicatedPaths)) {
+                die("Back and front routes can't have same path. Duplicated paths: ".implode(', ', $duplicatedPaths));
+            }
+        } else {
+            die("Back and front routes can't have same name. Duplicated names: ".implode(', ', array_keys($duplicatedNames)));
+        }
+    }
 
     protected function matchRoute($routesArray) {
         foreach ($routesArray as $office => $routes) {
-            foreach ($routes as $routeSlug => $routeData) {
+            foreach ($routes as $routeName => $routeData) {
 
                 $routeData['office'] = $office;
-                if ($routeSlug == $this->requestedUri) return $routeData;
+                $routeData['routeName'] = $routeName;
+                if ($routeData['path'] == $this->requestedUri) return $routeData;
 
                 // If route has parameters, replace name by regex value
-                if (strpos($routeSlug, '{')) {
-                    $cleanRoute = str_replace('/', '\/', $routeSlug) ;
+                if (strpos($routeData['path'], '{')) {
+                    $cleanRoute = str_replace('/', '\/', $routeData['path']) ;
                     $yamlParams = [];
-                    foreach ($routeData as $paramName => $regex) {
-                        if(!in_array($paramName, ['controller', 'action', 'middleware', 'office'])) {
-                            $yamlParams[] = $paramName;
-                            $cleanRoute = str_replace('{' . $paramName . '}', $regex, $cleanRoute);
-                        }
+                    foreach ($routeData['requirements'] as $paramName => $regex) {
+                        $yamlParams[] = $paramName;
+                        $cleanRoute = str_replace('{' . $paramName . '}', $regex, $cleanRoute);
                     }
                     // If requested url matches route pattern, return route
                     preg_match('~^' . $cleanRoute . '$~', $this->requestedUri, $matches);
@@ -134,6 +157,22 @@ class Router {
 
     public function setParameters(array $parameters): void {
         $this->parameters = $parameters;
+    }
+
+    public function getPath(): string {
+        return $this->path;
+    }
+
+    public function setPath(string $path): void {
+        $this->path = $path;
+    }
+
+    public function getName(): string {
+        return $this->name;
+    }
+
+    public function setName(string $name): void {
+        $this->name = $name;
     }
 
 }

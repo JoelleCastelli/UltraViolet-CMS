@@ -1,97 +1,119 @@
 # GLOBAL
-/admin:
+admin:
+  path:       /admin
   controller: Main
   action:     default
 
 # PAGES
-/admin/pages:
+pages_list:
+  path:       /admin/pages
   controller: Page
   action:     showAll
 
-/admin/pages/creation:
+page_creation:
+  path:       /admin/pages/creation
   controller: Page
   action:     createPage
 
 # ARTICLES
-/admin/articles:
+articles_list:
+  path:       /admin/articles
   controller: Article
   action:     showAll
 
-/admin/articles/modification:
+article_update:
+  path:       /admin/articles/modification
   controller: Article
   action:     modifyArticle
 
-/admin/tab-change:
+article_tab_change:
+  path:       /admin/tab-change
   controller: Article
   action:     tabChange
 
 # PRODUCTIONS
-/admin/productions:
+productions_list:
+  path:       /admin/productions
   controller: Production
   action:     showAll
 
-/admin/productions/creation:
+productions_creation:
+  path:       /admin/productions/creation
   controller: Production
   action:     addProduction
 
-/admin/productions/creation-tmdb:
+productions_creation_tmdb:
+  path:       /admin/productions/creation-tmdb
   controller: Production
   action:     addProductionTmdb
 
-/admin/productions/tmdb-request:
+productions_tmdb_request:
+  path:       /admin/productions/tmdb-request
   controller: Production
   action:     tmdbRequest
 
-/admin/productions/productions-data:
+productions_data:
+  path:       /admin/productions/productions-data
   controller: Production
   action:     getProductions
 
-/admin/productions/modification/{id}-{name}:
+production_update:
+  path:       /admin/productions/modification/{id}-{slug}
   controller: Production
   action:     updateProduction
   middleware: Editor
-  id:         (\d+)
-  name:       ([a-zA-Z]+)
+  requirements:
+    id:       (\d+)
+    slug:     ([a-zA-Z]+)
 
 # COMMENTS
-/admin/commentaires:
+comments_list:
+  path:       /admin/commentaires
   controller: Comment
   action:     showAll
 
 # TEMPLATES
-/admin/templates:
+templates_lists:
+  path:       /admin/templates
   controller: Template
   action:     showAll
 
 # STATS
-/admin/statistiques:
+stats:
+  path:       /admin/statistiques
   controller: Stats
   action:     showAll
 
 # USERS
-/admin/utilisateurs:
+users_list:
+  path:       /admin/utilisateurs
   controller: Person
   action:     showAll
 
-/admin/utilisateur:
+user_show:
+  path:       /admin/utilisateur
   controller: User
   action:     show
 
-/admin/utilisateurs/creation:
+user_creation:
+  path:       /admin/utilisateurs/creation
   controller: User
   action:     add
 
 # MEDIAS
-/admin/medias:
+media_list:
+  path:       /admin/medias
   controller: Media
   action:     showAll
 
-/admin/medias/chargement:
+media_upload:
+  path:       /admin/medias/chargement
   controller: Media
-  action: upload
+  action:     upload
 
 # SETTINGS
-/admin/parametres:
+settings:
+  path:       /admin/parametres
   controller: Settings
-  action: showAll
+  action:     showAll
   middleware: Admin, Editor, Moderator

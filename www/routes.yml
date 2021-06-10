@@ -1,19 +1,24 @@
-/:
+front_home:
+  path:       /
   controller: Main
   action:     frontHome
 
-/connexion:
+login:
+  path:       /connexion
   controller: Person
   action:     login
 
-/inscription:
+subscription:
+  path:       /inscription
   controller: Person
-  action: register
+  action:     register
 
-/deconnexion:
+logout:
+  path:       /deconnexion
   controller: Person
-  action: logout
+  action:     logout
 
-/404:
+404:
+  path:       /404
   controller: Main
   action:     page404
