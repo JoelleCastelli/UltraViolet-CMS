@@ -124,35 +124,49 @@ class Page
 
             $response = [];
 
-            // $errors = FormValidator::check($form, $_POST);
+            //$errors = FormValidator::check($form, $_POST);
             $errors = '';
 
             if (empty($errors)) {
 
-                /* VERIFICATIONS SLUG */
+                /* VERIFICATIONS AND CLEAN UP SLUG */
                 if (empty($_POST['slug'])) // if slug not specify
                 {
-                    $pattern[] = "/\s+/";
-                    $pattern[] = "/[^A-Za-z0-9\-]/";
-                    $pattern[] = "/-+/";
-
-                    $replacement[] = "-";
+                    $patterns[] = "/[^A-Za-z0-9\-]/"; // only alphabets, numbers and dash
+                    $patterns[] = "/^-+/"; // begin
+                    $patterns[] = "/-+$/"; // end
+                    $patterns[] = "/\s+/"; // space
+                    $patterns[] = "/-+/"; // only one dash
+                    
+                    $replacement[] = "";
+                    $replacement[] = "";
                     $replacement[] = "";
                     $replacement[] = "-";
+                    $replacement[] = "-";
 
-                    $slug = preg_replace($pattern, $replacement, strtolower(trim(htmlspecialchars($_POST["title"]))));
-                   
+                    $unwantedCharacters= array(
+                        'Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
+                        'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U',
+                        'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
+                        'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
+                        'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y'
+                    );
+               
+                    $slug = strtr($_POST["title"], $unwantedCharacters);
+                    $slug = preg_replace($patterns, $replacement, $slug);
+                    $slug = strtolower($slug);
                    
                 } else { // if slug specify
 
                     $slug = htmlspecialchars($_POST["slug"]); 
                 }
                 $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
-
+                
                 if(empty($isNotUniqueSlug)) {
                     
                     $page->setSlug($slug);
 
+                    /* Set State */
                     if ($_POST['state'] == 'draft') {
                         $page->setState('draft');
                         $page->setPublicationDate(htmlspecialchars($_POST['publicationDate']));
@@ -165,7 +179,6 @@ class Page
                     if (!empty($page->getState())) {
 
                         $page->setTitle($_POST["title"]);
-                        $page->setSlug($_POST["slug"]);
                         $page->setPosition(empty($_POST["position"]) ? "2" : $_POST["position"]);
                         $page->setTitleSeo(empty($_POST["titleSEO"]) ? "mon tire seo deuxième" : $_POST["titleSEO"]);
                         $page->setDescriptionSeo(empty($_POST["descriptionSEO"]) ? "ma description seo" : $_POST["descriptionSEO"]);
@@ -197,20 +210,4 @@ class Page
             echo json_encode($response);
         }
     }
-    // if (empty($errors)) {
-    //     $page->setTitle($_POST["title"]);
-    //     $page->setSlug($_POST["slug"]);
-    //     $page->setPosition($_POST["position"]);
-    //     $page->setTitleSeo($_POST["titleSEO"]);
-    //     $page->setDescriptionSeo($_POST["descriptionSEO"]);
-    //     $page->setPublicationDate($_POST["publictionDate"]);
-    //     $page->setState($_POST["state"]);
-
-    //     $page->save();
-    // } else {
-    //     $view = new View("pages/createPage");
-    //     $view->assign("errors", $errors);
-    // }
-
-
 }

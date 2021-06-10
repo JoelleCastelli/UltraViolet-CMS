@@ -361,7 +361,7 @@ class Page extends Database implements JsonSerializable
                 "title" => [
                     "type" => "text",
                     "placeholder" => "Animées",
-                    "label" => "Votre Titre :",
+                    "label" => "Votre Titre * :",
                     "class" => "search-bar",
                     "error" => "Votre titre doit faire entre 2 et 25 caractères",
                 ],
@@ -375,7 +375,7 @@ class Page extends Database implements JsonSerializable
                 "position" => [
                     "type" => "text",
                     "placeholder" => "3",
-                    "label" => "Position :",
+                    "label" => "Position * :",
                     "class" => "search-bar",
                     "error" => "Votre position doit étre entre 1 et 4",
                 ],
@@ -395,7 +395,7 @@ class Page extends Database implements JsonSerializable
                 ],
                 "state" => [
                     "type" => "radio",
-                    // "label" => "État :",
+                    "label" => "État * :",
                     "class" => "",
                     "error" => "Erreur test",
                     "options" => [
