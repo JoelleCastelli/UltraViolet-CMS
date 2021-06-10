@@ -4,17 +4,21 @@
         <meta charset="UTF-8">
         <title>UltraViolet - <?= $title ?? ' Back office'?></title>
         <meta name="description" content="UltraViolet - Back office">
+        <meta name="robots" content="noindex">
+
+        <!--JS-->
         <script src="<?=PATH_TO_DIST.'main.js'?>"></script>
         <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-        <!--<script type="text/javascript" charset="utf8" src=""></script>-->
-        <link rel="stylesheet" href="<?=PATH_TO_DIST.'main.css'?>">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
-        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
         <?php if(isset($headScripts) && !empty($headScripts)) {
             foreach ($headScripts as $script) {
                 echo "<script src='$script'></script>";
             }
         }?>
+
+        <!--CSS-->
+        <link rel="stylesheet" href="<?=PATH_TO_DIST.'main.css'?>">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     </head>
 
     <body class="preload">
