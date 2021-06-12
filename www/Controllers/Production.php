@@ -22,23 +22,36 @@ class Production
             "overview" => 'Résumé',
             "actions" => 'Actions'
         ];
-
-        $this->actions = [
-            ['name' => 'Modifier', 'url' => '/admin/productions/modifier'],
-            ['name' => 'Supprimer', 'url' => '/admin/productions/modifier'],
-        ];
     }
 
     public function showAllAction() {
-        $productions = new ProductionModel();
-        $productions = $productions->selectWhere('type', 'movie');
-
-        if(!$productions) $productions = [];
-
         $view = new View("productions/list");
         $view->assign('title', 'Productions');
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/productions.js']);
+    }
+
+    public function getProductionsAction() {
+        if(!empty($_POST['productionType'])) {
+            $productions = new ProductionModel();
+            $productions = $productions->selectWhere('type', htmlspecialchars($_POST['productionType']));
+            if(!$productions) $productions = [];
+
+            $productionArray = [];
+            foreach ($productions as $production) {
+                $productionArray[] = [
+                    $this->columnsTable['title'] => $production->getTitle(),
+                    $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
+                    $this->columnsTable['releaseDate'] => $production->getCleanReleaseDate(),
+                    $this->columnsTable['overview'] => $production->getOverview(),
+                    $this->columnsTable['runtime'] => $production->getCleanRuntime(),
+                    $this->columnsTable['actions'] => $production->generateActionsMenu(),
+                    // TODO supprimer overview + ajouter et trier par createdAd
+                ];
+            }
+
+            echo json_encode(["productions" => $productionArray]);
+        }
     }
 
     public function addProductionAction() {
@@ -225,40 +238,11 @@ class Production
         return $results;
     }
 
-    public function getProductionsAction() {
-        if(!empty($_POST['productionType'])) {
-            $productions = new ProductionModel();
-            $productions = $productions->selectWhere('type', htmlspecialchars($_POST['productionType']));
-            if(!$productions) $productions = [];
-            $actions = "<div class='actionsDropdown'>";
-            foreach ($this->actions as $action) {
-                $actions .= "<a href='".$action['url']."'>".$action['name']."</a>";
-            }
-            $actions .= "</div>";
 
-            $productionArray = [];
-            foreach ($productions as $production) {
-                $productionArray[] = [
-                    $this->columnsTable['title'] => $production->getTitle(),
-                    $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
-                    $this->columnsTable['overview'] => $production->getOverview(),
-                    $this->columnsTable['releaseDate'] => date("d/m/Y", strtotime($production->getReleaseDate())),
-                    $this->columnsTable['runtime'] => $production->getRuntime()." minutes",
-                    $this->columnsTable['actions'] => "<div class='bubble-actions'>$actions</div>",
-                ];
-            }
 
-            echo json_encode([
-                "productions" => $productionArray,
-                "columns" => $this->columnsTable,
-            ]);
-        }
-    }
-
-    public function updateProductionAction($mot, $id) {
+    public function updateProductionAction($id) {
         $view = new View("productions/update");
         $view->assign('title', 'Update de production');
-        $view->assign('param1', $mot);
         $view->assign('param2', $id);
     }
 

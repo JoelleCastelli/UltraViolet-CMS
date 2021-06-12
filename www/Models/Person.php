@@ -195,6 +195,23 @@ class Person extends Database
         }
     }
 
+    public function checkRights($role): bool {
+        switch ($role) {
+            case 'moderator':
+                if (in_array($this->getRole(), ['admin', 'editor', 'moderator'])) return true;
+                break;
+            case 'editor':
+                if (in_array($this->getRole(), ['admin', 'editor'])) return true;
+                break;
+            case 'admin':
+                if ($this->getRole() == 'admin') return true;
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
+
     public function setDefaultProfilePicture() {
         if(file_exists(PATH_TO_IMG.'default.jpg')) {
             $media = new Media();
@@ -205,7 +222,7 @@ class Person extends Database
                 die("Default image is not in database");
             }
         } else {
-            die("Default image file does not existe");
+            die("Default image file does not exist");
         }
     }
 

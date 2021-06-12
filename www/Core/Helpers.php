@@ -48,4 +48,20 @@ class Helpers{
     public static function urlJS(string $url) {
         return self::urlBase() . "src/js/" . $url . ".js";
     }
+
+    public static function callRoute(string $name, array $params = []): string {
+        foreach (Router::$routes as $office => $routes) {
+            foreach ($routes as $routeName => $routeData) {
+                if ($name == $routeName) {
+                    if(array_key_exists('requirements', $routeData)) {
+                        foreach ($routeData['requirements'] as $paramName => $regex) {
+                            $routeData['path'] = str_replace('{' . $paramName . '}', $params[$paramName], $routeData['path']);
+                        }
+                    }
+                    return $routeData['path'];
+                }
+            }
+        }
+        die($name.': route name not found');
+    }
 }

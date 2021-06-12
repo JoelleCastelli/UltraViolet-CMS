@@ -1,18 +1,22 @@
-/:
+front_home:
+  path:       /
   controller: Main
   action:     frontHome
 
-/connexion:
+login:
+  path:       /connexion
   controller: Person
   action:     login
 
-/inscription:
+subscription:
+  path:       /inscription
   controller: Person
-  action: register
+  action:     register
 
-/deconnexion:
+logout:
+  path:       /deconnexion
   controller: Person
-  action: logout
+  action:     logout
 
 /utilisateurs/verification/{pseudo}-{key}:
   controller: Person
@@ -20,6 +24,7 @@
   pseudo:     ([a-zA-Z0-9-_]{2,25})
   key:        (\d+)
 
-/404:
+404:
+  path:       /404
   controller: Main
   action:     page404
