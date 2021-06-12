@@ -20,7 +20,7 @@ class Production extends Database
     protected $deletedAt;
     private $createdAt;
     private $updatedAt;
-    protected ?array $actions = [];
+    private ?array $actions = [];
 
     public function __construct()
     {
