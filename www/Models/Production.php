@@ -149,7 +149,11 @@ class Production extends Database
     }
 
     public function getCleanReleaseDate() {
-        return date("d/m/Y", strtotime($this->getReleaseDate()));
+        if ($this->getReleaseDate() != '') {
+            return date("d/m/Y", strtotime($this->getReleaseDate()));
+        } else {
+            return "-";
+        }
     }
 
     public function translateType() {
@@ -186,7 +190,11 @@ class Production extends Database
     }
 
     public function getCleanRuntime() {
-        return $this->getRuntime()." minutes";
+        if($this->getRuntime() != '') {
+            return $this->getRuntime()." minutes";
+        } else {
+            return "-";
+        }
     }
 
     public function formBuilderAddProduction(){
