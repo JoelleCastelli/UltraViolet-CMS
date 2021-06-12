@@ -63,18 +63,19 @@ class Production
             $errors = FormValidator::check($form, $_POST);
 
             if(empty($errors)) {
-                // Mandatory
-                $production->setTitle(htmlspecialchars($_POST["title"]));
-                $production->setType(htmlspecialchars($_POST["type"]));
+                // Dynamic setters
+                foreach ($_POST as $key => $value) {
+                    if ($key !== 'csrfToken' && $value !== '') {
+                        if(!empty($value)) {
+                            $functionName = "set".ucfirst($key);
+                            $production->$functionName(htmlspecialchars($value));
+                        }
 
-                // Optional
-                $production->setOriginalTitle(htmlspecialchars($_POST["originalTitle"]) ?? '');
-                $production->setReleaseDate(htmlspecialchars($_POST["releaseDate"]) ?? '');
-                $production->setOverview(htmlspecialchars($_POST["overview"]) ?? '');
-                $production->setRuntime(htmlspecialchars($_POST["runtime"]) ?? '');
-                $production->setNumber(htmlspecialchars($_POST["number"]) ?? '');
-
+                    }
+                }
                 $production->save();
+                Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
+                Helpers::redirect(Helpers::callRoute('productions_list'));
             } else {
                 $view->assign("errors", $errors);
             }
