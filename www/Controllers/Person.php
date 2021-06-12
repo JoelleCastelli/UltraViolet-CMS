@@ -77,9 +77,8 @@ class Person
                     $user->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $user->setEmail(htmlspecialchars($_POST['email']));
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
-                    // $user->setDefaultProfilePicture();
-                    $user->setMediaId(1);
-                    $user->setEmailConfirmed(1);
+                    $user->setDefaultProfilePicture();
+                    $user->setEmailConfirmed(0);
 
                     // set emailkey
                     $lengthkey = 15;
