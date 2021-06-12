@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
+use App\Core\Mail;
 use App\Models\Person as PersonModel;
 
 class Person
@@ -77,6 +78,7 @@ class Person
                     $user->setEmail(htmlspecialchars($_POST['email']));
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                     $user->setDefaultProfilePicture();
+                    $user->setEmailConfirmed(0);
 
                     // set emailkey
                     $lengthkey = 15;
@@ -86,7 +88,17 @@ class Person
                     }
                     $user->setEmailKey($key);
 
+                    $to   = $_POST['email'];
+                    $from = 'ultravioletcms@gmail.com';
+                    $name = 'Ultaviolet';
+                    $subj = 'Confirmation mail';
+                    $msg = $user->verificationMail($_POST['pseudo'], $key);
+                    
+                    $mail = new Mail();
+                    $mail->sendMail($to, $from, $name, $subj, $msg);
+
                     $user->save();
+
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
                     vous a été envoyé sur " .$_POST['email'].". Cliquez sur le lien dans ce mail avant de vous connecter.");
                     Helpers::redirect('/connexion');
@@ -126,5 +138,52 @@ class Person
 		//Affiche la vue user intégrée dans le template du front
 		$view = new View("user"); 
 	}
+
+    public function verificationAction($pseudo, $key){
+
+<<<<<<< HEAD
+        $view = new View("userVerification", "front");
+        $user = new PersonModel();
+        $user = $user->select()->where("pseudo", $pseudo)->andWhere("emailkey", $key)->first();
+        
+        if(!empty($user))
+        {
+            if($user->isEmailConfirmed() != true)
+=======
+        $user = new PersonModel();
+        $user = $user->findOneBy("pseudo", $pseudo)->andWhere("emailkey", $key);
+        if(!empty($user))
+        {
+            if($user->isEmailConfirmed() != 1)
+>>>>>>> de3f689a167e89797217d2342d906c2ad956bc2d
+            {
+                $user->setEmailConfirmed(1);
+
+                $user->save();
+<<<<<<< HEAD
+                Helpers::setFlashMessage('success', "Votre compte à bien était activée.");
+                Helpers::redirect('/connexion');
+            }else
+            {
+                Helpers::setFlashMessage('error', "Votre compte est déja activée");
+=======
+            }else
+            {
+                Helpers::setFlashMessage('success', "Votre à bien était activée.");
+                Helpers::redirect('/connexion');
+>>>>>>> de3f689a167e89797217d2342d906c2ad956bc2d
+            }
+
+        }else 
+        {
+            Helpers::setFlashMessage('error', "Aucun utilisateur trouvé");
+        }
+
+<<<<<<< HEAD
+	}	
+=======
+		$view = new View("user"); 
+	}
 	
+>>>>>>> de3f689a167e89797217d2342d906c2ad956bc2d
 }
