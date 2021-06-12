@@ -11,7 +11,6 @@ class Production
 {
 
     protected $columnsTable;
-    protected $actions;
 
     public function __construct() {
         $this->columnsTable = [
