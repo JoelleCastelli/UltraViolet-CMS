@@ -2,8 +2,7 @@ $(document).ready( function () {
 
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable( {
-        
-        // All columns    
+        "order": [],
         columns: [
             { 
                 data: 'Titre',
