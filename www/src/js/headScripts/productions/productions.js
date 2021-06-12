@@ -3,40 +3,31 @@ $(document).ready( function () {
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable( {
         "order": [],
+        "autoWidth": false,
         columns: [
-            { 
-                data: 'Titre',
-                className: 'datatable-column-title'
-            },
-            { 
-                data: 'Titre original',
-                className: 'datatable-column-original-title'
-            },
-            { 
-                data: 'Date de sortie',
-                className: 'datatable-column-release-date'
-            },
-            { 
-                data: 'Durée',
-                className: 'datatable-column-runtime'
-            },
-            { 
-                data: 'Résumé',
-                className: 'datatable-column-overview'
-            },
-            { 
-                data: 'Actions',
-                className: 'datatable-column-actions'
-            }
+            { data: 'Titre' },
+            { data: 'Titre original' },
+            { data: 'Durée' },
+            { data: 'Date de sortie' },
+            { data: 'Date d\'ajout' },
+            { data: 'Actions' }
         ],
 
-        // Column Actions 
-        columnDefs: [{
-            targets: 5,
-            data: "Actions",
-            searchable: false,
-            orderable: false
-        }],
+        columnDefs: [
+            {
+                targets: 5,
+                data: "name",
+                searchable: false,
+                orderable: false
+            },
+            { width: "19%", targets: 0 },
+            { width: "19%", targets: 1 },
+            { width: "19%", targets: 2 },
+            { width: "19%", targets: 3 },
+            { width: "19%", targets: 4 },
+            { width: "5%", targets: 5 },
+        ],
+
 
         language: {
             "sEmptyTable":     "Aucune donnée disponible dans le tableau",

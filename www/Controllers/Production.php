@@ -16,9 +16,9 @@ class Production
         $this->columnsTable = [
             "title" => 'Titre',
             "originalTitle" => 'Titre original',
-            "releaseDate" => 'Date de sortie',
             "runtime" => 'Durée',
-            "overview" => 'Résumé',
+            "releaseDate" => 'Date de sortie',
+            "createdAt" => 'Date d\'ajout',
             "actions" => 'Actions'
         ];
     }
@@ -33,7 +33,7 @@ class Production
     public function getProductionsAction() {
         if(!empty($_POST['productionType'])) {
             $productions = new ProductionModel();
-            $productions = $productions->selectWhere('type', htmlspecialchars($_POST['productionType']));
+            $productions = $productions->select()->where('type', htmlspecialchars($_POST['productionType']))->orderBy('createdAt', 'DESC')->get();
             if(!$productions) $productions = [];
 
             $productionArray = [];
@@ -41,11 +41,10 @@ class Production
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
                     $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
-                    $this->columnsTable['releaseDate'] => $production->getCleanReleaseDate(),
-                    $this->columnsTable['overview'] => $production->getOverview(),
                     $this->columnsTable['runtime'] => $production->getCleanRuntime(),
+                    $this->columnsTable['releaseDate'] => $production->getCleanReleaseDate(),
+                    $this->columnsTable['createdAt'] => $production->getCleanCreatedAt(),
                     $this->columnsTable['actions'] => $production->generateActionsMenu(),
-                    // TODO supprimer overview + ajouter et trier par createdAd
                 ];
             }
 

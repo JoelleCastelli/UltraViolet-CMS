@@ -197,6 +197,11 @@ class Production extends Database
         }
     }
 
+    public function getCleanCreatedAt(): string
+    {
+        return date("d/m/Y",strtotime($this->getCreatedAt()));
+    }
+
     public function formBuilderAddProduction(){
         return [
             "config" => [
