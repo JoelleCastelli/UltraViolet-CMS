@@ -116,7 +116,6 @@ class Database {
     }
 
     public function delete() {
-
         if ($this->getDeletedAt()) // hard
         {
 
@@ -134,8 +133,6 @@ class Database {
             $this->setDeletedAt(Helpers::getCurrentTimestamp());
             $this->save();
         }
-
-
 }
 
     public function count($column = "*")
@@ -218,9 +215,8 @@ class Database {
     }
 
     public function orderBy($column, $order = "ASC") {
-
         if($this->order == 0) {
-            $this->query .= "ORDER BY " . $column . " " . $order . "' ";
+            $this->query .= "ORDER BY '" . $column . "' " . $order . " ";
             $this->order++;
         }
         else
@@ -229,14 +225,10 @@ class Database {
     }
 
     public function get(){
-
         $query = $this->pdo->query($this->query);
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
-
         try {
-
             return $query->fetchAll();
-
         }catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
