@@ -67,10 +67,15 @@ $(document).ready(function() {
     });
 
     $('#datatable tbody').on('click', '.switch-visibily-page', function() {
-
         console.log('ouiiii');
     });
 
+    setInterval(function() {
+        console.log($('.fadeOut').css('opacity'));
+        if ($('.fadeOut').css('opacity') == 0)
+            $('.fadeOut').remove();
+
+    }, 3000);
 })
 
 /* Message Error and Success */
