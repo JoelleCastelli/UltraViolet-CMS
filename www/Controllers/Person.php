@@ -11,26 +11,15 @@ use App\Models\Person as PersonModel;
 class Person
 {
     protected $columnsTable;
-    protected $actions;
 
     public function __construct()
     {
         $this->columnsTable = [
-            "ID" => 'ID de la personne',
             "name" => 'Nom et prénom',
-            "subname" => 'Pseudonyme',
+            "pseudo" => 'Pseudonyme',
             "mail" => 'Email',
-            "checkMail" => 'Visibilité',
-            "role" => 'Role de la personne',
-            "action" => 'Actions'
-        ];
-
-        $this->actions = [
-            ['name' => 'Changer de role', 'url' => '/admin/person/modifier'],
-            ['name' => 'Changer d\'email', 'url' => '/admin/person/modifier'],
-            ['name' => 'Changer de nom', 'url' => '/admin/person/modifier'],
-            ['name' => 'Changer de pseudo', 'url' => '/admin/person/modifier'],
-            ['name' => 'Supprimer', 'url' => '/admin/person/modifier']
+            "checkMail" => 'Verification email',
+            "actions" => 'Actions'
         ];
     }
 
@@ -120,8 +109,7 @@ class Person
                     }
                     $user->setEmailKey($key);
 
-                    //Helpers::dd($user);
-
+                
                     $user->save();
                 
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
@@ -132,6 +120,28 @@ class Person
             $view->assign("errors", $errors);
 		}
 	}
+
+    public function getUsersAction() {
+        if(!empty($_POST['role'])) {
+            $users = new PersonModel();
+            $users = $users->selectWhere('role', htmlspecialchars($_POST['role']));
+            
+            if(!$users) $users = [];
+            
+            $usersArray = [];
+            foreach ($users as $user) {
+                $usersArray[] = [
+                    $this->columnsTable['name'] => $user->getFullName(),
+                    $this->columnsTable['pseudo'] => $user->getPseudo(),
+                    $this->columnsTable['mail'] => $user->getEmail(),
+                    $this->columnsTable['checkMail'] => $user->isEmailConfirmed(),
+                    $this->columnsTable['actions'] => $user->generateActionsMenu(),
+                ];
+            }
+           
+            echo json_encode(["users" => $usersArray]);
+        }
+    }
 
 	public function logoutAction() {
         session_destroy();

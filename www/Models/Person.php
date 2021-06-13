@@ -23,6 +23,7 @@ class Person extends Database
     protected ?string $deletedAt;
     protected string $role = 'user';
     protected bool $emailConfirmed = false;
+    private ?array $actions = [];
 
     // Foreign properties
     protected int $mediaId;
@@ -31,6 +32,10 @@ class Person extends Database
     public function __construct() {
         parent::__construct();
         $this->media = new Media();
+        $this->actions = [
+            ['name' => 'Modifier','action'=> 'modify', 'url' => '/admin/utilisateurs/modifier'],
+            ['name' => 'Supprimer', 'action'=> 'delete', 'url' => '/admin/utilisateurs/supprimer']
+        ];
     }
 
     public function getId(): ?int {
@@ -117,8 +122,17 @@ class Person extends Database
         return $this->emailConfirmed;
     }
 
+    
     public function setEmailConfirmed(bool $emailConfirmed): void {
         $this->emailConfirmed = $emailConfirmed;
+    }
+
+    public function getActions(): ?array {
+        return $this->actions;
+    }
+
+    public function setActions(?array $actions): void {
+        $this->actions = $actions;
     }
 
     public function getMediaId(): int {

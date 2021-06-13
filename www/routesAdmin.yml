@@ -116,14 +116,19 @@ users_list:
   controller: Person
   action:     showAll
 
+users_data:
+  path:       /admin/utilisateurs/utilisateurs-data
+  controller: Person
+  action:     getUsers
+
 user_show:
   path:       /admin/utilisateur
-  controller: User
+  controller: Person
   action:     show
 
 user_creation:
   path:       /admin/utilisateurs/creation
-  controller: User
+  controller: Person
   action:     add
 
 # MEDIAS

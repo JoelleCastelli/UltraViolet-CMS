@@ -8,39 +8,36 @@ $(document).ready(function () {
         // All columns    
         columns: [
             {
-                data: 'ID',
+                data: 'Nom et prénom',
             },
             {
-                data: 'Nom',
-
+                data: 'Pseudonyme',
+                
             },
             {
-                data: 'Pseudo',
-                width: "10%"
-
+                data: 'Email',
+                
             },
             {
-                data: '@',
-                width: "15%"
-
-            },
+                data: 'Verification email',
+                            },
             {
-                data: '@ vérifier',
-                width: "10%"
-            },
-            {
-                data: 'Rôle',
-                width: "10%"
+                data: 'Actions',
             }
         ],
 
         // Column Actions 
-        columnDefs: [{
-            targets: 5,
+        columnDefs: [
+            
+            
+
+            {
+            targets: 4,
             data: "Actions",
             searchable: false,
             orderable: false
         }],
+        
 
         language: {
             "sEmptyTable": "Aucune donnée disponible dans le tableau",
@@ -73,69 +70,7 @@ $(document).ready(function () {
         },
     });
 
-    /* FILTERS */
-    // On start, display published pages
-    getPagesByType('published');
-    $("#published").addClass('active');
-
-    // Display different types on filtering button click
-    $(".filtering-btn").click(function () {
-        console.log('yes');
-        $(".filtering-btn").removeClass('active');
-        $(this).addClass('active');
-        getPagesByType(this.id)
-    });
-
-    function getPagesByType(pageType) {
-        $.ajax({
-            type: 'POST',
-            url: '/admin/pages/pages-data',
-            data: { pageType },
-            dataType: 'json',
-            success: function (response) {
-                table.clear();
-                table.rows.add(response.pages).draw();
-            },
-            error: function () {
-                console.log("Erreur dans la récupération des pages de type " + pageType);
-            }
-        });
-    }
-
-    /* FORM ADD PAGE*/
-    $('.form-add-page').submit(function (event) {
-        event.preventDefault();
-
-        if ($('#add-page-modal').hasClass('modal-visible')) {
-
-            $.ajax({
-                type: 'POST',
-                url: '/admin/pages/creation',
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function (response) {
-                    if (response['success'])
-                        $('#add-page-modal .container-message').html(successMessageForm(response['message']));
-                    else 
-                        $('#add-page-modal .container-message').html(errorMessageForm(response['message']));
-
-                },
-                error: function (response, statut, erreur) {
-                    $('#add-page-modal .container-message').html(errorMessageForm(response.responseText));
-                }
-            });
-        } 
-    })
-
-    /* CHANGE VISIBILITY PAGE */
-    $('.switch-visibily-page').click(function(){
-        console.log('yes');
-    });
-
-    $('bubble-actions').click(function(){
-        console.log('click');
-    });
-
+          
     // On page load, display movies
     getUsersByRole('user');
 
@@ -143,11 +78,18 @@ $(document).ready(function () {
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
         $(this).addClass('active');
-        getUsersByRole(this.id)
+        table.columns( [0] ).visible( true );
+        if(this.id === "user") {
+            table.columns( [0] ).visible( false );
+        }
+        getUsersByRole(this.id);
+        
+
     });
 
     function getUsersByRole(role) {
         $.ajax({
+
             type: 'POST',
             url: '/admin/utilisateurs/utilisateurs-data',
             data: { role },
