@@ -2,11 +2,7 @@
 
 namespace App\Controller;
 
-<<<<<<< HEAD
-
-=======
 use App\Core\Helpers;
->>>>>>> 75db105 (update view page and add page functionality)
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Models\Page as PageModel;

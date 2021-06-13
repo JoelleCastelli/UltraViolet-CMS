@@ -107,15 +107,10 @@ class Person
                     $user->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $user->setEmail(htmlspecialchars($_POST['email']));
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
-<<<<<<< HEAD
-                    $user->setDefaultProfilePicture();
-                    $user->setEmailConfirmed(0);
-=======
                     
                     //$user->setDefaultProfilePicture();
                     $user->setMediaId(1);
                     $user->setEmailConfirmed(1);
->>>>>>> add-table-CRUS-Person
 
                     // set emailkey
                     $lengthkey = 15;
@@ -125,24 +120,10 @@ class Person
                     }
                     $user->setEmailKey($key);
 
-<<<<<<< HEAD
-                    $to   = $_POST['email'];
-                    $from = 'ultravioletcms@gmail.com';
-                    $name = 'Ultaviolet';
-                    $subj = 'Confirmation mail';
-                    $msg = $user->verificationMail($_POST['pseudo'], $key);
-                    
-                    $mail = new Mail();
-                    $mail->sendMail($to, $from, $name, $subj, $msg);
-
-                    $user->save();
-
-=======
                     //Helpers::dd($user);
 
                     $user->save();
                 
->>>>>>> add-table-CRUS-Person
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
                     vous a été envoyé sur " .$_POST['email'].". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
                     Helpers::redirect('/connexion');
