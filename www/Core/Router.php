@@ -86,7 +86,7 @@ class Router {
                 $routeData['office'] = $office;
                 $routeData['routeName'] = $routeName;
                 if ($routeData['path'] == $this->requestedUri) return $routeData;
-
+              
                 // If route has parameters, replace name by regex value
                 if (strpos($routeData['path'], '{')) {
                     $cleanRoute = str_replace('/', '\/', $routeData['path']) ;

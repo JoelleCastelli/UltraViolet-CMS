@@ -243,6 +243,21 @@ class Database {
         }
     }
 
+    public function first(){
+
+        $query = $this->pdo->query($this->query);
+        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
+        try {
+
+            return $query->fetch();
+
+        }catch (\Exception $e) {
+            echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
+            die();
+        }
+    }
+  
     public function generateActionsMenu(): string {
         $classPath = explode('\\', get_class($this));
         $class = mb_strtolower(end($classPath));

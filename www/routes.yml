@@ -18,6 +18,18 @@ logout:
   controller: Person
   action:     logout
 
+verification:
+  path:       /utilisateurs/verification/{pseudo}-{key}
+  controller: Person
+  action:     verification
+  pseudo:     ([a-zA-Z0-9-_]{2,25})
+  key:        (\d+)
+
+forget_password:
+  path:       /forget_password
+  controller: Person
+  action:     forgetPassword
+
 404:
   path:       /404
   controller: Main
