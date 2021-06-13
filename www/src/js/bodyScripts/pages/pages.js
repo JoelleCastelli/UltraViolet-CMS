@@ -1,6 +1,6 @@
 let a = 0;
 let b = 0;
-$(document).ready(function () {
+$(document).ready(function() {
 
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable({
@@ -79,8 +79,7 @@ $(document).ready(function () {
     $("#published").addClass('active');
 
     // Display different types on filtering button click
-    $(".filtering-btn").click(function () {
-        console.log('yes');
+    $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
         $(this).addClass('active');
         getPagesByType(this.id)
@@ -89,50 +88,51 @@ $(document).ready(function () {
     function getPagesByType(pageType) {
         $.ajax({
             type: 'POST',
-            url: '/admin/pages/pages-data',
+            url: callRoute('pages-data'),
             data: { pageType },
             dataType: 'json',
-            success: function (response) {
+            async: false,
+            success: function(response) {
                 table.clear();
                 table.rows.add(response.pages).draw();
             },
-            error: function () {
+            error: function() {
                 console.log("Erreur dans la récupération des pages de type " + pageType);
             }
         });
     }
 
     /* FORM ADD PAGE*/
-    $('.form-add-page').submit(function (event) {
+    $('.form-add-page').submit(function(event) {
         event.preventDefault();
 
         if ($('#add-page-modal').hasClass('modal-visible')) {
 
             $.ajax({
                 type: 'POST',
-                url: '/admin/pages/creation',
+                url: callRoute('page_creation'),
                 data: $(this).serialize(),
                 dataType: 'json',
-                success: function (response) {
+                success: function(response) {
                     if (response['success'])
                         $('#add-page-modal .container-message').html(successMessageForm(response['message']));
-                    else 
+                    else
                         $('#add-page-modal .container-message').html(errorMessageForm(response['message']));
 
                 },
-                error: function (response, statut, erreur) {
+                error: function(response, statut, erreur) {
                     $('#add-page-modal .container-message').html(errorMessageForm(response.responseText));
                 }
             });
-        } 
+        }
     })
 
     /* CHANGE VISIBILITY PAGE */
-    $('.switch-visibily-page').click(function(){
-        console.log('yes');
+    $('.switch-visibily-page').click(function() {
+        // console.log('yes');
     });
 
-    $('bubble-actions').click(function(){
+    $('bubble-actions').click(function() {
         console.log('click');
     });
 
