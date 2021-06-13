@@ -98,6 +98,7 @@ $(document).ready(function() {
             },
             error: function() {
                 console.log("Erreur dans la récupération des pages de type " + pageType);
+
             }
         });
     }
@@ -121,7 +122,7 @@ $(document).ready(function() {
 
                 },
                 error: function(response, statut, erreur) {
-                    $('#add-page-modal .container-message').html(errorMessageForm(response.responseText));
+                    $('.header').after(errorMessageForm(errorServerJS));
                 }
             });
         }

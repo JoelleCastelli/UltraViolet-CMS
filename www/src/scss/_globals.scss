@@ -99,3 +99,38 @@ a:active {
 .hidden {
 	visibility: hidden;
 }
+
+.fadeOut {
+    animation: 3s fadeOut 1s forwards; // duration, animation, delay, fill-mode
+
+    -webkit-animation:3s fadeOut 1s forwards;
+    -moz-animation:3s fadeOut 1s forwards;
+}
+@-webkit-keyframes fadeOut {
+    from {
+        opacity:1;
+
+    }
+    to {
+        opacity:0;
+    }
+}
+@-moz-keyframes fadeOut {
+    from {
+        opacity:1;
+		
+
+    }
+    to {
+        opacity:0;
+    }
+}
+@keyframes fadeOut {
+    from {
+        opacity:1;
+
+    }
+    to {
+        opacity:0;
+    }
+}
