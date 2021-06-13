@@ -22,11 +22,8 @@ class Article extends Database implements JsonSerializable
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
-    protected $contentCreatedAt;
-    protected $contentDeletedAt;
-    protected $uvtr_media_id;
+    protected $media_id;
     protected $personId;
-
 
     public $media;
     public $person;
@@ -222,38 +219,6 @@ class Article extends Database implements JsonSerializable
     }
 
     /**
-     * @return mixed
-     */
-    public function getContentCreatedAt()
-    {
-        return $this->contentCreatedAt;
-    }
-
-    /**
-     * @param mixed $contentCreatedAt
-     */
-    public function setContentCreatedAt($contentCreatedAt): void
-    {
-        $this->contentCreatedAt = $contentCreatedAt;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getContentDeletedAt()
-    {
-        return $this->contentDeletedAt;
-    }
-
-    /**
-     * @param mixed $contentDeletedAt
-     */
-    public function setContentDeletedAt($contentDeletedAt): void
-    {
-        $this->contentDeletedAt = $contentDeletedAt;
-    }
-
-    /**
      * @return Media
      */
     public function getMedia(): Media
@@ -290,33 +255,17 @@ class Article extends Database implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getUvtrMediaId()
+    public function getMediaId()
     {
-        return $this->uvtr_media_id;
+        return $this->media_id;
     }
 
     /**
-     * @param mixed $uvtr_media_id
+     * @param mixed $media_id
      */
-    public function setUvtrMediaId($uvtr_media_id): void
+    public function setMediaId($media_id): void
     {
-        $this->uvtr_media_id = $uvtr_media_id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUvtrPersonId()
-    {
-        return $this->uvtr_person_id;
-    }
-
-    /**
-     * @param mixed $uvtr_media_id
-     */
-    public function setUvtrPersonId($uvtr_person_id): void
-    {
-        $this->uvtr_person_id = $uvtr_person_id;
+        $this->media_id = $media_id;
     }
 
     public function findAll() {
@@ -353,7 +302,6 @@ class Article extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "form_create_article",
                 "submit" => "Créer un article",
-                "referer" => '/creer-un-article'
             ],
             "fields" => [
                 "csrf_token" => [
@@ -362,7 +310,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Titre de l article",
+                    "placeholder" => "Titre de l'article",
                     "minLength" => 2,
                     "maxLength" => 100,
                     "class" => "input",
@@ -372,21 +320,21 @@ class Article extends Database implements JsonSerializable
                 ],
                 "description" => [
                     "type" => "text",
-                    "placeholder" => "Description de l article",
+                    "placeholder" => "Description de l'article",
                     "minLength" => 2,
                     // "class" => "input",
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
                 ],
-                "content" => [
-                    "type" => "textarea",
-                    "placeholder" => "Contenu de l article",
-                    "minLength" => 2,
-                    // "maxLength" => 255,
-                    "class" => "input",
-                    "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
-                    "required" => true,
-                ],
+                 "content" => [
+                     "type" => "textarea",
+                     "placeholder" => "Contenu de l article",
+                     "minLength" => 2,
+                     // "maxLength" => 255,
+                     "class" => "input",
+                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
+                     "required" => true,
+                 ],
                 "state"=>[
                     "type"=>"radio",
                     "label"=>"État :",

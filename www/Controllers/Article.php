@@ -80,21 +80,42 @@ class Article {
 
         if (!empty($_POST)) {
 
-            $errors = FormValidator::check($form, $_POST);
-            
-            if (empty($errors)) {
+//              $errors = FormValidator::check($form, $_POST);
+
+//              if (empty($errors)) {
+                if (true) {
 
                 $title = htmlspecialchars($_POST["title"]);
+            
+                
 
                 $article->setTitle($title);
-                $article->setSlug(slugify($title));
+
+                // echo $this->slugify($title);
+
+                $article->setSlug($this->slugify($title));
+
+                // var_dump($article);
+
                 $article->setDescription(htmlspecialchars($_POST["description"]));
-                $article->setContent(htmlspecialchars($_POST["content"]));
+                
+
+                
+                // $article->setContent(htmlspecialchars($_POST["content"]));
+                $article->setContent("Super content statique");
                 $article->setState(htmlspecialchars($_POST["state"]));
+                
+                
 
                 // TODO : Get real connected Person and Media used
-                $article->setUvtrMediaId(1);
-                $article->setUvtrPersonId(1);
+                $article->setMediaId(1);
+                $article->setPersonId(1);
+
+                // echo "<pre>";
+                // var_dump($article);
+                // echo "</pre>";
+
+                // die;
 
                 $article->save();
             } 
@@ -104,7 +125,5 @@ class Article {
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
     }
-
-    
 
 }
