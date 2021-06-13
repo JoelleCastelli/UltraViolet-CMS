@@ -141,7 +141,6 @@ class Person
 
     public function verificationAction($pseudo, $key){
 
-<<<<<<< HEAD
         $view = new View("userVerification", "front");
         $user = new PersonModel();
         $user = $user->select()->where("pseudo", $pseudo)->andWhere("emailkey", $key)->first();
@@ -149,29 +148,15 @@ class Person
         if(!empty($user))
         {
             if($user->isEmailConfirmed() != true)
-=======
-        $user = new PersonModel();
-        $user = $user->findOneBy("pseudo", $pseudo)->andWhere("emailkey", $key);
-        if(!empty($user))
-        {
-            if($user->isEmailConfirmed() != 1)
->>>>>>> de3f689a167e89797217d2342d906c2ad956bc2d
             {
                 $user->setEmailConfirmed(1);
 
                 $user->save();
-<<<<<<< HEAD
                 Helpers::setFlashMessage('success', "Votre compte à bien était activée.");
                 Helpers::redirect('/connexion');
             }else
             {
                 Helpers::setFlashMessage('error', "Votre compte est déja activée");
-=======
-            }else
-            {
-                Helpers::setFlashMessage('success', "Votre à bien était activée.");
-                Helpers::redirect('/connexion');
->>>>>>> de3f689a167e89797217d2342d906c2ad956bc2d
             }
 
         }else 
@@ -179,11 +164,5 @@ class Person
             Helpers::setFlashMessage('error', "Aucun utilisateur trouvé");
         }
 
-<<<<<<< HEAD
 	}	
-=======
-		$view = new View("user"); 
-	}
-	
->>>>>>> de3f689a167e89797217d2342d906c2ad956bc2d
 }
