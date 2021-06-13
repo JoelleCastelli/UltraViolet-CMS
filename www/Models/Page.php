@@ -369,7 +369,7 @@ class Page extends Database implements JsonSerializable
                 "action" => "",
                 "class" => "form_control form-add-page",
                 "id" => "form_register",
-                "submit" => "Ajout d'une page",
+                "submit" => "Ajouter une page",
                 "required_inputs" => 5
             ],
             "fields" => [

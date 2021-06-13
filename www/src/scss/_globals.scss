@@ -101,10 +101,10 @@ a:active {
 }
 
 .fadeOut {
-    animation: 3s fadeOut 1s forwards; // duration, animation, delay, fill-mode
+    animation: 3s fadeOut 7s forwards; // duration, animation, delay, fill-mode
 
-    -webkit-animation:3s fadeOut 1s forwards;
-    -moz-animation:3s fadeOut 1s forwards;
+    -webkit-animation:3s fadeOut 7s forwards;
+    -moz-animation:3s fadeOut 7s forwards;
 }
 @-webkit-keyframes fadeOut {
     from {
