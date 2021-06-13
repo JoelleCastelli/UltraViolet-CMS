@@ -96,8 +96,10 @@ $(document).ready(function() {
                 table.clear();
                 table.rows.add(response.pages).draw();
             },
-            error: function() {
+            error: function(response) {
                 console.log("Erreur dans la récupération des pages de type " + pageType);
+                console.log(response);
+                $('.header').after(response.responseText);
 
             }
         });

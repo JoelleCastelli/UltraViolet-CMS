@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\Helpers;
 use App\Core\FormBuilder;
 use JsonSerializable;
 
@@ -21,8 +22,14 @@ class Page extends Database implements JsonSerializable
 	protected $updatedAt;
 	protected $deletedAt;
 
+    private $actions;
+
 	public function __construct(){
 		parent::__construct();
+          $this->actions = [
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
+        ];
 	}
 
     /**
@@ -199,6 +206,14 @@ class Page extends Database implements JsonSerializable
     public function setDeletedAt($deletedAt): void
     {
         $this->deletedAt = $deletedAt;
+    }
+
+     /**
+     * @return array
+     */
+    public function getActions()
+    {
+        return $this->actions;
     }
 
     public function findAll() {

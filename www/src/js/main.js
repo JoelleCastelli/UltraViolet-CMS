@@ -30,7 +30,7 @@ waitForElement("#datatable", function() {
     wrapper.children().slice(0, 2).wrapAll("<div id='tableHeader'></div>");
     wrapper.children().slice(2, 4).wrapAll("<div id='tableFooter'></div>");
 
-    $(".bubble-actions").click(function() {
+    $("#datatable tbody").on('click', '.bubble-actions', function() {
         $(this).toggleClass("active");
         $('.bubble-actions').not(this).removeClass('active');
     });
@@ -64,6 +64,11 @@ $(document).ready(function() {
             $($(modal)[0]).addClass('modal-hidden');
             $('body').removeClass('blurred');
         }
+    });
+
+    $('#datatable tbody').on('click', '.switch-visibily-page', function() {
+
+        console.log('ouiiii');
     });
 
 })

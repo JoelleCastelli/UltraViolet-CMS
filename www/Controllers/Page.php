@@ -70,13 +70,14 @@ class Page
 
             $pageArray = [];
             foreach ($pages as $page) {
+
                 $pageArray[] = [
                     $this->columnsTable['title'] => $page->getTitle(),
                     $this->columnsTable['slug'] => $page->getSlug(),
                     $this->columnsTable['position'] => $page->getPosition(),
                     $this->columnsTable['articles'] => 43,
                     $this->columnsTable['state'] => $page->getState() == "hidden" ? '<div class="state-switch switch-visibily-page" onclick="toggleSwitch(this)"></div>' : '<div class="state-switch switched-on switch-visibily-page" onclick="toggleSwitch(this)"></div>',
-                    $this->columnsTable['actions'] => "<div class='bubble-actions'>$actions</div>"
+                    $this->columnsTable['actions'] => $page->generateActionsMenu()
                 ];
             }
 
