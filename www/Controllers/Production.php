@@ -33,7 +33,10 @@ class Production
     public function getProductionsAction() {
         if(!empty($_POST['productionType'])) {
             $productions = new ProductionModel();
-            $productions = $productions->select()->where('type', htmlspecialchars($_POST['productionType']))->orderBy('createdAt', 'DESC')->get();
+            $productions = $productions->select()->where('type', htmlspecialchars($_POST['productionType']))
+                                                 ->andWhere('deletedAt', "NULL")
+                                                 ->orderBy('createdAt', 'DESC')
+                                                 ->get();
             if(!$productions) $productions = [];
 
             $productionArray = [];
@@ -87,7 +90,7 @@ class Production
         $view = new View("productions/add-production-tmdb");
         $view->assign("form", $form);
         $view->assign("title", "Ajout d'une production");
-        $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/addProduction.js']);
+        $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/addProduction.js']);
     }
 
     public function tmdbRequestAction() {
@@ -237,12 +240,18 @@ class Production
         return $results;
     }
 
-
-
     public function updateProductionAction($id) {
         $view = new View("productions/update");
         $view->assign('title', 'Update de production');
         $view->assign('param2', $id);
+    }
+
+    public function deleteProductionAction() {
+        if(!empty($_POST['productionId'])) {
+            $production = new ProductionModel();
+            $production->setId($_POST['productionId']);
+            $production->delete();
+        }
     }
 
 }

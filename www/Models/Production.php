@@ -17,9 +17,9 @@ class Production extends Database
     protected ?string $overview;
     protected ?int $runtime;
     protected ?int $number;
-    protected $deletedAt;
-    private $createdAt;
-    private $updatedAt;
+    protected ?string $deletedAt = null;
+    private string $createdAt;
+    private ?string $updatedAt;
     private ?array $actions = [];
 
     public function __construct()
@@ -126,7 +126,7 @@ class Production extends Database
         return $this->createdAt;
     }
 
-    public function getDeletedAt(): string
+    public function getDeletedAt(): ?string
     {
         return $this->deletedAt;
     }

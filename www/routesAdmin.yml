@@ -85,7 +85,7 @@ production_update:
     id:       (\d+)
 
 production_delete:
-  path:       /admin/productions/supprimer/{id}
+  path:       /admin/productions/supprimer
   controller: Production
   action:     deleteProduction
   middleware: Editor

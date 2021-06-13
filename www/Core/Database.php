@@ -116,24 +116,21 @@ class Database {
     }
 
     public function delete() {
-        if ($this->getDeletedAt()) // hard
-        {
-
+        if ($this->getDeletedAt()) {
+            // hard delete
             $query = $this->pdo->prepare("DELETE FROM " . $this->table . " WHERE id=" . $this->getId());
             try {
-
                 return $query->execute();
-
-            }catch (\Exception $e) {
+            } catch (\Exception $e) {
                 echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
                 die();
             }
-
-        } else { // soft
+        } else {
+            // soft
             $this->setDeletedAt(Helpers::getCurrentTimestamp());
             $this->save();
         }
-}
+    }
 
     public function count($column = "*")
     {
@@ -149,12 +146,24 @@ class Database {
 
     // WHERE
     public function where($column, $value, $equal = "=" ) {
-        $this->query .= "WHERE " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        if($value == "NOT NULL") {
+            $this->query .= "WHERE " . $column . " IS NOT NULL ";
+        } else if ($value == "NULL") {
+            $this->query .= "WHERE " . $column . " IS NULL ";
+        } else {
+            $this->query .= "WHERE " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        }
         return $this;
     }
 
     public function andWhere($column, $value, $equal = "=") {
-        $this->query .= "AND " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        if($value == "NOT NULL") {
+            $this->query .= "AND " . $column . " IS NOT NULL ";
+        } else if ($value == "NULL") {
+            $this->query .= "AND " . $column . " IS NULL ";
+        } else {
+            $this->query .= "AND " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        }
         return $this;
     }
 
@@ -257,8 +266,8 @@ class Database {
         $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
-                $class = $action['class'] ?? '';
-                $actions .= "<a id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</a>";
+                $tag = $action['action'] == "delete" ? "span" : "a";
+                $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$action['action']."' href='".$action['url']."'>".$action['name']."</$tag>";
             }
         }
         $actions .= "</div></div>";
