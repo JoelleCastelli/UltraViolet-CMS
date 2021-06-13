@@ -71,7 +71,6 @@ $(document).ready(function() {
     });
 
     setInterval(function() {
-        console.log($('.fadeOut').css('opacity'));
         if ($('.fadeOut').css('opacity') == 0)
             $('.fadeOut').remove();
 

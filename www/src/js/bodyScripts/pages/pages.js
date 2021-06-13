@@ -117,14 +117,20 @@ $(document).ready(function() {
                 data: $(this).serialize(),
                 dataType: 'json',
                 success: function(response) {
-                    if (response['success'])
+                    if (response['success']) {
+
+                        $('#add-page-modal .content-modal').hide();
+                        $('#add-page-modal .content-modal .form-add-page')[0].reset()
                         $('#add-page-modal .container-message').html(successMessageForm(response['message']));
+
+                    }
+
                     else
                         $('#add-page-modal .container-message').html(errorMessageForm(response['message']));
 
                 },
                 error: function(response, statut, erreur) {
-                    $('.header').after(errorMessageForm(errorServerJS));
+                    $('.header').after(errorMessageForm(response.responseText));
                 }
             });
         }
