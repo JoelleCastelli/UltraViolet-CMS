@@ -19,6 +19,16 @@ page_creation:
   controller: Page
   action:     addPage
 
+page_delete:
+  path:       /admin/pages/delete
+  controller: Page
+  action:     deletePage
+
+page_update:
+  path:       /admin/pages/update
+  controller: Page
+  action:     updatePage
+
 pages-data:
   path:       /admin/pages-data
   controller: Page
