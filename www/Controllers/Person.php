@@ -38,7 +38,7 @@ class Person
     public function showAllAction() {
         $view = new View("persons/list");
         $view->assign('title', 'Utilisateurs');
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/persons.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/person.js']);
     }
 
 	public function defaultAction() {
