@@ -136,4 +136,30 @@ $(document).ready(function () {
         console.log('click');
     });
 
+    // On page load, display movies
+    getUsersByRole('user');
+
+    // Display different types on filtering button click
+    $(".filtering-btn").click(function() {
+        $(".filtering-btn").removeClass('active');
+        $(this).addClass('active');
+        getUsersByRole(this.id)
+    });
+
+    function getUsersByRole(role) {
+        $.ajax({
+            type: 'POST',
+            url: '/admin/utilisateurs/utilisateurs-data',
+            data: { role },
+            dataType: 'json',
+            success: function(response) {
+                table.clear();
+                table.rows.add(response.users).draw();
+            },
+            error: function(){
+                console.log("Erreur dans la récupération des utilisateurs de role " + role);
+            }
+        });
+    }
+
 });
