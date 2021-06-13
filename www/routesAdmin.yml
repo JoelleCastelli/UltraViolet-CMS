@@ -4,6 +4,10 @@ admin:
   controller: Main
   action:     default
 
+routes: 
+  path:       /admin/routes
+  controller: Main
+  action:     getRoute
 # PAGES
 pages_list:
   path:       /admin/pages
@@ -15,7 +19,8 @@ page_creation:
   controller: Page
   action:     addPage
 
-/admin/pages/pages-data:
+pages-data:
+  path:       /admin/pages-data
   controller: Page
   action:     getPages
 
@@ -33,7 +38,7 @@ article_update:
 article_tab_change:
   path:       /admin/tab-change
   controller: Article
-  action: tabChange
+  action:     tabChange
 
 # PRODUCTIONS
 productions_list:
