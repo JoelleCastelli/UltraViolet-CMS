@@ -144,7 +144,7 @@ $(document).ready(function() {
     $("#datatable tbody").on('click', '.switch-visibily-page', function() {
 
         let id = $(this)[0].id.split("-");
-        pageId = id[id.length - 1];
+        let pageId = id[id.length - 1];
 
         $.ajax({
             type: 'POST',
@@ -153,14 +153,9 @@ $(document).ready(function() {
                 id: pageId,
                 form: 'changeVisibility'
             },
-            dataType: 'json',
             async: false,
-            success: function(response) {
-                console.log(response);
-            },
             error: function(response) {
                 $('.header').after(errorServerJS);
-                console.log(response);
 
             }
         });
