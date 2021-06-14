@@ -54,8 +54,17 @@ class Page
     public function getPagesAction()
     {
         if (!empty($_POST['pageType'])) {
-            $pages = new PageModel();
-            $pages = $pages->selectWhere('state', htmlspecialchars($_POST['pageType']));
+            $pageModel = new PageModel();
+            
+            // get pages
+            if ($_POST['pageType'] === 'published' ){
+                $pages = $pageModel->selectWhere('state', htmlspecialchars($_POST['pageType']));
+                $pages = array_merge($pages, $pageModel->selectWhere('state', 'hidden'));
+
+            }else {
+                $pages = $pageModel->selectWhere('state', htmlspecialchars($_POST['pageType']));
+            }
+            
             if (!$pages) $pages = [];
 
             $actions = "<div class='actionsDropdown'>";
@@ -218,6 +227,33 @@ class Page
             $response['post'] = $_POST;
 
             echo json_encode($response);
+        }
+    }
+
+    public function updatePageAction()
+    {
+        if(isset($_POST['form'])){
+
+                        
+            if($_POST['form'] == "changeVisibility")
+            {
+
+                if(isset($_POST['id']) && !empty($_POST['id']))
+                {
+                    $page = new PageModel();
+                    $page->setId($_POST['id']);
+                    
+                    if($page->getState() === "published"){
+                        $page->setState('hidden');
+                    }else if ($page->getState() === "hidden"){
+                        $page->setState('published');
+                    }
+                    
+                    $page->save();
+                }
+
+            }
+
         }
     }
 }

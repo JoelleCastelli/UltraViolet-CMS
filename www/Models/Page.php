@@ -5,10 +5,13 @@ namespace App\Models;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\FormBuilder;
+use App\Core\Traits\ModelsTrait;
+
 use JsonSerializable;
 
 class Page extends Database implements JsonSerializable
 {
+    use ModelsTrait;
 
 	private $id = null;
 	protected $title;
@@ -38,14 +41,6 @@ class Page extends Database implements JsonSerializable
     public function getId()
     {
         return $this->id;
-    }
-
-	/**
-	 * @param mixed $id
-	 */
-	public function setId($id): void {
-	    $this->id = $id;
-        $this->findOneById($this->id);
     }
 
     /**
