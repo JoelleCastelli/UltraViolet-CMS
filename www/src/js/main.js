@@ -2,6 +2,35 @@ window.addEventListener("load", function(event) {
     document.getElementsByTagName('body')[0].classList.remove("preload");
 });
 
+/* ROUTING */
+
+
+function callRoute(path) {
+
+    let routeJS = "";
+
+    jQuery.ajax({
+        type: "POST",
+        url: '/admin/routes',
+        dataType: 'json',
+        async: false,
+        data: {
+            name: path
+        },
+
+        success: function(obj, textstatus) {
+            routeJS = obj;
+        },
+        error: function(obj, textstatus) {
+            routeJS = "";
+        }
+    });
+
+    return routeJS;
+}
+
+/* END ROUTING */
+
 const toggleSwitch = (element) => element.classList.toggle("switched-on");
 
 function toggleSidebar() {

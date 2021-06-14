@@ -13,34 +13,6 @@ use App\Core\Helpers;
 
     <!--JS-->
     <script src="<?=PATH_TO_DIST.'main.js'?>"></script>
-
-    <script>
-    var routeJS = "";
-
-    /* CALL PHP FUNCTION CallRoute  */
-    function callRoute(path) {
-
-        jQuery.ajax({
-            type: "POST",
-            url: "<?= Helpers::callRoute('routes') ?>",
-            dataType: 'json',
-            async: false,
-            data: {
-                name: path
-            },
-
-            success: function(obj, textstatus) {
-                routeJS = obj;
-            },
-            error: function(obj, textstatus) {
-                routeJS = "";
-            }
-        });
-
-        return routeJS;
-    }
-    </script>
-
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js">
     </script>
     <?php if(isset($headScripts) && !empty($headScripts)) {
