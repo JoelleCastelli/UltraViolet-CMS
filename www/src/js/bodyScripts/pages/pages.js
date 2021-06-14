@@ -160,6 +160,28 @@ $(document).ready(function() {
             }
         });
     });
+
+
+    /* DELETE PAGE */
+    table.on('click', '.delete', function(event) {
+        event.preventDefault();
+        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette page ?')) {
+            let pageId = this.id.substring(this.id.lastIndexOf('-') + 1);
+            let row = table.row($(this).parents('tr'));
+            $.ajax({
+                type: 'POST',
+                url: callRoute("page_delete"),
+                data: { id: pageId },
+                success: function() {
+                    row.remove().draw();
+                },
+                error: function() {
+                    $('.header').after("Erreur dans la suppression de la page ID " + pageId);
+
+                }
+            });
+        }
+    });
 });
 
 /* ADD NEW PAGE WHEN MODAL ALREADY OPEN */

@@ -11,7 +11,6 @@ class Page
 {
 
     protected $columnsTable;
-    protected $actions;
 
     public function __construct()
     {
@@ -22,11 +21,6 @@ class Page
             "articles" => 'Nombre d\'articles',
             "state" => 'Visibilité',
             "actions" => 'Actions'
-        ];
-
-        $this->actions = [
-            ['name' => 'Modifier', 'url' => '/admin/productions/modifier'],
-            ['name' => 'Supprimer', 'url' => '/admin/productions/modifier'],
         ];
     }
 
@@ -66,12 +60,6 @@ class Page
             }
             
             if (!$pages) $pages = [];
-
-            $actions = "<div class='actionsDropdown'>";
-            foreach ($this->actions as $action) {
-                $actions .= "<a href='" . $action['url'] . "'>" . $action['name'] . "</a>";
-            }
-            $actions .= "</div>";
 
             $pageArray = [];
             foreach ($pages as $page) {
@@ -254,6 +242,15 @@ class Page
 
             }
 
+        }
+    }
+
+        public function deletePageAction() {
+        if(!empty($_POST['id'])) {
+            $page = new PageModel();
+            $page->setId($_POST['id']);
+            $page->setState("deleted");
+            $page->delete();
         }
     }
 }

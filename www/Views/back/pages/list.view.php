@@ -5,7 +5,7 @@
             <div class="filtering-btn" id="published">Publiés</div>
             <div class="filtering-btn" id="scheduled">Planifiés</div>
             <div class="filtering-btn" id="draft">Brouillons</div>
-            <div class="filtering-btn" id="trash">Corbeille</div>
+            <div class="filtering-btn" id="deleted">Corbeille</div>
         </div>
 
         <button id="btnPopup" class="btn btnPopup" data-toggle="modal" data-target="#add-page-modal">Ajouter une

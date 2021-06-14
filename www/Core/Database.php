@@ -265,7 +265,8 @@ class Database {
         $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
-                $actions .= "<a id='".$class.'-'.$action['action'].'-'.$this->getId()."' href='".$action['url']."'>".$action['name']."</a>";
+                $class = $action['class'] ?? '';
+                $actions .= "<a id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</a>";
             }
         }
         $actions .= "</div></div>";
