@@ -45,6 +45,7 @@ $(document).ready(function() {
     $('button[data-toggle="modal"]').click(function() {
         let idModal = $(this).data('target');
 
+        console.log("yes");
         if ($(idModal).length > 0) {
             a = $(idModal)[0];
             $($(idModal)[0]).removeClass('modal-hidden');
@@ -64,10 +65,6 @@ $(document).ready(function() {
             $($(modal)[0]).addClass('modal-hidden');
             $('body').removeClass('blurred');
         }
-    });
-
-    $('#datatable tbody').on('click', '.switch-visibily-page', function() {
-        console.log('ouiiii');
     });
 
     setInterval(function() {

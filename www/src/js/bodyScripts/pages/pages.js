@@ -1,4 +1,5 @@
-$(document).ready(function () {
+var a = 0;
+$(document).ready(function() {
 
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable({
@@ -79,8 +80,12 @@ $(document).ready(function () {
     // Display different types on filtering button click
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
+        table.column([4]).visible(true);
         $(this).addClass('active');
-        getPagesByType(this.id)
+        if (this.id !== "published") {
+            table.column([4]).visible(false);
+        }
+        getPagesByType(this.id);
     });
 
     function getPagesByType(pageType) {
@@ -95,10 +100,7 @@ $(document).ready(function () {
                 table.rows.add(response.pages).draw();
             },
             error: function(response) {
-                console.log("Erreur dans la récupération des pages de type " + pageType);
-                console.log(response);
-                $('.header').after(response.responseText);
-
+                $('.header').after(errorServerJS);
             }
         });
     }
@@ -117,10 +119,14 @@ $(document).ready(function () {
                 success: function(response) {
                     if (response['success']) {
 
+                        let button = "<button class='btn add-new-page'>" +
+                            "Créer une nouvelle page" +
+                            "</button>";
+
                         $('#add-page-modal .content-modal').hide();
                         $('#add-page-modal .content-modal .form-add-page')[0].reset()
-                        $('#add-page-modal .container-message').html(successMessageForm(response['message']));
-
+                        $('#add-page-modal .footer-modal').prepend(button);
+                        $('#add-page-modal .footer-modal').prepend(successMessageForm(response['message']));
                     }
 
                     else
@@ -128,23 +134,29 @@ $(document).ready(function () {
 
                 },
                 error: function(response, statut, erreur) {
-                    $('.header').after(errorMessageForm(response.responseText));
+                    $('#add-page-modal .container-message').html(errorMessageForm(errorServerJS));
                 }
             });
         }
     })
+});
 
-    function successMessageForm(message) {
-        return '<p class="success-message-form">' + 
-                    '<i class="fas fa-check icon-message-form"></i>' +
-                    message +
-                '</p>';
-    }
+/* ADD NEW PAGE WHEN MODAL ALREADY OPEN */
+$('#add-page-modal').click(function(event) {
+    let targetElement = event.target;
+    let selector = 'add-new-page';
 
-    function errorMessageForm(message) {
-        return '<p class="error-message-form">' +
-                    '<i class="fas fa-times icon-message-form"></i>' +
-                    message +
-                '</p>';
+    if (targetElement != null) {
+
+        a = targetElement;
+
+        if ($(a).hasClass(selector)) {
+            console.log("clickk selector");
+            $('#add-page-modal .content-modal').show();
+            $('#add-page-modal .add-new-page').remove();
+            $('#add-page-modal .error-message-form').remove();
+            $('#add-page-modal .success-message-form').remove();
+            return;
+        }
     }
 });

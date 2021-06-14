@@ -72,7 +72,9 @@ class Page
                     $this->columnsTable['slug'] => $page->getSlug(),
                     $this->columnsTable['position'] => $page->getPosition(),
                     $this->columnsTable['articles'] => 43,
-                    $this->columnsTable['state'] => $page->getState() == "hidden" ? '<div class="state-switch switch-visibily-page" onclick="toggleSwitch(this)"></div>' : '<div class="state-switch switched-on switch-visibily-page" onclick="toggleSwitch(this)"></div>',
+                    $this->columnsTable['state'] => $page->getState() == "hidden" ? 
+                                        '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switch-visibily-page" onclick="toggleSwitch(this)"></div>' 
+                                        : '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switched-on switch-visibily-page" onclick="toggleSwitch(this)"></div>',
                     $this->columnsTable['actions'] => $page->generateActionsMenu()
                 ];
             }
@@ -168,11 +170,18 @@ class Page
                     $page->setSlug($slug);
 
                     /* Set State */
-                    if ($_POST['state'] == 'draft') {
-                        $page->setState('draft');
-                        $page->setPublicationDate(htmlspecialchars($_POST['publicationDate']));
+                    if(empty($_POST['publicationDate']) && $_POST['state'] == 'draft') { // draft
 
-                    } else if ($_POST['state'] == 'published') {
+                        $page->setState('draft');
+                        $page->setPublicationDate(null);
+                        
+                    } else if(!empty($_POST['publicationDate'])) { // scheduled
+
+                        $page->setState('scheduled');
+                        $page->setPublicationDate(htmlspecialchars($_POST['publicationDate']));
+                        
+                    }else if ($_POST['state'] == 'published' && empty($_POST['publicationDate'])) { // published
+                        
                         $page->setState('published');
                         $page->setPublicationDate(Helpers::getCurrentTimestamp());
                     }
@@ -184,9 +193,9 @@ class Page
                         $page->setTitleSeo(empty($_POST["titleSEO"]) ? "mon tire seo deuxième" : $_POST["titleSEO"]);
                         $page->setDescriptionSeo(empty($_POST["descriptionSEO"]) ? "ma description seo" : $_POST["descriptionSEO"]);
                         $page->setCreatedAt(Helpers::getCurrentTimestamp());
-                        $check = $page->save();
+                        $save= $page->save();
 
-                        if($check) {
+                        if($save) {
                             $response['message'] = 'Sauvegarde faite !';
                             $response['success'] = true;
                         }else {
