@@ -315,12 +315,14 @@ class Production extends Database
                 ],
                 "productionID" => [
                     "type" => "number",
+                    "min" => 1,
                     "label" => "ID du film ou de la série",
                     "class" => "form_input",
                     "error" => "Un ID est nécessaire"
                 ],
                 "seasonNb" => [
                     "type" => "number",
+                    "min" => 0,
                     "label" => "Numéro de la saison",
                     "class" => "form_input",
                     "error" => "Un type de production est nécessaire",
@@ -328,6 +330,7 @@ class Production extends Database
                 ],
                 "episodeNb" => [
                     "type" => "number",
+                    "min" => 0,
                     "label" => "Numéro de l'épisode",
                     "class" => "form_input",
                     "error" => "Un type de production est nécessaire",
