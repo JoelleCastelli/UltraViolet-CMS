@@ -7,7 +7,7 @@ class FormValidator
 
     public static function check($config, $data) {
 
-        self::validateCSRFToken($config['config'], $data);
+        self::validateCSRFToken($config['config']['referer'], $data['csrfToken']);
         $errors = [];
 
         if(count($data) != count($config["fields"])) {
@@ -129,11 +129,11 @@ class FormValidator
         }
     }
 
-    public static function validateCSRFToken($config, $data) {
-        if(isset($_SESSION['csrfTokens']) && isset($data['csrfToken'])) {
-            $key = array_search($data['csrfToken'], $_SESSION['csrfTokens']);
-            if($key) {
-                if($_SERVER['REQUEST_URI'] !== $config['referer']) {
+    public static function validateCSRFToken($referer, $formToken) {
+        if(isset($_SESSION['csrfTokens']) && isset($formToken)) {
+            $key = array_search($formToken, $_SESSION['csrfTokens']);
+            if(in_array($formToken, $_SESSION['csrfTokens'])) {
+                if($_SERVER['REQUEST_URI'] !== $referer) {
                     trigger_error("CSRF attack: incorrect referer", E_USER_ERROR);
                 }
             } else {
