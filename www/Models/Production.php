@@ -324,12 +324,14 @@ class Production extends Database
                     "label" => "Numéro de la saison",
                     "class" => "form_input",
                     "error" => "Un type de production est nécessaire",
+                    "disabled" => true
                 ],
                 "episodeNb" => [
                     "type" => "number",
                     "label" => "Numéro de l'épisode",
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire"
+                    "error" => "Un type de production est nécessaire",
+                    "disabled" => true
                 ],
                 "productionPreviewRequest" => [
                     "type" => "button",
