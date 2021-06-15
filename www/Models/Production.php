@@ -302,7 +302,7 @@ class Production extends Database
                         [
                             "value"=>"movie",
                             "text"=>"Film",
-                            "selected"=>true
+                            "checked"=>true
                         ],
                         [
                             "value"=>"series",
