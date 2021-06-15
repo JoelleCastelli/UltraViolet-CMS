@@ -132,17 +132,18 @@ class Page
                 /* VERIFICATIONS AND CLEAN UP SLUG */
                 if (empty($_POST['slug'])) // if slug not specify
                 {
-                    $patterns[] = "/[^A-Za-z0-9\-]/"; // only alphabets, numbers and dash
-                    $patterns[] = "/^-+/"; // begin
-                    $patterns[] = "/-+$/"; // end
+
+                    $patterns[] = "/^[^A-Za-z0-9]+/"; // only alphabets and numbers in the beginning
+                    $patterns[] = "/[^A-Za-z0-9]+$/"; // only alphabets and numbers int the end
+                    $patterns[] = "/[^A-Za-z0-9\s\-]/"; // only alphabets, dash, space and numbers
                     $patterns[] = "/\s+/"; // space
                     $patterns[] = "/-+/"; // only one dash
                     
-                    $replacement[] = "";
-                    $replacement[] = "";
-                    $replacement[] = "";
-                    $replacement[] = "-";
-                    $replacement[] = "-";
+                    $replacements[] = "";
+                    $replacements[] = "";
+                    $replacements[] = "";
+                    $replacements[] = "-";
+                    $replacements[] = "-";
 
                     $unwantedCharacters= array(
                         'Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
@@ -153,7 +154,7 @@ class Page
                     );
                
                     $slug = strtr($_POST["title"], $unwantedCharacters);
-                    $slug = preg_replace($patterns, $replacement, $slug);
+                    $slug = preg_replace($patterns, $replacements, $slug);
                     $slug = strtolower($slug);
                    
                 } else { // if slug specify
