@@ -314,19 +314,19 @@ class Production extends Database
                     "error" => "Le type doit être film, série, saison ou épisode"
                 ],
                 "productionID" => [
-                    "type" => "text",
+                    "type" => "number",
                     "label" => "ID du film ou de la série",
                     "class" => "form_input",
                     "error" => "Un ID est nécessaire"
                 ],
                 "seasonNb" => [
-                    "type" => "text",
+                    "type" => "number",
                     "label" => "Numéro de la saison",
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire"
+                    "error" => "Un type de production est nécessaire",
                 ],
                 "episodeNb" => [
-                    "type" => "text",
+                    "type" => "number",
                     "label" => "Numéro de l'épisode",
                     "class" => "form_input",
                     "error" => "Un type de production est nécessaire"
