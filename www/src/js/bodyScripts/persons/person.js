@@ -28,10 +28,7 @@ $(document).ready(function () {
 
         // Column Actions 
         columnDefs: [
-            
-            
-
-            {
+        {
             targets: 4,
             data: "Actions",
             searchable: false,
@@ -83,13 +80,10 @@ $(document).ready(function () {
             table.columns( [0] ).visible( false );
         }
         getUsersByRole(this.id);
-        
-
     });
 
     function getUsersByRole(role) {
         $.ajax({
-
             type: 'POST',
             url: '/admin/utilisateurs/utilisateurs-data',
             data: { role },
@@ -103,5 +97,4 @@ $(document).ready(function () {
             }
         });
     }
-
 });

@@ -67,7 +67,6 @@ class Production
                 // Mandatory
                 $production->setTitle(htmlspecialchars($_POST["title"]));
                 $production->setType(htmlspecialchars($_POST["type"]));
-
                 // Optional
                 $production->setOriginalTitle(htmlspecialchars($_POST["originalTitle"]) ?? '');
                 $production->setReleaseDate(htmlspecialchars($_POST["releaseDate"]) ?? '');

@@ -36,5 +36,3 @@
 </div>
 
 
-
-<div class='bubble-actions'>actions</div>
