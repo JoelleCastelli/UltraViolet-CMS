@@ -8,7 +8,7 @@
             <div class="filtering-btn articleState" id="trash">Corbeille</div>
         </div>
 
-        <a class="btn" href="articles/creation" >Ajouter un article</a>
+        <a class="btn" href="<?= \App\Core\Helpers::callRoute('article_creation') ?>" >Ajouter un article</a>
 
     </section>
 

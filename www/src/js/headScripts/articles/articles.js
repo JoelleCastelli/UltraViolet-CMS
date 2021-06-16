@@ -56,7 +56,7 @@ $(document).ready( function () {
     function getArticleByState(state) {
         $.ajax({
             type: 'POST',
-            url: '/admin/articles/articles-data',
+            url: callRoute("article_data"),
             data: { state },
             dataType: 'json',
             success: function(response) {

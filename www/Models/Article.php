@@ -22,7 +22,7 @@ class Article extends Database implements JsonSerializable
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
-    protected $media_id;
+    protected $mediaId;
     protected $personId;
 
     public $media;
@@ -257,15 +257,15 @@ class Article extends Database implements JsonSerializable
      */
     public function getMediaId()
     {
-        return $this->media_id;
+        return $this->mediaId;
     }
 
     /**
-     * @param mixed $media_id
+     * @param mixed $mediaId
      */
-    public function setMediaId($media_id): void
+    public function setMediaId($mediaId): void
     {
-        $this->media_id = $media_id;
+        $this->mediaId = $mediaId;
     }
 
     public function findAll() {
