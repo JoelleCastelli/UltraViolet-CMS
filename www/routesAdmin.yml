@@ -53,6 +53,16 @@ article_update:
   controller: Article
   action:     modifyArticle
 
+article_creation:
+  path: /admin/articles/creation
+  controller: Article
+  action: createArticle
+
+article_data:
+  path: /admin/articles/articles-data
+  controller: Article
+  action: getArticles
+
 article_tab_change:
   path:       /admin/tab-change
   controller: Article

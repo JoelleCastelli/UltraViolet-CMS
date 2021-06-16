@@ -39,6 +39,7 @@ class Article {
         $articles = new ArticleModel();
 
         $articles = $articles->selectWhere('state', htmlspecialchars($_POST['state']));
+
         if (!$articles) $articles = [];
 
         $articlesArray = [];
