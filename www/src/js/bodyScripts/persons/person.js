@@ -68,7 +68,7 @@ $(document).ready(function () {
     });
 
           
-    // On page load, display movies
+    // On page load, display user
     getUsersByRole('user');
 
     // Display different types on filtering button click

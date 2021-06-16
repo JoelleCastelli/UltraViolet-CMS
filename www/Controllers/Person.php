@@ -138,7 +138,6 @@ class Person
                     $this->columnsTable['actions'] => $user->generateActionsMenu(),
                 ];
             }
-           
             echo json_encode(["users" => $usersArray]);
         }
     }
