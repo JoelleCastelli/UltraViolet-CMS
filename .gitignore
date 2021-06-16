@@ -21,3 +21,5 @@ www/.env*
 
 # media uploading
 www/dist/images/*
+
+www/package-lock.json
