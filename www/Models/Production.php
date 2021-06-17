@@ -426,7 +426,7 @@ class Production extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "tmdb-request",
+                "action" => "creation-check",
                 "class" => "form_control",
                 "id" => "formAddProductionTmdb",
                 "submit" => "Valider"

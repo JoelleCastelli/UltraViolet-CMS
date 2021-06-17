@@ -173,4 +173,8 @@ class Production
         }
     }
 
+    public function addProductionCheckAction() {
+        Helpers::redirect(Helpers::callRoute('productions_list'));
+    }
+
 }
