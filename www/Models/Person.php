@@ -240,6 +240,15 @@ class Person extends Database
         }
     }
 
+    public function generateEmailKey() {
+        $lengthkey = 15;
+        $key= "";
+        for($i=1;$i<$lengthkey;$i++) {
+            $key.=mt_rand(0,9);
+        }
+        $this->setEmailKey($key);
+    }
+
     public function formBuilderLogin(): array {
         return [
             "config" => [

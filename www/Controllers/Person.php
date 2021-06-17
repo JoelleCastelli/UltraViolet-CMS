@@ -96,20 +96,8 @@ class Person
                     $user->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $user->setEmail(htmlspecialchars($_POST['email']));
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
-                    
-                    //$user->setDefaultProfilePicture();
-                    $user->setMediaId(1);
-                    $user->setEmailConfirmed(1);
-
-                    // set emailkey
-                    $lengthkey = 15;
-                    $key= "";
-                    for($i=1;$i<$lengthkey;$i++) {
-                        $key.=mt_rand(0,9);
-                    }
-                    $user->setEmailKey($key);
-
-                
+                    $user->setDefaultProfilePicture();
+                    $user->generateEmailKey();
                     $user->save();
                 
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
