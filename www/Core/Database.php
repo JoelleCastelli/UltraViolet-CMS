@@ -64,6 +64,10 @@ class Database {
         }
 
         try {
+            // Workaround: prevent MySql from interpreting bool(false) as empty string
+            foreach ($column as $key => $value) {
+                if(gettype($value) === "boolean" && $value === false) { $column[$key] = 0; }
+            }
             return $query->execute($column);
         } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
