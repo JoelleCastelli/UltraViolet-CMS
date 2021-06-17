@@ -30,7 +30,7 @@ class Page extends Database implements JsonSerializable
 	public function __construct(){
 		parent::__construct();
           $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
+            ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
         ];
 	}
@@ -397,6 +397,88 @@ class Page extends Database implements JsonSerializable
                     "error" => "Votre titleSEO doit étre entre 2 et 50"
                 ],
                 "descriptionSEO" => [
+                    "type" => "text",
+                    "placeholder" => "META description",
+                    "label" => "META description :",
+                    "class" => "search-bar",
+                    "error" => "Votre descriptionSEO doit étre entre 2 et 255"
+                ],
+                "state" => [
+                    "type" => "radio",
+                    "label" => "État * :",
+                    "class" => "",
+                    "error" => "Erreur test",
+                    "options" => [
+                        [
+                            "value" => "draft",
+                            "text" => "Brouillon",
+                        ],
+                        [
+                            "value" => "published",
+                            "text" => "Publier maintenant",
+                        ]
+                    ],
+                ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "placeholder" => "publication",
+                    "label" => "Ou plus tard : ",
+                    "class" => "search-bar",
+                    "error" => "Votre date de publication doit être entre " . $today . " et 31-12-2030",
+
+                ],
+                "csrfToken" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken(),
+                ]
+            ]
+        ];
+    }
+
+    public function formBuilderUpdate()
+    {
+
+        $today = date("Y-m-d");
+
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control form-add-page",
+                "id" => "form_update",
+                "submit" => "Modifier une page",
+                "required_inputs" => 5
+            ],
+            "fields" => [
+                "title" => [
+                    "type" => "text",
+                    "placeholder" => "Animées",
+                    "label" => "Votre Titre * :",
+                    "class" => "search-bar",
+                    "error" => "Votre titre doit faire entre 2 et 25 caractères",
+                ],
+                "slug" => [
+                    "type" => "text",
+                    "placeholder" => "meilleure-serie",
+                    "label" => "Votre slug :",
+                    "class" => "search-bar",
+                    "error" => "Votre slug doit faire entre 2 et 15 caractères",
+                ],
+                "position" => [
+                    "type" => "text",
+                    "placeholder" => "3",
+                    "label" => "Position * :",
+                    "class" => "search-bar",
+                    "error" => "Votre position doit étre entre 1 et 4",
+                ],
+                "titleSeo" => [
+                    "type" => "text",
+                    "placeholder" => "Titre pour le référencement",
+                    "label" => "titleSEO :",
+                    "class" => "search-bar",
+                    "error" => "Votre titleSEO doit étre entre 2 et 50"
+                ],
+                "descriptionSeo" => [
                     "type" => "text",
                     "placeholder" => "META description",
                     "label" => "META description :",

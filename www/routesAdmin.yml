@@ -8,16 +8,17 @@ routes:
   path:       /admin/routes
   controller: Main
   action:     getRoute
+  
 # PAGES
 pages_list:
   path:       /admin/pages
   controller: Page
   action:     showAll
-
+  
 page_creation:
   path:       /admin/pages/creation
   controller: Page
-  action:     addPage
+  action:     createPage
 
 page_delete:
   path:       /admin/pages/delete
@@ -25,11 +26,18 @@ page_delete:
   action:     deletePage
 
 page_update:
-  path:       /admin/pages/update
+  path:       /admin/pages/update/{id}
   controller: Page
   action:     updatePage
+  requirements:
+    id:       (\d+)
 
-pages-data:
+page_update_visibility:
+  path:       /admin/pages/update-visibility
+  controller: Page
+  action:     updateVisibility
+
+pages_data:
   path:       /admin/pages-data
   controller: Page
   action:     getPages
