@@ -1,29 +1,39 @@
 .dataTables_wrapper {
     font-family: $mulish;
     font-size: 14px;
+    margin-bottom: 30px;
     border: 1px solid #DFE0EB;
     border-radius: 8px;
 
     #tableHeader {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         background-color: white;
         margin-bottom: 20px;
-        padding: 5px;
+        padding: 5px 1rem;
         border-radius: 8px;
 
         & * {
             height: max-content;
         }
 
+        #datatable_length select {
+            border: solid $transparent 2px;
+            transition: border 0.3s ease;
+            text-align-last:center;
+            &:hover {
+                border-color: $purple;
+            }
+        }
+
         .dataTables_filter {
             width: 35%;
             background-color: #E7E9F3;
-            border: solid $transparent 3px;
+            border: solid $transparent 2px;
             height: max-content;
             border-radius: 4px;
             transition: border 0.3s ease;
-                        
             display: flex;
             justify-items: center;
 
@@ -49,19 +59,18 @@
                 width: 100%;
                 font-size: 14px;
                 margin-left: 2rem;
+                padding-right: 2.5rem;
             }
 
             &:focus-within {
-                border-color: $search-bar-icon-color;
+                border-color: $purple;
             } 
         }
     }
 
     .dataTable {
         background-color: white;
-        // padding: 10px;
-        // border: 2px solid #DFE0EB;
-        // border-radius: 20px;
+        border: 2px solid #DFE0EB;
         border-radius: 8px 8px 0 0;
 
         &.no-footer{
@@ -84,20 +93,10 @@
         }
 
         tbody {
-
-            // .odd, .even {
-                // background: white !important;
-
-                // &:hover {
-                //     background: $purple-light;
-                // }
-            // }
-
             tr td {
+                font-family: inherit;
                 text-align: center;
-                font-size: 12px;
-                // background: yellow;
-                // display: block;
+                font-size: 14px;
                 position: relative;
             }
         }
@@ -111,12 +110,12 @@
         }
     }
 
-    .table-footer {
+    #tableFooter {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         background: $pure-white;
-        padding: 1rem 0;
+        padding: 1rem 1rem;
         border-radius: 0 0 8px 8px;
 
         font-size: 14px;
@@ -128,18 +127,13 @@
             padding: 0;
         }
 
-        #datatable_paginate {
-            padding: 0;
-            
-            .paginate_button {
-                border: none;
-                min-width: 0;
-                padding: 0;
+        a.paginate_button {
+            padding: .2em .5em;
+
+            &.current {
+                border: 1px solid $purple;
             }
         }
     }
 
-    &::after {
-        display: none !important;
-    }
 }

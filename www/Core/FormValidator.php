@@ -7,7 +7,7 @@ class FormValidator
 
     public static function check($config, $data) {
 
-        self::validateCSRFToken($config['config'], $data);
+        self::validateCSRFToken($config['config']['referer'], $data['csrfToken']);
         $errors = [];
 
         if(count($data) != count($config["fields"])) {
@@ -129,19 +129,20 @@ class FormValidator
         }
     }
 
-    public static function validateCSRFToken($config, $data) {
-        if(isset($_SESSION['csrf_token']) && isset($data['csrf_token'])) {
-            if($_SESSION['csrf_token'] == $data['csrf_token']) {
-                if($_SERVER['REQUEST_URI'] !== $config['referer']) {
-                    echo "Attaque CSRF : la page source est incorrecte"; exit;
+    public static function validateCSRFToken($referer, $formToken) {
+        if(isset($_SESSION['csrfTokens']) && isset($formToken)) {
+            $key = array_search($formToken, $_SESSION['csrfTokens']);
+            if(in_array($formToken, $_SESSION['csrfTokens'])) {
+                if($_SERVER['REQUEST_URI'] !== $referer) {
+                    trigger_error("CSRF attack: incorrect referer", E_USER_ERROR);
                 }
             } else {
-                echo "Attaque CSRF : les valeurs sont différentes"; exit;
+                trigger_error("CSRF attack: values are different", E_USER_ERROR);
             }
         } else {
-            echo "Attaque CSRF: une des valeurs n'est pas présente"; exit;
+            trigger_error("CSRF attack: one of the values is not present", E_USER_ERROR);
         }
-        unset($_SESSION['csrf_token']);
+        unset($_SESSION['csrfToken'][$key]);
     }
 
 }

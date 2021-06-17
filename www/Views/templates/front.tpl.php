@@ -1,5 +1,3 @@
-<?php use App\Core\Helpers;?>
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -20,9 +18,16 @@
             <main class="main">
                 <div class="main-content">
                     <?php
-                        Helpers::getFlashMessage('success');
-                        Helpers::getFlashMessage('errors');
-                        Helpers::getFlashMessage('info');
+                        if(\App\Core\Request::getUser()->isLogged()) {
+                            echo "<a href='/deconnexion'>Déconnexion</a>";
+                            if(\App\Core\Request::getUser()->canAccessBackOffice()) {
+                                echo "<a href='/admin'>Administration</a>";
+                            }
+                        } else {
+                            echo "<a href='/connexion'>Connexion</a><br>";
+                            echo "<a href='/inscription'>Inscription</a><br><br>";
+                        }
+                        if(isset($flash)) $this->displayFlash($flash);
                         include $this->view;
                     ?>
                 </div>

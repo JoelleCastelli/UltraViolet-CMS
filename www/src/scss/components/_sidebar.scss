@@ -1,127 +1,76 @@
 #sidebar {
-    //code sidebar general
+    height: 100%;
+    width: $sidebarFullWidth;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    position: fixed;
     background: #000D28;
     color: #A4A6B3;
     font-family: 'Mulish', sans-serif;
-    display: flex;
-    flex-direction: column;
-    width: 19rem;
-    height: 100vh;
     transition-duration: 0.4s;
     transition-timing-function: ease;
-   
 
-    // &:hover pour le hover de la sidebar
-    
-        a{
-            text-decoration: none;
-            color: inherit;
-            display: inline;
+    a {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        height: 3.7rem;
+
+        &:not(.brandLogo):hover {
+            background-color: $purple;
+            color: #DDE2FF;
         }
 
-        li {
-            /* background: green; */
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            height: 3.7rem;
-            margin-left: 2rem;
-
-            &:hover{
-                background-color: #9FA2B411;             
-                color: #DDE2FF;
-                
-            }
-
-                i {
-                    font-size: 30px;
-                    transition: 0.5s ease;
-                }
-                .icon {
-                    width: 40px;
-                    height: 30px;
-                    margin-right: 5px;
-                }
-                div {
-                    font-size: 16px;
-                }
-            }
-
-            img{
-                height: 100px;
+        &.brandLogo {
+            height: 100px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            img {
                 width: 100%;
+                max-height: 100%;
+                margin-left: auto;
+                margin-right: auto;
                 object-fit: scale-down;
-                margin-top: 3rem;
-                margin-left: -1rem;
             }
-
-        hr {
-            background-color: grey;
-            height: 1px;
-            flex: auto;
-            text-decoration: none;
-            border-style: none;
         }
+
+        i {
+            margin-left: 1.8rem;
+            margin-right: 15px;
+            font-size: 30px;
+        }
+    }
+
+    &.wrapped {
+        width: $sidebarWrappedWidth;
+
+        & #cta-toggle-sidebar i {
+            transform: rotate(180deg);
+        }
+    }
+
+    #cta-toggle-sidebar {
+        position: absolute;
+        right: -10px;
+        top: 90px;
+        background: #f1f1f1;
+        cursor: pointer;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        border: 1px solid #5F2EEA;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+            filter: brightness(85%);
+        }
+
+        i {
+            color: grey;
+        }
+    }
 }
-
-
-#sidebar li div.grow-separator {
-    flex: auto;
-}
-
-
-/* Ligne du boutton */
-#sidebar li:nth-child(2) {
-    justify-content: flex-end;
-    padding: 1rem 0;
-    padding-top: 3.5rem;
-}
-
-#sidebar #cta-toggle-sidebar {
-    background: #f1f1f1;
-    cursor: pointer;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    transform: translateX(50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-#sidebar #cta-toggle-sidebar:hover {
-    filter: brightness(85%);
-}
-
-#sidebar #cta-toggle-sidebar i {
-    color: grey;
-}
-
-
-/* WRAPPED */
-#sidebar.wrapped {
-    width: 6rem;
-}
-
-#sidebar.wrapped li div:not(#cta-toggle-sidebar) {
-    /* background: yellow; */
-    opacity: 0;
-}
-
-#sidebar.wrapped li div:not(#cta-toggle-sidebar) i {
-    /* background: yellow; */
-    align-self: center;
-}
-
-#sidebar.wrapped li #cta-toggle-sidebar i {
-    transform: rotate(180deg);
-}
-
-/* HOVERS */
-#sidebar li:not(:first-child):not(:nth-child(2)):not(:nth-child(10)):hover {
-    background: #9FA2B4; /* voir le layer sur figma 8% ? */
-    cursor: pointer;
-}
-
-

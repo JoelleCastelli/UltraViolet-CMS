@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Core\Helpers;
 use App\Core\View;
 
 class Main
@@ -10,8 +11,14 @@ class Main
 	public function defaultAction(){
 		$view = new View("dashboard");
 		$view->assign('title', 'Back office');
-		$view->assign('headScript', 'src/js/headScripts/home.js');
-		$view->assign('bodyScript', 'src/js/bodyScripts/home.js');
+        $view->assignFlash();
+		$view->assign('headScript', Helpers::urlJS('headScripts/home'));
+		$view->assign('bodyScript',  Helpers::urlJS('bodyScripts/home'));
+	}
+
+	public function getRouteAction()
+	{
+		echo json_encode(Helpers::callRoute($_POST['name']));
 	}
 
 	public function page404Action(){

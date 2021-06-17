@@ -1,3 +1,15 @@
+.btn-link {
+    border-radius: 5px;
+    background-color: $button-bg;
+    color: $button-font-color;
+    font-family: $poppins;
+    font-weight: semibold;
+    border-style: none;
+    box-shadow: 1px 6px 20px -4px $button-shadow-color;
+    transition: all 0.3s ease-out;
+    padding: 0.5rem 2rem;
+}
+
 .btn {
     // display: flex;
     // align-items: center;

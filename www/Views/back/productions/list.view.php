@@ -1,43 +1,31 @@
-<a href="/nouvelle-production">Ajouter une production manuellement</a>
-<a href="/nouvelle-production-tmdb">Ajouter une production via TMDB</a>
-
 <div class="grid-listing-datatables">
 
     <section>
         <div class="filtering-status">
-            <div class="filtering-btn productionType" id="movie">Films</div>
-            <div class="filtering-btn productionType" id="series">Séries</div>
-            <div class="filtering-btn productionType" id="season">Saisons</div>
-            <div class="filtering-btn productionType" id="episode">Episodes</div>
+            <div class="filtering-btn active" id="movie">Films</div>
+            <div class="filtering-btn" id="series">Séries</div>
+            <div class="filtering-btn" id="season">Saisons</div>
+            <div class="filtering-btn" id="episode">Episodes</div>
         </div>
-        <button class="btn">Ajouter une production</button>
+
+        <a href="<?= \App\Core\Helpers::callRoute('productions_creation_tmdb') ?>">
+            <button class="btn">Nouvelle production</button>
+        </a>
     </section>
 
     <section>
         <table id="datatable" class="display">
-       <thead>
-            <tr>
-
-                <?php foreach ($columnsTable as $key => $value): ?>
-                    <th><?= $value ?></th>
-                <?php endforeach; ?>
-
-            </tr>
-        </thead>
-            <!-- <tbody>
-            <?php
-/*            if (!empty($productions)) {
-
-               /* foreach ($productions as $production) {
-                    echo "<td>" . $production->getType() . "</td>";
-                    echo "<td>" . $production->getOriginalTitle() ?? $production->getTitle() . "</td>";
-                    echo "<td>" . ($production->getReleaseDate() ?? '') . "</td>";
-                    echo "<td>" . ($production->getRuntime() ?? '') . "</td>";
-                    echo "<td>" . ($production->getOverview() ?? '') . "</td>";
-                }
-            }
-            */?>
-            </tbody>-->
+            <thead>
+                <tr>
+                    <?php
+                        foreach ($columnsTable as $key => $value) {
+                            echo "<th>$value</th>";
+                        }
+                    ?>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
         </table>
     </section>
 

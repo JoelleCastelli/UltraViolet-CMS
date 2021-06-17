@@ -14,6 +14,8 @@
 @import "grids/grid_register_user";
 @import "grids/grid_connection_user";
 @import "grids/grid_display_comments";
+@import "grids/grid_display_medias";
+@import "grids/grid_datatable";
 
 // Components
 @import "components/button";
@@ -33,5 +35,27 @@
 @import "components/item-navgation";
 @import "components/datatable";
 @import "components/filtering-status";
-@import "components/buble-actions";
+@import "components/bubble-actions";
 @import "components/state-switch";
+@import "components/modal";
+@import "components/request-response";
+
+
+.preload * {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+}
+
+#main {
+    height: 100%;
+    margin-left: $sidebarFullWidth;
+    padding-left: 30px;
+    padding-right: 30px;
+    transition: margin 0.4s;
+
+    &.sidebarWrapped {
+        margin-left: $sidebarWrappedWidth;
+    }
+}

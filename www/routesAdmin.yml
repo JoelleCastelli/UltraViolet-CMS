@@ -1,78 +1,155 @@
 # GLOBAL
-/admin:
+admin:
+  path:       /admin
   controller: Main
   action:     default
 
+routes: 
+  path:       /admin/routes
+  controller: Main
+  action:     getRoute
 # PAGES
-/admin/pages:
+pages_list:
+  path:       /admin/pages
   controller: Page
   action:     showAll
 
-/admin/pages/creation:
+page_creation:
+  path:       /admin/pages/creation
   controller: Page
-  action:     createPage
+  action:     addPage
+
+page_delete:
+  path:       /admin/pages/delete
+  controller: Page
+  action:     deletePage
+
+page_update:
+  path:       /admin/pages/update
+  controller: Page
+  action:     updatePage
+
+pages-data:
+  path:       /admin/pages-data
+  controller: Page
+  action:     getPages
 
 # ARTICLES
-/admin/articles:
+articles_list:
+  path:       /admin/articles
   controller: Article
   action:     showAll
 
-/admin/articles/modification:
+article_update:
+  path:       /admin/articles/modification
   controller: Article
   action:     modifyArticle
 
-/admin/tab-change:
+article_tab_change:
+  path:       /admin/tab-change
   controller: Article
   action:     tabChange
 
 # PRODUCTIONS
-/admin/productions:
+productions_list:
+  path:       /admin/productions
   controller: Production
   action:     showAll
 
-/admin/productions/creation:
+productions_creation:
+  path:       /admin/productions/creation
   controller: Production
   action:     addProduction
 
-/admin/productions/creation-tmdb:
+productions_creation_tmdb:
+  path:       /admin/productions/creation-tmdb
   controller: Production
   action:     addProductionTmdb
 
-/admin/production/tmdb-request:
+productions_creation_check:
+  path:       /admin/productions/creation-check
+  controller: Production
+  action:     addProductionCheck
+
+productions_tmdb_request:
+  path:       /admin/productions/tmdb-request
   controller: Production
   action:     tmdbRequest
 
+productions_data:
+  path:       /admin/productions/productions-data
+  controller: Production
+  action:     getProductions
+
+production_update:
+  path:       /admin/productions/modification/{id}
+  controller: Production
+  action:     updateProduction
+  middleware: Editor
+  requirements:
+    id:       (\d+)
+
+production_delete:
+  path:       /admin/productions/supprimer
+  controller: Production
+  action:     deleteProduction
+  middleware: Editor
+  requirements:
+    id:       (\d+)
+
 # COMMENTS
-/admin/commentaires:
+comments_list:
+  path:       /admin/commentaires
   controller: Comment
   action:     showAll
 
 # TEMPLATES
-/admin/templates:
+templates_lists:
+  path:       /admin/templates
   controller: Template
   action:     showAll
 
 # STATS
-/admin/statistiques:
+stats:
+  path:       /admin/statistiques
   controller: Stats
   action:     showAll
 
 # USERS
-/admin/utilisateurs:
+users_list:
+  path:       /admin/utilisateurs
   controller: Person
   action:     showAll
 
-/admin/utilisateur:
-  controller: User
+users_data:
+  path:       /admin/utilisateurs/utilisateurs-data
+  controller: Person
+  action:     getUsers
+
+user_show:
+  path:       /admin/utilisateur
+  controller: Person
   action:     show
 
-/admin/utilisateurs/creation:
-  controller: User
+user_creation:
+  path:       /admin/utilisateurs/creation
+  controller: Person
   action:     add
 
+# MEDIAS
+media_list:
+  path:       /admin/medias
+  controller: Media
+  action:     showAll
+
+media_upload:
+  path:       /admin/medias/chargement
+  controller: Media
+  action:     upload
 
 # SETTINGS
-/admin/parametres:
+settings:
+  path:       /admin/parametres
   controller: Settings
-  action: showAll
+  action:     showAll
   middleware: Admin, Editor, Moderator

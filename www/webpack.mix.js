@@ -24,8 +24,7 @@ mix.babel(
   // All the JS source files...
   [
 	  './src/js/jquery-3.5.1.min.js',
-	  './src/js/datatable.js',
-	  './src/js/main.js',
+	  './src/js/main.js'
 	],
   // ...ompiled to the following file to inclue inside views
     './dist/main.js');

@@ -22,7 +22,7 @@ $pure-black: black;
 $black: #14142B;
 $light-black: lighten(black, 26%);
 
-
+$green: #32cd32;
 
 $purple: #5F2EEA;
 $purple2: #5B1CE0;
@@ -115,3 +115,8 @@ $item-navigation-font-color: $grey6;
 // Logo
 $logo-bg-color: $blue;
 $logo-icon-color: $light-white;
+
+
+// SIZES
+$sidebarFullWidth: 220px;
+$sidebarWrappedWidth: 6rem;

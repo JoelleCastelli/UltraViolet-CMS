@@ -14,18 +14,19 @@ class FormBuilder
                        action = '".($config["config"]["action"] ?? "")."'
                        class = '".($config["config"]["class"] ?? "")."'
                        id = '".($config["config"]["id"] ?? "")."'
+                       enctype = '".($config["config"]["enctype"] ?? "")."'
 				>";
 
 		foreach ($config["fields"] as $fieldName => $field) {
 
             $required = isset($field["required"]) && $field["required"] == true ? "required" : '';
             $disabled = isset($field["disabled"]) && $field["disabled"] == true ? "disabled" : '';
+            $multiple = isset($field["multiple"]) && $field["multiple"] == true ? "multiple" : '';
 
-            $html .= "<label for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
+            $html .= "<label class='".($field["classLabel"] ?? "")."' for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
 
             // SELECT
 		    if ($field["type"] == "select") {
-
                 $html .= "<select name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
@@ -49,7 +50,6 @@ class FormBuilder
 
             // CHECKBOX
             } elseif ($field['type'] == 'checkbox') {
-
                 $html .= "<fieldset id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $disabledOption = isset($option["disabled"]) &&  $option["disabled"] == true ? "disabled" : '';
@@ -61,6 +61,19 @@ class FormBuilder
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
                 }
                 $html .= "</fieldset>";
+
+            } elseif ($field['type'] == 'textarea') {
+
+                $value = $field['value'] ?? '';
+                if (!empty($_POST[$fieldName])) {
+                    $value = htmlspecialchars($_POST[$fieldName], ENT_QUOTES);
+                }
+
+                $html .="<textarea name='".$fieldName."'
+                                   placeholder='".($field["placeholder"] ?? "")."'
+                                   class='".($field["class"] ?? "")."'
+                                   id='".($field["id"] ?? $fieldName)."'
+                                   $required $disabled>$value</textarea>";
 
             // OTHER INPUTS
             } else {
@@ -79,7 +92,7 @@ class FormBuilder
                     min='".($field["min"] ?? "")."'
                     max='".($field["max"] ?? "")."'
                     id='".($field["id"] ?? $fieldName)."'
-                    $required $disabled
+                    $required $disabled $multiple
                 >";
             }
 		}
@@ -95,13 +108,9 @@ class FormBuilder
 	}
 
     public static function generateCSRFToken() {
-        if(!isset($_SESSION['csrf_token'])) {
-            $token = bin2hex(random_bytes(32));
-            $_SESSION['csrf_token'] = $token;
-            return $token;
-        } else {
-            return $_SESSION['csrf_token'];
-        }
+        $token = bin2hex(random_bytes(32)).time();
+        $_SESSION['csrfTokens'][] = $token;
+        return $token;
     }
 
 }
