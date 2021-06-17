@@ -37,7 +37,8 @@
         z-index: 1;
         transition: visibility .2s, opacity 0.2s linear;
 
-        a {
+        a, span {
+            color: black;
             padding: 10px 10px;
             display: block;
             &:hover {

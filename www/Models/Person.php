@@ -227,7 +227,7 @@ class Person extends Database
     }
 
     public function setDefaultProfilePicture() {
-        if(file_exists(PATH_TO_IMG.'default.jpg')) {
+        if(file_exists(getcwd().PATH_TO_IMG.'default.jpg')) {
             $media = new Media();
             if($media->findOneBy('path', 'default.jpg')) {
                 $defaultImage = $media->findOneBy('path', 'default.jpg');
@@ -236,8 +236,17 @@ class Person extends Database
                 die("Default image is not in database");
             }
         } else {
-            die("Default image file does not exist");
+            die('Default image '.getcwd().PATH_TO_IMG.'default.jpg does not exist');
         }
+    }
+
+    public function generateEmailKey() {
+        $lengthkey = 15;
+        $key= "";
+        for($i=1;$i<$lengthkey;$i++) {
+            $key.=mt_rand(0,9);
+        }
+        $this->setEmailKey($key);
     }
 
     public function formBuilderLogin(): array {

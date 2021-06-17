@@ -2,19 +2,20 @@
     display: flex;
     color: $purple2;
     background-color: $pure-white;
-    font-style: $mulish;
-    font-weight: 700;
+    font-family: $poppins;
+    font-size: 14px;
+    font-weight: 500;
     border-radius: 8px;
     border: solid $white2 1px;
 
     .filtering-btn {
-        
         padding: 1rem 3rem;
         transition: all 0.3s ease-out;
         cursor: pointer;
 
         &.active {
-            background-color: $purple-light;
+            background-color: $purple2;
+            color: white;
         }
 
         &:first-child {
@@ -26,14 +27,18 @@
         }
 
         &:hover {
-            background-color: $purple-light;
+            background-color: $purple2;
+            color: white;
+        }
+
+        &:first-child {
+            border-radius: 8px 0 3px 8px;
+        }
+
+        &:last-child {
+            border-radius: 0 8px 8px 0;
         }
     }
-
-     &:first-child {
-        border-radius: inherit 0px 0px inherit;
-    }
-
 }
 
 .row-between {

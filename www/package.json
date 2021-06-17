@@ -20,6 +20,6 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
-    "node-sass": "^5.0.0"
+    "node-sass": "^4.14.1"
   }
 }

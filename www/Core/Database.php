@@ -64,6 +64,10 @@ class Database {
         }
 
         try {
+            // Workaround: prevent MySql from interpreting bool(false) as empty string
+            foreach ($column as $key => $value) {
+                if(gettype($value) === "boolean" && $value === false) { $column[$key] = 0; }
+            }
             return $query->execute($column);
         } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
@@ -116,27 +120,21 @@ class Database {
     }
 
     public function delete() {
-
-        if ($this->getDeletedAt()) // hard
-        {
-
+        if ($this->getDeletedAt()) {
+            // hard delete
             $query = $this->pdo->prepare("DELETE FROM " . $this->table . " WHERE id=" . $this->getId());
             try {
-
                 return $query->execute();
-
-            }catch (\Exception $e) {
+            } catch (\Exception $e) {
                 echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
                 die();
             }
-
-        } else { // soft
+        } else {
+            // soft
             $this->setDeletedAt(Helpers::getCurrentTimestamp());
             $this->save();
         }
-
-
-}
+    }
 
     public function count($column = "*")
     {
@@ -152,12 +150,24 @@ class Database {
 
     // WHERE
     public function where($column, $value, $equal = "=" ) {
-        $this->query .= "WHERE " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        if($value == "NOT NULL") {
+            $this->query .= "WHERE " . $column . " IS NOT NULL ";
+        } else if ($value == "NULL") {
+            $this->query .= "WHERE " . $column . " IS NULL ";
+        } else {
+            $this->query .= "WHERE " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        }
         return $this;
     }
 
     public function andWhere($column, $value, $equal = "=") {
-        $this->query .= "AND " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        if($value == "NOT NULL") {
+            $this->query .= "AND " . $column . " IS NOT NULL ";
+        } else if ($value == "NULL") {
+            $this->query .= "AND " . $column . " IS NULL ";
+        } else {
+            $this->query .= "AND " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+        }
         return $this;
     }
 
@@ -218,9 +228,8 @@ class Database {
     }
 
     public function orderBy($column, $order = "ASC") {
-
         if($this->order == 0) {
-            $this->query .= "ORDER BY " . $column . " " . $order . "' ";
+            $this->query .= "ORDER BY '" . $column . "' " . $order . " ";
             $this->order++;
         }
         else
@@ -229,14 +238,10 @@ class Database {
     }
 
     public function get(){
-
         $query = $this->pdo->query($this->query);
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
-
         try {
-
             return $query->fetchAll();
-
         }catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
@@ -265,8 +270,8 @@ class Database {
         $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
-                $class = $action['class'] ?? '';
-                $actions .= "<a id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</a>";
+                $tag = $action['action'] == "delete" ? "span" : "a";
+                $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$action['action']."' href='".$action['url']."'>".$action['name']."</$tag>";
             }
         }
         $actions .= "</div></div>";

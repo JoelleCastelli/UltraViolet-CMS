@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Core\Database;
 use App\Core\FormBuilder;
 use App\Core\Helpers;
+use App\Core\View;
 
 class Production extends Database
 {
@@ -17,10 +18,18 @@ class Production extends Database
     protected ?string $overview;
     protected ?int $runtime;
     protected ?int $number;
-    protected $deletedAt;
-    private $createdAt;
-    private $updatedAt;
-    protected ?array $actions = [];
+    protected ?int $totalSeasons;
+    protected ?int $totalEpisodes;
+    protected array $cast = [];
+    protected array $directors = [];
+    protected array $writers = [];
+    protected array $creators = [];
+    protected Media $poster;
+    protected string $tmdbPosterPath;
+    protected ?string $deletedAt = null;
+    private string $createdAt;
+    private ?string $updatedAt;
+    private ?array $actions = [];
 
     public function __construct()
     {
@@ -121,12 +130,32 @@ class Production extends Database
         $this->number = $number;
     }
 
+    public function getTotalSeasons(): ?int
+    {
+        return $this->totalSeasons;
+    }
+
+    public function setTotalSeasons(int $totalSeasons): void
+    {
+        $this->totalSeasons = $totalSeasons;
+    }
+
+    public function getTotalEpisodes(): ?int
+    {
+        return $this->totalEpisodes;
+    }
+
+    public function setTotalEpisodes(int $totalEpisodes): void
+    {
+        $this->totalEpisodes = $totalEpisodes;
+    }
+
     public function getCreatedAt(): string
     {
         return $this->createdAt;
     }
 
-    public function getDeletedAt(): string
+    public function getDeletedAt(): ?string
     {
         return $this->deletedAt;
     }
@@ -149,7 +178,11 @@ class Production extends Database
     }
 
     public function getCleanReleaseDate() {
-        return date("d/m/Y", strtotime($this->getReleaseDate()));
+        if ($this->getReleaseDate() != '') {
+            return date("d/m/Y", strtotime($this->getReleaseDate()));
+        } else {
+            return "-";
+        }
     }
 
     public function translateType() {
@@ -186,7 +219,123 @@ class Production extends Database
     }
 
     public function getCleanRuntime() {
-        return $this->getRuntime()." minutes";
+        if($this->getRuntime() != '') {
+            return $this->getRuntime()." minutes";
+        } else {
+            return "-";
+        }
+    }
+
+    public function getCleanCreatedAt(): string
+    {
+        return date("d/m/Y",strtotime($this->getCreatedAt()));
+    }
+
+    public function getCast(): array
+    {
+        return $this->cast;
+    }
+
+    public function setCast($tmdbCast): void
+    {
+        $cast = [];
+        for($i = 1; $i <= 3 ; $i++) {
+            $person = new Person();
+            $person->setRole('vip');
+            $name = $tmdbCast[$i]->name ?? '-';
+            $person->setFullName($name);
+            $productionPerson = new ProductionPerson();
+            $productionPerson->setDepartment('cast');
+            $cast[] = $person;
+            $cast[] = $productionPerson;
+        }
+        $this->cast = $cast;
+    }
+
+    public function getPoster(): Media
+    {
+        return $this->poster;
+    }
+
+    public function setPoster($tmdbId, $productionType): void
+    {
+        $media = new Media();
+        $imgPath = PATH_TO_IMG_POSTERS ."/$productionType/poster_$tmdbId.png";
+        $media->setPath($imgPath);
+        $media->setTitle("poster_$tmdbId");
+    }
+
+    public function getTmdbPosterPath(): string
+    {
+        return $this->tmdbPosterPath;
+    }
+
+    public function setTmdbPosterPath(string $tmdbPosterPath): void
+    {
+        $this->tmdbPosterPath = $tmdbPosterPath;
+    }
+
+    public function getDirectors(): array
+    {
+        return $this->directors;
+    }
+
+    public function setDirectors(array $crewTeam): void
+    {
+        $directors = [];
+        foreach ($crewTeam as $crew) {
+            if ($crew->name != "" && $crew->job == 'Director') {
+                $person = new Person();
+                $person->setRole('vip');
+                $person->setFullName($crew->name);
+                $productionPerson = new ProductionPerson();
+                $productionPerson->setDepartment('director');
+                $directors[] = $person;
+                $directors[] = $productionPerson;
+            }
+        }
+        $this->directors = $directors;
+    }
+
+    public function getWriters(): array
+    {
+        return $this->writers;
+    }
+
+    public function setWriters(array $crewTeam): void
+    {
+        $writers = [];
+        foreach ($crewTeam as $crew) {
+            if ($crew->name != "" && $crew->job == 'Screenplay') {
+                $person = new Person();
+                $person->setRole('vip');
+                $person->setFullName($crew->name);
+                $productionPerson = new ProductionPerson();
+                $productionPerson->setDepartment('writer');
+                $writers[] = $person;
+                $writers[] = $productionPerson;
+            }
+        }
+        $this->writers = $writers;
+    }
+
+    public function getCreators(): array
+    {
+        return $this->creators;
+    }
+
+    public function setCreators(array $creators): void
+    {
+        $creators = [];
+        foreach ($creators as $creator) {
+            $person = new Person();
+            $person->setRole('vip');
+            $person->setFullName($creator->name);
+            $productionPerson = new ProductionPerson();
+            $creators[] = $person;
+            $creators[] = $productionPerson;
+        }
+        $this->creators = $creators;
     }
 
     public function formBuilderAddProduction(){
@@ -277,7 +426,7 @@ class Production extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "tmdb-request",
+                "action" => "creation-check",
                 "class" => "form_control",
                 "id" => "formAddProductionTmdb",
                 "submit" => "Valider"
@@ -289,7 +438,7 @@ class Production extends Database
                         [
                             "value"=>"movie",
                             "text"=>"Film",
-                            "selected"=>true
+                            "checked"=>true
                         ],
                         [
                             "value"=>"series",
@@ -301,22 +450,27 @@ class Production extends Database
                     "error" => "Le type doit être film, série, saison ou épisode"
                 ],
                 "productionID" => [
-                    "type" => "text",
+                    "type" => "number",
+                    "min" => 1,
                     "label" => "ID du film ou de la série",
                     "class" => "form_input",
                     "error" => "Un ID est nécessaire"
                 ],
                 "seasonNb" => [
-                    "type" => "text",
+                    "type" => "number",
+                    "min" => 0,
                     "label" => "Numéro de la saison",
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire"
+                    "error" => "Un type de production est nécessaire",
+                    "disabled" => true
                 ],
                 "episodeNb" => [
-                    "type" => "text",
+                    "type" => "number",
+                    "min" => 0,
                     "label" => "Numéro de l'épisode",
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire"
+                    "error" => "Un type de production est nécessaire",
+                    "disabled" => true
                 ],
                 "productionPreviewRequest" => [
                     "type" => "button",
@@ -330,7 +484,69 @@ class Production extends Database
                 ]
             ],
         ];
+    }
 
+    public function populateFromTmdb($post, $jsonResponseArray) {
+
+        // index 0: movie or series
+        $item = json_decode($jsonResponseArray[0]);
+        // index 1: episode
+        if(isset($jsonResponseArray[1]))
+            $episode = json_decode($jsonResponseArray[1]);
+
+        $this->setTmdbId($item->id);
+        $this->setType(htmlspecialchars($post['productionType']));
+        $this->setTitle($item->title ?? $item->name);
+        $this->setOriginalTitle($item->original_title ?? $item->original_name);
+        $this->setOverview($item->overview);
+        $this->setReleaseDate($item->release_date ?? $item->first_air_date);
+        $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
+        $this->setCast($item->credits->cast);
+        $this->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
+
+        //$production0['genres'] = $item->genres; TODO
+
+        switch ($post['productionType']) {
+            case 'movie':
+                $this->setDirectors($item->credits->crew);
+                $this->setWriters($item->credits->crew);
+                $this->setPoster($item->id, 'movie');
+                break;
+            case 'series':
+                $this->setCreators($item->created_by);
+                $this->setTotalSeasons(sizeof($item->seasons));
+                $nbEpisodes = 0;
+                foreach ($item->seasons as $season) { $nbEpisodes += $season->episode_count; }
+                $this->setTotalEpisodes($nbEpisodes);
+                $this->setPoster($item->id, 'series');
+
+                // Season
+                if(!empty($_POST['seasonNb'])) {
+                    if(isset($item->seasons[$post['seasonNb']])) {
+                        $this->setTotalEpisodes($item->seasons[$post['seasonNb']]->episode_count);
+                        $this->setOverview($item->seasons[$post['seasonNb']]->overview);
+                        $this->setPoster($item->id, 'season');
+                        $this->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
+
+                        // Episode
+                        if(!empty($episode)) {
+                            $this->setTitle($episode->name);
+                            $this->setOverview($episode->overview);
+                            $this->setReleaseDate($episode->air_date);
+                            $this->setPoster($item->id, 'episode');
+                            $this->setTmdbPosterPath(TMDB_IMG_PATH.$episode->still_path);
+                        }
+                    } else {
+                        echo 'La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb'];
+                    }
+                }
+                break;
+        }
+    }
+
+    public function displayPreview() {
+        $view = new View("productions/tmdbPreview", null);
+        $view->assign('production', $this);
     }
 
 }

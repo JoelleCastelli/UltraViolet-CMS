@@ -66,6 +66,11 @@ productions_creation_tmdb:
   controller: Production
   action:     addProductionTmdb
 
+productions_creation_check:
+  path:       /admin/productions/creation-check
+  controller: Production
+  action:     addProductionCheck
+
 productions_tmdb_request:
   path:       /admin/productions/tmdb-request
   controller: Production
@@ -85,7 +90,7 @@ production_update:
     id:       (\d+)
 
 production_delete:
-  path:       /admin/productions/supprimer/{id}
+  path:       /admin/productions/supprimer
   controller: Production
   action:     deleteProduction
   middleware: Editor
