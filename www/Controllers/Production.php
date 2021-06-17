@@ -91,9 +91,37 @@ class Production
         $view->assign("form", $form);
         $view->assign("title", "Ajout d'une production");
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/addProduction.js']);
+
+        if(!empty($_POST)) {
+            if(!isset($_POST['seasonNb'])) { $_POST['seasonNb'] = ''; }
+            if(!isset($_POST['episodeNb'])) { $_POST['episodeNb'] = ''; }
+            if(!isset($_POST['productionPreviewRequest'])) { $_POST['productionPreviewRequest'] = ''; }
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)) {
+                if($_POST['productionType'] === 'movie' && (!empty($_POST['seasonNb']) || !empty($_POST['episodeNb']))) {
+                    $errors[] = "Un film ne peut pas avoir de numéro de saison ou d'épisode";
+                } else {
+                    $urlArray = $this->getTmdbUrl($_POST);
+                    $jsonResponseArray = $this->getApiResponse($urlArray);
+                    if (!empty($jsonResponseArray)) {
+                        $production = new ProductionModel();
+                        if($production->populateFromTmdb($_POST, $jsonResponseArray)) {
+                            $production->save();
+                            Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
+                            Helpers::redirect(Helpers::callRoute('productions_list'));
+                        } else {
+                            echo "Problème avec TMDB";
+                        }
+                    } else {
+                        $errors[] = "La recherche ne correspond à aucun résultat sur TMDB";
+                    }
+                }
+            }
+            $view->assign("errors", $errors);
+        }
     }
 
-    public function tmdbRequestAction() {
+    public function ajaxShowPreviewAction() {
         if(!empty($_POST['productionType']) && !empty($_POST['productionID'])) {
             if($_POST['productionType'] === 'movie' && (!empty($_POST['seasonNb']) || !empty($_POST['episodeNb']))) {
                 echo "Un film ne peut pas avoir de numéro de saison ou d'épisode";
@@ -171,10 +199,6 @@ class Production
             $production->setId($_POST['productionId']);
             $production->delete();
         }
-    }
-
-    public function addProductionCheckAction() {
-        Helpers::redirect(Helpers::callRoute('productions_list'));
     }
 
 }

@@ -37,25 +37,24 @@ class Database {
 
     /* GENERAL QUERY */
 	public function save() {
-        $column = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
-        //if column is foreign object, unset it
-        foreach($column as $key => $value) {
-            if(is_object($value)) {
-                unset($column[$key]);
-            }
+        $columns = array_diff_key(get_object_vars($this), get_class_vars(get_class()));
+
+        // Unset $column if its an object
+        foreach($columns as $key => $value) {
+            if(is_object($value)) { unset($columns[$key]); }
         }
 
-        // INSERT
         if (is_null($this->getId())) {
+            // INSERT
             $query = $this->pdo->prepare("INSERT INTO " . $this->table . " 
-            (" . implode(',', array_keys($column)) . ") 
+            (" . implode(', ', array_keys($columns)) . ") 
             VALUES 
-            (:" . implode(',:', array_keys($column)) . ") "); //1
-        } //UPDATE
-        else {
+            (:" . implode(', :', array_keys($columns)) . ") ");
+        } else {
+            //UPDATE
             $str = "";
             // build string for update -> "propertie = :propertie"
-            foreach ($column as $key => $value) {
+            foreach ($columns as $key => $value) {
                 $str .= $key . " = :" . $key . ", ";
             }
             // remove the last space and last comma
@@ -65,12 +64,12 @@ class Database {
 
         try {
             // Workaround: prevent MySql from interpreting bool(false) as empty string
-            foreach ($column as $key => $value) {
+            foreach ($columns as $key => $value) {
                 if(gettype($value) === "boolean" && $value === false) { $column[$key] = 0; }
             }
-            return $query->execute($column);
+            return $query->execute($columns);
         } catch (\Exception $e) {
-            echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
+            echo "EXCEPTION : Incorrect query<br>" . $e->getMessage();
             die();
         }
     }

@@ -25,7 +25,7 @@ class Production extends Database
     private array $writers = [];
     private array $creators = [];
     protected Media $poster;
-    protected string $tmdbPosterPath;
+    private string $tmdbPosterPath;
     protected ?string $deletedAt = null;
     private string $createdAt;
     private ?string $updatedAt;
@@ -426,10 +426,11 @@ class Production extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "creation-check",
+                "action" => "",
                 "class" => "form_control",
                 "id" => "formAddProductionTmdb",
-                "submit" => "Valider"
+                "submit" => "Valider",
+                "referer" => Helpers::callRoute('productions_creation_tmdb')
             ],
             "fields" => [
                 "productionType" => [
@@ -454,14 +455,14 @@ class Production extends Database
                     "min" => 1,
                     "label" => "ID du film ou de la série",
                     "class" => "form_input",
-                    "error" => "Un ID est nécessaire"
+                    "error" => "Un ID TMDB est nécessaire"
                 ],
                 "seasonNb" => [
                     "type" => "number",
                     "min" => 0,
                     "label" => "Numéro de la saison",
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire",
+                    "error" => "Le numéro de saison doit être supérieur ou égal à 0",
                     "disabled" => true
                 ],
                 "episodeNb" => [
@@ -469,7 +470,7 @@ class Production extends Database
                     "min" => 0,
                     "label" => "Numéro de l'épisode",
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire",
+                    "error" => "Le numéro d'épisode doit être supérieur ou égal à 0",
                     "disabled" => true
                 ],
                 "productionPreviewRequest" => [

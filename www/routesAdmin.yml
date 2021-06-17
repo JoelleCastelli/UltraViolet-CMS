@@ -74,15 +74,10 @@ productions_creation_tmdb:
   controller: Production
   action:     addProductionTmdb
 
-productions_creation_check:
-  path:       /admin/productions/creation-check
-  controller: Production
-  action:     addProductionCheck
-
-productions_tmdb_request:
+productions_show_preview:
   path:       /admin/productions/tmdb-request
   controller: Production
-  action:     tmdbRequest
+  action:     ajaxShowPreview
 
 productions_data:
   path:       /admin/productions/productions-data
