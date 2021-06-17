@@ -102,8 +102,8 @@ class Production
                 $jsonResponseArray = $this->getApiResponse($urlArray);
                 if (!empty($jsonResponseArray)) {
                     $production = new ProductionModel();
-                    $production->populateFromTmdb($_POST, $jsonResponseArray);
-                    $production->displayPreview();
+                    if($production->populateFromTmdb($_POST, $jsonResponseArray))
+                        $production->displayPreview();
                 } else {
                     echo "La recherche ne correspond à aucun résultat sur TMDB";
                 }

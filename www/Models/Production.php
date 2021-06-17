@@ -537,11 +537,13 @@ class Production extends Database
                             $this->setTmdbPosterPath(TMDB_IMG_PATH.$episode->still_path);
                         }
                     } else {
-                        echo 'La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb'];
+                        echo '<div class="error">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</div>";
+                        return false;
                     }
                 }
                 break;
         }
+        return true;
     }
 
     public function displayPreview() {
