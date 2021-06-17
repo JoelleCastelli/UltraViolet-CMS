@@ -20,10 +20,10 @@ class Production extends Database
     protected ?int $number;
     protected ?int $totalSeasons;
     protected ?int $totalEpisodes;
-    protected array $cast = [];
-    protected array $directors = [];
-    protected array $writers = [];
-    protected array $creators = [];
+    private array $cast = [];
+    private array $directors = [];
+    private array $writers = [];
+    private array $creators = [];
     protected Media $poster;
     protected string $tmdbPosterPath;
     protected ?string $deletedAt = null;
