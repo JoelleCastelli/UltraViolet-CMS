@@ -17,7 +17,7 @@ class Person extends Database
     protected ?string $fullName;
     protected ?string $pseudo;
     protected ?string $email;
-    protected ?string $emailkey;
+    protected ?string $emailKey;
     protected ?string $password;
     protected bool $optin = true;
     protected ?string $deletedAt;
@@ -66,12 +66,13 @@ class Person extends Database
         $this->email = $email;
     }
 
-    public function getEmailKey() {
-        return $this->emailkey;
+    public function getEmailKey(): ?string
+    {
+        return $this->emailKey;
     }
 
-    public function setEmailKey($emailkey): void {
-        $this->emailkey = $emailkey;
+    public function setEmailKey($emailKey): void {
+        $this->emailKey = $emailKey;
     }
 
     public function getPassword(): ?string {
