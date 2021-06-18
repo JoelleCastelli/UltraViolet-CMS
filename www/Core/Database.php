@@ -65,7 +65,7 @@ class Database {
         try {
             // Workaround: prevent MySql from interpreting bool(false) as empty string
             foreach ($columns as $key => $value) {
-                if(gettype($value) === "boolean" && $value === false) { $column[$key] = 0; }
+                if(gettype($value) === "boolean" && $value === false) { $columns[$key] = 0; }
             }
             return $query->execute($columns);
         } catch (\Exception $e) {
