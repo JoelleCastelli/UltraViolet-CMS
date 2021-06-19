@@ -51,7 +51,7 @@ class Article {
                 "Commentaire" => "[NOMBRE COMMENTAIRE]",
                  "Date" => $article->getCreatedAt(),
                 "Publication" => $article->getState(),
-                "Actions" => "[CHOIX DES ACTIONS]"
+                "Actions" => $article->generateActionsMenu()
             ];
         }
 
@@ -95,12 +95,6 @@ class Article {
                 // TODO : Get real connected Person and Media used
                 $article->setMediaId(1);
                 $article->setPersonId(1);
-
-//                 echo "<pre>";
-//                 var_dump($article);
-//                 echo "</pre>";
-//                 die;
-
 
                 $article->save();
             } 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
 use App\Core\FormBuilder;
 use JsonSerializable;
@@ -31,10 +32,16 @@ class Article extends Database implements JsonSerializable
     public $media;
     public $person;
 
+    private $actions;
+
     public function __construct() {
         parent::__construct();
         $this->media = new Media;
         $this->person = new Person;
+        $this->actions = [
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('article_update', ['id' => $this->id])],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('article_delete', ['id' => $this->id]), 'role' => 'admin'],
+        ];
     }
 
     /**
@@ -317,6 +324,14 @@ class Article extends Database implements JsonSerializable
     public function setDeletedAt($deletedAt): void
     {
         $this->deletedAt = $deletedAt;
+    }
+
+    /**
+     * @return array
+     */
+    public function getActions()
+    {
+        return $this->actions;
     }
 
     public function findAll() {

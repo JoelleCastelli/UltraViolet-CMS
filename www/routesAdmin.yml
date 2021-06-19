@@ -49,14 +49,19 @@ articles_list:
   action:     showAll
 
 article_update:
-  path:       /admin/articles/modification
+  path:       /admin/articles/update
   controller: Article
-  action:     modifyArticle
+  action:     updateArticle
 
 article_creation:
   path: /admin/articles/creation
   controller: Article
   action: createArticle
+
+article_delete:
+  path: /admin/articles/delete
+  controller: Article
+  action: deleteArticle
 
 article_data:
   path: /admin/articles/articles-data
