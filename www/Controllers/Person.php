@@ -167,6 +167,17 @@ class Person
 
 	}
 
+    public function deletePersonAction($id) {
+        $view = new View("person/delete");
+        
+    }
+
+    public function updatePersonAction($id) {
+        $view = new View("persons/update");
+        $view->assign('title', 'Modification d\' utilisateur');
+        $view->assign('param', $id);
+    }
+
     
 
 	public function showAction(){
