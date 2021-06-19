@@ -176,7 +176,7 @@ class Person
 
         $view = new View("userVerification", "front");
         $user = new PersonModel();
-        $user = $user->select()->where("pseudo", $pseudo)->andWhere("emailkey", $key)->first();
+        $user = $user->select()->where("pseudo", $pseudo)->andWhere("emailKey", $key)->first();
         
         if(!empty($user))
         {

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\FormBuilder;
+use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
 
 
@@ -13,18 +14,24 @@ class Person extends Database
     use ModelsTrait;
 
     private ?int $id = null;
-    private string $createdAt;
-    private ?string $updatedAt;
     protected ?string $fullName;
     protected ?string $pseudo;
-    protected ?string $email;
-    protected ?string $emailkey;
-    protected ?string $password;
-    protected bool $optin = true;
-    protected ?string $deletedAt;
     protected string $role = 'user';
-    protected bool $emailConfirmed = false;
     private ?array $actions = [];
+    private string $createdAt;
+    private ?string $updatedAt;
+    protected ?string $deletedAt;
+
+    // User-related
+    protected ?string $email;
+    protected ?string $emailKey;
+    protected ?string $password;
+    protected bool $emailConfirmed = false;
+    protected bool $optin = true;
+
+    // VIP-related
+    protected ?int $tmdbId = null;
+    private ?string $character;
 
     // Foreign properties
     protected int $mediaId;
@@ -41,6 +48,16 @@ class Person extends Database
 
     public function getId(): ?int {
         return $this->id;
+    }
+
+    public function getTmdbId(): ?int
+    {
+        return $this->tmdbId;
+    }
+
+    public function setTmdbId(?int $tmdbId): void
+    {
+        $this->tmdbId = $tmdbId;
     }
 
     public function getFullName(): ?string {
@@ -67,12 +84,13 @@ class Person extends Database
         $this->email = $email;
     }
 
-    public function getEmailKey() {
-        return $this->emailkey;
+    public function getEmailKey(): ?string
+    {
+        return $this->emailKey;
     }
 
-    public function setEmailKey($emailkey): void {
-        $this->emailkey = $emailkey;
+    public function setEmailKey($emailKey): void {
+        $this->emailKey = $emailKey;
     }
 
     public function getPassword(): ?string {
@@ -123,7 +141,6 @@ class Person extends Database
         return $this->emailConfirmed;
     }
 
-    
     public function setEmailConfirmed(bool $emailConfirmed): void {
         $this->emailConfirmed = $emailConfirmed;
     }
@@ -160,6 +177,16 @@ class Person extends Database
 
     public function setMedia(Media $media): void {
         $this->media = $media;
+    }
+
+    public function getCharacter(): ?string
+    {
+        return $this->character;
+    }
+
+    public function setCharacter(?string $character): void
+    {
+        $this->character = $character;
     }
 
     public function canAccessBackOffice(): bool {
@@ -249,6 +276,68 @@ class Person extends Database
         }
         $this->setEmailKey($key);
         return $key;
+    }
+
+    public function saveMedia() {
+        $actorImgPath = PATH_TO_IMG_VIP.$this->getTmdbId().'_'.Helpers::slugify($this->getFullName());
+        // Save vip's image file
+        if(!empty($this->media->getTmdbPosterPath()) && $this->media->getTmdbPosterPath() != TMDB_IMG_PATH) {
+            file_put_contents(getcwd().$actorImgPath, file_get_contents($this->media->getTmdbPosterPath()));
+        }
+
+        // Save or update vip's image in database
+        $existingMedia = new Media();
+        $existingMedia = $existingMedia->findOneBy('path', $actorImgPath);
+        if($existingMedia) {
+            $existingMedia->setTitle($this->getFullName());
+            $existingMedia->save();
+            $mediaId = $existingMedia->getId();
+        } else {
+            $media = new Media();
+            $media->setTitle($this->getFullName());
+            $media->setPath($actorImgPath);
+            $media->save();
+            $mediaId = $media->getLastInsertId();
+        }
+        return $mediaId;
+    }
+
+    public function saveVip($mediaId) {
+        // Save or update person in database
+        $existingActor = new Person();
+        $existingActor = $existingActor->findOneBy('fullName', $this->getFullName());
+        if($existingActor) {
+            $existingActor->setMediaId($mediaId);
+            $existingActor->save();
+            $actorID = $existingActor->getId();
+        } else {
+            $this->setMediaId($mediaId);
+            $this->save();
+            $actorID = $this->getLastInsertId();
+        }
+
+        return $actorID;
+    }
+
+    public function saveProductionPerson($actorID, $productionId, $department) {
+        // Save or update production person in database
+        $existingProductionPerson = new ProductionPerson();
+        $existingProductionPerson = $existingProductionPerson->select()
+            ->where('personId', $actorID)
+            ->andWhere('productionId', $productionId)
+            ->get();
+        if($existingProductionPerson) {
+            $existingProductionPerson->setCharacter($this->getCharacter());
+            $existingProductionPerson->save();
+        } else {
+            $productionPerson = new ProductionPerson();
+            $productionPerson->setDepartment($department);
+            $productionPerson->setPersonId($actorID);
+            $productionPerson->setProductionId($productionId);
+            if($department === 'cast')
+                $productionPerson->setCharacter($this->getCharacter());
+            $productionPerson->save();
+        }
     }
 
     public function formBuilderLogin(): array {

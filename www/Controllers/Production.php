@@ -6,6 +6,9 @@ use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
+use App\Models\Media;
+use App\Models\ProductionPerson;
+use App\Models\Person;
 
 class Production
 {
@@ -91,9 +94,48 @@ class Production
         $view->assign("form", $form);
         $view->assign("title", "Ajout d'une production");
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/addProduction.js']);
+
+        if(!empty($_POST)) {
+            if(!isset($_POST['seasonNb'])) { $_POST['seasonNb'] = ''; }
+            if(!isset($_POST['episodeNb'])) { $_POST['episodeNb'] = ''; }
+            if(!isset($_POST['productionPreviewRequest'])) { $_POST['productionPreviewRequest'] = ''; }
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)) {
+                if($_POST['productionType'] === 'movie' && (!empty($_POST['seasonNb']) || !empty($_POST['episodeNb']))) {
+                    $errors[] = "Un film ne peut pas avoir de numéro de saison ou d'épisode";
+                } else {
+                    $urlArray = $this->getTmdbUrl($_POST);
+                    $jsonResponseArray = $this->getApiResponse($urlArray);
+                    if (!empty($jsonResponseArray)) {
+                        $production = new ProductionModel();
+                        if($production->populateFromTmdb($_POST, $jsonResponseArray)) {
+                            if ($production->findOneBy('tmdbId', $production->getTmdbId())) {
+                                $errors[] = "La production avec l'ID TMDB ".$production->getTmdbId()." existe déjà dans la base de données";
+                            } else {
+                                $production->save();
+                                $production->savePoster();
+                                $production->saveCrew('actors');
+                                if($production->getType() == 'movie') {
+                                    $production->saveCrew('writers');
+                                    $production->saveCrew('directors');
+                                }
+
+                                Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
+                                Helpers::redirect(Helpers::callRoute('productions_list'));
+                            }
+                        } else {
+                            echo "Problème dans la récupération de données TMDB";
+                        }
+                    } else {
+                        $errors[] = "La recherche ne correspond à aucun résultat sur TMDB";
+                    }
+                }
+            }
+            $view->assign("errors", $errors);
+        }
     }
 
-    public function tmdbRequestAction() {
+    public function ajaxShowPreviewAction() {
         if(!empty($_POST['productionType']) && !empty($_POST['productionID'])) {
             if($_POST['productionType'] === 'movie' && (!empty($_POST['seasonNb']) || !empty($_POST['episodeNb']))) {
                 echo "Un film ne peut pas avoir de numéro de saison ou d'épisode";
@@ -102,8 +144,8 @@ class Production
                 $jsonResponseArray = $this->getApiResponse($urlArray);
                 if (!empty($jsonResponseArray)) {
                     $production = new ProductionModel();
-                    $production->populateFromTmdb($_POST, $jsonResponseArray);
-                    $production->displayPreview();
+                    if($production->populateFromTmdb($_POST, $jsonResponseArray))
+                        $production->displayPreview();
                 } else {
                     echo "La recherche ne correspond à aucun résultat sur TMDB";
                 }
@@ -171,10 +213,6 @@ class Production
             $production->setId($_POST['productionId']);
             $production->delete();
         }
-    }
-
-    public function addProductionCheckAction() {
-        Helpers::redirect(Helpers::callRoute('productions_list'));
     }
 
 }
