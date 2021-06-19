@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_media` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `mediaId` INT NOT NULL,
   `productionId` INT NOT NULL,
-  `key_art` TINYINT NOT NULL DEFAULT 0,
+  `keyArt` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   INDEX `fk_uvtr_production_media_uvtr_media1_idx` (`mediaId` ASC),
   INDEX `fk_uvtr_production_media_uvtr_production1_idx` (`productionId` ASC),

@@ -277,9 +277,12 @@ class Person extends Database
     }
 
     public function saveMedia() {
-        // Save vip's image file
         $actorImgPath = PATH_TO_IMG_VIP.$this->getTmdbId().'_'.Helpers::slugify($this->getFullName());
-        file_put_contents(getcwd().$actorImgPath, file_get_contents($this->media->getTmdbPosterPath()));
+        // Save vip's image file
+        if($this->media->getTmdbPosterPath()) {
+            file_put_contents(getcwd().$actorImgPath, file_get_contents($this->media->getTmdbPosterPath()));
+        }
+
 
         // Save or update vip's image in database
         $existingMedia = new Media();

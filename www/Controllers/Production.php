@@ -113,6 +113,7 @@ class Production
                                 $errors[] = "La production avec l'ID TMDB ".$production->getTmdbId()." existe déjà dans la base de données";
                             } else {
                                 $production->save();
+                                $production->savePoster();
                                 $production->saveCast();
                                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
                                 Helpers::redirect(Helpers::callRoute('productions_list'));

@@ -275,6 +275,55 @@ class Production extends Database
         $media->setTitle("poster_$tmdbId");
     }
 
+    public function savePoster() {
+        $mediaId = $this->saveMedia();
+        $productionID = $this->getLastInsertId();
+        $this->saveProductionMedia($mediaId, $productionID, true);
+    }
+
+    public function saveMedia() {
+        // Save poster file
+        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle());
+        if($this->poster->getTmdbPosterPath()) {
+            file_put_contents(getcwd().$productionImgPath, file_get_contents($this->poster->getTmdbPosterPath()));
+        }
+
+        // Save or update poster in database
+        $existingMedia = new Media();
+        $existingMedia = $existingMedia->findOneBy('path', $productionImgPath);
+        if($existingMedia) {
+            $existingMedia->setTitle($this->getTitle());
+            $existingMedia->save();
+            $mediaId = $existingMedia->getId();
+        } else {
+            $media = new Media();
+            $media->setTitle($this->getTitle());
+            $media->setPath($productionImgPath);
+            $media->save();
+            $mediaId = $media->getLastInsertId();
+        }
+        return $mediaId;
+    }
+
+    public function saveProductionMedia($mediaId, $productionId, $isKeyArt) {
+        // Save or update production person in database
+        $existingProductionMedia = new ProductionMedia();
+        $existingProductionMedia = $existingProductionMedia->select()
+                                    ->where('mediaId', $mediaId)
+                                    ->andWhere('productionId', $productionId)
+                                    ->get();
+        if($existingProductionMedia) {
+            $existingProductionMedia->setKeyArt($isKeyArt);
+            $existingProductionMedia->save();
+        } else {
+            $productionMedia = new ProductionMedia();
+            $productionMedia->setProductionId($productionId);
+            $productionMedia->setMediaId($mediaId);
+            $productionMedia->setKeyArt($isKeyArt);
+            $productionMedia->save();
+        }
+    }
+
     public function getTmdbPosterPath(): string
     {
         return $this->tmdbPosterPath;
