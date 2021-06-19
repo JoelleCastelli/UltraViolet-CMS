@@ -12,9 +12,7 @@ class Database {
     private int $like = 0;
 
     protected function __construct() {
-
         if ($this->pdo === null) {
-
             if (ENV === "dev") {
                 try {
                     $this->pdo = new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
@@ -30,7 +28,6 @@ class Database {
                 }
             }
         }
-
         $classExploded = explode("\\", get_called_class());
         $this->table = strtolower(Helpers::convertToSnakeCase(DBPREFIXE . end($classExploded)));
     }
@@ -93,19 +90,21 @@ class Database {
     }
 
     public function findOneBy($column, $value)  {
-        $query = $this->pdo->query("SELECT * FROM " . $this->table . " WHERE " . $column . " = '" . $value . "'");
+        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'.$value.'"');
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetch();
     }
 
-    public function findAll(){
+    public function findAll(): array
+    {
         $query = $this->pdo->query("SELECT * FROM " . $this->table);
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetchAll();
     }
 
-    public function selectWhere($column, $value) {
-        $query = $this->pdo->query("SELECT * FROM ".$this->table." WHERE ".$column." = '".$value."'");
+    public function selectWhere($column, $value): array
+    {
+        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'.$value.'"');
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetchAll();
     }
@@ -113,7 +112,8 @@ class Database {
     /* BUILDING QUERY */
 
     // QUERY BEGINNING
-    public function select() {
+    public function select(): Database
+    {
         $this->query = "SELECT * FROM " . $this->table . " ";
         return $this; // Activate chaining
     }
@@ -121,7 +121,7 @@ class Database {
     public function delete() {
         if ($this->getDeletedAt()) {
             // hard delete
-            $query = $this->pdo->prepare("DELETE FROM " . $this->table . " WHERE id=" . $this->getId());
+            $query = $this->pdo->prepare("DELETE FROM " . $this->table . " WHERE `id`=" . $this->getId());
             try {
                 return $query->execute();
             } catch (\Exception $e) {
@@ -135,108 +135,118 @@ class Database {
         }
     }
 
-    public function count($column = "*")
+    public function count($column = "*"): Database
     {
-        $this->query = "SELECT COUNT(" . $column . ") as total FROM " . $this->table . " ";
+        $this->query = 'SELECT COUNT(`' . $column . '`) ';
         return $this;
     }
 
-    public function customQuery($string)
+    public function customQuery($string): Database
     {
-        $this->query .= $string . " ";
+        $this->query .= $string . ' ';
         return $this;
     }
 
     // WHERE
-    public function where($column, $value, $equal = "=" ) {
-        if($value == "NOT NULL") {
-            $this->query .= "WHERE " . $column . " IS NOT NULL ";
-        } else if ($value == "NULL") {
-            $this->query .= "WHERE " . $column . " IS NULL ";
+    public function where($column, $value, $equal = "=" ): Database
+    {
+        if($value == 'NOT NULL') {
+            $this->query .= 'WHERE `' . $column . '` IS NOT NULL ';
+        } else if ($value == 'NULL') {
+            $this->query .= 'WHERE `' . $column . '` IS NULL ';
         } else {
-            $this->query .= "WHERE " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+            $this->query .= 'WHERE `' . $column . '` ' . $equal . ' "' . htmlspecialchars($value, ENT_QUOTES) . '" ';
         }
         return $this;
     }
 
-    public function andWhere($column, $value, $equal = "=") {
-        if($value == "NOT NULL") {
-            $this->query .= "AND " . $column . " IS NOT NULL ";
+    public function andWhere($column, $value, $equal = "="): Database
+    {
+        if($value == 'NOT NULL') {
+            $this->query .= 'AND `' . $column . '` IS NOT NULL ';
         } else if ($value == "NULL") {
-            $this->query .= "AND " . $column . " IS NULL ";
+            $this->query .= 'AND `' . $column . '` IS NULL ';
         } else {
-            $this->query .= "AND " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+            $this->query .= 'AND `' . $column . '` ' . $equal . ' "' . htmlspecialchars($value, ENT_QUOTES) . '" ';
         }
         return $this;
     }
 
-    public function orWhere($column, $value, $equal = "=") {
-        $this->query .= "OR " . $column . " " . $equal . " '" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+    public function orWhere($column, $value, $equal = "="): Database
+    {
+        $this->query .= 'OR `' . $column . '` ' . $equal . ' "' . htmlspecialchars($value, ENT_QUOTES) . '" ';
         return $this;
     }
 
-    public function whereIn($column, $value) {
-        $this->query .= "WHERE " . $column . " IN " . $value . " ";
+    public function whereIn($column, $value): Database
+    {
+        $this->query .= 'WHERE `' . $column . '` IN ' . $value . ' ';
         return $this;
     }
 
     //JOINS
-    public function innerJoin($table, $statement) {
-        $this->query .= "INNER JOIN " . $table . " ON " . htmlspecialchars($statement, ENT_QUOTES) . " ";
+    public function innerJoin($table, $statement): Database
+    {
+        $this->query .= 'INNER JOIN ' . $table . ' ON ' . htmlspecialchars($statement, ENT_QUOTES) . ' ';
         return $this;
     }
 
-    public function leftJoin($table, $statement) {
-        $this->query .= "LEFT JOIN " . $table . " ON " . htmlspecialchars($statement, ENT_QUOTES) . " ";
+    public function leftJoin($table, $statement): Database
+    {
+        $this->query .= 'LEFT JOIN ' . $table . ' ON ' . htmlspecialchars($statement, ENT_QUOTES) . ' ';
         return $this;
     }
 
-    public function rightJoin($table, $statement) {
-        $this->query .= "RIGHT JOIN " . $table . " ON " . htmlspecialchars($statement, ENT_QUOTES) . " ";
+    public function rightJoin($table, $statement): Database
+    {
+        $this->query .= 'RIGHT JOIN ' . $table . ' ON ' . htmlspecialchars($statement, ENT_QUOTES) . ' ';
         return $this;
     }
 
-    public function fullJoin($table, $statement) {
-        $this->query .= "FULL JOIN " . $table . " ON " . htmlspecialchars($statement, ENT_QUOTES) . " ";
+    public function fullJoin($table, $statement): Database
+    {
+        $this->query .= 'FULL JOIN ' . $table . ' ON ' . htmlspecialchars($statement, ENT_QUOTES) . ' ';
         return $this;
     }
 
     // OTHERS
-    public function groupBy($column)
+    public function groupBy($column): Database
     {
-        $this->query .= "GROUP BY " . $column . " ";
+        $this->query .= 'GROUP BY `' . $column . '` ';
         return $this;
     }
 
-    public function limit($limit = 10, $offset = 0)
+    public function limit($limit = 10, $offset = 0): Database
     {
         // Use syntax the offset syntax because of the compatibility with others DBMS (database management system)
-        $this->query .= "LIMIT " . $limit . " OFFSET " . $offset . " ";
+        $this->query .= 'LIMIT ' . $limit . ' OFFSET ' . $offset . ' ';
         return $this;
     }
 
-    public function like($column, $value, $escape = "") {
+    public function like($column, $value, $escape = ""): Database
+    {
         if($this->like == 0) { 
-            $this->query .= "WHERE " . $column . " LIKE '" . $value . "' " . $escape . " ";
+            $this->query .= 'WHERE `' . $column . '` LIKE "' . $value . '" ' . $escape . ' ';
             $this->like++;
-
         } else{
-            $this->query .= "AND " . $column . " LIKE '" . $value . "' " . $escape . " ";
+            $this->query .= 'AND `' . $column . '` LIKE "' . $value . '" ' . $escape . ' ';
         }
         return $this;
     }
 
-    public function orderBy($column, $order = "ASC") {
+    public function orderBy($column, $order = "ASC"): Database
+    {
         if($this->order == 0) {
-            $this->query .= "ORDER BY '" . $column . "' " . $order . " ";
+            $this->query .= 'ORDER BY `' . $column . '` ' . $order . ' ';
             $this->order++;
         }
         else
-            $this->query .= ", " . $column . " ". $order . "' ";
+            $this->query .= ', `' . $column . '` '. $order . '" ';
         return $this;
     }
 
-    public function get(){
+    public function get(): array
+    {
         $query = $this->pdo->query($this->query);
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         try {
@@ -248,15 +258,11 @@ class Database {
     }
 
     public function first(){
-
         $query = $this->pdo->query($this->query);
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
-
         try {
-
             return $query->fetch();
-
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
         }
