@@ -383,7 +383,6 @@ class Production extends Database
     public function saveWriters() {
         $writers = $this->getWriters();
         foreach ($writers as $writer) {
-            Helpers::dd($writer);
             $mediaId = $writer->saveMedia();
             $writerID = $writer->saveVip($mediaId);
             $writer->saveProductionPerson($writerID, $this->getLastInsertId(), 'writer');
