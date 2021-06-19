@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "node_modules/.bin/webpack --watch --watch-poll --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "mix watch",
     "build": "webpack --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "keywords": [],
@@ -20,6 +20,6 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
-    "node-sass": "^5.0.0"
+    "node-sass": "^4.14.1"
   }
 }

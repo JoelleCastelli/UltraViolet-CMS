@@ -4,16 +4,43 @@ admin:
   controller: Main
   action:     default
 
+routes: 
+  path:       /admin/routes
+  controller: Main
+  action:     getRoute
+  
 # PAGES
 pages_list:
   path:       /admin/pages
   controller: Page
   action:     showAll
-
+  
 page_creation:
   path:       /admin/pages/creation
   controller: Page
   action:     createPage
+
+page_delete:
+  path:       /admin/pages/delete
+  controller: Page
+  action:     deletePage
+
+page_update:
+  path:       /admin/pages/update/{id}
+  controller: Page
+  action:     updatePage
+  requirements:
+    id:       (\d+)
+
+page_update_visibility:
+  path:       /admin/pages/update-visibility
+  controller: Page
+  action:     updateVisibility
+
+pages_data:
+  path:       /admin/pages-data
+  controller: Page
+  action:     getPages
 
 # ARTICLES
 articles_list:
@@ -47,6 +74,11 @@ productions_creation_tmdb:
   controller: Production
   action:     addProductionTmdb
 
+productions_creation_check:
+  path:       /admin/productions/creation-check
+  controller: Production
+  action:     addProductionCheck
+
 productions_tmdb_request:
   path:       /admin/productions/tmdb-request
   controller: Production
@@ -66,7 +98,7 @@ production_update:
     id:       (\d+)
 
 production_delete:
-  path:       /admin/productions/supprimer/{id}
+  path:       /admin/productions/supprimer
   controller: Production
   action:     deleteProduction
   middleware: Editor
@@ -97,14 +129,19 @@ users_list:
   controller: Person
   action:     showAll
 
+users_data:
+  path:       /admin/utilisateurs/utilisateurs-data
+  controller: Person
+  action:     getUsers
+
 user_show:
   path:       /admin/utilisateur
-  controller: User
+  controller: Person
   action:     show
 
 user_creation:
   path:       /admin/utilisateurs/creation
-  controller: User
+  controller: Person
   action:     add
 
 # MEDIAS

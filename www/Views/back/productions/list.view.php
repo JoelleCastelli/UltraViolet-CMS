@@ -1,6 +1,3 @@
-<a href="/admin/productions/creation">Ajouter une production manuellement</a>
-
-
 <div class="grid-listing-datatables">
 
     <section>
@@ -10,7 +7,10 @@
             <div class="filtering-btn" id="season">Saisons</div>
             <div class="filtering-btn" id="episode">Episodes</div>
         </div>
-        <button class="btn">Ajouter une production</button>
+
+        <a href="<?= \App\Core\Helpers::callRoute('productions_creation_tmdb') ?>">
+            <button class="btn">Nouvelle production</button>
+        </a>
     </section>
 
     <section>

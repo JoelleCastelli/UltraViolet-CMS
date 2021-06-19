@@ -23,7 +23,8 @@ class Person extends Database
     protected bool $optin = true;
     protected ?string $deletedAt;
     protected string $role = 'user';
-    protected int $emailConfirmed;
+    protected bool $emailConfirmed = false;
+    private ?array $actions = [];
 
     // Foreign properties
     protected int $mediaId;
@@ -32,6 +33,10 @@ class Person extends Database
     public function __construct() {
         parent::__construct();
         $this->media = new Media();
+        $this->actions = [
+            ['name' => 'Modifier','action'=> 'modify', 'url' => '/admin/utilisateurs/modifier'],
+            ['name' => 'Supprimer', 'action'=> 'delete', 'url' => '/admin/utilisateurs/supprimer']
+        ];
     }
 
     public function getId(): ?int {
@@ -118,8 +123,17 @@ class Person extends Database
         return $this->emailConfirmed;
     }
 
+    
     public function setEmailConfirmed(bool $emailConfirmed): void {
         $this->emailConfirmed = $emailConfirmed;
+    }
+
+    public function getActions(): ?array {
+        return $this->actions;
+    }
+
+    public function setActions(?array $actions): void {
+        $this->actions = $actions;
     }
 
     public function getMediaId(): int {
@@ -214,7 +228,7 @@ class Person extends Database
     }
 
     public function setDefaultProfilePicture() {
-        if(file_exists(PATH_TO_IMG.'default.jpg')) {
+        if(file_exists(getcwd().PATH_TO_IMG.'default.jpg')) {
             $media = new Media();
             if($media->findOneBy('path', 'default.jpg')) {
                 $defaultImage = $media->findOneBy('path', 'default.jpg');
@@ -223,8 +237,18 @@ class Person extends Database
                 die("Default image is not in database");
             }
         } else {
-            die("Default image file does not exist");
+            die('Default image '.getcwd().PATH_TO_IMG.'default.jpg does not exist');
         }
+    }
+
+    public function generateEmailKey() {
+        $lengthkey = 15;
+        $key= "";
+        for($i=1;$i<$lengthkey;$i++) {
+            $key.=mt_rand(0,9);
+        }
+        $this->setEmailKey($key);
+        return $key;
     }
 
     public function formBuilderLogin(): array {
@@ -502,7 +526,7 @@ class Person extends Database
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de création de compte pour Ultraviolet à bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('verification', ['id' => $pseudo, 'key' => $key])."</p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('verification', ['pseudo' => $pseudo, 'key' => $key], true)."</p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:15px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Dans la plupart des logiciels de courriel, cette adresse devrait apparaître comme un lien de couleur bleue qu'il vous suffit de cliquer. Si cel ane fonctionne pas, copiez ce lien et collez-le dans la barre d'adresse de votre navigateur web. </p></td> 
@@ -642,7 +666,7 @@ class Person extends Database
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de création de compte pour Ultraviolet à bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('reset_password', ['id' => $id, 'key' => $key])."</p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('reset_password', ['id' => $id, 'key' => $key], true)."</p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:15px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Dans la plupart des logiciels de courriel, cette adresse devrait apparaître comme un lien de couleur bleue qu'il vous suffit de cliquer. Si cel ane fonctionne pas, copiez ce lien et collez-le dans la barre d'adresse de votre navigateur web. </p></td> 

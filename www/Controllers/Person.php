@@ -10,10 +10,29 @@ use App\Models\Person as PersonModel;
 
 class Person
 {
+    protected $columnsTable;
+
+    public function __construct()
+    {
+        $this->columnsTable = [
+            "name" => 'Nom et prénom',
+            "pseudo" => 'Pseudonyme',
+            "mail" => 'Email',
+            "checkMail" => 'Verification email',
+            "actions" => 'Actions'
+        ];
+    }
 
     public function showAllAction() {
-        $view = new View("users/list");
+        $persons = new PersonModel();
+        $persons = $persons->selectWhere('role', 'admin');
+        if(!$persons) $persons = [];
+
+
+        $view = new View("persons/list");
         $view->assign('title', 'Utilisateurs');
+        $view->assign('columnsTable', $this->columnsTable);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/person.js']);
     }
 
 	public function defaultAction() {
@@ -79,35 +98,46 @@ class Person
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                     //$user->setDefaultProfilePicture();
                     $user->setMediaId(1);
-                    $user->setEmailConfirmed(0);
+                    $user->generateEmailKey();
 
-                    // set emailkey
-                    $lengthkey = 15;
-                    $key= "";
-                    for($i=1;$i<$lengthkey;$i++) {
-                        $key.=mt_rand(0,9);
-                    }
-                    $user->setEmailKey($key);
-
-                    $to   = $_POST['email'];
-                    $from = 'ultravioletcms@gmail.com';
-                    $name = 'Ultaviolet';
-                    $subj = 'Confirmation mail';
-                    $msg = $user->verificationMail($_POST['pseudo'], $key);
-                    
                     $mail = new Mail();
+                    $msg = $user->verificationMail($_POST['pseudo'], $user->getEmailKey());
+                    $mail->sendMail($_POST['email'], 'ultravioletcms@gmail.com', 'Ultaviolet', 'Confirmation mail', $msg);
+
                     $user->save();
 
-                    $mail->sendMail($to, $from, $name, $subj, $msg);
 
+                
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
-                    vous a été envoyé sur " .$_POST['email'].". Cliquez sur le lien dans ce mail avant de vous connecter.");
+                    vous a été envoyé sur " .$_POST['email'].". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
                     Helpers::redirect('/connexion');
                 }
 			}
             $view->assign("errors", $errors);
 		}
 	}
+
+    public function getUsersAction() {
+        if(!empty($_POST['role'])) {
+            $users = new PersonModel();
+            $users = $users->selectWhere('role', htmlspecialchars($_POST['role']));
+            
+            if(!$users) $users = [];
+            
+            $usersArray = [];
+            foreach ($users as $user) {
+                $usersArray[] = [
+                    $this->columnsTable['name'] => $user->getFullName(),
+                    $this->columnsTable['pseudo'] => $user->getPseudo(),
+                    $this->columnsTable['mail'] => $user->getEmail(),
+                    $this->columnsTable['checkMail'] => $user->isEmailConfirmed(),
+                    $this->columnsTable['actions'] => $user->generateActionsMenu(),
+                ];
+            }
+           
+            echo json_encode(["users" => $usersArray]);
+        }
+    }
 
 	public function logoutAction() {
         session_destroy();
@@ -133,6 +163,8 @@ class Person
 		//Affichage du résultat
 
 	}
+
+    
 
 	public function showAction(){
 		

@@ -16,6 +16,11 @@ class Main
 		$view->assign('bodyScript',  Helpers::urlJS('bodyScripts/home'));
 	}
 
+	public function getRouteAction()
+	{
+		echo json_encode(Helpers::callRoute($_POST['name']));
+	}
+
 	public function page404Action(){
 		$view = new View("404", "front");
 	}

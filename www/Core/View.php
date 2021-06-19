@@ -10,9 +10,10 @@ class View
 	private array $data = [];
 
 	public function __construct($view, $template = "back"){
-		$this->setTemplate($template);
-		$this->setView($view, $template);
-		$this->assignFlash();
+	    if ($template != null)
+            $this->setTemplate($template);
+        $this->setView($view, $template);
+        $this->assignFlash();
 	}
 
 	public function setTemplate($template) {
@@ -24,6 +25,7 @@ class View
 	}
 
 	public function setView($view, $template) {
+	    $template = $template ?? "noTemplate";
 		if(file_exists("Views/$template/$view.view.php")) {
 			$this->view = "Views/$template/$view.view.php";
 		} else {
@@ -60,7 +62,10 @@ class View
 
 	public function __destruct(){
 		extract($this->data);
-		include $this->template;
+		if(isset($this->template))
+            include $this->template;
+        else
+            include $this->view;
 	}
 
 }

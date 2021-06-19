@@ -21,7 +21,7 @@ services:
     ports :
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: ultraviolet_db
+      MYSQL_DATABASE: ultraviolet
       MYSQL_ROOT_PASSWORD: password
       MYSQL_USER: user
       MYSQL_PASSWORD: user

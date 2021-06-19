@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\Helpers;
 use App\Core\FormBuilder;
+use App\Core\Traits\ModelsTrait;
 
-class Page extends Database
+use JsonSerializable;
+
+class Page extends Database implements JsonSerializable
 {
+    use ModelsTrait;
 
 	private $id = null;
 	protected $title;
@@ -15,13 +20,19 @@ class Page extends Database
 	protected $state;
 	protected $titleSeo;
 	protected $descriptionSeo;
-	protected $publictionDate;
+	protected $publicationDate;
 	protected $createdAt;
 	protected $updatedAt;
 	protected $deletedAt;
 
+    private $actions;
+
 	public function __construct(){
 		parent::__construct();
+          $this->actions = [
+            ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
+        ];
 	}
 
     /**
@@ -30,14 +41,6 @@ class Page extends Database
     public function getId()
     {
         return $this->id;
-    }
-
-	/**
-	 * @param mixed $id
-	 */
-	public function setId($id): void {
-	    $this->id = $id;
-        $this->findOneById($this->id);
     }
 
     /**
@@ -139,17 +142,17 @@ class Page extends Database
     /**
      * @return mixed
      */
-    public function getPublictionDate()
+    public function getPublicationDate()
     {
-        return $this->publictionDate;
+        return $this->publicationDate;
     }
 
     /**
-     * @param mixed $publictionDate
+     * @param mixed $publicationDate
      */
-    public function setPublictionDate($publictionDate): void
+    public function setPublicationDate($publicationDate): void
     {
-        $this->publictionDate = $publictionDate;
+        $this->publicationDate = $publicationDate;
     }
 
     /**
@@ -200,15 +203,57 @@ class Page extends Database
         $this->deletedAt = $deletedAt;
     }
 
+     /**
+     * @return array
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
     public function findAll() {
         return parent::findAll();
     }
 
-    public function cleanPublictionDate() {
-        $this->setPublictionDate(date("d/m/Y", strtotime($this->getPublictionDate())));
+    public function selectWhere($column, $value) {
+        return parent::selectWhere($column, $value);
     }
 
-	public function formBuilderRegister() 
+    public function cleanPublicationDate() {
+        $this->setPublicationDate(date("d/m/Y", strtotime($this->getPublicationDate())));
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "title" => $this->getTitle(),
+            "slug" => $this->getSlug(),
+            "position" => $this->getPosition(),
+            "state" => $this->getState(),
+            "titleSeo" => $this->getTitleSeo(),
+            "descriptionSeo" => $this->getDescriptionSeo(),
+            "publicationDate" => $this->getPublicationDate(),
+            "createdAt" => $this->getCreatedAt(),
+            "updatedAt" => $this->getUpdatedAt(),
+            "deletedAt" => $this->getDeletedAt()
+        ];
+    }
+
+    public function checkState() {
+        if(
+            $this->getState() != 'draft' &&
+            $this->getState() != 'scheduled' &&
+            $this->getState() != 'published' &&
+            $this->getState() != 'hidden' &&
+            $this->getState() != 'deleted'
+          )
+            return false;
+        else
+            return true;
+    }
+
+    /* public function formBuilderRegister() 
 	{
 
         $today = date("Y-m-d");
@@ -217,7 +262,7 @@ class Page extends Database
 			"config"=>[
 				"method"=>"POST",
 				"action"=>"",
-				"class"=>"form_control",
+				"class"=>"form_control form-add-page",
 				"id"=>"form_register",
 				"submit"=>"Ajout d'une page",
                 "required_inputs"=>5
@@ -271,7 +316,7 @@ class Page extends Database
                     "maxLength"=>255,
                     "error"=>"Votre descriptionSEO doit étre entre 2 et 255"
                 ],
-                "publictionDate"=>[
+                "publicationDate"=>[
                     "type"=>"date",
                     "placeholder"=>"publication",
                     "label"=>"Date de publication :",
@@ -306,10 +351,169 @@ class Page extends Database
 			]
 		];
 	}
+    */
 
-	public function getAll()
+    public function formBuilderRegister()
     {
-        $page = new Page();
-        $page->findAll();
+
+        $today = date("Y-m-d");
+
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control form-add-page",
+                "id" => "form_register",
+                "submit" => "Ajouter une page",
+                "required_inputs" => 5
+            ],
+            "fields" => [
+                "title" => [
+                    "type" => "text",
+                    "placeholder" => "Animées",
+                    "label" => "Votre Titre * :",
+                    "class" => "search-bar",
+                    "error" => "Votre titre doit faire entre 2 et 25 caractères",
+                ],
+                "slug" => [
+                    "type" => "text",
+                    "placeholder" => "meilleure-serie",
+                    "label" => "Votre slug :",
+                    "class" => "search-bar",
+                    "error" => "Votre slug doit faire entre 2 et 15 caractères",
+                ],
+                "position" => [
+                    "type" => "text",
+                    "placeholder" => "3",
+                    "label" => "Position * :",
+                    "class" => "search-bar",
+                    "error" => "Votre position doit étre entre 1 et 4",
+                ],
+                "titleSEO" => [
+                    "type" => "text",
+                    "placeholder" => "Titre pour le référencement",
+                    "label" => "titleSEO :",
+                    "class" => "search-bar",
+                    "error" => "Votre titleSEO doit étre entre 2 et 50"
+                ],
+                "descriptionSEO" => [
+                    "type" => "text",
+                    "placeholder" => "META description",
+                    "label" => "META description :",
+                    "class" => "search-bar",
+                    "error" => "Votre descriptionSEO doit étre entre 2 et 255"
+                ],
+                "state" => [
+                    "type" => "radio",
+                    "label" => "État * :",
+                    "class" => "",
+                    "error" => "Erreur test",
+                    "options" => [
+                        [
+                            "value" => "draft",
+                            "text" => "Brouillon",
+                        ],
+                        [
+                            "value" => "published",
+                            "text" => "Publier maintenant",
+                        ]
+                    ],
+                ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "placeholder" => "publication",
+                    "label" => "Ou plus tard : ",
+                    "class" => "search-bar",
+                    "error" => "Votre date de publication doit être entre " . $today . " et 31-12-2030",
+
+                ],
+                "csrfToken" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken(),
+                ]
+            ]
+        ];
+    }
+
+    public function formBuilderUpdate()
+    {
+
+        $today = date("Y-m-d");
+
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control form-add-page",
+                "id" => "form_update",
+                "submit" => "Modifier une page",
+                "required_inputs" => 5
+            ],
+            "fields" => [
+                "title" => [
+                    "type" => "text",
+                    "placeholder" => "Animées",
+                    "label" => "Votre Titre * :",
+                    "class" => "search-bar",
+                    "error" => "Votre titre doit faire entre 2 et 25 caractères",
+                ],
+                "slug" => [
+                    "type" => "text",
+                    "placeholder" => "meilleure-serie",
+                    "label" => "Votre slug :",
+                    "class" => "search-bar",
+                    "error" => "Votre slug doit faire entre 2 et 15 caractères",
+                ],
+                "position" => [
+                    "type" => "text",
+                    "placeholder" => "3",
+                    "label" => "Position * :",
+                    "class" => "search-bar",
+                    "error" => "Votre position doit étre entre 1 et 4",
+                ],
+                "titleSeo" => [
+                    "type" => "text",
+                    "placeholder" => "Titre pour le référencement",
+                    "label" => "titleSEO :",
+                    "class" => "search-bar",
+                    "error" => "Votre titleSEO doit étre entre 2 et 50"
+                ],
+                "descriptionSeo" => [
+                    "type" => "text",
+                    "placeholder" => "META description",
+                    "label" => "META description :",
+                    "class" => "search-bar",
+                    "error" => "Votre descriptionSEO doit étre entre 2 et 255"
+                ],
+                "state" => [
+                    "type" => "radio",
+                    "label" => "État * :",
+                    "class" => "",
+                    "error" => "Erreur test",
+                    "options" => [
+                        [
+                            "value" => "draft",
+                            "text" => "Brouillon",
+                        ],
+                        [
+                            "value" => "published",
+                            "text" => "Publier maintenant",
+                        ]
+                    ],
+                ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "placeholder" => "publication",
+                    "label" => "Ou plus tard : ",
+                    "class" => "search-bar",
+                    "error" => "Votre date de publication doit être entre " . $today . " et 31-12-2030",
+
+                ],
+                "csrfToken" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken(),
+                ]
+            ]
+        ];
     }
 }
