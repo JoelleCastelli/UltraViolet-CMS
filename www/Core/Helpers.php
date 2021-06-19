@@ -64,4 +64,28 @@ class Helpers{
         }
         die($name.': route name not found');
     }
+
+    public static function slugify($text) : string {
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        $text = preg_replace('~[^-\w]+~', '', $text);
+        $text = trim($text, '-');
+        $text = preg_replace('~-+~', '-', $text);
+        $text = strtolower($text);
+        if (empty($text)) return false;
+        return $text;
+    }
+
+    public static function convertToSnakeCase($input) {
+        $pattern = '!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!';
+        preg_match_all($pattern, $input, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ?
+                strtolower($match) :
+                lcfirst($match);
+        }
+        return implode('_', $ret);
+    }
+
 }

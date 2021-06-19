@@ -4,6 +4,6 @@
     <li>Résumé : <?= $production->getOverview() ?></li>
     <li>Date de sortie : <?= $production->getCleanReleaseDate() ?></li>
     <li>Durée : <?= $production->getCleanRuntime() ?></li>
-    <li><img src='<?= $production->getTmdbPosterPath() ?>'/></li>
+    <li><img src='<?= $production->getPoster()->getTmdbPosterPath() ?>'/></li>
     <!--//$this->setCast($item->credits->cast);-->
 </ul>

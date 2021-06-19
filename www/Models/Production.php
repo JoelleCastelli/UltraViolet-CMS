@@ -10,7 +10,7 @@ use App\Core\View;
 class Production extends Database
 {
     private ?int $id = null;
-    protected ?int $tmdbId = null;
+    protected ?int $tmdbId;
     protected string $title;
     protected ?string $originalTitle;
     protected ?string $releaseDate;
@@ -20,12 +20,12 @@ class Production extends Database
     protected ?int $number;
     protected ?int $totalSeasons;
     protected ?int $totalEpisodes;
-    protected array $cast = [];
-    protected array $directors = [];
-    protected array $writers = [];
-    protected array $creators = [];
+    private array $actors = [];
+    private array $directors = [];
+    private array $writers = [];
+    private array $creators = [];
     protected Media $poster;
-    protected string $tmdbPosterPath;
+    private string $tmdbPosterPath;
     protected ?string $deletedAt = null;
     private string $createdAt;
     private ?string $updatedAt;
@@ -34,6 +34,7 @@ class Production extends Database
     public function __construct()
     {
         parent::__construct();
+        $this->poster = new Media();
         $this->actions = [
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('production_update', ['id' => $this->id])],
             ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('production_delete', ['id' => $this->id]), 'role' => 'admin'],
@@ -231,25 +232,36 @@ class Production extends Database
         return date("d/m/Y",strtotime($this->getCreatedAt()));
     }
 
-    public function getCast(): array
+    public function getActors(): array
     {
-        return $this->cast;
+        return $this->actors;
     }
 
-    public function setCast($tmdbCast): void
+    public function setActors($tmdbCast): void
     {
-        $cast = [];
-        for($i = 1; $i <= 3 ; $i++) {
-            $person = new Person();
-            $person->setRole('vip');
-            $name = $tmdbCast[$i]->name ?? '-';
-            $person->setFullName($name);
-            $productionPerson = new ProductionPerson();
-            $productionPerson->setDepartment('cast');
-            $cast[] = $person;
-            $cast[] = $productionPerson;
+        $actors = [];
+        for($i = 0; $i < 5 ; $i++) {
+            if(isset($tmdbCast[$i])) {
+                $person = new Person();
+                $person->setRole('vip');
+                $person->setCharacter($tmdbCast[$i]->character ?? '');
+                $person->setTmdbId($tmdbCast[$i]->id ?? null);
+                $name = $tmdbCast[$i]->name ?? '';
+                $person->setFullName($name);
+                $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbCast[$i]->profile_path);
+                $actors[] = $person;
+            }
         }
-        $this->cast = $cast;
+        $this->actors = $actors;
+    }
+
+    public function saveActors() {
+        $actors = $this->getActors();
+        foreach ($actors as $actor) {
+            $mediaId = $actor->saveMedia();
+            $actorID = $actor->saveVip($mediaId);
+            $actor->saveProductionPerson($actorID, $this->getLastInsertId(), 'cast');
+        }
     }
 
     public function getPoster(): Media
@@ -263,6 +275,55 @@ class Production extends Database
         $imgPath = PATH_TO_IMG_POSTERS ."/$productionType/poster_$tmdbId.png";
         $media->setPath($imgPath);
         $media->setTitle("poster_$tmdbId");
+    }
+
+    public function savePoster() {
+        $mediaId = $this->saveMedia();
+        $productionID = $this->getLastInsertId();
+        $this->saveProductionMedia($mediaId, $productionID, true);
+    }
+
+    public function saveMedia() {
+        // Save poster file
+        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle());
+        if(!empty($this->poster->getTmdbPosterPath()) && $this->poster->getTmdbPosterPath() != TMDB_IMG_PATH) {
+            file_put_contents(getcwd().$productionImgPath, file_get_contents($this->poster->getTmdbPosterPath()));
+        }
+
+        // Save or update poster in database
+        $existingMedia = new Media();
+        $existingMedia = $existingMedia->findOneBy('path', $productionImgPath);
+        if($existingMedia) {
+            $existingMedia->setTitle($this->getTitle());
+            $existingMedia->save();
+            $mediaId = $existingMedia->getId();
+        } else {
+            $media = new Media();
+            $media->setTitle($this->getTitle());
+            $media->setPath($productionImgPath);
+            $media->save();
+            $mediaId = $media->getLastInsertId();
+        }
+        return $mediaId;
+    }
+
+    public function saveProductionMedia($mediaId, $productionId, $isKeyArt) {
+        // Save or update production person in database
+        $existingProductionMedia = new ProductionMedia();
+        $existingProductionMedia = $existingProductionMedia->select()
+                                    ->where('mediaId', $mediaId)
+                                    ->andWhere('productionId', $productionId)
+                                    ->get();
+        if($existingProductionMedia) {
+            $existingProductionMedia->setKeyArt($isKeyArt);
+            $existingProductionMedia->save();
+        } else {
+            $productionMedia = new ProductionMedia();
+            $productionMedia->setProductionId($productionId);
+            $productionMedia->setMediaId($mediaId);
+            $productionMedia->setKeyArt($isKeyArt);
+            $productionMedia->save();
+        }
     }
 
     public function getTmdbPosterPath(): string
@@ -288,10 +349,7 @@ class Production extends Database
                 $person = new Person();
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
-                $productionPerson = new ProductionPerson();
-                $productionPerson->setDepartment('director');
                 $directors[] = $person;
-                $directors[] = $productionPerson;
             }
         }
         $this->directors = $directors;
@@ -310,10 +368,7 @@ class Production extends Database
                 $person = new Person();
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
-                $productionPerson = new ProductionPerson();
-                $productionPerson->setDepartment('writer');
                 $writers[] = $person;
-                $writers[] = $productionPerson;
             }
         }
         $this->writers = $writers;
@@ -331,11 +386,19 @@ class Production extends Database
             $person = new Person();
             $person->setRole('vip');
             $person->setFullName($creator->name);
-            $productionPerson = new ProductionPerson();
             $creators[] = $person;
-            $creators[] = $productionPerson;
         }
         $this->creators = $creators;
+    }
+
+    public function saveCrew($department) {
+        $functionName = "get".ucfirst($department);
+        $crew = $this->$functionName();
+        foreach ($crew as $crewMember) {
+            $mediaId = $crewMember->saveMedia();
+            $writerID = $crewMember->saveVip($mediaId);
+            $crewMember->saveProductionPerson($writerID, $this->getLastInsertId(), mb_substr($department, 0, -1));
+        }
     }
 
     public function formBuilderAddProduction(){
@@ -426,10 +489,11 @@ class Production extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "creation-check",
+                "action" => "",
                 "class" => "form_control",
                 "id" => "formAddProductionTmdb",
-                "submit" => "Valider"
+                "submit" => "Valider",
+                "referer" => Helpers::callRoute('productions_creation_tmdb')
             ],
             "fields" => [
                 "productionType" => [
@@ -454,14 +518,14 @@ class Production extends Database
                     "min" => 1,
                     "label" => "ID du film ou de la série",
                     "class" => "form_input",
-                    "error" => "Un ID est nécessaire"
+                    "error" => "Un ID TMDB est nécessaire"
                 ],
                 "seasonNb" => [
                     "type" => "number",
                     "min" => 0,
                     "label" => "Numéro de la saison",
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire",
+                    "error" => "Le numéro de saison doit être supérieur ou égal à 0",
                     "disabled" => true
                 ],
                 "episodeNb" => [
@@ -469,7 +533,7 @@ class Production extends Database
                     "min" => 0,
                     "label" => "Numéro de l'épisode",
                     "class" => "form_input",
-                    "error" => "Un type de production est nécessaire",
+                    "error" => "Le numéro d'épisode doit être supérieur ou égal à 0",
                     "disabled" => true
                 ],
                 "productionPreviewRequest" => [
@@ -501,8 +565,8 @@ class Production extends Database
         $this->setOverview($item->overview);
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
-        $this->setCast($item->credits->cast);
-        $this->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
+        $this->setActors($item->credits->cast);
+        $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
 
         //$production0['genres'] = $item->genres; TODO
 
@@ -526,7 +590,7 @@ class Production extends Database
                         $this->setTotalEpisodes($item->seasons[$post['seasonNb']]->episode_count);
                         $this->setOverview($item->seasons[$post['seasonNb']]->overview);
                         $this->setPoster($item->id, 'season');
-                        $this->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
+                        $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
 
                         // Episode
                         if(!empty($episode)) {
@@ -534,14 +598,16 @@ class Production extends Database
                             $this->setOverview($episode->overview);
                             $this->setReleaseDate($episode->air_date);
                             $this->setPoster($item->id, 'episode');
-                            $this->setTmdbPosterPath(TMDB_IMG_PATH.$episode->still_path);
+                            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
                         }
                     } else {
-                        echo 'La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb'];
+                        echo '<div class="error">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</div>";
+                        return false;
                     }
                 }
                 break;
         }
+        return true;
     }
 
     public function displayPreview() {
