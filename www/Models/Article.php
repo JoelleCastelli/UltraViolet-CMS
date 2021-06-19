@@ -24,6 +24,9 @@ class Article extends Database implements JsonSerializable
     protected $contentUpdatedAt;
     protected $mediaId;
     protected $personId;
+    protected $createdAt;
+    protected $updatedAt;
+    protected $deletedAt;
 
     public $media;
     public $person;
@@ -266,6 +269,54 @@ class Article extends Database implements JsonSerializable
     public function setMediaId($mediaId): void
     {
         $this->mediaId = $mediaId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param mixed $createdAt
+     */
+    public function setCreatedAt($createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param mixed $updatedAt
+     */
+    public function setUpdatedAt($updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param mixed $deletedAt
+     */
+    public function setDeletedAt($deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
     }
 
     public function findAll() {

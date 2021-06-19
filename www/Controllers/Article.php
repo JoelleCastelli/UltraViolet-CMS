@@ -49,9 +49,7 @@ class Article {
                 "Auteur" => $article->getPerson()->getPseudo(),
                 "Vues" => $article->getTotalViews(),
                 "Commentaire" => "[NOMBRE COMMENTAIRE]",
-                // "Created At" => $article->getContentCreatedAt(), // ! ne marche pas, renvoie null
-                // "Date" => $article->getContentUpdatedAt(), // ! marche pas non plus 
-                "Date" => "[DATE]",
+                 "Date" => $article->getCreatedAt(),
                 "Publication" => $article->getState(),
                 "Actions" => "[CHOIX DES ACTIONS]"
             ];
