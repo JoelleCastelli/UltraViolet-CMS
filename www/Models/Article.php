@@ -18,14 +18,14 @@ class Article extends Database implements JsonSerializable
     protected $rating;
     protected $slug;
     protected $state;
-    protected $totalViews;
+    protected $totalViews = 0;
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
     protected $mediaId;
     protected $personId;
-    protected $createdAt;
-    protected $updatedAt;
+    private $createdAt;
+    private $updatedAt;
     protected $deletedAt;
 
     public $media;
@@ -341,6 +341,9 @@ class Article extends Database implements JsonSerializable
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
             "contentUpdatedAt" => $this->getContentUpdatedAt(),
+            "createdAt" => $this->getCreatedAt(),
+            "updatedAt" => $this->getUpdatedAt(),
+            "deletedAt" => $this->getDeletedAt(),
         ];
     }
 

@@ -80,41 +80,27 @@ class Article {
         if (!empty($_POST)) {
 
 //              $errors = FormValidator::check($form, $_POST);
-
+                $errors = [];
 //              if (empty($errors)) {
-                if (true) {
+                if (true) { // CSRF error here always
 
                 $title = htmlspecialchars($_POST["title"]);
-            
-                
 
                 $article->setTitle($title);
-
-                // echo $this->slugify($title);
-
                 $article->setSlug($this->slugify($title));
-
-                // var_dump($article);
-
                 $article->setDescription(htmlspecialchars($_POST["description"]));
-                
-
-                
-                // $article->setContent(htmlspecialchars($_POST["content"]));
-                $article->setContent("Super content statique");
+                $article->setContent(htmlspecialchars($_POST["content"]));
                 $article->setState(htmlspecialchars($_POST["state"]));
-                
-                
 
                 // TODO : Get real connected Person and Media used
                 $article->setMediaId(1);
                 $article->setPersonId(1);
 
-                // echo "<pre>";
-                // var_dump($article);
-                // echo "</pre>";
+//                 echo "<pre>";
+//                 var_dump($article);
+//                 echo "</pre>";
+//                 die;
 
-                // die;
 
                 $article->save();
             } 
