@@ -9,19 +9,6 @@ use App\Models\Article as ArticleModel;
 
 class Article {
 
-    function slugify($text) : string { 
-   
-        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        $text = preg_replace('~[^-\w]+~', '', $text);
-        $text = trim($text, '-');
-        $text = preg_replace('~-+~', '-', $text);
-        $text = strtolower($text);
-    
-        if (empty($text)) return '-1';
-        return $text;
-    }
-
     public function showAllAction() {
         $article = new ArticleModel;
         $articles = $article->selectWhere('state', 'published');
@@ -87,7 +74,8 @@ class Article {
                 $title = htmlspecialchars($_POST["title"]);
 
                 $article->setTitle($title);
-                $article->setSlug($this->slugify($title));
+                $article->setSlug(Helpers::slugify($title));
+                    
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent(htmlspecialchars($_POST["content"]));
                 $article->setState(htmlspecialchars($_POST["state"]));
