@@ -167,15 +167,18 @@ class Person
 
 	}
 
-    public function deletePersonAction($id) {
-        $view = new View("person/delete");
-        
+    public function updatePersonAction($id) {
+        $view = new View("utilisateurs/update");
+        $view->assign('title', 'Modification d\'un utilisateur');
+        $view->assign('param2', $id);
     }
 
-    public function updatePersonAction($id) {
-        $view = new View("persons/update");
-        $view->assign('title', 'Modification d\' utilisateur');
-        $view->assign('param', $id);
+    public function deletePersonAction() {
+        if(!empty($_POST['personId'])) {
+            $persons = new PersonModel();
+            $persons->setId($_POST['personId']);
+            $persons->delete();
+        }
     }
 
     

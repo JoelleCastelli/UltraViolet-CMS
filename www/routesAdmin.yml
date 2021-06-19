@@ -121,6 +121,11 @@ users_data:
   controller: Person
   action:     getUsers
 
+users_update:
+  path:       /admin/utilisateurs/update
+  controller: Person
+  action:     getUsers
+
 user_show:
   path:       /admin/utilisateur
   controller: Person
