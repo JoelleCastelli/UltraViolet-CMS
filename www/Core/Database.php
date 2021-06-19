@@ -106,7 +106,7 @@ class Database {
     }
 
     public function selectWhere($column, $value) {
-        $query = $this->pdo->query("SELECT * FROM ".$this->table." WHERE ".$column." = '".$value."' LIMIT 100");
+        $query = $this->pdo->query("SELECT * FROM ".$this->table." WHERE ".$column." = '".$value."'");
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetchAll();
     }
@@ -138,7 +138,7 @@ class Database {
 
     public function count($column = "*")
     {
-        $this->query = "SELECT COUNT(" . $column . ") ";
+        $this->query = "SELECT COUNT(" . $column . ") as total FROM " . $this->table . " ";
         return $this;
     }
 

@@ -11,6 +11,9 @@
             <section class="container-form">
                 <?php App\Core\FormBuilder::render($form, true); ?>
             </section>
+            <a href="<?= \App\Core\Helpers::callRoute('forget_password') ?>">
+            Mots de passe oublié ?
+            </a>
         </section>
     </section>
 

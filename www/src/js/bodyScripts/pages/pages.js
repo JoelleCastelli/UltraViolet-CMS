@@ -91,7 +91,7 @@ $(document).ready(function() {
     function getPagesByType(pageType) {
         $.ajax({
             type: 'POST',
-            url: callRoute('pages-data'),
+            url: callRoute('pages_data'),
             data: { pageType },
             dataType: 'json',
             async: false,
@@ -148,7 +148,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: callRoute('page_update'),
+            url: callRoute('page_update_visibility'),
             data: {
                 id: pageId,
                 form: 'changeVisibility'
@@ -177,29 +177,27 @@ $(document).ready(function() {
                 },
                 error: function() {
                     $('.header').after("Erreur dans la suppression de la page ID " + pageId);
-
                 }
             });
         }
     });
-});
 
-/* ADD NEW PAGE WHEN MODAL ALREADY OPEN */
-$('#add-page-modal').click(function(event) {
-    let targetElement = event.target;
-    let selector = 'add-new-page';
+    /* ADD NEW PAGE WHEN MODAL ALREADY OPEN */
+    $('#add-page-modal').click(function(event) {
+        let targetElement = event.target;
+        let selector = 'add-new-page';
 
-    if (targetElement != null) {
+        if (targetElement != null) {
 
-        a = targetElement;
+            a = targetElement;
 
-        if ($(a).hasClass(selector)) {
-            console.log("clickk selector");
-            $('#add-page-modal .content-modal').show();
-            $('#add-page-modal .add-new-page').remove();
-            $('#add-page-modal .error-message-form').remove();
-            $('#add-page-modal .success-message-form').remove();
-            return;
+            if ($(a).hasClass(selector)) {
+                $('#add-page-modal .content-modal').show();
+                $('#add-page-modal .add-new-page').remove();
+                $('#add-page-modal .error-message-form').remove();
+                $('#add-page-modal .success-message-form').remove();
+                return;
+            }
         }
-    }
+    });
 });

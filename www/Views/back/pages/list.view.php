@@ -32,7 +32,7 @@
     </section>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL ADD PAGE -->
 <div id="add-page-modal" class="modal modal-hidden">
     <div class="wrapper-modal">
         <div class="header-modal">

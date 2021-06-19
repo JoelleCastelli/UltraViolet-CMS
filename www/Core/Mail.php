@@ -26,7 +26,7 @@ class Mail
 	public function sendMail($to, $from, $from_name, $subject, $msg) {
 		$mail = new PHPMailer();
         try {
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
             $mail->isSMTP();                      
             $mail->SMTPAuth = true;
 
@@ -45,7 +45,6 @@ class Mail
             $mail->Body = $msg;
             $mail->AddAddress($to);
             $mail->send();
-            Helpers::dd($mail);
 
             echo 'Message has been sent';
         } catch (Exception $e) {

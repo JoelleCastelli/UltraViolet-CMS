@@ -3,13 +3,11 @@ window.addEventListener("load", function(event) {
 });
 
 /* ROUTING */
-
-
 function callRoute(path) {
 
     let routeJS = "";
 
-    jQuery.ajax({
+    $.ajax({
         type: "POST",
         url: '/admin/routes',
         dataType: 'json',
