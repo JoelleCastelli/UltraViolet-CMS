@@ -115,6 +115,10 @@ class Production
                                 $production->save();
                                 $production->savePoster();
                                 $production->saveCast();
+                                if($production->getType() == 'movie') {
+                                    $production->saveWriters();
+                                }
+
                                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
                                 Helpers::redirect(Helpers::callRoute('productions_list'));
                             }

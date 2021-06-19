@@ -241,14 +241,16 @@ class Production extends Database
     {
         $cast = [];
         for($i = 0; $i < 5 ; $i++) {
-            $person = new Person();
-            $person->setRole('vip');
-            $person->setCharacter($tmdbCast[$i]->character ?? '');
-            $person->setTmdbId($tmdbCast[$i]->id);
-            $name = $tmdbCast[$i]->name ?? '';
-            $person->setFullName($name);
-            $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbCast[$i]->profile_path);
-            $cast[] = $person;
+            if(isset($tmdbCast[$i])) {
+                $person = new Person();
+                $person->setRole('vip');
+                $person->setCharacter($tmdbCast[$i]->character ?? '');
+                $person->setTmdbId($tmdbCast[$i]->id ?? null);
+                $name = $tmdbCast[$i]->name ?? '';
+                $person->setFullName($name);
+                $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbCast[$i]->profile_path);
+                $cast[] = $person;
+            }
         }
         $this->cast = $cast;
     }
@@ -258,7 +260,7 @@ class Production extends Database
         foreach ($cast as $actor) {
             $mediaId = $actor->saveMedia();
             $actorID = $actor->saveVip($mediaId);
-            $actor->saveProductionPerson($actorID, $this->getLastInsertId());
+            $actor->saveProductionPerson($actorID, $this->getLastInsertId(), 'cast');
         }
     }
 
@@ -284,7 +286,7 @@ class Production extends Database
     public function saveMedia() {
         // Save poster file
         $productionImgPath = PATH_TO_IMG_POSTERS.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle());
-        if($this->poster->getTmdbPosterPath()) {
+        if(!empty($this->poster->getTmdbPosterPath()) && $this->poster->getTmdbPosterPath() != TMDB_IMG_PATH) {
             file_put_contents(getcwd().$productionImgPath, file_get_contents($this->poster->getTmdbPosterPath()));
         }
 
@@ -376,6 +378,16 @@ class Production extends Database
             }
         }
         $this->writers = $writers;
+    }
+
+    public function saveWriters() {
+        $writers = $this->getWriters();
+        foreach ($writers as $writer) {
+            Helpers::dd($writer);
+            $mediaId = $writer->saveMedia();
+            $writerID = $writer->saveVip($mediaId);
+            $writer->saveProductionPerson($writerID, $this->getLastInsertId(), 'writer');
+        }
     }
 
     public function getCreators(): array

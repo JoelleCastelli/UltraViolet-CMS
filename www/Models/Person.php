@@ -279,10 +279,9 @@ class Person extends Database
     public function saveMedia() {
         $actorImgPath = PATH_TO_IMG_VIP.$this->getTmdbId().'_'.Helpers::slugify($this->getFullName());
         // Save vip's image file
-        if($this->media->getTmdbPosterPath()) {
+        if(!empty($this->media->getTmdbPosterPath()) && $this->media->getTmdbPosterPath() != TMDB_IMG_PATH) {
             file_put_contents(getcwd().$actorImgPath, file_get_contents($this->media->getTmdbPosterPath()));
         }
-
 
         // Save or update vip's image in database
         $existingMedia = new Media();
@@ -318,7 +317,7 @@ class Person extends Database
         return $actorID;
     }
 
-    public function saveProductionPerson($actorID, $productionId) {
+    public function saveProductionPerson($actorID, $productionId, $department) {
         // Save or update production person in database
         $existingProductionPerson = new ProductionPerson();
         $existingProductionPerson = $existingProductionPerson->select()
@@ -330,10 +329,11 @@ class Person extends Database
             $existingProductionPerson->save();
         } else {
             $productionPerson = new ProductionPerson();
-            $productionPerson->setDepartment('cast');
+            $productionPerson->setDepartment($department);
             $productionPerson->setPersonId($actorID);
             $productionPerson->setProductionId($productionId);
-            $productionPerson->setCharacter($this->getCharacter());
+            if($department === 'cast')
+                $productionPerson->setCharacter($this->getCharacter());
             $productionPerson->save();
         }
     }
