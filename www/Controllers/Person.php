@@ -199,7 +199,7 @@ class Person
 
         $user = new PersonModel();
         $view = new View("resetPassword", "front");
-        $form = $user->formBuilderResetPassword();
+        $form = $user->formBuilderResetPassword($id, $key);
         $view->assign("form", $form);
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\Helpers;
 use App\Core\FormBuilder;
 use App\Core\Traits\ModelsTrait;
 
@@ -327,7 +328,7 @@ class Person extends Database
                 "class" => "form_control",
                 "id" => "form_register",
                 "submit" => "Valider",
-                "referer" => '/forget_password'
+                "referer" => Helpers::callRoute('forget_password')
             ],
             "fields" => [
                 "email" => [
@@ -348,7 +349,7 @@ class Person extends Database
         ];
     }
 
-    public function formBuilderResetPassword(): array {
+    public function formBuilderResetPassword($id, $key): array {
         return [
             "config" => [
                 "method" => "POST",
@@ -356,7 +357,7 @@ class Person extends Database
                 "class" => "form_control",
                 "id" => "form_register",
                 "submit" => "Valider",
-                "referer" => '/utilisateurs/password_reset/{id}-{key}'
+                "referer" => Helpers::callRoute('reset_password', ['id' => $id, 'key' => $key])
             ],
             "fields" => [
                 "pwd" => [
@@ -501,7 +502,7 @@ class Person extends Database
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de création de compte pour Ultraviolet à bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">http://localhost:8080/utilisateurs/verification/$pseudo-$key</p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('verification', ['id' => $pseudo, 'key' => $key])."</p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:15px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Dans la plupart des logiciels de courriel, cette adresse devrait apparaître comme un lien de couleur bleue qu'il vous suffit de cliquer. Si cel ane fonctionne pas, copiez ce lien et collez-le dans la barre d'adresse de votre navigateur web. </p></td> 
@@ -641,7 +642,7 @@ class Person extends Database
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de création de compte pour Ultraviolet à bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">http://localhost:8080/utilisateurs/password_reset/$id-$key</p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('reset_password', ['id' => $id, 'key' => $key])."</p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:15px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Dans la plupart des logiciels de courriel, cette adresse devrait apparaître comme un lien de couleur bleue qu'il vous suffit de cliquer. Si cel ane fonctionne pas, copiez ce lien et collez-le dans la barre d'adresse de votre navigateur web. </p></td> 
