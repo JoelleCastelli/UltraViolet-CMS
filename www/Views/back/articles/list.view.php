@@ -5,6 +5,7 @@
             <div class="filtering-btn articleState" id="published">Publiés</div>
             <div class="filtering-btn articleState" id="draft">Brouillons</div>
             <div class="filtering-btn articleState" id="scheduled">Planifiés</div>
+            <div class="filtering-btn articleState" id="hidden">Cachés</div>
             <div class="filtering-btn articleState" id="trash">Corbeille</div>
         </div>
 
