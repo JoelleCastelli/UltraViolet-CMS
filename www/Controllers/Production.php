@@ -6,6 +6,9 @@ use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
+use App\Models\Media;
+use App\Models\ProductionPerson;
+use App\Models\Person;
 
 class Production
 {
@@ -106,11 +109,16 @@ class Production
                     if (!empty($jsonResponseArray)) {
                         $production = new ProductionModel();
                         if($production->populateFromTmdb($_POST, $jsonResponseArray)) {
-                            $production->save();
-                            Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
-                            Helpers::redirect(Helpers::callRoute('productions_list'));
+                            if ($production->findOneBy('tmdbId', $production->getTmdbId())) {
+                                $errors[] = "La production avec l'ID TMDB ".$production->getTmdbId()." existe déjà dans la base de données";
+                            } else {
+                                $production->save();
+                                $production->saveCast();
+                                Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
+                                Helpers::redirect(Helpers::callRoute('productions_list'));
+                            }
                         } else {
-                            echo "Problème avec TMDB";
+                            echo "Problème dans la récupération de données TMDB";
                         }
                     } else {
                         $errors[] = "La recherche ne correspond à aucun résultat sur TMDB";

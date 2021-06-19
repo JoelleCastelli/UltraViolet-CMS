@@ -10,7 +10,7 @@ use App\Core\View;
 class Production extends Database
 {
     private ?int $id = null;
-    protected ?int $tmdbId = null;
+    protected ?int $tmdbId;
     protected string $title;
     protected ?string $originalTitle;
     protected ?string $releaseDate;
@@ -34,6 +34,7 @@ class Production extends Database
     public function __construct()
     {
         parent::__construct();
+        $this->poster = new Media();
         $this->actions = [
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('production_update', ['id' => $this->id])],
             ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('production_delete', ['id' => $this->id]), 'role' => 'admin'],
@@ -239,17 +240,26 @@ class Production extends Database
     public function setCast($tmdbCast): void
     {
         $cast = [];
-        for($i = 1; $i <= 3 ; $i++) {
+        for($i = 0; $i < 5 ; $i++) {
             $person = new Person();
             $person->setRole('vip');
-            $name = $tmdbCast[$i]->name ?? '-';
+            $person->setCharacter($tmdbCast[$i]->character ?? '');
+            $person->setTmdbId($tmdbCast[$i]->id);
+            $name = $tmdbCast[$i]->name ?? '';
             $person->setFullName($name);
-            $productionPerson = new ProductionPerson();
-            $productionPerson->setDepartment('cast');
+            $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbCast[$i]->profile_path);
             $cast[] = $person;
-            $cast[] = $productionPerson;
         }
         $this->cast = $cast;
+    }
+
+    public function saveCast() {
+        $cast = $this->getCast();
+        foreach ($cast as $actor) {
+            $mediaId = $actor->saveMedia();
+            $actorID = $actor->saveVip($mediaId);
+            $actor->saveProductionPerson($actorID, $this->getLastInsertId());
+        }
     }
 
     public function getPoster(): Media
@@ -503,7 +513,7 @@ class Production extends Database
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
         $this->setCast($item->credits->cast);
-        $this->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
+        $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
 
         //$production0['genres'] = $item->genres; TODO
 
@@ -527,7 +537,7 @@ class Production extends Database
                         $this->setTotalEpisodes($item->seasons[$post['seasonNb']]->episode_count);
                         $this->setOverview($item->seasons[$post['seasonNb']]->overview);
                         $this->setPoster($item->id, 'season');
-                        $this->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
+                        $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
 
                         // Episode
                         if(!empty($episode)) {
@@ -535,7 +545,7 @@ class Production extends Database
                             $this->setOverview($episode->overview);
                             $this->setReleaseDate($episode->air_date);
                             $this->setPoster($item->id, 'episode');
-                            $this->setTmdbPosterPath(TMDB_IMG_PATH.$episode->still_path);
+                            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
                         }
                     } else {
                         echo '<div class="error">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</div>";

@@ -18,3 +18,7 @@ www/dist/
 # env files
 www/.env*
 !www/.env.example
+
+# images
+www/src/img/posters/
+www/src/img/vip/

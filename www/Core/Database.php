@@ -32,7 +32,7 @@ class Database {
         }
 
         $classExploded = explode("\\", get_called_class());
-        $this->table = strtolower(DBPREFIXE . end($classExploded));
+        $this->table = strtolower(Helpers::convertToSnakeCase(DBPREFIXE . end($classExploded)));
     }
 
     /* GENERAL QUERY */
@@ -47,7 +47,7 @@ class Database {
         if (is_null($this->getId())) {
             // INSERT
             $query = $this->pdo->prepare("INSERT INTO " . $this->table . " 
-            (" . implode(', ', array_keys($columns)) . ") 
+            (`" . implode('`, `', array_keys($columns)) . "`) 
             VALUES 
             (:" . implode(', :', array_keys($columns)) . ") ");
         } else {
@@ -275,6 +275,11 @@ class Database {
         }
         $actions .= "</div></div>";
         return $actions;
+    }
+
+    public function getLastInsertId(): string
+    {
+        return $this->pdo->lastInsertId();
     }
 
 }

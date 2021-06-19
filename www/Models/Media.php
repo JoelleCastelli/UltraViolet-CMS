@@ -9,100 +9,86 @@ class Media extends Database
 {
     use ModelsTrait;
 
-    private $id = null;
-    private $createdAt;
-    private $updatedAt;
-    protected $title;
-    protected $path;
-    protected $video = 0;
-    protected $deletedAt;
+    private ?int $id = null;
+    protected string $title;
+    protected string $path;
+    private ?string $tmdbPosterPath = null;
+    protected bool $video = false;
+    private string $createdAt;
+    private ?string $updatedAt;
+    protected ?string $deletedAt = null;
 
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * @return null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param mixed $title
-     */
     public function setTitle($title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @param mixed $path
-     */
     public function setPath($path): void
     {
         $this->path = $path;
     }
 
-    /**
-     * @return int
-     */
+    public function getTmdbPosterPath(): ?string
+    {
+        return $this->tmdbPosterPath;
+    }
+
+    public function setTmdbPosterPath(?string $tmdbPosterPath): void
+    {
+        $this->tmdbPosterPath = $tmdbPosterPath;
+    }
+
     public function getVideo(): int
     {
         return $this->video;
     }
 
-    /**
-     * @param int $video
-     */
     public function setVideo(int $video): void
     {
         $this->video = $video;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): string
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getDeletedAt()
+    public function getUpdatedAt(): ?string
+    {
+        return $this->updatedAt;
+    }
+
+    public function getDeletedAt(): ?string
     {
         return $this->deletedAt;
     }
 
-    /**
-     * @param mixed $deletedAt
-     */
     public function setDeletedAt($deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
 
-    public function formBuilderUpload()
+    public function formBuilderUpload(): array
     {
         return [
             "config" => [
