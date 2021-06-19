@@ -114,9 +114,10 @@ class Production
                             } else {
                                 $production->save();
                                 $production->savePoster();
-                                $production->saveCast();
+                                $production->saveCrew('actors');
                                 if($production->getType() == 'movie') {
-                                    $production->saveWriters();
+                                    $production->saveCrew('writers');
+                                    $production->saveCrew('directors');
                                 }
 
                                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");

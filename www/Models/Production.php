@@ -20,7 +20,7 @@ class Production extends Database
     protected ?int $number;
     protected ?int $totalSeasons;
     protected ?int $totalEpisodes;
-    private array $cast = [];
+    private array $actors = [];
     private array $directors = [];
     private array $writers = [];
     private array $creators = [];
@@ -232,14 +232,14 @@ class Production extends Database
         return date("d/m/Y",strtotime($this->getCreatedAt()));
     }
 
-    public function getCast(): array
+    public function getActors(): array
     {
-        return $this->cast;
+        return $this->actors;
     }
 
-    public function setCast($tmdbCast): void
+    public function setActors($tmdbCast): void
     {
-        $cast = [];
+        $actors = [];
         for($i = 0; $i < 5 ; $i++) {
             if(isset($tmdbCast[$i])) {
                 $person = new Person();
@@ -249,15 +249,15 @@ class Production extends Database
                 $name = $tmdbCast[$i]->name ?? '';
                 $person->setFullName($name);
                 $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbCast[$i]->profile_path);
-                $cast[] = $person;
+                $actors[] = $person;
             }
         }
-        $this->cast = $cast;
+        $this->actors = $actors;
     }
 
-    public function saveCast() {
-        $cast = $this->getCast();
-        foreach ($cast as $actor) {
+    public function saveActors() {
+        $actors = $this->getActors();
+        foreach ($actors as $actor) {
             $mediaId = $actor->saveMedia();
             $actorID = $actor->saveVip($mediaId);
             $actor->saveProductionPerson($actorID, $this->getLastInsertId(), 'cast');
@@ -349,10 +349,7 @@ class Production extends Database
                 $person = new Person();
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
-                $productionPerson = new ProductionPerson();
-                $productionPerson->setDepartment('director');
                 $directors[] = $person;
-                $directors[] = $productionPerson;
             }
         }
         $this->directors = $directors;
@@ -371,22 +368,10 @@ class Production extends Database
                 $person = new Person();
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
-                $productionPerson = new ProductionPerson();
-                $productionPerson->setDepartment('writer');
                 $writers[] = $person;
-                $writers[] = $productionPerson;
             }
         }
         $this->writers = $writers;
-    }
-
-    public function saveWriters() {
-        $writers = $this->getWriters();
-        foreach ($writers as $writer) {
-            $mediaId = $writer->saveMedia();
-            $writerID = $writer->saveVip($mediaId);
-            $writer->saveProductionPerson($writerID, $this->getLastInsertId(), 'writer');
-        }
     }
 
     public function getCreators(): array
@@ -401,11 +386,19 @@ class Production extends Database
             $person = new Person();
             $person->setRole('vip');
             $person->setFullName($creator->name);
-            $productionPerson = new ProductionPerson();
             $creators[] = $person;
-            $creators[] = $productionPerson;
         }
         $this->creators = $creators;
+    }
+
+    public function saveCrew($department) {
+        $functionName = "get".ucfirst($department);
+        $crew = $this->$functionName();
+        foreach ($crew as $crewMember) {
+            $mediaId = $crewMember->saveMedia();
+            $writerID = $crewMember->saveVip($mediaId);
+            $crewMember->saveProductionPerson($writerID, $this->getLastInsertId(), mb_substr($department, 0, -1));
+        }
     }
 
     public function formBuilderAddProduction(){
@@ -572,7 +565,7 @@ class Production extends Database
         $this->setOverview($item->overview);
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
-        $this->setCast($item->credits->cast);
+        $this->setActors($item->credits->cast);
         $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
 
         //$production0['genres'] = $item->genres; TODO
