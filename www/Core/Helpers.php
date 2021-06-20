@@ -8,6 +8,21 @@ class Helpers{
 		return ucwords(mb_strtolower(trim($firstname)));
 	}
 
+
+    public static function slugify($text): string
+    {
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        $text = preg_replace('~[^-\w]+~', '', $text);
+        $text = trim($text, '-');
+        $text = preg_replace('~-+~', '-', $text);
+        $text = strtolower($text);
+
+        if (empty($text)) return '-1';
+
+        return $text;
+    }
+
 	public static function getCurrentTimestamp(){
         $dateNow = new \DateTime('now');
         return $dateNow->format("Y-m-d H:i:s");

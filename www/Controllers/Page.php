@@ -133,7 +133,12 @@ class Page
 
             if (empty($errors)) {
 
-                $slug = $this->slugValidator($_POST['slug'], $_POST['title']);
+                if(empty($_POST['slug'])) {
+                    $slug = Helpers::slugify($_POST['title']);
+                } else {
+                    $slug = htmlspecialchars($_POST['slug']);
+                }
+
                 $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
 
                 if (empty($isNotUniqueSlug)) {
@@ -215,7 +220,12 @@ class Page
 
             if (empty($errors)) {
 
-                $slug = $this->slugValidator($_POST['slug'], $_POST['title']);
+                if (empty($_POST['slug'])) {
+                    $slug = Helpers::slugify($_POST['title']);
+                } else {
+                    $slug = htmlspecialchars($_POST['slug']);
+                }
+
                 $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
                 if (count($isNotUniqueSlug) < 2) {
 
