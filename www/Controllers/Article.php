@@ -57,9 +57,22 @@ class Article {
     }
 
     public function updateArticleAction($id) {
+        // TODO : check and redirect if id exist or invalid
+
         $view = new View("articles/updateArticle");
         $view->assign("title", "Modifier un article");
         $view->assign("articleId", $id);
+    }
+
+    public function deleteArticleAction($id) {
+        // TODO : check and redirect if id exist or invalid
+
+        $article = new ArticleModel();
+        $article->setId($id);
+        $article->setState("deleted");
+        $article->delete();
+
+        Helpers::redirect(Helpers::callRoute("articles_list"), "302");
     }
 
     // API methods : Always return a json object
