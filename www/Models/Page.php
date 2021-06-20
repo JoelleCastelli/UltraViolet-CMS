@@ -211,14 +211,6 @@ class Page extends Database implements JsonSerializable
         return $this->actions;
     }
 
-    public function findAll() {
-        return parent::findAll();
-    }
-
-    public function selectWhere($column, $value) {
-        return parent::selectWhere($column, $value);
-    }
-
     public function cleanPublicationDate() {
         $this->setPublicationDate(date("d/m/Y", strtotime($this->getPublicationDate())));
     }

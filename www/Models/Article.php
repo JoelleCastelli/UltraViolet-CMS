@@ -334,14 +334,6 @@ class Article extends Database implements JsonSerializable
         return $this->actions;
     }
 
-    public function findAll() {
-        return parent::findAll();
-    }
-
-    public function selectWhere($column, $value) {
-        return parent::selectWhere($column, $value);
-    }
-
     public function jsonSerialize(): array
     {
         return [
