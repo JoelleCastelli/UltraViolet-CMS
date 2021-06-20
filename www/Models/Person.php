@@ -344,7 +344,7 @@ class Person extends Database implements JsonSerializable
                                                              ->andWhere('department', $department)
                                                              ->first();
         if($existingProductionPerson) {
-            if($department === 'cast')
+            if($department === 'actor')
                 $existingProductionPerson->setCharacter($this->getCharacter());
             $existingProductionPerson->save();
         } else {
@@ -352,7 +352,7 @@ class Person extends Database implements JsonSerializable
             $productionPerson->setDepartment($department);
             $productionPerson->setPersonId($actorID);
             $productionPerson->setProductionId($productionId);
-            if($department === 'cast')
+            if($department === 'actor')
                 $productionPerson->setCharacter($this->getCharacter());
             $productionPerson->save();
         }

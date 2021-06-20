@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_person` (
   `personId` INT NOT NULL,
   `productionId` INT NOT NULL,
   `department` VARCHAR(15) NOT NULL,
-  `character` VARCHAR(45) NULL DEFAULT NULL,
+  `character` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_uvtr_production_person_uvtr_person1_idx` (`personId` ASC),
   INDEX `fk_uvtr_production_person_uvtr_production1_idx` (`productionId` ASC),
