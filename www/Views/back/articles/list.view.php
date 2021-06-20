@@ -5,9 +5,12 @@
             <div class="filtering-btn articleState" id="published">Publiés</div>
             <div class="filtering-btn articleState" id="draft">Brouillons</div>
             <div class="filtering-btn articleState" id="scheduled">Planifiés</div>
-            <div class="filtering-btn articleState" id="trash">Corbeille</div>
+            <div class="filtering-btn articleState" id="hidden">Cachés</div>
+            <div class="filtering-btn articleState" id="deleted">Supprimés</div>
         </div>
-        <button class="btn">Ajouter un article</button>
+
+        <a class="btn" href="<?= \App\Core\Helpers::callRoute('article_creation') ?>" >Ajouter un article</a>
+
     </section>
 
     <section>
@@ -24,19 +27,6 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
-                    if (!empty($articles)) {
-                        foreach ($articles as $article) {
-                            echo "<td>$article->title</td>";
-                            echo "<td>$article->author</td>";
-                            echo "<td>$article->totalViews</td>";
-                            echo "<td>$article->totalComments</td>";
-                            echo "<td>$article->publicationDate</td>";
-                            echo "<td>$article->publicationToggle</td>";
-                            echo "<td>$article->actions</td>";
-                        }
-                    }
-                ?>
             </tbody>
         </table>
     </section>
