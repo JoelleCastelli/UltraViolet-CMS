@@ -56,6 +56,12 @@ class Article {
         $view->assign("form", $form);
     }
 
+    public function updateArticleAction($id) {
+        $view = new View("articles/updateArticle");
+        $view->assign("title", "Modifier un article");
+        $view->assign("articleId", $id);
+    }
+
     // API methods : Always return a json object
 
     public function getArticlesAction() {

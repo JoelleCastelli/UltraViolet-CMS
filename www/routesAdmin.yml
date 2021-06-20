@@ -48,15 +48,18 @@ articles_list:
   controller: Article
   action:     showAll
 
-article_update:
-  path:       /admin/articles/update
-  controller: Article
-  action:     updateArticle
-
 article_creation:
   path: /admin/articles/creation
   controller: Article
   action: createArticle
+
+article_update:
+  path: /admin/articles/modification/{id}
+  controller: Article
+  action: updateArticle
+  middleware: Editor
+  requirements:
+    id: (\d+)
 
 article_delete:
   path: /admin/articles/delete
