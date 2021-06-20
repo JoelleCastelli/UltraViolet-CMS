@@ -6,7 +6,7 @@
             <div class="filtering-btn articleState" id="draft">Brouillons</div>
             <div class="filtering-btn articleState" id="scheduled">Planifiés</div>
             <div class="filtering-btn articleState" id="hidden">Cachés</div>
-            <div class="filtering-btn articleState" id="trash">Corbeille</div>
+            <div class="filtering-btn articleState" id="deleted">Supprimés</div>
         </div>
 
         <a class="btn" href="<?= \App\Core\Helpers::callRoute('article_creation') ?>" >Ajouter un article</a>
