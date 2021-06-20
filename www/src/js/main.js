@@ -71,8 +71,6 @@ $(document).ready(function() {
     // Open modal
     $('button[data-toggle="modal"]').click(function() {
         let idModal = $(this).data('target');
-
-        console.log("yes");
         if ($(idModal).length > 0) {
             a = $(idModal)[0];
             $($(idModal)[0]).removeClass('modal-hidden');
