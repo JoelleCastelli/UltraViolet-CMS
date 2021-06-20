@@ -339,9 +339,10 @@ class Person extends Database implements JsonSerializable
         // Save or update production person in database
         $existingProductionPerson = new ProductionPerson();
         $existingProductionPerson = $existingProductionPerson->select()
-            ->where('personId', $actorID)
-            ->andWhere('productionId', $productionId)
-            ->get();
+                                                             ->where('personId', $actorID)
+                                                             ->andWhere('productionId', $productionId)
+                                                             ->andWhere('department', $department)
+                                                             ->first();
         if($existingProductionPerson) {
             if($department === 'cast')
                 $existingProductionPerson->setCharacter($this->getCharacter());
