@@ -7,9 +7,10 @@ use App\Core\Helpers;
 use App\Core\FormBuilder;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
+use JsonSerializable;
 
 
-class Person extends Database
+class Person extends Database implements JsonSerializable
 {
     use ModelsTrait;
 
@@ -237,6 +238,23 @@ class Person extends Database
         }
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "fullName" => $this->getFullName(),
+            "pseudo" => $this->getPseudo(),
+            "email" => $this->getEmail(),
+            "optin" => $this->getOptin(),
+            "updatedAt" => $this->getUpdatedAt(),
+            "createdAt" => $this->getCreatedAt(),
+            "deletedAt" => $this->getDeletedAt(),
+            "role" => $this->getRole(),
+            "isEmailConfirmed" => $this->isEmailConfirmed(),
+            "mediaId" => $this->getMediaId(),
+        ];
+    }
+
     public function checkRights($role): bool {
         switch ($role) {
             case 'moderator':
@@ -323,18 +341,20 @@ class Person extends Database
         // Save or update production person in database
         $existingProductionPerson = new ProductionPerson();
         $existingProductionPerson = $existingProductionPerson->select()
-            ->where('personId', $actorID)
-            ->andWhere('productionId', $productionId)
-            ->get();
+                                                             ->where('personId', $actorID)
+                                                             ->andWhere('productionId', $productionId)
+                                                             ->andWhere('department', $department)
+                                                             ->first();
         if($existingProductionPerson) {
-            $existingProductionPerson->setCharacter($this->getCharacter());
+            if($department === 'actor')
+                $existingProductionPerson->setCharacter($this->getCharacter());
             $existingProductionPerson->save();
         } else {
             $productionPerson = new ProductionPerson();
             $productionPerson->setDepartment($department);
             $productionPerson->setPersonId($actorID);
             $productionPerson->setProductionId($productionId);
-            if($department === 'cast')
+            if($department === 'actor')
                 $productionPerson->setCharacter($this->getCharacter());
             $productionPerson->save();
         }

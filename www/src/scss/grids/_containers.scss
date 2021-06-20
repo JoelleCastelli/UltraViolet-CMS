@@ -39,4 +39,12 @@
 .main-content {
     display: flex;
     flex-flow: column;
+    // height: 100%;
+}
+
+// Lazy layout forms
+
+.form_control {
+    display: flex;
+    flex-direction: column;
 }
