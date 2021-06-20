@@ -349,6 +349,7 @@ class Production extends Database
                 $person = new Person();
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
+                $person->setTmdbId($crew->id);
                 $directors[] = $person;
             }
         }
@@ -368,6 +369,7 @@ class Production extends Database
                 $person = new Person();
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
+                $person->setTmdbId($crew->id);
                 $writers[] = $person;
             }
         }
@@ -386,6 +388,7 @@ class Production extends Database
             $person = new Person();
             $person->setRole('vip');
             $person->setFullName($creator->name);
+            $person->setTmdbId($creator->id);
             $creators[] = $person;
         }
         $this->creators = $creators;
