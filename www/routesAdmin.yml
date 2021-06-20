@@ -48,10 +48,31 @@ articles_list:
   controller: Article
   action:     showAll
 
-article_update:
-  path:       /admin/articles/modification
+article_creation:
+  path: /admin/articles/creation
   controller: Article
-  action:     modifyArticle
+  action: createArticle
+
+article_update:
+  path: /admin/articles/modification/{id}
+  controller: Article
+  action: updateArticle
+  middleware: Editor
+  requirements:
+    id: (\d+)
+
+article_delete:
+  path: /admin/articles/delete/{id}
+  controller: Article
+  action: deleteArticle
+  middleware: Editor
+  requirements:
+    id: (\d+)
+
+article_data:
+  path: /admin/articles/articles-data
+  controller: Article
+  action: getArticles
 
 article_tab_change:
   path:       /admin/tab-change
