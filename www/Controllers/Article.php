@@ -9,6 +9,8 @@ use App\Models\Article as ArticleModel;
 
 class Article {
 
+    // Standard controller methods
+
     public function showAllAction() {
         $article = new ArticleModel;
         $articles = $article->selectWhere('state', 'published');
@@ -17,45 +19,6 @@ class Article {
         $view->assign('title', 'Articles');
         $view->assign('articles', $articles);
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/articles/articles.js']);
-    }
-
-    public function getArticlesAction() {
-        if (empty($_POST['state'])) return;
-        
-        $state = $_POST['state'];
-        $articles = new ArticleModel();
-
-        $articles = $articles->selectWhere('state', htmlspecialchars($_POST['state']));
-
-        if (!$articles) $articles = [];
-
-        $articlesArray = [];
-        foreach ($articles as $article) {
-            $articlesArray[] = [
-                "Titre" => $article->getTitle(),
-                "Auteur" => $article->getPerson()->getPseudo(),
-                "Vues" => $article->getTotalViews(),
-                "Commentaire" => "[NOMBRE COMMENTAIRE]",
-                 "Date" => $article->getCreatedAt(),
-                "Publication" => $article->getState(),
-                "Actions" => $article->generateActionsMenu()
-            ];
-        }
-
-        echo json_encode([
-            "state" => $state,
-            "articles" => $articlesArray
-        ]);
-    }
-
-    public function tabChangeAction() {
-        $article = new ArticleModel;
-        echo json_encode($article->selectWhere('state', $_POST['articleState']));
-    }
-
-    public function modifyArticleAction() {
-        $view = new View("articles/modifyArticle");
-        $view->assign("title", "Modifier un article");
     }
 
     public function createArticleAction() {
@@ -91,6 +54,37 @@ class Article {
         }
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
+    }
+
+    // API methods : Always return a json object
+
+    public function getArticlesAction() {
+        if (empty($_POST['state'])) return;
+
+        $state = $_POST['state'];
+        $articles = new ArticleModel();
+
+        $articles = $articles->selectWhere('state', htmlspecialchars($_POST['state']));
+
+        if (!$articles) $articles = [];
+
+        $articlesArray = [];
+        foreach ($articles as $article) {
+            $articlesArray[] = [
+                "Titre" => $article->getTitle(),
+                "Auteur" => $article->getPerson()->getPseudo(),
+                "Vues" => $article->getTotalViews(),
+                "Commentaire" => "[NOMBRE COMMENTAIRE]",
+                "Date" => $article->getCreatedAt(),
+                "Publication" => $article->getState(),
+                "Actions" => $article->generateActionsMenu()
+            ];
+        }
+
+        echo json_encode([
+            "state" => $state,
+            "articles" => $articlesArray
+        ]);
     }
 
 }
