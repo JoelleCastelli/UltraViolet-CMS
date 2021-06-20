@@ -6,7 +6,7 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Models\Page as PageModel;
-use App\Models\Page_Article;
+use App\Models\PageArticle;
 
 class Page
 {
@@ -53,7 +53,7 @@ class Page
 
         if (!empty($_POST['pageType'])) {
             $pageModel = new PageModel();
-            $page_article = new Page_Article();
+            $pageArticle = new PageArticle();
 
             // get pages
             if ($_POST['pageType'] === 'published') {
@@ -72,7 +72,7 @@ class Page
                     $this->columnsTable['title'] => $page->getTitle(),
                     $this->columnsTable['slug'] => $page->getSlug(),
                     $this->columnsTable['position'] => $page->getPosition(),
-                    $this->columnsTable['articles'] => $page_article->count("pageId")->where("pageId", $page->getId())->first()->total,
+                    $this->columnsTable['articles'] => $pageArticle->count("pageId")->where("pageId", $page->getId())->first()->total,
                     $this->columnsTable['state'] => $page->getState() == "hidden" ?
                         '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switch-visibily-page" onclick="toggleSwitch(this)"></div>'
                         : '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switched-on switch-visibily-page" onclick="toggleSwitch(this)"></div>',

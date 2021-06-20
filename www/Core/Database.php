@@ -137,7 +137,7 @@ class Database {
 
     public function count($column = "*"): Database
     {
-        $this->query = 'SELECT COUNT(`' . $column . '`) ';
+        $this->query = 'SELECT COUNT(`' . $column . '`) as total FROM ' . $this->table . ' ';
         return $this;
     }
 
