@@ -4,40 +4,25 @@ $(document).ready(function () {
 
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable({
-
+        responsive: true,
         // All columns    
         columns: [
-            {
-                data: 'Nom et prénom',
-            },
-            {
-                data: 'Pseudonyme',
-                
-            },
-            {
-                data: 'Email',
-                
-            },
-            {
-                data: 'Verification email',
-                            },
-            {
-                data: 'Actions',
-            }
+            {data: 'Nom et prénom'},
+            {data: 'Pseudonyme'},
+            {data: 'Email'},
+            {data: 'Verification email'},
+            {data: 'Actions'}
         ],
 
         // Column Actions 
         columnDefs: [
-            
-            
-
             {
-            targets: 4,
-            data: "Actions",
-            searchable: false,
-            orderable: false
-        }],
-        
+                targets: 4,
+                data: "Actions",
+                searchable: false,
+                orderable: false
+            }
+        ],
 
         language: {
             "sEmptyTable": "Aucune donnée disponible dans le tableau",

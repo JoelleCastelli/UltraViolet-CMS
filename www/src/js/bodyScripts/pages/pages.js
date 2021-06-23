@@ -3,6 +3,7 @@ $(document).ready(function() {
 
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable({
+        responsive: true,
 
         // All columns    
         columns: [
@@ -11,17 +12,14 @@ $(document).ready(function() {
             },
             {
                 data: 'URL de la page',
-
             },
             {
                 data: 'Ordre',
                 width: "10%"
-
             },
             {
                 data: 'Nombre d\'articles',
                 width: "15%"
-
             },
             {
                 data: 'Visibilité',

@@ -106,14 +106,13 @@ a:active {
 
 .fadeOut {
     animation: 3s fadeOut 7s forwards; // duration, animation, delay, fill-mode
-
     -webkit-animation:3s fadeOut 7s forwards;
     -moz-animation:3s fadeOut 7s forwards;
 }
+
 @-webkit-keyframes fadeOut {
     from {
         opacity:1;
-
     }
     to {
         opacity:0;
@@ -122,8 +121,6 @@ a:active {
 @-moz-keyframes fadeOut {
     from {
         opacity:1;
-		
-
     }
     to {
         opacity:0;
@@ -132,7 +129,6 @@ a:active {
 @keyframes fadeOut {
     from {
         opacity:1;
-
     }
     to {
         opacity:0;
