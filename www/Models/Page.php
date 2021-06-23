@@ -356,44 +356,44 @@ class Page extends Database implements JsonSerializable
                 "action" => "",
                 "class" => "form_control form-add-page",
                 "id" => "form_register",
-                "submit" => "Ajouter une page",
+                "submit" => "Valider",
                 "required_inputs" => 5
             ],
             "fields" => [
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Animées",
-                    "label" => "Votre Titre * :",
+                    "placeholder" => "Critiques de séries",
+                    "label" => "Titre* :",
                     "class" => "search-bar",
-                    "error" => "Votre titre doit faire entre 2 et 25 caractères",
+                    "error" => "Le titre doit contenir entre 2 et 25 caractères",
                 ],
                 "slug" => [
                     "type" => "text",
-                    "placeholder" => "meilleure-serie",
-                    "label" => "Votre slug :",
+                    "placeholder" => "critiques-de-series",
+                    "label" => "Slug :",
                     "class" => "search-bar",
-                    "error" => "Votre slug doit faire entre 2 et 15 caractères",
+                    "error" => "Le slug doit contenir entre 2 et 15 caractères",
                 ],
                 "position" => [
                     "type" => "text",
                     "placeholder" => "3",
-                    "label" => "Position * :",
+                    "label" => "Position* :",
                     "class" => "search-bar",
-                    "error" => "Votre position doit étre entre 1 et 4",
+                    "error" => "La position doit être comprise entre 1 et 4",
                 ],
                 "titleSEO" => [
                     "type" => "text",
-                    "placeholder" => "Titre pour le référencement",
-                    "label" => "titleSEO :",
+                    "placeholder" => "Nos critiques des meilleures séries TV",
+                    "label" => "Meta-title :",
                     "class" => "search-bar",
-                    "error" => "Votre titleSEO doit étre entre 2 et 50"
+                    "error" => "Le meta-title contenir entre 2 et 50 caractères"
                 ],
                 "descriptionSEO" => [
                     "type" => "text",
-                    "placeholder" => "META description",
-                    "label" => "META description :",
+                    "placeholder" => "Retrouvez nos dernières critiques sur les meilleures séries du moment !",
+                    "label" => "Meta-description :",
                     "class" => "search-bar",
-                    "error" => "Votre descriptionSEO doit étre entre 2 et 255"
+                    "error" => "La meta-description doit contenir entre 2 et 255 caractères"
                 ],
                 "state" => [
                     "type" => "radio",
@@ -444,38 +444,38 @@ class Page extends Database implements JsonSerializable
             "fields" => [
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Animées",
-                    "label" => "Votre Titre * :",
+                    "placeholder" => "Critiques de séries",
+                    "label" => "Titre * :",
                     "class" => "search-bar",
-                    "error" => "Votre titre doit faire entre 2 et 25 caractères",
+                    "error" => "Le titre doit contenir entre 2 et 25 caractères",
                 ],
                 "slug" => [
                     "type" => "text",
-                    "placeholder" => "meilleure-serie",
+                    "placeholder" => "critiques-de-series",
                     "label" => "Votre slug :",
                     "class" => "search-bar",
-                    "error" => "Votre slug doit faire entre 2 et 15 caractères",
+                    "error" => "Le slug doit contenir entre 2 et 15 caractères",
                 ],
                 "position" => [
                     "type" => "text",
                     "placeholder" => "3",
-                    "label" => "Position * :",
+                    "label" => "Position dans le menu* :",
                     "class" => "search-bar",
-                    "error" => "Votre position doit étre entre 1 et 4",
+                    "error" => "La position doit être comprise entre 1 et 4",
                 ],
                 "titleSeo" => [
                     "type" => "text",
-                    "placeholder" => "Titre pour le référencement",
-                    "label" => "titleSEO :",
+                    "placeholder" => "Nos critiques des meilleures séries TV",
+                    "label" => "Meta-title :",
                     "class" => "search-bar",
-                    "error" => "Votre titleSEO doit étre entre 2 et 50"
+                    "error" => "Le meta-title contenir entre 2 et 50 caractères"
                 ],
                 "descriptionSeo" => [
                     "type" => "text",
-                    "placeholder" => "META description",
-                    "label" => "META description :",
+                    "placeholder" => "Retrouvez nos dernières critiques sur les meilleures séries du moment !",
+                    "label" => "Meta-description :",
                     "class" => "search-bar",
-                    "error" => "Votre descriptionSEO doit étre entre 2 et 255"
+                    "error" => "La meta-description doit contenir entre 2 et 255 caractères"
                 ],
                 "state" => [
                     "type" => "radio",
