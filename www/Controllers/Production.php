@@ -138,7 +138,7 @@ class Production
     public function ajaxShowPreviewAction() {
         if(!empty($_POST['productionType']) && !empty($_POST['productionID'])) {
             if($_POST['productionType'] === 'movie' && (!empty($_POST['seasonNb']) || !empty($_POST['episodeNb']))) {
-                echo "Un film ne peut pas avoir de numéro de saison ou d'épisode";
+                echo "<p class='error-message-form'>Un film ne peut pas avoir de numéro de saison ou d'épisode</p>";
             } else {
                 $urlArray = $this->getTmdbUrl($_POST);
                 $jsonResponseArray = $this->getApiResponse($urlArray);
@@ -147,11 +147,11 @@ class Production
                     if($production->populateFromTmdb($_POST, $jsonResponseArray))
                         $production->displayPreview();
                 } else {
-                    echo "La recherche ne correspond à aucun résultat sur TMDB";
+                    echo "<p class='error-message-form'>La recherche ne correspond à aucun résultat sur TMDB</p>";
                 }
             }
         } else {
-            echo "Un type et un ID de film ou de série sont nécessaires";
+            echo "<p class='error-message-form'>Un type et un ID de film ou de série sont nécessaires</p>";
         }
     }
 

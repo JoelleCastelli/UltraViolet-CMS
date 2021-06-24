@@ -1,0 +1,42 @@
+#bannerToManual div {
+    margin-bottom: 5px;
+}
+
+#tmdbForm {
+    font-family: $mulish;
+    margin-top: 20px;
+    display: flex;
+
+    form {
+        width: 250px;
+        margin-right: 10px;
+    }
+
+    #production-preview {
+        width: 100%;
+        line-height: 1.5;
+        text-align: justify;
+        p {
+            text-align: center;
+        }
+        #poster {
+            width: 200px;
+            float: left;
+            margin-right: 10px;
+        }
+
+        #actors {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            .actorCard {
+                .actorName {
+                    text-align: center;
+                }
+                .actorImg img {
+                    width: 150px;
+                }
+            }
+        }
+    }
+}

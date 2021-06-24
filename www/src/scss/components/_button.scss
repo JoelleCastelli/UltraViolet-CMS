@@ -33,6 +33,12 @@
         transform: scale(1.1);
     }
 
+    &.preview {
+        background-color: $cyan;
+        margin-top: 15px;
+        margin-bottom: 20px;
+    }
+
     // IDEA, but not the priority
 
     /*

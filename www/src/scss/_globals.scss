@@ -73,6 +73,7 @@ html {
 body {
 	height: 100%;
 	background: $main-bg-color;
+    font-family: $mulish;
 }
 
 a {
@@ -100,6 +101,9 @@ a:active {
 	color: initial;
 }
 
+b {
+    font-weight: 700;
+}
 .hidden {
 	visibility: hidden;
 }

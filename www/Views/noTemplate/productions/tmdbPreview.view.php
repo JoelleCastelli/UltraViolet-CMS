@@ -1,35 +1,61 @@
-<ul class="productionInfos">
-    <li>Titre : <?= $production->getTitle() ?></li>
-    <li>Titre original : <?= $production->getOriginalTitle() ?? '' ?></li>
-    <li>Résumé : <?= $production->getOverview() ?? '' ?></li>
-    <li>Date de sortie : <?= $production->getCleanReleaseDate() ?? '' ?></li>
-    <li>Durée : <?= $production->getCleanRuntime() ?? '' ?></li>
-    <li><img src='<?= $production->getPoster()->getTmdbPosterPath() ?>'/></li>
-    <li>
-        Acteurs principaux :
-        <?php
-            $actors = $production->getActors();
-            for ($n = count($actors), $i = 0; $i < $n; $i++) {
-                echo $actors[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
-            }
-        ?>
-    </li>
-    <li>
-        Réalisation :
-        <?php
+<div id="productionInfos">
+    <?php
+        if($production->getPoster()->getTmdbPosterPath() == '')
+            echo "<img id='poster' src='".PATH_TO_IMG_POSTERS."default_poster.jpg'/>";
+        else
+            echo "<img id='poster' src='".$production->getPoster()->getTmdbPosterPath()."'/>";
+    ?>
+    
+    <div><b>Titre :</b> <?= $production->getTitle() ?></div>
+    <div><b>Titre original :</b> <?= $production->getOriginalTitle() != '' ? $production->getOriginalTitle() : '?' ?></div>
+    <div><b>Résumé :</b> <?= $production->getOverview() != '' ? $production->getOverview() : '?' ?></div>
+    <div><b>Date de sortie :</b> <?= $production->getCleanReleaseDate() ?? '?' ?></div>
+    <div><b>Durée :</b> <?= $production->getCleanRuntime() != '' ? $production->getCleanRuntime() : '?' ?></div>
+
+    <?php
         $directors = $production->getDirectors();
-        for ($n = count($directors), $i = 0; $i < $n; $i++) {
-            echo $directors[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
+        if(!empty($directors)) {
+            echo "<div>";
+                echo "<b>Réalisation : </b>";
+                for ($n = count($directors), $i = 0; $i < $n; $i++) {
+                    echo $directors[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
+                }
+            echo "</div>";
         }
-        ?>
-    </li>
-    <li>
-        Scénario :
-        <?php
+    ?>
+
+    <?php
         $writers = $production->getWriters();
-        for ($n = count($writers), $i = 0; $i < $n; $i++) {
-            echo $writers[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
+        if(!empty($writers)) {
+            echo "<div>";
+                echo "<b>Scénario : </b>";
+                for ($n = count($writers), $i = 0; $i < $n; $i++) {
+                    echo $writers[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
+                }
+            echo "</div>";
         }
-        ?>
-    </li>
-</ul>
+    ?>
+
+    <?php
+        $actors = $production->getActors();
+        if(!empty($actors)) {
+            echo '<b>Acteurs principaux :</b>';
+            echo '<div id="actors">';
+                for ($n = count($actors), $i = 0; $i < $n; $i++) {
+                    echo "<div class='actorCard'>";
+                        echo "<div class='actorName'>";
+                            echo $actors[$i]->getFullName();
+                        echo "</div>";
+                        echo "<div class='actorImg'>";
+                            if($actors[$i]->getMedia()->getTmdbPosterPath() == '')
+                                echo "<img src='".PATH_TO_IMG_POSTERS."default_poster.jpg'/>";
+                            else
+                                echo "<img src='".$actors[$i]->getMedia()->getTmdbPosterPath()."'/>";
+                        echo "</div>";
+                    echo "</div>";
+                }
+            echo "</div>";
+        }
+    ?>
+
+</div>
