@@ -383,10 +383,10 @@ class Production extends Database
         return $this->creators;
     }
 
-    public function setCreators(array $creators): void
+    public function setCreators(array $tmdbCreators): void
     {
         $creators = [];
-        foreach ($creators as $creator) {
+        foreach ($tmdbCreators as $creator) {
             $person = new Person();
             $person->setRole('vip');
             $person->setFullName($creator->name);

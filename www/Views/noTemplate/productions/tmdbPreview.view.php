@@ -10,7 +10,8 @@
     <div><b>Titre original :</b> <?= $production->getOriginalTitle() != '' ? $production->getOriginalTitle() : '?' ?></div>
     <div><b>Résumé :</b> <?= $production->getOverview() != '' ? $production->getOverview() : '?' ?></div>
     <div><b>Date de sortie :</b> <?= $production->getCleanReleaseDate() ?? '?' ?></div>
-    <div><b>Durée :</b> <?= $production->getCleanRuntime() != '' ? $production->getCleanRuntime() : '?' ?></div>
+    <?php $label = $production->getType() == "movie" ? "Durée" : "Durée d'un épisode"; ?>
+    <div><b><?= $label ?> :</b> <?= $production->getCleanRuntime() != '' ? $production->getCleanRuntime() : '?' ?></div>
 
     <?php
         $directors = $production->getDirectors();
@@ -32,6 +33,18 @@
                 for ($n = count($writers), $i = 0; $i < $n; $i++) {
                     echo $writers[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
                 }
+            echo "</div>";
+        }
+    ?>
+
+    <?php
+        $creators = $production->getCreators();
+        if(!empty($creators)) {
+            echo "<div>";
+            echo "<b>Réalisation : </b>";
+            for ($n = count($creators), $i = 0; $i < $n; $i++) {
+                echo $creators[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
+            }
             echo "</div>";
         }
     ?>
