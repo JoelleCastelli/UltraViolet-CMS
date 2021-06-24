@@ -22,8 +22,9 @@ verification:
   path:       /utilisateurs/verification/{pseudo}-{key}
   controller: Person
   action:     verification
-  pseudo:     ([a-zA-Z0-9-_]{2,25})
-  key:        (\d+)
+  requirements:
+    pseudo:     ([a-zA-Z0-9-_]{2,25})
+    key:        (\d+)
 
 reset_password:
   path:       /utilisateurs/password_reset/{id}-{key}
@@ -36,7 +37,7 @@ reset_password:
 forget_password:
   path:       /forget_password
   controller: Person
-  action:     forgetPassword
+  action:     forgetPasswordMail
 
 404:
   path:       /404

@@ -53,8 +53,7 @@ class Helpers{
         if($name === '') return '#';
 
         $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ?
-            "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . 
-            $_SERVER['REQUEST_URI'];
+            "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
 
         foreach (Router::$routes as $office => $routes) {
             foreach ($routes as $routeName => $routeData) {

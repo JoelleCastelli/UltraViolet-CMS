@@ -212,6 +212,7 @@ class Person
             if(empty($errors)) {
                 $user = $user->findOneBy("email", $_POST['email']);
                 if(!empty($user)) {
+                    Helpers::dd($user);
                     $to   = $_POST['email'];
                     $from = 'ultravioletcms@gmail.com';
                     $name = 'Ultaviolet';
@@ -220,8 +221,11 @@ class Person
                     
                     $mail = new Mail();
                     $mail->sendMail($to, $from, $name, $subj, $msg);
+                    Helpers::setFlashMessage('success', " Un e-mail
+                    vous a été envoyé sur " .$_POST['email']);
+                    Helpers::redirect('/connexion');
                 } else {
-                    $errors[] = "Les identifiants ne sont pas reconnus";
+                    $errors[] = "Aucun compte n'a été trouvé";
                 }
             }
             $view->assign("errors", $errors);

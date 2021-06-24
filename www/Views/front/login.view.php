@@ -12,7 +12,7 @@
 
     <?php App\Core\FormBuilder::render($form, true); ?>
     <div>
-        Mot de passe perdu ? <a href="<?= \App\Core\Helpers::callRoute('')?>">Réinitialiser mon mot de passe</a>
+        Mot de passe perdu ? <a href="<?= \App\Core\Helpers::callRoute('forget_password')?>">Réinitialiser mon mot de passe</a>
     </div>
     <div>
         Vous n'avez pas de compte ? <a href="<?= \App\Core\Helpers::callRoute('subscription')?>">Rejoignez-nous !</a>
