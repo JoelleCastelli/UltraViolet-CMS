@@ -134,7 +134,6 @@ class Person
 	}
 
 	public function showAction(){
-		
 		//Affiche la vue user intégrée dans le template du front
 		$view = new View("user"); 
 	}
@@ -163,6 +162,60 @@ class Person
         {
             Helpers::setFlashMessage('error', "Aucun utilisateur trouvé");
         }
-
 	}	
+
+    public function forgetPasswordMailAction(){
+		
+		$user = new PersonModel();
+        $view = new View("forgetPassword", "front");
+        $form = $user->formBuilderForgetPassword();
+        $view->assign("form", $form);
+
+        if(!empty($_POST)) {
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)) {
+                $user = $user->findOneBy("email", $_POST['email']);
+                if(!empty($user)) {
+                    $to   = $_POST['email'];
+                    $from = 'ultravioletcms@gmail.com';
+                    $name = 'Ultaviolet';
+                    $subj = 'Changée de mot de passe';
+                    $msg = $user->forgetPasswordMail($user->getId(), $user->getEmailKey());
+                    
+                    $mail = new Mail();
+                    $mail->sendMail($to, $from, $name, $subj, $msg);
+                } else {
+                    $errors[] = "Les identifiants ne sont pas reconnus";
+                }
+            }
+            $view->assign("errors", $errors);
+        }
+	}
+
+    public function resetPasswordAction($id, $key){
+
+        $user = new PersonModel();
+        $view = new View("resetPassword", "front");
+        $form = $user->formBuilderResetPassword($id, $key);
+        $view->assign("form", $form);
+        if(!empty($_POST)) {
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)) {
+                $user = $user->select()->where("id", $id)->andWhere("emailkey", $key)->first();
+                if(!empty($user)) {
+                    if(password_verify($_POST['password'], $user->getPassword())) {
+                        Helpers::setFlashMessage('error', "Le mot de passe corespond au mot de passe déjà enregistré."); 
+                    } else {
+                        $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
+                        $user->save();
+                        Helpers::setFlashMessage('success', "Votre mot de passe à bien était changée.");
+                        Helpers::redirect('/connexion');
+                    }
+                } else {
+                    $errors[] = "Les identifiants ne sont pas reconnus";
+                }
+            }
+            $view->assign("errors", $errors);
+        }
+	}
 }
