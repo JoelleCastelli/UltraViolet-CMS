@@ -95,100 +95,58 @@ class Page
         }
     }
 
-    public function createcPageAction()
+    public function createPageAction()
     {
         $page = new PageModel();
-        $view = new View("pages/createPage");
-        $view->assign('title', 'Création d\'une page');
-
         $form = $page->formBuilderRegister();
+        $response = [];
+        $response['post'] = $_POST;
 
         if (!empty($_POST)) {
+
+            $_POST["state"] ?? $_POST["state"] = "";
 
             $errors = FormValidator::check($form, $_POST);
 
             if (empty($errors)) {
-                $page->setTitle($_POST["title"]);
-                $page->setSlug($_POST["slug"]);
-                $page->setPosition($_POST["position"]);
-                $page->setTitleSeo($_POST["titleSEO"]);
-                $page->setDescriptionSeo($_POST["descriptionSEO"]);
-                $page->setPublicationDate($_POST["publictionDate"]);
-                $page->setState($_POST["state"]);
-
-                $page->save();
-            } else {
-                $view = new View("pages/createPage");
-                $view->assign("errors", $errors);
-            }
-        }
-
-        $view->assign("form", $form);
-    }
-
-    public function createPageAction()
-    {
-
-        $page = new PageModel();
-        $form = $page->formBuilderRegister();
-
-        if (!empty($_POST)) {
-
-            $response = [];
-
-            //$errors = FormValidator::check($form, $_POST);
-            $errors = '';
-
-            if (empty($errors)) {
-
-                if(empty($_POST['slug'])) {
-                    $slug = Helpers::slugify($_POST['title']);
-                } else {
-                    $slug = htmlspecialchars($_POST['slug']);
-                }
-
+                
+                $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
+                $publicationDate  = empty($_POST["publicationDate"]) ? null : $_POST["publicationDate"];
                 $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
 
                 if (empty($isNotUniqueSlug)) {
+                    
+                    $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
 
                     $page->setSlug($slug);
+                    $page->setTitle($_POST["title"]);
+                    $page->setPosition($_POST["position"]);
+                    $page->setTitleSeo($_POST["titleSEO"]);
+                    $page->setDescriptionSeo($_POST["descriptionSEO"]);
+                    $page->setCreatedAt(Helpers::getCurrentTimestamp());
+                    $save = $page->save();
 
-                    $stateAndPublicationPage = $this->stateValidator($_POST['publicationDate'], $_POST['state'] ?? null);
-                    $page->setState($stateAndPublicationPage['state']);
-                    $page->setPublicationDate($stateAndPublicationPage['publicationDate']);
 
-                    if (!empty($page->getState())) {
-
-                        $page->setTitle($_POST["title"]);
-                        $page->setPosition(empty($_POST["position"]) ? "2" : $_POST["position"]);
-                        $page->setTitleSeo(empty($_POST["titleSEO"]) ? "mon tire seo deuxième" : $_POST["titleSEO"]);
-                        $page->setDescriptionSeo(empty($_POST["descriptionSEO"]) ? "ma description seo" : $_POST["descriptionSEO"]);
-                        $page->setCreatedAt(Helpers::getCurrentTimestamp());
-                        $save = $page->save();
-
-                        if ($save) {
-                            $response['message'] = 'La page a été créée !';
-                            $response['success'] = true;
-                        } else {
-                            $response['message'] = 'Oulah Oops problème serveur sorry';
-                            $response['success'] = false;
-                        }
+                    if ($save) {
+                        $response['message'] = 'La nouvelle s\'est bien crée';
+                        $response['success'] = true;
                     } else {
-                        $response['message'] = 'Le statut choisi est incorrect';
+                        $response['message'] = 'Oops ! Le seveur vient de rencontrer un problème durant la sauvegarde, veuillez recommencer.';
                         $response['success'] = false;
                     }
+
                 } else {
-                    $response['message'] = 'Ce slug existe déjà AHAH';
+                    $response['message'] = 'Le slug est déjà existant, veuillez le modifier svp ';
                     $response['success'] = false;
                 }
             } else {
                 $response['message'] = $errors;
                 $response['success'] = false;
             }
-            $response['post'] = $_POST;
-
-            echo json_encode($response);
         }
+
+        echo json_encode($response);
+
     }
 
     public function updateVisibilityAction()
@@ -239,14 +197,12 @@ class Page
 
                     $page->setSlug($slug);
 
-                    $stateAndPublicationPage = $this->stateValidator($_POST['publicationDate'], $_POST['state']??null);
-                    $page->setState($stateAndPublicationPage['state']);
-                    $page->setPublicationDate($stateAndPublicationPage['publicationDate']);
+                    $this->stateValidator($page, $_POST['publicationDate'], $_POST['state']??null);
 
                     if (!empty($page->getState())) {
 
                         $page->setTitle($_POST["title"]);
-                        $page->setPosition(empty($_POST["position"]) ? "2" : $_POST["position"]);
+                        $page->setPosition(($_POST["position"]));
                         $page->setTitleSeo(empty($_POST["titleSEO"]) ? "mon tire seo deuxième" : $_POST["titleSEO"]);
                         $page->setDescriptionSeo(empty($_POST["descriptionSEO"]) ? "ma description seo" : $_POST["descriptionSEO"]);
                         $page->setCreatedAt(Helpers::getCurrentTimestamp());
@@ -326,28 +282,22 @@ class Page
         }
     }
 
-    private function stateValidator($publicationDate, $state)
+    private function stateValidator(&$page, $publicationDate, $state)
     {
 
         /* Set State */
-        if (empty($publicationDate) && $_POST['state'] == 'draft') { // draft
+        if ($state == 'draft') { // draft
 
-            $state = 'draft';
-            $publicationDate = null;
-        } else if (!empty($_POST['publicationDate'])) { // scheduled
+            $page->setStateToDraft();
 
-            $state = 'scheduled';
-            $publicationDate = htmlspecialchars($_POST['publicationDate']);
+        } else if ($state == "scheduled") { // scheduled
 
-        } else if ($_POST['state'] == 'published' && empty($_POST['publicationDate'])) { // published
+            $page->setStateToScheduled($publicationDate);
+           
 
-            $state = 'published';
-            $publicationDate = Helpers::getCurrentTimestamp();
+        } else if ($state == 'published' ) { // published
+
+            $page->setStateToPublished();
         }
-
-        return [
-            'publicationDate' => $publicationDate,
-            'state' => $state
-        ];
     }
 }
