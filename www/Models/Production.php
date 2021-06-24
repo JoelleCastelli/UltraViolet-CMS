@@ -411,14 +411,14 @@ class Production extends Database
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control",
+                "class" => "form_control card",
                 "id" => "formAddProduction",
                 "submit" => "Valider",
                 "referer" => '/admin/productions/creation'
             ],
             "fields" => [
                 "type" => [
-                    "type" => "select",
+                    "type" => "radio",
                     "label" => "Type",
                     "required" => true,
                     "class" => "form_input",
@@ -439,7 +439,7 @@ class Production extends Database
                     "placeholder" => "",
                     "label" => "Titre",
                     "required" => true,
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "minLength" => 1,
                     "maxLength" => 100,
                     "error" => "Le titre doit faire entre 1 et 100 caractères"
@@ -448,14 +448,14 @@ class Production extends Database
                     "type" => "text",
                     "placeholder" => "",
                     "label" => "Titre original",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "maxLength" => 100,
                     "error" => "Le titre doit faire entre 1 et 100 caractères"
                 ],
                 "releaseDate" => [
                     "type" => "date",
                     "label" => "Date de sortie",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "minLength" => 10,
                     "maxLength" => 10,
                     "error" => "Le format de la date est incorrect"
@@ -464,7 +464,7 @@ class Production extends Database
                     "type" => "text",
                     "placeholder" => "",
                     "label" => "Résumé",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "maxLength" => 1000,
                     "error" => "Le résumé ne peut pas dépasser 1000 caractères"
                 ],
@@ -472,14 +472,14 @@ class Production extends Database
                     "type" => "number",
                     "placeholder" => "",
                     "label" => "Durée (du film ou d'un épisode)",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "error" => "Le résumé ne peut pas dépasser 1000 caractères"
                 ],
                 "number" => [
                     "type" => "number",
                     "placeholder" => "",
                     "label" => "Numéro",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                 ],
                 "csrfToken" => [
                     "type"=>"hidden",

@@ -62,6 +62,7 @@ class Production
         $production = new ProductionModel();
         $form = $production->formBuilderAddProduction();
         $view = new View("productions/add-production");
+        $view->assign('title', 'Nouvelle production manuelle');
         $view->assign("form", $form);
 
         if(!empty($_POST)) {
