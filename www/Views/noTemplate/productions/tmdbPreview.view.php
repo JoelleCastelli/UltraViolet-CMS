@@ -43,14 +43,14 @@
             echo '<div id="actors">';
                 for ($n = count($actors), $i = 0; $i < $n; $i++) {
                     echo "<div class='actorCard'>";
+
+                        if($actors[$i]->getMedia()->getTmdbPosterPath() == '')
+                            echo "<img class='actorImg' src='".PATH_TO_IMG_POSTERS."default_poster.jpg'/>";
+                        else
+                            echo "<img class='actorImg' src='".$actors[$i]->getMedia()->getTmdbPosterPath()."'/>";
+
                         echo "<div class='actorName'>";
                             echo $actors[$i]->getFullName();
-                        echo "</div>";
-                        echo "<div class='actorImg'>";
-                            if($actors[$i]->getMedia()->getTmdbPosterPath() == '')
-                                echo "<img src='".PATH_TO_IMG_POSTERS."default_poster.jpg'/>";
-                            else
-                                echo "<img src='".$actors[$i]->getMedia()->getTmdbPosterPath()."'/>";
                         echo "</div>";
                     echo "</div>";
                 }

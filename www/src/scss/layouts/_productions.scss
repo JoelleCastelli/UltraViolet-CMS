@@ -31,10 +31,17 @@
             flex-wrap: wrap;
             justify-content: space-around;
             .actorCard {
+                border: solid $grey4 1px;
+                border-radius: 8px;
+                margin-bottom: 5px;
+                box-shadow: 2px 2px 5px $grey4;;
+
                 .actorName {
                     text-align: center;
+                    padding-bottom: 5px;
                 }
-                .actorImg img {
+                .actorImg {
+                    border-radius: 8px 8px 0 0;
                     width: 150px;
                 }
             }
