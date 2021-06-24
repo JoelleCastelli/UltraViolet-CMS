@@ -452,7 +452,7 @@ class Page extends Database implements JsonSerializable
                 "slug" => [
                     "type" => "text",
                     "placeholder" => "critiques-de-series",
-                    "label" => "Votre slug :",
+                    "label" => "Slug :",
                     "class" => "search-bar",
                     "error" => "Le slug doit contenir entre 2 et 15 caractères",
                 ],

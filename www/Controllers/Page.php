@@ -272,7 +272,7 @@ class Page
         // return view
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
-        $view->assign('title', 'Modifier la page n° ' . $page->getId());
+        $view->assign('title', 'Modifier une page');
     }
 
     public function deletePageAction()
