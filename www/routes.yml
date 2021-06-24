@@ -25,6 +25,14 @@ verification:
   pseudo:     ([a-zA-Z0-9-_]{2,25})
   key:        (\d+)
 
+reset_password:
+  path:       /utilisateurs/password_reset/{id}-{key}
+  controller: Person
+  action:     resetPassword
+  requirements:
+    id:     (\d+)
+    key:    (\d+)
+
 forget_password:
   path:       /forget_password
   controller: Person

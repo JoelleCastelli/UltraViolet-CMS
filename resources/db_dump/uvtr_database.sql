@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_media` (
   `video` TINYINT NOT NULL DEFAULT '0',
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `deletedAt` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -38,10 +39,11 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_person` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fullName` VARCHAR(50) NULL DEFAULT NULL,
+  `tmdbId` INT NULL DEFAULT NULL,
   `pseudo` VARCHAR(25) NULL DEFAULT NULL,
   `email` VARCHAR(130) NULL DEFAULT NULL,
   `emailConfirmed` TINYINT NULL DEFAULT '0',
-  `emailkey` VARCHAR(255) NOT NULL,
+  `emailKey` VARCHAR(255) NULL DEFAULT NULL,
   `password` VARCHAR(255) NULL DEFAULT NULL,
   `role` ENUM('user', 'admin', 'editor', 'vip') NULL DEFAULT 'user',
   `optin` TINYINT NULL DEFAULT '1',
@@ -121,6 +123,8 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production` (
   `originalTitle` VARCHAR(100) NULL DEFAULT NULL,
   `releaseDate` VARCHAR(10) NULL DEFAULT NULL,
   `type` ENUM('movie', 'series', 'season', 'episode') NOT NULL,
+  `totalSeasons` INT NULL DEFAULT NULL,
+  `totalEpisodes` INT NULL DEFAULT NULL,
   `overview` TEXT NULL DEFAULT NULL,
   `runtime` INT NULL DEFAULT NULL,
   `number` TINYINT NULL DEFAULT NULL,
@@ -250,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_media` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `mediaId` INT NOT NULL,
   `productionId` INT NOT NULL,
-  `key_art` TINYINT NOT NULL DEFAULT 0,
+  `keyArt` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   INDEX `fk_uvtr_production_media_uvtr_media1_idx` (`mediaId` ASC),
   INDEX `fk_uvtr_production_media_uvtr_production1_idx` (`productionId` ASC),
@@ -275,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production_person` (
   `personId` INT NOT NULL,
   `productionId` INT NOT NULL,
   `department` VARCHAR(15) NOT NULL,
-  `character` VARCHAR(45) NULL DEFAULT NULL,
+  `character` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_uvtr_production_person_uvtr_person1_idx` (`personId` ASC),
   INDEX `fk_uvtr_production_person_uvtr_production1_idx` (`productionId` ASC),

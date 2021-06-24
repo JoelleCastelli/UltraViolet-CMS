@@ -49,13 +49,22 @@ class Helpers{
         return self::urlBase() . "src/js/" . $url . ".js";
     }
 
-    public static function callRoute(string $name, array $params = []): string {
+    public static function callRoute(string $name, array $params = [], bool $fullPath = false): string {
+        if($name === '') return '#';
+
+        $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ?
+            "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . 
+            $_SERVER['REQUEST_URI'];
+
         foreach (Router::$routes as $office => $routes) {
             foreach ($routes as $routeName => $routeData) {
                 if ($name == $routeName) {
                     if(array_key_exists('requirements', $routeData)) {
                         foreach ($routeData['requirements'] as $paramName => $regex) {
                             $routeData['path'] = str_replace('{' . $paramName . '}', $params[$paramName], $routeData['path']);
+                        }
+                        if($fullPath == true) {
+                            return $link.$routeData['path'];
                         }
                     }
                     return $routeData['path'];
@@ -64,4 +73,28 @@ class Helpers{
         }
         die($name.': route name not found');
     }
+
+    public static function slugify($text) : string {
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        $text = preg_replace('~[^-\w]+~', '', $text);
+        $text = trim($text, '-');
+        $text = preg_replace('~-+~', '-', $text);
+        $text = strtolower($text);
+        if (empty($text)) return false;
+        return $text;
+    }
+
+    public static function convertToSnakeCase($input) {
+        $pattern = '!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!';
+        preg_match_all($pattern, $input, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ?
+                strtolower($match) :
+                lcfirst($match);
+        }
+        return implode('_', $ret);
+    }
+
 }

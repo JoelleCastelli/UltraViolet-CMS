@@ -8,7 +8,7 @@ class FormBuilder
 	public function __construct(){
 	}
 
-	public static function render($config, $show = true){
+	public static function render($config, $data = [], $show = true){
 
 		$html = "<form method = '".($config["config"]["method"] ?? "GET")."' 
                        action = '".($config["config"]["action"] ?? "")."'
@@ -40,10 +40,14 @@ class FormBuilder
                 foreach($field["options"] as $option) {
                     $disabledOption = isset($option["disabled"]) && $option["disabled"] == true ? "disabled" : '';
                     $checked = isset($option["checked"]) && $option["checked"] == true ? "checked" : '';
+                    
                     if (!empty($_POST[$fieldName]) && $_POST[$fieldName] == $option["value"]) {
                         $checked = "checked";
+                    }else if (!empty($data[$fieldName]) && $data[$fieldName] == $option["value"]){
+                        $checked = "checked";
                     }
-                    $html .= "<input type='radio' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
+                    
+                    $html .= "<input type='radio' class='".($option["class"] ?? "")."' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
                 }
                 $html .= "</fieldset>";
@@ -54,10 +58,14 @@ class FormBuilder
                 foreach($field["options"] as $option) {
                     $disabledOption = isset($option["disabled"]) &&  $option["disabled"] == true ? "disabled" : '';
                     $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
+                    
                     if (!empty($_POST[$fieldName]) && in_array($option['value'], $_POST[$fieldName])) {
                         $selected = "checked";
+                    }else if (!empty($data[$fieldName]) && in_array($option['value'], $data[$fieldName])){
+                        $checked = "checked";
                     }
-                    $html .= "<input type='checkbox' name='".$fieldName."[]' value='".$option["value"]."' $selected $disabledOption>";
+
+                    $html .= "<input type='checkbox' class='".($option["class"] ?? "")."' name='".$fieldName."[]' value='".$option["value"]."' $selected $disabledOption>";
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
                 }
                 $html .= "</fieldset>";
@@ -67,6 +75,8 @@ class FormBuilder
                 $value = $field['value'] ?? '';
                 if (!empty($_POST[$fieldName])) {
                     $value = htmlspecialchars($_POST[$fieldName], ENT_QUOTES);
+                }else if (!empty($data[$fieldName])){
+                    $value = htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
                 $html .="<textarea name='".$fieldName."'
@@ -79,8 +89,11 @@ class FormBuilder
             } else {
 
                 $value = $field['value'] ?? '';
+                
                 if (!empty($_POST[$fieldName])) {
                     $value = ($field['type'] === 'password') ? '' : htmlspecialchars($_POST[$fieldName], ENT_QUOTES);
+                }else if(!empty($data[$fieldName])) {
+                    $value = ($field['type'] === 'password') ? '' : htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
                 $html .="<input
@@ -96,7 +109,6 @@ class FormBuilder
                 >";
             }
 		}
-
         $html .= "<input type='submit' class='btn' value=\"".($config["config"]["submit"]??"Valider")."\">";
 		$html .= "</form>";
 

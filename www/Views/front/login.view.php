@@ -1,17 +1,20 @@
-<div class="grid-connection-user">
-    <?php if(isset($errors)): ?>
-        <?php foreach ($errors as $error): ?>
-            <li><?= $error ?></li>
-        <?php endforeach;?>
-    <?php endif;?>
+<h1 class="title-form"><?= APP_NAME ?></h1>
+<div id='login-subscription' class="card">
+    <div class="error-message-form">
+        <?php
+        if(isset($errors)) {
+            foreach ($errors as $error) {
+                echo "<li>".$error."</li>";
+            }
+        }
+        ?>
+    </div>
 
-    <section class="grid-form-connection-user">
-        <h1 class="title-form">UltraViolet</h1>
-        <section class="card">
-            <section class="container-form">
-                <?php App\Core\FormBuilder::render($form, true); ?>
-            </section>
-        </section>
-    </section>
-
+    <?php App\Core\FormBuilder::render($form, true); ?>
+    <div>
+        Mot de passe perdu ? <a href="<?= \App\Core\Helpers::callRoute('')?>">Réinitialiser mon mot de passe</a>
+    </div>
+    <div>
+        Vous n'avez pas de compte ? <a href="<?= \App\Core\Helpers::callRoute('subscription')?>">Rejoignez-nous !</a>
+    </div>
 </div>

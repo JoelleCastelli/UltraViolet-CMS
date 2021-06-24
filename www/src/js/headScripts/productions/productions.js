@@ -1,23 +1,34 @@
-/* BUILD DATATABLES */
 $(document).ready( function () {
 
+    /* BUILD DATATABLES */
     let table = $('#datatable').DataTable( {
-
+        "order": [],
+        "autoWidth": false,
+        responsive: true,
         columns: [
             { data: 'Titre' },
             { data: 'Titre original' },
-            { data: 'Date de sortie' },
             { data: 'Durée' },
-            { data: 'Résumé' },
+            { data: 'Date de sortie' },
+            { data: 'Date d\'ajout' },
             { data: 'Actions' }
         ],
 
-        columnDefs: [{
-            targets: 5,
-            data: "name",
-            searchable: false,
-            orderable: false
-        }],
+        columnDefs: [
+            {
+                targets: 5,
+                data: "name",
+                searchable: false,
+                orderable: false
+            },
+            { width: "19%", targets: 0 },
+            { width: "19%", targets: 1 },
+            { width: "19%", targets: 2 },
+            { width: "19%", targets: 3 },
+            { width: "19%", targets: 4 },
+            { width: "5%", targets: 5 },
+        ],
+
 
         language: {
             "sEmptyTable":     "Aucune donnée disponible dans le tableau",
@@ -50,7 +61,8 @@ $(document).ready( function () {
         },
     });
 
-    // On page load, display movies
+    /* FILTERS */
+    // On start, display movies
     getProductionsByType('movie');
 
     // Display different types on filtering button click
@@ -63,7 +75,7 @@ $(document).ready( function () {
     function getProductionsByType(productionType) {
         $.ajax({
             type: 'POST',
-            url: '/admin/productions/productions-data',
+            url: '/admin/productions/productions-data', //TODO changer l'URL en dur
             data: { productionType },
             dataType: 'json',
             success: function(response) {
@@ -75,4 +87,23 @@ $(document).ready( function () {
             }
         });
     }
-} );
+
+    table.on('click', '.delete', function () {
+        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette production ? Tous les articles relatifs à cette production seront supprimés')) {
+            let productionId = this.id.substring(this.id.lastIndexOf('-') + 1);
+            let row = table.row($(this).parents('tr'));
+            $.ajax({
+                type: 'POST',
+                url: '/admin/productions/supprimer',
+                data: { productionId },
+                success: function() {
+                    row.remove().draw();
+                },
+                error: function() {
+                    console.log("Erreur dans la suppression de la production ID " + productionId);
+                }
+            });
+        }
+    });
+
+});

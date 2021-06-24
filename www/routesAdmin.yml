@@ -4,16 +4,43 @@ admin:
   controller: Main
   action:     default
 
+routes: 
+  path:       /admin/routes
+  controller: Main
+  action:     getRoute
+  
 # PAGES
 pages_list:
   path:       /admin/pages
   controller: Page
   action:     showAll
-
+  
 page_creation:
   path:       /admin/pages/creation
   controller: Page
   action:     createPage
+
+page_delete:
+  path:       /admin/pages/delete
+  controller: Page
+  action:     deletePage
+
+page_update:
+  path:       /admin/pages/update/{id}
+  controller: Page
+  action:     updatePage
+  requirements:
+    id:       (\d+)
+
+page_update_visibility:
+  path:       /admin/pages/update-visibility
+  controller: Page
+  action:     updateVisibility
+
+pages_data:
+  path:       /admin/pages-data
+  controller: Page
+  action:     getPages
 
 # ARTICLES
 articles_list:
@@ -21,10 +48,31 @@ articles_list:
   controller: Article
   action:     showAll
 
-article_update:
-  path:       /admin/articles/modification
+article_creation:
+  path: /admin/articles/creation
   controller: Article
-  action:     modifyArticle
+  action: createArticle
+
+article_update:
+  path: /admin/articles/modification/{id}
+  controller: Article
+  action: updateArticle
+  middleware: Editor
+  requirements:
+    id: (\d+)
+
+article_delete:
+  path: /admin/articles/delete/{id}
+  controller: Article
+  action: deleteArticle
+  middleware: Editor
+  requirements:
+    id: (\d+)
+
+article_data:
+  path: /admin/articles/articles-data
+  controller: Article
+  action: getArticles
 
 article_tab_change:
   path:       /admin/tab-change
@@ -38,19 +86,19 @@ productions_list:
   action:     showAll
 
 productions_creation:
-  path:       /admin/productions/creation
+  path:       /admin/productions/creation-manuelle
   controller: Production
   action:     addProduction
 
 productions_creation_tmdb:
-  path:       /admin/productions/creation-tmdb
+  path:       /admin/productions/creation
   controller: Production
   action:     addProductionTmdb
 
-productions_tmdb_request:
+productions_show_preview:
   path:       /admin/productions/tmdb-request
   controller: Production
-  action:     tmdbRequest
+  action:     ajaxShowPreview
 
 productions_data:
   path:       /admin/productions/productions-data
@@ -66,7 +114,7 @@ production_update:
     id:       (\d+)
 
 production_delete:
-  path:       /admin/productions/supprimer/{id}
+  path:       /admin/productions/supprimer
   controller: Production
   action:     deleteProduction
   middleware: Editor
@@ -97,14 +145,19 @@ users_list:
   controller: Person
   action:     showAll
 
+users_data:
+  path:       /admin/utilisateurs/utilisateurs-data
+  controller: Person
+  action:     getUsers
+
 user_show:
   path:       /admin/utilisateur
-  controller: User
+  controller: Person
   action:     show
 
 user_creation:
   path:       /admin/utilisateurs/creation
-  controller: User
+  controller: Person
   action:     add
 
 # MEDIAS

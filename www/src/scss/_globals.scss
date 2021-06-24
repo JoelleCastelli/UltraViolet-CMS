@@ -66,22 +66,24 @@ button:focus {
 
 // Global after resets :
 
+html {
+    height: 100%;
+}
+
 body {
 	height: 100%;
 	background: $main-bg-color;
+    font-family: $mulish;
 }
 
-a {
+a, a:visited {
 	text-decoration: none;
 	outline: none;
+    color: $purple;
 }
 
 a:link {
 
-}
-
-a:visited {
-	color: initial;
 }
 
 a:focus {
@@ -89,13 +91,47 @@ a:focus {
 }
 
 a:hover {
-	color: initial;
+	color: $purple4;
 }
 
 a:active {
 	color: initial;
 }
 
+b {
+    font-weight: 700;
+}
 .hidden {
 	visibility: hidden;
+}
+
+.fadeOut {
+    animation: 3s fadeOut 7s forwards; // duration, animation, delay, fill-mode
+    -webkit-animation:3s fadeOut 7s forwards;
+    -moz-animation:3s fadeOut 7s forwards;
+}
+
+@-webkit-keyframes fadeOut {
+    from {
+        opacity:1;
+    }
+    to {
+        opacity:0;
+    }
+}
+@-moz-keyframes fadeOut {
+    from {
+        opacity:1;
+    }
+    to {
+        opacity:0;
+    }
+}
+@keyframes fadeOut {
+    from {
+        opacity:1;
+    }
+    to {
+        opacity:0;
+    }
 }

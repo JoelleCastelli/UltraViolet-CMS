@@ -6,24 +6,32 @@ use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\FormBuilder;
 use App\Core\Traits\ModelsTrait;
+use JsonSerializable;
 
 
-class Person extends Database
+class Person extends Database implements JsonSerializable
 {
     use ModelsTrait;
 
     private ?int $id = null;
-    private string $createdAt;
-    private ?string $updatedAt;
     protected ?string $fullName;
     protected ?string $pseudo;
-    protected ?string $email;
-    protected ?string $emailkey;
-    protected ?string $password;
-    protected bool $optin = true;
-    protected ?string $deletedAt;
     protected string $role = 'user';
+    private ?array $actions = [];
+    private string $createdAt;
+    private ?string $updatedAt;
+    protected ?string $deletedAt;
+
+    // User-related
+    protected ?string $email;
+    protected ?string $emailKey;
+    protected ?string $password;
     protected bool $emailConfirmed = false;
+    protected bool $optin = true;
+
+    // VIP-related
+    protected ?int $tmdbId = null;
+    private ?string $character;
 
     // Foreign properties
     protected int $mediaId;
@@ -32,10 +40,24 @@ class Person extends Database
     public function __construct() {
         parent::__construct();
         $this->media = new Media();
+        $this->actions = [
+            ['name' => 'Modifier','action'=> 'modify', 'url' => '/admin/utilisateurs/modifier'],
+            ['name' => 'Supprimer', 'action'=> 'delete', 'url' => '/admin/utilisateurs/supprimer']
+        ];
     }
 
     public function getId(): ?int {
         return $this->id;
+    }
+
+    public function getTmdbId(): ?int
+    {
+        return $this->tmdbId;
+    }
+
+    public function setTmdbId(?int $tmdbId): void
+    {
+        $this->tmdbId = $tmdbId;
     }
 
     public function getFullName(): ?string {
@@ -62,12 +84,13 @@ class Person extends Database
         $this->email = $email;
     }
 
-    public function getEmailKey() {
-        return $this->emailkey;
+    public function getEmailKey(): ?string
+    {
+        return $this->emailKey;
     }
 
-    public function setEmailKey($emailkey): void {
-        $this->emailkey = $emailkey;
+    public function setEmailKey($emailKey): void {
+        $this->emailKey = $emailKey;
     }
 
     public function getPassword(): ?string {
@@ -122,6 +145,14 @@ class Person extends Database
         $this->emailConfirmed = $emailConfirmed;
     }
 
+    public function getActions(): ?array {
+        return $this->actions;
+    }
+
+    public function setActions(?array $actions): void {
+        $this->actions = $actions;
+    }
+
     public function getMediaId(): int {
         return $this->mediaId;
     }
@@ -146,6 +177,16 @@ class Person extends Database
 
     public function setMedia(Media $media): void {
         $this->media = $media;
+    }
+
+    public function getCharacter(): ?string
+    {
+        return $this->character;
+    }
+
+    public function setCharacter(?string $character): void
+    {
+        $this->character = $character;
     }
 
     public function canAccessBackOffice(): bool {
@@ -196,6 +237,23 @@ class Person extends Database
         }
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "fullName" => $this->getFullName(),
+            "pseudo" => $this->getPseudo(),
+            "email" => $this->getEmail(),
+            "optin" => $this->getOptin(),
+            "updatedAt" => $this->getUpdatedAt(),
+            "createdAt" => $this->getCreatedAt(),
+            "deletedAt" => $this->getDeletedAt(),
+            "role" => $this->getRole(),
+            "isEmailConfirmed" => $this->isEmailConfirmed(),
+            "mediaId" => $this->getMediaId(),
+        ];
+    }
+
     public function checkRights($role): bool {
         switch ($role) {
             case 'moderator':
@@ -214,7 +272,7 @@ class Person extends Database
     }
 
     public function setDefaultProfilePicture() {
-        if(file_exists(PATH_TO_IMG.'default.jpg')) {
+        if(file_exists(getcwd().PATH_TO_IMG.'default.jpg')) {
             $media = new Media();
             if($media->findOneBy('path', 'default.jpg')) {
                 $defaultImage = $media->findOneBy('path', 'default.jpg');
@@ -223,7 +281,80 @@ class Person extends Database
                 die("Default image is not in database");
             }
         } else {
-            die("Default image file does not exist");
+            die('Default image '.getcwd().PATH_TO_IMG.'default.jpg does not exist');
+        }
+    }
+
+    public function generateEmailKey() {
+        $lengthkey = 15;
+        $key= "";
+        for($i=1;$i<$lengthkey;$i++) {
+            $key.=mt_rand(0,9);
+        }
+        $this->setEmailKey($key);
+    }
+
+    public function saveMedia() {
+        $actorImgPath = PATH_TO_IMG_VIP.$this->getTmdbId().'_'.Helpers::slugify($this->getFullName());
+        // Save vip's image file
+        if(!empty($this->media->getTmdbPosterPath()) && $this->media->getTmdbPosterPath() != TMDB_IMG_PATH) {
+            file_put_contents(getcwd().$actorImgPath, file_get_contents($this->media->getTmdbPosterPath()));
+        }
+
+        // Save or update vip's image in database
+        $existingMedia = new Media();
+        $existingMedia = $existingMedia->findOneBy('path', $actorImgPath);
+        if($existingMedia) {
+            $existingMedia->setTitle($this->getFullName());
+            $existingMedia->save();
+            $mediaId = $existingMedia->getId();
+        } else {
+            $media = new Media();
+            $media->setTitle($this->getFullName());
+            $media->setPath($actorImgPath);
+            $media->save();
+            $mediaId = $media->getLastInsertId();
+        }
+        return $mediaId;
+    }
+
+    public function saveVip($mediaId) {
+        // Save or update person in database
+        $existingActor = new Person();
+        $existingActor = $existingActor->findOneBy('fullName', $this->getFullName());
+        if($existingActor) {
+            $existingActor->setMediaId($mediaId);
+            $existingActor->save();
+            $actorID = $existingActor->getId();
+        } else {
+            $this->setMediaId($mediaId);
+            $this->save();
+            $actorID = $this->getLastInsertId();
+        }
+
+        return $actorID;
+    }
+
+    public function saveProductionPerson($actorID, $productionId, $department) {
+        // Save or update production person in database
+        $existingProductionPerson = new ProductionPerson();
+        $existingProductionPerson = $existingProductionPerson->select()
+                                                             ->where('personId', $actorID)
+                                                             ->andWhere('productionId', $productionId)
+                                                             ->andWhere('department', $department)
+                                                             ->first();
+        if($existingProductionPerson) {
+            if($department === 'actor')
+                $existingProductionPerson->setCharacter($this->getCharacter());
+            $existingProductionPerson->save();
+        } else {
+            $productionPerson = new ProductionPerson();
+            $productionPerson->setDepartment($department);
+            $productionPerson->setPersonId($actorID);
+            $productionPerson->setProductionId($productionId);
+            if($department === 'actor')
+                $productionPerson->setCharacter($this->getCharacter());
+            $productionPerson->save();
         }
     }
 
@@ -502,7 +633,7 @@ class Person extends Database
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de création de compte pour Ultraviolet à bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('verification', ['id' => $pseudo, 'key' => $key])."</p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('verification', ['pseudo' => $pseudo, 'key' => $key], true)."</p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:15px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Dans la plupart des logiciels de courriel, cette adresse devrait apparaître comme un lien de couleur bleue qu'il vous suffit de cliquer. Si cel ane fonctionne pas, copiez ce lien et collez-le dans la barre d'adresse de votre navigateur web. </p></td> 

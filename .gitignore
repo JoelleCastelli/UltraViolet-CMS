@@ -1,23 +1,24 @@
-# IDE related
+# IDE
 .idea
 .vscode
 
-# Database related
-db_data
-
-# Local machines related
+# Local machines
 .DS_Store
+
+# Docker database
+db_data
 
 # Node modules
 *node_modules
+www/package.json
 
 # builds from the dist directory
-www/dist/main.css
-www/dist/main.js
+www/dist/
 
 # env files
 www/.env*
 !www/.env.example
 
-# media uploading
-www/dist/images/*
+# images
+www/src/img/posters/
+www/src/img/vip/

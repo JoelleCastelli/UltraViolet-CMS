@@ -6,15 +6,11 @@
 @import "placeholders";
 
 // Grids
-@import "grids/containers";
-@import "grids/grid_modify_article";
-@import "grids/grid_display_collection";
-@import "grids/grid_add_page";
-@import "grids/grid-listing-datatables";
-@import "grids/grid_register_user";
-@import "grids/grid_connection_user";
-@import "grids/grid_display_comments";
-@import "grids/grid_display_medias";
+@import "layouts/containers";
+@import "layouts/grid_modify_article";
+@import "layouts/grid-create-article";
+@import "layouts/productions";
+@import "layouts/login_subscription";
 
 // Components
 @import "components/button";
@@ -36,6 +32,9 @@
 @import "components/filtering-status";
 @import "components/bubble-actions";
 @import "components/state-switch";
+@import "components/modal";
+@import "components/request-response";
+
 
 .preload * {
     -webkit-transition: none !important;
