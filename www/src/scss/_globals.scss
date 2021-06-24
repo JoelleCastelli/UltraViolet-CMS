@@ -76,17 +76,14 @@ body {
     font-family: $mulish;
 }
 
-a {
+a, a:visited {
 	text-decoration: none;
 	outline: none;
+    color: $purple;
 }
 
 a:link {
 
-}
-
-a:visited {
-	color: initial;
 }
 
 a:focus {
@@ -94,7 +91,7 @@ a:focus {
 }
 
 a:hover {
-	color: initial;
+	color: $purple4;
 }
 
 a:active {
