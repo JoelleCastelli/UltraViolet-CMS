@@ -1,7 +1,7 @@
 <div id="productionInfos">
     <?php
         if($production->getPoster()->getTmdbPosterPath() == '')
-            echo "<img id='poster' src='".PATH_TO_IMG_POSTERS."default_poster.jpg'/>";
+            echo "<img id='poster' src='".PATH_TO_IMG."default_poster.jpg'/>";
         else
             echo "<img id='poster' src='".$production->getPoster()->getTmdbPosterPath()."'/>";
     ?>
@@ -58,7 +58,7 @@
                     echo "<div class='actorCard'>";
 
                         if($actors[$i]->getMedia()->getTmdbPosterPath() == '')
-                            echo "<img class='actorImg' src='".PATH_TO_IMG_POSTERS."default_poster.jpg'/>";
+                            echo "<img class='actorImg' src='".PATH_TO_IMG."default_poster.jpg'/>";
                         else
                             echo "<img class='actorImg' src='".$actors[$i]->getMedia()->getTmdbPosterPath()."'/>";
 
