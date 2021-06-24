@@ -287,7 +287,7 @@ class Production extends Database
 
     public function saveMedia() {
         // Save poster file
-        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle());
+        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle());
         if(!empty($this->poster->getTmdbPosterPath()) && $this->poster->getTmdbPosterPath() != TMDB_IMG_PATH) {
             file_put_contents(getcwd().$productionImgPath, file_get_contents($this->poster->getTmdbPosterPath()));
         }
