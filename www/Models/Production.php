@@ -608,7 +608,7 @@ class Production extends Database
                                 $this->poster->setTmdbPosterPath(TMDB_IMG_PATH . $item->seasons[$post['seasonNb']]->poster_path);
                         }
                     } else {
-                        echo '<div class="error">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</div>";
+                        echo '<p class="error-message-form">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</p>";
                         return false;
                     }
                 }
