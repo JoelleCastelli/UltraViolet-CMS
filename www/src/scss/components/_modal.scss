@@ -2,11 +2,11 @@
     font-family: $mulish;
     transition: height 0.5s ease;
     color: $main-font-color;
-    
+    backdrop-filter: blur(2px);
     z-index: 200;
     position: fixed;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
 
@@ -16,12 +16,13 @@
 
     .wrapper-modal {
         position: relative;
-        width: 50%;
-
+        max-width: 600px;
+        min-width: 450px;
+        margin: 2% auto auto;
         background-color: white;
         border: 1px solid #DFE0EB;
         box-sizing: border-box;
-        padding: 3em;
+        padding: 2.5em;
         box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
         border-radius: 8px;
 
@@ -36,16 +37,25 @@
         align-items: center;
         justify-content: space-between;
         font-size: 1.2em;
-        margin-bottom: 2em;
+        margin-bottom: 1em;
     }
 
     .content-modal {
-        margin-bottom: 2em;
+        margin-bottom: 1em;
+
+        .btn {
+            margin: 10px auto auto;
+        }
     }
 
     .footer-modal {
         display: flex;
-        justify-content: flex-end;
+        flex-direction: column;
+        text-align: center;
+
+        .btn {
+            margin: 10px auto auto;
+        }
     }
 
     .btn-close-modal {
@@ -62,26 +72,11 @@
     &.modal-visible {
         visibility: visible;
         transition: height 0.5s ease;
-        
     }
 
     .container-message {
         display: flex;
         justify-content: flex-start;
-
         width: 100%;
     }
 }
-
-/*
-.blurred {
-
-    & > :not(.modal) {
-        -webkit-filter: blur(5px);
-        -moz-filter: blur(5px);
-        -o-filter: blur(5px);
-        -ms-filter: blur(5px);
-        filter: blur(5px);
-        pointer-events: none;
-    }
-}*/

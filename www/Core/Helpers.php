@@ -50,6 +50,8 @@ class Helpers{
     }
 
     public static function callRoute(string $name, array $params = []): string {
+        if($name === '') return '#';
+
         foreach (Router::$routes as $office => $routes) {
             foreach ($routes as $routeName => $routeData) {
                 if ($name == $routeName) {

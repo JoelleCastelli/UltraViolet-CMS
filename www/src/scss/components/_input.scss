@@ -16,7 +16,6 @@
 
    //Input
    display: inline-block;
-   border-style: none;
    background: #E7E9F3;
    height: 41px;
    border: 1px solid #E9ECEF;
@@ -43,5 +42,6 @@
 input[type=date], input[type=time] {
     font-weight: lighter;
     font-size: 16px;
-    }
+}
 
+input[type="number"]:disabled { background: $light-grey; }

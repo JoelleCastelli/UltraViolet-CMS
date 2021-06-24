@@ -47,7 +47,7 @@ class FormBuilder
                         $checked = "checked";
                     }
                     
-                    $html .= "<input type='radio' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
+                    $html .= "<input type='radio' class='".($option["class"] ?? "")."' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
                 }
                 $html .= "</fieldset>";
@@ -65,7 +65,7 @@ class FormBuilder
                         $checked = "checked";
                     }
 
-                    $html .= "<input type='checkbox' name='".$fieldName."[]' value='".$option["value"]."' $selected $disabledOption>";
+                    $html .= "<input type='checkbox' class='".($option["class"] ?? "")."' name='".$fieldName."[]' value='".$option["value"]."' $selected $disabledOption>";
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
                 }
                 $html .= "</fieldset>";

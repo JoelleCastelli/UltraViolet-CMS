@@ -2,7 +2,7 @@
 $(document).ready( function () {
 
     let table = $('#datatable').DataTable( {
-
+        responsive: true,
         columns: [
             { data: 'Titre' },
             { data: 'Auteur' },

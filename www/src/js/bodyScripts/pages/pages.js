@@ -3,34 +3,16 @@ $(document).ready(function() {
 
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable({
+        responsive: true,
 
         // All columns    
         columns: [
-            {
-                data: 'Nom de la page',
-            },
-            {
-                data: 'URL de la page',
-
-            },
-            {
-                data: 'Ordre',
-                width: "10%"
-
-            },
-            {
-                data: 'Nombre d\'articles',
-                width: "15%"
-
-            },
-            {
-                data: 'Visibilité',
-                width: "10%"
-            },
-            {
-                data: 'Actions',
-                width: "10%"
-            }
+            {data: 'Nom de la page'},
+            {data: 'URL de la page'},
+            {data: 'Ordre', width: "10%"},
+            {data: 'Nombre d\'articles', width: "15%"},
+            {data: 'Visibilité', width: "10%"},
+            {data: 'Actions', width: "10%"}
         ],
 
         // Column Actions 
@@ -120,7 +102,7 @@ $(document).ready(function() {
                     if (response['success']) {
 
                         let button = "<button class='btn add-new-page'>" +
-                            "Créer une nouvelle page" +
+                            "Ajouter une nouvelle page" +
                             "</button>";
 
                         $('#add-page-modal .content-modal').hide();

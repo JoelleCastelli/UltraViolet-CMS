@@ -4,6 +4,7 @@ $(document).ready( function () {
     let table = $('#datatable').DataTable( {
         "order": [],
         "autoWidth": false,
+        responsive: true,
         columns: [
             { data: 'Titre' },
             { data: 'Titre original' },

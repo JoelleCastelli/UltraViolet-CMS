@@ -159,14 +159,14 @@ class Page
                         $save = $page->save();
 
                         if ($save) {
-                            $response['message'] = 'Sauvegarde faite !';
+                            $response['message'] = 'La page a été créée !';
                             $response['success'] = true;
                         } else {
                             $response['message'] = 'Oulah Oops problème serveur sorry';
                             $response['success'] = false;
                         }
                     } else {
-                        $response['message'] = 'Le statut choisie est incorrect';
+                        $response['message'] = 'Le statut choisi est incorrect';
                         $response['success'] = false;
                     }
                 } else {
@@ -272,7 +272,7 @@ class Page
         // return view
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
-        $view->assign('title', 'Modifier la page n° ' . $page->getId());
+        $view->assign('title', 'Modifier une page');
     }
 
     public function deletePageAction()

@@ -1,36 +1,19 @@
-<div class="grid-register-user">
-    <?php if(isset($errors)):?>
-        <?php foreach ($errors as $error):?>
-            <li><?=$error?></li>
-        <?php endforeach;?>
-    <?php endif;?>
+<h1 class="title-form"><?= APP_NAME ?></h1>
+<div id='login-subscription' class="card">
+    <div class="error-message-form">
+        <?php
+        if(isset($errors)) {
+            foreach ($errors as $error) {
+                echo "<li>".$error."</li>";
+            }
+        }
+        ?>
+    </div>
 
-    <section class="grid-form-register-user">
-
-        <h1 class="title-form">Ultra Violet</h1>
-        <section class="card">
-
-            <article>
-                <h2 class="title-form-h2">Créer mon compte</h2>
-
-                <article class="container-form">
-                    <?php App\Core\FormBuilder::render($form, true); ?>
-                </article><br>
-
-                <article class="links">
-                    <p class="text">
-                        <a href="#">Déjà un compte ? Je me connecte </a>
-                    </p><br>
-                    <p class="text">
-                        <a href="#">Retour à l'acceuil </a>
-                    </p>
-                </article>
-
-            </article>
-        </section>
-
-    </section>
-
+    <?php App\Core\FormBuilder::render($form, true); ?>
+    <div>
+        Déjà un compte ? <a href="<?= \App\Core\Helpers::callRoute('login')?>">Je me connecte.</a>
+    </div>
 </div>
 
 

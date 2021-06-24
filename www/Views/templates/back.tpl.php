@@ -31,15 +31,13 @@ use App\Core\Helpers;
 
 <body class="preload">
     <?php include 'Views/components/sidebar.php' ?>
-
     <main id="main">
-        <?php include 'Views/components/header.php'; ?>
-        <div class="main-content">
-            <?php
-                    if(isset($flash)) $this->displayFlash($flash);
-                    include $this->view;
-                ?>
-        </div>
+        <?php
+            include 'Views/components/header.php';
+            if(isset($flash)) $this->displayFlash($flash);
+            include $this->view;
+
+        ?>
     </main>
 
     <?php if(isset($bodyScripts) && !empty($bodyScripts)) {
