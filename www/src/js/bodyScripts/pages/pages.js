@@ -91,7 +91,7 @@ $(document).ready(function() {
     $('.form-add-page').submit(function(event) {
         event.preventDefault();
 
-        if ($('#add-page-modal').hasClass('modal-visible')) {
+        if ($('#add-page-modal').hasClass('modal-visible')) { // if modal open
 
             $.ajax({
                 type: 'POST',
@@ -105,12 +105,12 @@ $(document).ready(function() {
                             "Ajouter une nouvelle page" +
                             "</button>";
 
+                        // remove form, show success and button new page
                         $('#add-page-modal .content-modal').hide();
-                        $('#add-page-modal .content-modal .form-add-page')[0].reset()
+                        $('#add-page-modal .content-modal .form-add-page')[0].reset(); // empty form
                         $('#add-page-modal .footer-modal').prepend(button);
                         $('#add-page-modal .footer-modal').prepend(successMessageForm(response['message']));
                     }
-
                     else
                         $('#add-page-modal .container-message').html(errorMessageForm(response['message']));
 
@@ -171,15 +171,19 @@ $(document).ready(function() {
 
         if (targetElement != null) {
 
-            a = targetElement;
-
-            if ($(a).hasClass(selector)) {
+            if ($(targetElement).hasClass(selector)) {
                 $('#add-page-modal .content-modal').show();
-                $('#add-page-modal .add-new-page').remove();
-                $('#add-page-modal .error-message-form').remove();
-                $('#add-page-modal .success-message-form').remove();
-                return;
+                $('#add-page-modal .footer-modal').empty();
+
             }
         }
     });
+
+    // RESET MODAL CONTENT AT CLOSING
+    $('.modal .btn-close-modal').click(function() {
+
+        $('#add-page-modal .content-modal').show();
+        $('#add-page-modal .footer-modal').empty();
+
+    })
 });
