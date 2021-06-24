@@ -68,6 +68,14 @@ class Page
             $pageArray = [];
             foreach ($pages as $page) {
 
+                if($page->getState() != "deleted"){
+                    $actions = $page->generateActionsMenu();
+                }
+                else{
+                    $page->setActions($page->getActionsDeletedPages());
+                    $actions = $page->generateActionsMenu();
+                }
+
                 $pageArray[] = [
                     $this->columnsTable['title'] => $page->getTitle(),
                     $this->columnsTable['slug'] => $page->getSlug(),
@@ -76,7 +84,7 @@ class Page
                     $this->columnsTable['state'] => $page->getState() == "hidden" ?
                         '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switch-visibily-page" onclick="toggleSwitch(this)"></div>'
                         : '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switched-on switch-visibily-page" onclick="toggleSwitch(this)"></div>',
-                    $this->columnsTable['actions'] => $page->generateActionsMenu()
+                    $this->columnsTable['actions'] => $actions
                 ];
             }
 
@@ -273,6 +281,25 @@ class Page
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
         $view->assign('title', 'Modifier une page');
+    }
+
+    public function updatePageStateAction($state, $id){
+
+        $page = new PageModel;
+        $page->setId($id);
+
+        if($state == "hidden")
+        {
+            $page->setStateToPublishedHidden();
+
+        }else if ($state == "draft") 
+        {
+            $page->setStateToDraft();
+        }
+
+        $page->save();
+
+        $this->showAllAction();
     }
 
     public function deletePageAction()

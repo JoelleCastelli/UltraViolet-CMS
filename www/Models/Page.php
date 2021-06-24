@@ -26,6 +26,7 @@ class Page extends Database implements JsonSerializable
 	protected $deletedAt;
 
     private $actions;
+    private $actionsDeletedPages;
 
 	public function __construct(){
 		parent::__construct();
@@ -33,6 +34,13 @@ class Page extends Database implements JsonSerializable
             ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
         ];
+
+        $this->actionsDeletedPages = [
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Restaurer en tant que brouillon', 'action' => 'state-to-draft', 'url' => Helpers::callRoute('page_update_state', ['state' => 'draft', 'id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Restaurer en tant que publiée', 'action' => 'state-to-hidden', 'url' => Helpers::callRoute('page_update_state', ['state' => 'hidden', 'id' => $this->id]), 'role' => 'admin'],
+        ];
+
 	}
 
     /**
@@ -203,9 +211,24 @@ class Page extends Database implements JsonSerializable
         $this->deletedAt = $deletedAt;
     }
 
-     /**
+    /**
+     * @param array
+     */
+    public function setActions($actions): void
+    {
+        $this->actions = $actions;
+    }
+    /**
      * @return array
      */
+    public function getActionsDeletedPages()
+    {
+        return $this->actionsDeletedPages;
+    }
+
+    /**
+    * @return array
+    */
     public function getActions()
     {
         return $this->actions;
@@ -213,6 +236,27 @@ class Page extends Database implements JsonSerializable
 
     public function cleanPublicationDate() {
         $this->setPublicationDate(date("d/m/Y", strtotime($this->getPublicationDate())));
+    }
+
+    public function setStateToPublished()
+    {
+        $this->setState("published");
+        $this->setPublicationDate(Helpers::getCurrentTimestamp());
+        $this->setDeletedAt(null);
+    }
+
+    public function setStateToPublishedHidden()
+    {
+        $this->setState("hidden");
+        $this->setPublicationDate(null);
+        $this->setDeletedAt(null);
+    }
+
+    public function setStateToDraft()
+    {
+        $this->setState("draft");
+        $this->setDeletedAt(null);
+        $this->setPublicationDate(null);
     }
 
     public function jsonSerialize(): array
