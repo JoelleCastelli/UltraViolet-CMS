@@ -6,16 +6,14 @@
 @import "placeholders";
 
 // Grids
-@import "grids/containers";
-@import "grids/grid_modify_article";
-@import "grids/grid_display_collection";
-@import "grids/grid-listing-datatables";
-@import "grids/grid_register_user";
-@import "grids/grid_connection_user";
-@import "grids/grid_display_comments";
-@import "grids/grid-create-article";
-@import "grids/grid_display_medias";
-@import "grids/productions";
+@import "layouts/containers";
+@import "layouts/grid_modify_article";
+@import "layouts/grid_register_user";
+@import "layouts/grid_connection_user";
+@import "layouts/grid_display_comments";
+@import "layouts/grid-create-article";
+@import "layouts/grid_display_medias";
+@import "layouts/productions";
 
 // Components
 @import "components/button";
