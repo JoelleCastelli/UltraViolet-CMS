@@ -291,7 +291,7 @@ class Person extends Database implements JsonSerializable
         for($i=1;$i<$lengthkey;$i++) {
             $key.=mt_rand(0,9);
         }
-        $this->setEmailKey($key);
+        $this->emailKey = $key;
     }
 
     public function saveMedia() {

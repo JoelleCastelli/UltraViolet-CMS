@@ -212,7 +212,6 @@ class Person
             if(empty($errors)) {
                 $user = $user->findOneBy("email", $_POST['email']);
                 if(!empty($user)) {
-                    Helpers::dd($user);
                     $to   = $_POST['email'];
                     $from = 'ultravioletcms@gmail.com';
                     $name = 'Ultaviolet';
