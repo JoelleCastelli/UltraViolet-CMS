@@ -9,7 +9,7 @@ use App\Core\Traits\ModelsTrait;
 
 use JsonSerializable;
 
-class Page_Article extends Database implements JsonSerializable
+class PageArticle extends Database implements JsonSerializable
 {
 
     use ModelsTrait;

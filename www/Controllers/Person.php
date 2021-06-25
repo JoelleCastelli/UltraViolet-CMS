@@ -100,10 +100,14 @@ class Person
                     $user->setMediaId(1);
                     $user->generateEmailKey();
 
-                    $mail = new Mail();
+                    $to   = $_POST['email'];
+                    $from = 'ultravioletcms@gmail.com';
+                    $name = 'Ultaviolet';
+                    $subj = 'Confirmation mail';
                     $msg = $user->verificationMail($_POST['pseudo'], $user->getEmailKey());
-                    $mail->sendMail($_POST['email'], 'ultravioletcms@gmail.com', 'Ultaviolet', 'Confirmation mail', $msg);
-
+                    
+                    $mail = new Mail();
+                    $mail->sendMail($to, $from, $name, $subj, $msg);
                     $user->save();
 
 
@@ -176,7 +180,7 @@ class Person
 
         $view = new View("userVerification", "front");
         $user = new PersonModel();
-        $user = $user->select()->where("pseudo", $pseudo)->andWhere("emailKey", $key)->first();
+        $user = $user->select()->where("pseudo", $pseudo)->andWhere("emailkey", $key)->first();
         
         if(!empty($user))
         {
@@ -218,9 +222,11 @@ class Person
                     
                     $mail = new Mail();
                     $mail->sendMail($to, $from, $name, $subj, $msg);
-                    $view->assign("send", $send = 1);
+                    Helpers::setFlashMessage('success', " Un e-mail
+                    vous a été envoyé sur " .$_POST['email']);
+                    Helpers::redirect('/connexion');
                 } else {
-                    $errors[] = "Les identifiants ne sont pas reconnus";
+                    $errors[] = "Aucun compte n'a été trouvé";
                 }
             }
             $view->assign("errors", $errors);
@@ -253,6 +259,4 @@ class Person
             $view->assign("errors", $errors);
         }
 	}
-
 }
-

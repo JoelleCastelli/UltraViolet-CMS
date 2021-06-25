@@ -49,13 +49,13 @@ class View
     public function displayFlash($flash) {
         foreach ($flash as $flashType => $flashContent) {
             if(gettype($flashContent) == "array") {
-                echo "<div class='flash-$flashType'>";
+                echo "<div class='flash flash-$flashType'>";
                 foreach ($flashContent as $message) {
                     echo "<li>$message</li>";
                 }
                 echo "</div>";
             } else {
-                echo "<div class='flash-$flashType'>$flashContent</div>";
+                echo "<div class='flash flash-$flashType'>$flashContent</div>";
             }
         }
     }

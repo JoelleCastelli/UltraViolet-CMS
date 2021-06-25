@@ -1,5 +1,9 @@
 .filtering-status {
-    display: flex;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
     color: $purple2;
     background-color: $pure-white;
     font-family: $poppins;
@@ -9,6 +13,10 @@
     border: solid $white2 1px;
 
     .filtering-btn {
+        display: flex;
+        justify-content: center;
+        flex-grow: 1;
+        flex-shrink: 1;
         padding: 1rem 3rem;
         transition: all 0.3s ease-out;
         cursor: pointer;
@@ -32,7 +40,7 @@
         }
 
         &:first-child {
-            border-radius: 8px 0 3px 8px;
+            border-radius: 8px 0 0 8px;
         }
 
         &:last-child {

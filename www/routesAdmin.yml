@@ -86,12 +86,12 @@ productions_list:
   action:     showAll
 
 productions_creation:
-  path:       /admin/productions/creation
+  path:       /admin/productions/creation-manuelle
   controller: Production
   action:     addProduction
 
 productions_creation_tmdb:
-  path:       /admin/productions/creation-tmdb
+  path:       /admin/productions/creation
   controller: Production
   action:     addProductionTmdb
 

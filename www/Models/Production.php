@@ -26,6 +26,8 @@ class Production extends Database
     private array $creators = [];
     protected Media $poster;
     private string $tmdbPosterPath;
+    private ?Production $parentProduction = null;
+    protected ?int $parentProductionId = null;
     protected ?string $deletedAt = null;
     private string $createdAt;
     private ?string $updatedAt;
@@ -136,7 +138,7 @@ class Production extends Database
         return $this->totalSeasons;
     }
 
-    public function setTotalSeasons(int $totalSeasons): void
+    public function setTotalSeasons(?int $totalSeasons): void
     {
         $this->totalSeasons = $totalSeasons;
     }
@@ -146,7 +148,7 @@ class Production extends Database
         return $this->totalEpisodes;
     }
 
-    public function setTotalEpisodes(int $totalEpisodes): void
+    public function setTotalEpisodes(?int $totalEpisodes): void
     {
         $this->totalEpisodes = $totalEpisodes;
     }
@@ -248,7 +250,9 @@ class Production extends Database
                 $person->setTmdbId($tmdbCast[$i]->id ?? null);
                 $name = $tmdbCast[$i]->name ?? '';
                 $person->setFullName($name);
-                $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbCast[$i]->profile_path);
+                if($tmdbCast[$i]->profile_path != '') {
+                    $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbCast[$i]->profile_path);
+                }
                 $actors[] = $person;
             }
         }
@@ -285,10 +289,9 @@ class Production extends Database
 
     public function saveMedia() {
         // Save poster file
-        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle());
-        if(!empty($this->poster->getTmdbPosterPath()) && $this->poster->getTmdbPosterPath() != TMDB_IMG_PATH) {
+        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle()).".png";
+        if(!empty($this->poster->getTmdbPosterPath()) && $this->poster->getTmdbPosterPath() != TMDB_IMG_PATH)
             file_put_contents(getcwd().$productionImgPath, file_get_contents($this->poster->getTmdbPosterPath()));
-        }
 
         // Save or update poster in database
         $existingMedia = new Media();
@@ -336,6 +339,31 @@ class Production extends Database
         $this->tmdbPosterPath = $tmdbPosterPath;
     }
 
+    public function getParentProduction(): ?Production
+    {
+        return $this->parentProduction;
+    }
+
+    public function getGrandParentProduction(): ?Production
+    {
+        return $this->parentProduction->parentProduction;
+    }
+
+    public function setParentProduction(?Production $parentProduction): void
+    {
+        $this->parentProduction = $parentProduction;
+    }
+
+    public function getParentProductionId(): ?int
+    {
+        return $this->parentProductionId;
+    }
+
+    public function setParentProductionId(?int $parentProductionId): void
+    {
+        $this->parentProductionId = $parentProductionId;
+    }
+
     public function getDirectors(): array
     {
         return $this->directors;
@@ -381,10 +409,10 @@ class Production extends Database
         return $this->creators;
     }
 
-    public function setCreators(array $creators): void
+    public function setCreators(array $tmdbCreators): void
     {
         $creators = [];
-        foreach ($creators as $creator) {
+        foreach ($tmdbCreators as $creator) {
             $person = new Person();
             $person->setRole('vip');
             $person->setFullName($creator->name);
@@ -404,19 +432,53 @@ class Production extends Database
         }
     }
 
-    public function formBuilderAddProduction(){
+    public function getParentSeriesName(): string
+    {
+        $series = new Production();
+        if($this->getType() == 'episode') {
+            $season = new Production();
+            $season = $season->select()->where('type', 'season')->andWhere('id', $this->getParentProductionId())->first();
+            $series = $series->select()->where('type', 'series')->andWhere('id', $season->getParentProductionId())->first();
+        } elseif ($this->getType() == 'season') {
+            $series = $series->select()->where('type', 'series')->andWhere('id', $this->getParentProductionId())->first();
+        } else {
+            return '';
+        }
+        return $series->getTitle();
+    }
+
+    public function getParentSeasonName(): string
+    {
+        if($this->getType() == 'episode') {
+            $season = new Production();
+            $season = $season->select()->where('type', 'season')->andWhere('id', $this->getParentProductionId())->first();
+            return $season->getTitle();
+        }
+        return '';
+    }
+
+    public function formBuilderAddProduction() {
+
+        $series = new Production();
+        $series = $series->selectWhere('type', 'series');
+        if(empty($series)) $series[0] = "Aucune série disponible";
+        $string = '';
+        foreach ($series as $seriesID => $seriesName) {
+            $string .= '[ "value" => '.$seriesID.', "text" => '.$seriesName.']';
+        }
+
         return [
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control",
+                "class" => "form_control card",
                 "id" => "formAddProduction",
                 "submit" => "Valider",
                 "referer" => '/admin/productions/creation'
             ],
             "fields" => [
                 "type" => [
-                    "type" => "select",
+                    "type" => "radio",
                     "label" => "Type",
                     "required" => true,
                     "class" => "form_input",
@@ -437,7 +499,7 @@ class Production extends Database
                     "placeholder" => "",
                     "label" => "Titre",
                     "required" => true,
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "minLength" => 1,
                     "maxLength" => 100,
                     "error" => "Le titre doit faire entre 1 et 100 caractères"
@@ -446,14 +508,14 @@ class Production extends Database
                     "type" => "text",
                     "placeholder" => "",
                     "label" => "Titre original",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "maxLength" => 100,
                     "error" => "Le titre doit faire entre 1 et 100 caractères"
                 ],
                 "releaseDate" => [
                     "type" => "date",
                     "label" => "Date de sortie",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "minLength" => 10,
                     "maxLength" => 10,
                     "error" => "Le format de la date est incorrect"
@@ -462,7 +524,7 @@ class Production extends Database
                     "type" => "text",
                     "placeholder" => "",
                     "label" => "Résumé",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "maxLength" => 1000,
                     "error" => "Le résumé ne peut pas dépasser 1000 caractères"
                 ],
@@ -470,14 +532,14 @@ class Production extends Database
                     "type" => "number",
                     "placeholder" => "",
                     "label" => "Durée (du film ou d'un épisode)",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "error" => "Le résumé ne peut pas dépasser 1000 caractères"
                 ],
                 "number" => [
                     "type" => "number",
                     "placeholder" => "",
                     "label" => "Numéro",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                 ],
                 "csrfToken" => [
                     "type"=>"hidden",
@@ -493,7 +555,7 @@ class Production extends Database
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control",
+                "class" => "form_control card",
                 "id" => "formAddProductionTmdb",
                 "submit" => "Valider",
                 "referer" => Helpers::callRoute('productions_creation_tmdb')
@@ -520,14 +582,14 @@ class Production extends Database
                     "type" => "number",
                     "min" => 1,
                     "label" => "ID du film ou de la série",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "error" => "Un ID TMDB est nécessaire"
                 ],
                 "seasonNb" => [
                     "type" => "number",
                     "min" => 0,
                     "label" => "Numéro de la saison",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "error" => "Le numéro de saison doit être supérieur ou égal à 0",
                     "disabled" => true
                 ],
@@ -535,14 +597,13 @@ class Production extends Database
                     "type" => "number",
                     "min" => 0,
                     "label" => "Numéro de l'épisode",
-                    "class" => "form_input",
+                    "class" => "search-bar",
                     "error" => "Le numéro d'épisode doit être supérieur ou égal à 0",
                     "disabled" => true
                 ],
                 "productionPreviewRequest" => [
                     "type" => "button",
-                    "label" => "Preview",
-                    "class" => "form_input",
+                    "class" => "btn preview",
                     "value" => "Preview"
                 ],
                 "csrfToken" => [
@@ -553,8 +614,8 @@ class Production extends Database
         ];
     }
 
-    public function populateFromTmdb($post, $jsonResponseArray) {
-
+    public function populateFromTmdb($post, $jsonResponseArray): bool
+    {
         // index 0: movie or series
         $item = json_decode($jsonResponseArray[0]);
         // index 1: episode
@@ -569,8 +630,8 @@ class Production extends Database
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
         $this->setActors($item->credits->cast);
-        $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
-
+        if($item->poster_path != '')
+            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
         //$production0['genres'] = $item->genres; TODO
 
         switch ($post['productionType']) {
@@ -590,21 +651,37 @@ class Production extends Database
                 // Season
                 if(!empty($_POST['seasonNb'])) {
                     if(isset($item->seasons[$post['seasonNb']])) {
+                        $this->setParentProduction(clone $this);
+                        $this->setType('season');
+                        $this->setTmdbId($item->seasons[$post['seasonNb']]->id);
+                        $this->setTitle($item->seasons[$post['seasonNb']]->name);
+                        $this->setOriginalTitle(null);
+                        $this->setTotalSeasons(null);
                         $this->setTotalEpisodes($item->seasons[$post['seasonNb']]->episode_count);
+                        $this->setNumber($post['seasonNb']);
                         $this->setOverview($item->seasons[$post['seasonNb']]->overview);
                         $this->setPoster($item->id, 'season');
-                        $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
+                        if($item->seasons[$post['seasonNb']]->poster_path != '')
+                            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
 
                         // Episode
                         if(!empty($episode)) {
+                            $this->setParentProduction(clone $this);
+                            $this->setType('episode');
+                            $this->setTmdbId($episode->id);
                             $this->setTitle($episode->name);
+                            $this->setOriginalTitle(null);
                             $this->setOverview($episode->overview);
+                            $this->setNumber($_POST['episodeNb']);
+                            $this->setTotalEpisodes(null);
+                            $this->setTotalSeasons(null);
                             $this->setReleaseDate($episode->air_date);
                             $this->setPoster($item->id, 'episode');
-                            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
+                            if($item->seasons[$post['seasonNb']]->poster_path != '')
+                                $this->poster->setTmdbPosterPath(TMDB_IMG_PATH . $episode->still_path);
                         }
                     } else {
-                        echo '<div class="error">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</div>";
+                        echo '<p class="error-message-form">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</p>";
                         return false;
                     }
                 }
@@ -616,6 +693,81 @@ class Production extends Database
     public function displayPreview() {
         $view = new View("productions/tmdbPreview", null);
         $view->assign('production', $this);
+    }
+
+    public function save() {
+        if($this->getType() == "episode") {
+            $seriesId = $this->saveParentSeries();
+            $seasonId = $this->saveParentSeason($seriesId);
+            $this->saveEpisode($seasonId);
+        } elseif ($this->getType() == "season") {
+            $seriesId = $this->saveParentSeries();
+            $this->setParentProductionId($seriesId);
+            $this->dbSave();
+        } else {
+            // Movie or Series
+            $this->dbSave();
+            $this->savePoster();
+            $this->saveCrew('actors');
+            if($this->getType() == 'movie') {
+                $this->saveCrew('writers');
+                $this->saveCrew('directors');
+            } else {
+                $this->saveCrew('creators');
+            }
+        }
+    }
+
+    public function saveParentSeries(){
+        $existingSeries = new Production();
+        $getProductionAbove = 'getParentProduction';
+        if($this->getType() == 'episode') $getProductionAbove = 'getGrandParentProduction';
+
+        $existingSeries = $existingSeries->select()->where('type', 'series')->andWhere('tmdbId', $this->$getProductionAbove()->getTmdbId())->first();
+        if($existingSeries) {
+            $existingSeries->dbSave();
+            $seriesId = $existingSeries->getId();
+        } else {
+            $this->$getProductionAbove()->dbSave();
+            $this->$getProductionAbove()->savePoster();
+            $this->$getProductionAbove()->saveCrew('creators');
+            $this->$getProductionAbove()->saveCrew('actors');
+            $seriesId = $this->getLastInsertId();
+        }
+        return $seriesId;
+    }
+
+    public function saveParentSeason($seriesId){
+        $existingSeason = new Production();
+        $existingSeason = $existingSeason->select()->where('type', 'season')->andWhere('tmdbId', $this->getParentProduction()->getTmdbId())->first();
+        if($existingSeason) {
+            $existingSeason->dbSave();
+            $seasonId = $existingSeason->getId();
+        } else {
+            $this->getParentProduction()->setParentProductionId($seriesId);
+            $this->getParentProduction()->dbSave();
+            $this->getParentProduction()->savePoster();
+            $this->getParentProduction()->saveCrew('actors');
+            $seasonId = $this->getLastInsertId();
+        }
+        return $seasonId;
+    }
+
+    public function saveEpisode($seasonId){
+        // Save episode
+        $existingEpisode = new Production();
+        $existingEpisode = $existingEpisode->select()->where('type', 'episode')->andWhere('tmdbId', $this->getTmdbId())->first();
+        if($existingEpisode) {
+            $existingEpisode->dbSave();
+        } else {
+            $this->setParentProductionId($seasonId);
+            $this->dbSave();
+            $this->savePoster();
+        }
+    }
+
+    public function dbSave() {
+        parent::save();
     }
 
 }

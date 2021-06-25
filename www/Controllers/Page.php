@@ -6,7 +6,7 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Models\Page as PageModel;
-use App\Models\Page_Article;
+use App\Models\PageArticle;
 
 class Page
 {
@@ -53,7 +53,7 @@ class Page
 
         if (!empty($_POST['pageType'])) {
             $pageModel = new PageModel();
-            $page_article = new Page_Article();
+            $pageArticle = new PageArticle();
 
             // get pages
             if ($_POST['pageType'] === 'published') {
@@ -72,7 +72,7 @@ class Page
                     $this->columnsTable['title'] => $page->getTitle(),
                     $this->columnsTable['slug'] => $page->getSlug(),
                     $this->columnsTable['position'] => $page->getPosition(),
-                    $this->columnsTable['articles'] => $page_article->count("pageId")->where("pageId", $page->getId())->first()->total,
+                    $this->columnsTable['articles'] => $pageArticle->count("pageId")->where("pageId", $page->getId())->first()->total,
                     $this->columnsTable['state'] => $page->getState() == "hidden" ?
                         '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switch-visibily-page" onclick="toggleSwitch(this)"></div>'
                         : '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switched-on switch-visibily-page" onclick="toggleSwitch(this)"></div>',
@@ -133,7 +133,12 @@ class Page
 
             if (empty($errors)) {
 
-                $slug = $this->slugValidator($_POST['slug'], $_POST['title']);
+                if(empty($_POST['slug'])) {
+                    $slug = Helpers::slugify($_POST['title']);
+                } else {
+                    $slug = htmlspecialchars($_POST['slug']);
+                }
+
                 $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
 
                 if (empty($isNotUniqueSlug)) {
@@ -154,14 +159,14 @@ class Page
                         $save = $page->save();
 
                         if ($save) {
-                            $response['message'] = 'Sauvegarde faite !';
+                            $response['message'] = 'La page a été créée !';
                             $response['success'] = true;
                         } else {
                             $response['message'] = 'Oulah Oops problème serveur sorry';
                             $response['success'] = false;
                         }
                     } else {
-                        $response['message'] = 'Le statut choisie est incorrect';
+                        $response['message'] = 'Le statut choisi est incorrect';
                         $response['success'] = false;
                     }
                 } else {
@@ -215,7 +220,12 @@ class Page
 
             if (empty($errors)) {
 
-                $slug = $this->slugValidator($_POST['slug'], $_POST['title']);
+                if (empty($_POST['slug'])) {
+                    $slug = Helpers::slugify($_POST['title']);
+                } else {
+                    $slug = htmlspecialchars($_POST['slug']);
+                }
+
                 $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
                 if (count($isNotUniqueSlug) < 2) {
 
@@ -262,52 +272,31 @@ class Page
         // return view
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
-        $view->assign('title', 'Modifier la page n° ' . $page->getId());
+        $view->assign('title', 'Modifier une page');
     }
 
     public function deletePageAction()
     {
         if (!empty($_POST['id'])) {
             $page = new PageModel();
-            $page->setId($_POST['id']);
-            $page->setState("deleted");
-            $page->delete();
+            $id = $_POST['id'];
+            $page->setId($id);
+
+            if($page->getState() == "deleted")
+            {
+                $pageArticle = new PageArticle();
+                $check = $pageArticle->hardDelete()->where('pageId', $id)->execute(); // delete foreing keys
+              
+                if($check){
+                    $check = $page->delete();
+                }
+            }
+            else {
+                $page->setState("deleted");
+                $page->delete();
+                $page->save();
+            }
         }
-    }
-
-    private function slugValidator($slug, $title)
-    {
-
-        /* VERIFICATIONS AND CLEAN UP SLUG */
-        if (empty($slug)) // if slug not specify
-        {
-
-            $patterns[] = "/^[^A-Za-z0-9]+/"; // only alphabets and numbers in the beginning
-            $patterns[] = "/[^A-Za-z0-9]+$/"; // only alphabets and numbers int the end
-            $patterns[] = "/[^A-Za-z0-9\s\-]/"; // only alphabets, dash, space and numbers
-            $patterns[] = "/\s+/"; // space
-            $patterns[] = "/-+/"; // only one dash
-
-            $replacements[] = "";
-            $replacements[] = "";
-            $replacements[] = "";
-            $replacements[] = "-";
-            $replacements[] = "-";
-
-            $unwantedCharacters = array(
-                'Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
-                'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U',
-                'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
-                'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
-                'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y'
-            );
-
-            $slug = strtr($title, $unwantedCharacters);
-            $slug = preg_replace($patterns, $replacements, $slug);
-            $slug = strtolower(htmlspecialchars($slug));
-        }
-
-        return $slug;
     }
 
     private function stateValidator($publicationDate, $state)

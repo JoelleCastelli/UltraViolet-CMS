@@ -1,3 +1,15 @@
+#tableActions {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+}
+
 .dataTables_wrapper {
     font-family: $mulish;
     font-size: 14px;

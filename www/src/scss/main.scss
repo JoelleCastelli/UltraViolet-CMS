@@ -6,18 +6,11 @@
 @import "placeholders";
 
 // Grids
-@import "grids/containers";
-@import "grids/grid_modify_article";
-@import "grids/grid_display_collection";
-@import "grids/grid_add_page";
-@import "grids/grid-listing-datatables";
-@import "grids/grid_register_user";
-@import "grids/grid_connection_user";
-@import "grids/grid_display_comments";
-@import "grids/grid-create-article";
-@import "grids/grid_display_medias";
-@import "grids/grid-form-forget-password-user";
-@import "grids/grid_datatable";
+@import "layouts/containers";
+@import "layouts/grid_modify_article";
+@import "layouts/grid-create-article";
+@import "layouts/productions";
+@import "layouts/login_subscription";
 
 // Components
 @import "components/button";

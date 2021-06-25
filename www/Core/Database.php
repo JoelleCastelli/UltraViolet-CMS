@@ -135,9 +135,14 @@ class Database {
         }
     }
 
+    public function hardDelete() {
+        $this->query = 'DELETE FROM ' . $this->table . ' ';
+        return $this;
+    }
+
     public function count($column = "*"): Database
     {
-        $this->query = 'SELECT COUNT(`' . $column . '`) ';
+        $this->query = 'SELECT COUNT(`' . $column . '`) as total FROM ' . $this->table . ' ';
         return $this;
     }
 
@@ -252,6 +257,17 @@ class Database {
         try {
             return $query->fetchAll();
         }catch (\Exception $e) {
+            echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
+            die();
+        }
+    }
+
+    public function execute(): bool
+    {
+        $query = $this->pdo->prepare($this->query);
+        try {
+            return $query->execute();
+        } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
         }
