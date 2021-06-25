@@ -12,6 +12,10 @@ class ProductionMedia extends Database
     protected int $productionId;
     protected ?bool $keyArt = false;
 
+    public function __construct() {
+        parent::__construct();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

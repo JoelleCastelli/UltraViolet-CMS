@@ -22,7 +22,7 @@ USE `ultraviolet` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_media` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(50) NULL DEFAULT NULL,
+  `title` VARCHAR(150) NULL DEFAULT NULL,
   `path` VARCHAR(255) NOT NULL,
   `video` TINYINT NOT NULL DEFAULT '0',
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -131,11 +131,11 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production` (
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt` DATETIME NULL DEFAULT NULL,
-  `productionId` INT NULL DEFAULT NULL,
+  `parentProductionId` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_production_uvtr_production1_idx` (`productionId` ASC),
+  INDEX `fk_uvtr_production_uvtr_production1_idx` (`parentProductionId` ASC),
   CONSTRAINT `fk_uvtr_production_uvtr_production1`
-    FOREIGN KEY (`productionId`)
+    FOREIGN KEY (`parentProductionId`)
     REFERENCES `ultraviolet`.`uvtr_production` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

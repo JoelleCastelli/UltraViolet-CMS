@@ -1,5 +1,4 @@
-
- .success-message-form {
+.success-message-form, .flash-success {
     color: $green;
     font-family: $mulish;
     
@@ -8,7 +7,7 @@
     }
 }
 
-.error-message-form {
+.error-message-form, .flash-error {
     color: $red;
     font-family: $mulish;
     margin-bottom: 10px;
@@ -16,4 +15,8 @@
     .icon-message-form {
         margin-right: 5px;
     }
+}
+
+.flash {
+    margin-bottom: 15px;
 }

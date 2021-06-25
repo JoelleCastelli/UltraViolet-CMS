@@ -7,7 +7,9 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
 use App\Models\Media;
+use App\Models\ProductionArticle;
 use App\Models\ProductionPerson;
+use App\Models\ProductionMedia;
 use App\Models\Person;
 
 class Production
@@ -19,6 +21,8 @@ class Production
         $this->columnsTable = [
             "title" => 'Titre',
             "originalTitle" => 'Titre original',
+            "season" => 'Saison',
+            "series" => 'Série',
             "runtime" => 'Durée',
             "releaseDate" => 'Date de sortie',
             "createdAt" => 'Date d\'ajout',
@@ -47,14 +51,15 @@ class Production
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
                     $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
+                    $this->columnsTable['season'] => $production->getParentSeasonName(),
+                    $this->columnsTable['series'] => $production->getParentSeriesName(),
                     $this->columnsTable['runtime'] => $production->getCleanRuntime(),
                     $this->columnsTable['releaseDate'] => $production->getCleanReleaseDate(),
                     $this->columnsTable['createdAt'] => $production->getCleanCreatedAt(),
                     $this->columnsTable['actions'] => $production->generateActionsMenu(),
                 ];
             }
-
-            echo json_encode(["productions" => $productionArray]);
+            echo json_encode($productionArray);
         }
     }
 
@@ -114,13 +119,6 @@ class Production
                                 $errors[] = "La production avec l'ID TMDB ".$production->getTmdbId()." existe déjà dans la base de données";
                             } else {
                                 $production->save();
-                                $production->savePoster();
-                                $production->saveCrew('actors');
-                                if($production->getType() == 'movie') {
-                                    $production->saveCrew('writers');
-                                    $production->saveCrew('directors');
-                                }
-
                                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
                                 Helpers::redirect(Helpers::callRoute('productions_list'));
                             }
@@ -185,21 +183,24 @@ class Production
 
     public function getApiResponse($urlArray){
         $results = [];
-        foreach ($urlArray as $url) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Résultat de curl_exec() = string au lieu de l'afficher
-            curl_setopt($ch, CURLOPT_FAILONERROR, 1); // Echoue verbalement si code HTTP >= 400
-            if (curl_exec($ch)) {
-                $results[] = curl_exec($ch);
-                curl_close($ch);
-            } else {
-                curl_close($ch);
-                return false;
+        if($urlArray) {
+            foreach ($urlArray as $url) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Résultat de curl_exec() = string au lieu de l'afficher
+                curl_setopt($ch, CURLOPT_FAILONERROR, 1); // Echoue verbalement si code HTTP >= 400
+                if (curl_exec($ch)) {
+                    $results[] = curl_exec($ch);
+                    curl_close($ch);
+                } else {
+                    curl_close($ch);
+                    return false;
+                }
             }
+            if(empty($results)) return false;
+            return $results;
         }
-        if(empty($results)) return false;
-        return $results;
+        return false;
     }
 
     public function updateProductionAction($id) {
@@ -210,10 +211,39 @@ class Production
 
     public function deleteProductionAction() {
         if(!empty($_POST['productionId'])) {
-            $production = new ProductionModel();
-            $production->setId($_POST['productionId']);
-            $production->delete();
+            $response = [];
+            // Check if articles are linked to the production
+            $articles = new ProductionArticle;
+            $articles = $articles->select()->where('articleId', $_POST['productionId'])->get();
+            if(empty($articles)) {
+                // check if there are child productions
+                $childProductions = new ProductionModel();
+                $childProductions = $childProductions->select()->where('parentProductionId', $_POST['productionId'])->get();
+                if(empty($childProductions)) {
+                    // delete productionMedia
+                    $productionMedias = new ProductionMedia;
+                    $productionMedias->hardDelete()->where('productionId', $_POST['productionId'])->execute();
+
+                    // delete productionPerson
+                    $productionPersons = new ProductionPerson;
+                    $productionPersons->hardDelete()->where('productionId', $_POST['productionId'])->execute();
+
+                    // delete Production
+                    $production = new ProductionModel();
+                    $production->hardDelete()->where('id', $_POST['productionId'])->execute();
+
+                    $response['success'] = true;
+                    $response['message'] = 'La production a bien été supprimée';
+                } else {
+                    $response['success'] = false;
+                    $response['message'] = "La production ne peut pas être supprimée : d'autres productions y sont rattachées (saisons ou épisodes)";
+                }
+            } else {
+                $response['success'] = false;
+                $response['message'] = "La production ne peut pas être supprimée : des articles y sont rattachés";
+            }
+            echo json_encode($response);
         }
     }
-
+    
 }
