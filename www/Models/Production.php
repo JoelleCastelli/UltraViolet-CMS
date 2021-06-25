@@ -432,7 +432,41 @@ class Production extends Database
         }
     }
 
-    public function formBuilderAddProduction(){
+    public function getParentSeriesName(): string
+    {
+        $series = new Production();
+        if($this->getType() == 'episode') {
+            $season = new Production();
+            $season = $season->select()->where('type', 'season')->andWhere('id', $this->getParentProductionId())->first();
+            $series = $series->select()->where('type', 'series')->andWhere('id', $season->getParentProductionId())->first();
+        } elseif ($this->getType() == 'season') {
+            $series = $series->select()->where('type', 'series')->andWhere('id', $this->getParentProductionId())->first();
+        } else {
+            return '';
+        }
+        return $series->getTitle();
+    }
+
+    public function getParentSeasonName(): string
+    {
+        if($this->getType() == 'episode') {
+            $season = new Production();
+            $season = $season->select()->where('type', 'season')->andWhere('id', $this->getParentProductionId())->first();
+            return $season->getTitle();
+        }
+        return '';
+    }
+
+    public function formBuilderAddProduction() {
+
+        $series = new Production();
+        $series = $series->selectWhere('type', 'series');
+        if(empty($series)) $series[0] = "Aucune série disponible";
+        $string = '';
+        foreach ($series as $seriesID => $seriesName) {
+            $string .= '[ "value" => '.$seriesID.', "text" => '.$seriesName.']';
+        }
+
         return [
             "config" => [
                 "method" => "POST",
@@ -591,7 +625,7 @@ class Production extends Database
         $this->setTmdbId($item->id);
         $this->setType(htmlspecialchars($post['productionType']));
         $this->setTitle($item->title ?? $item->name);
-        $this->setOriginalTitle($item->original_title ?? null);
+        $this->setOriginalTitle($item->original_title ?? $item->original_name);
         $this->setOverview($item->overview);
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
@@ -621,6 +655,7 @@ class Production extends Database
                         $this->setType('season');
                         $this->setTmdbId($item->seasons[$post['seasonNb']]->id);
                         $this->setTitle($item->seasons[$post['seasonNb']]->name);
+                        $this->setOriginalTitle(null);
                         $this->setTotalSeasons(null);
                         $this->setTotalEpisodes($item->seasons[$post['seasonNb']]->episode_count);
                         $this->setNumber($post['seasonNb']);
@@ -635,6 +670,7 @@ class Production extends Database
                             $this->setType('episode');
                             $this->setTmdbId($episode->id);
                             $this->setTitle($episode->name);
+                            $this->setOriginalTitle(null);
                             $this->setOverview($episode->overview);
                             $this->setNumber($_POST['episodeNb']);
                             $this->setTotalEpisodes(null);

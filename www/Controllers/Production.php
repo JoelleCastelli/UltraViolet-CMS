@@ -19,6 +19,8 @@ class Production
         $this->columnsTable = [
             "title" => 'Titre',
             "originalTitle" => 'Titre original',
+            "season" => 'Saison',
+            "series" => 'Série',
             "runtime" => 'Durée',
             "releaseDate" => 'Date de sortie',
             "createdAt" => 'Date d\'ajout',
@@ -47,13 +49,14 @@ class Production
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
                     $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
+                    $this->columnsTable['season'] => $production->getParentSeasonName(),
+                    $this->columnsTable['series'] => $production->getParentSeriesName(),
                     $this->columnsTable['runtime'] => $production->getCleanRuntime(),
                     $this->columnsTable['releaseDate'] => $production->getCleanReleaseDate(),
                     $this->columnsTable['createdAt'] => $production->getCleanCreatedAt(),
                     $this->columnsTable['actions'] => $production->generateActionsMenu(),
                 ];
             }
-
             echo json_encode($productionArray);
         }
     }

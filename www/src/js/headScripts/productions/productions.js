@@ -8,6 +8,8 @@ $(document).ready( function () {
         columns: [
             { data: 'Titre' },
             { data: 'Titre original' },
+            { data: 'Saison' },
+            { data: 'Série' },
             { data: 'Durée' },
             { data: 'Date de sortie' },
             { data: 'Date d\'ajout' },
@@ -16,17 +18,19 @@ $(document).ready( function () {
 
         columnDefs: [
             {
-                targets: 5,
+                targets: 7,
                 data: "name",
                 searchable: false,
                 orderable: false
             },
-            { width: "19%", targets: 0 },
-            { width: "19%", targets: 1 },
-            { width: "19%", targets: 2 },
-            { width: "19%", targets: 3 },
-            { width: "19%", targets: 4 },
-            { width: "5%", targets: 5 },
+            { width: "16%", targets: 0 },
+            { width: "16%", targets: 1 },
+            { width: "16%", targets: 2 },
+            { width: "16%", targets: 3 },
+            { width: "16%", targets: 4 },
+            { width: "16%", targets: 5 },
+            { width: "16%", targets: 6 },
+            { width: "5%", targets: 7 },
         ],
 
 
@@ -65,11 +69,29 @@ $(document).ready( function () {
     // On start, display movies
     getProductionsByType('movie');
 
+    table.columns([2]).visible(false); // season
+    table.columns([3]).visible(false); // series
     // Display different types on filtering button click
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
         $(this).addClass('active');
         getProductionsByType(this.id);
+
+        switch (this.id) {
+            case 'season':
+                table.columns([1]).visible(false); //original title
+                table.columns([2]).visible(false); // season
+                table.columns([3]).visible(true); // series
+                break
+            case 'episode':
+                table.columns([2]).visible(true); // season
+                table.columns([3]).visible(true); // series
+                break;
+            default:
+                table.columns([2]).visible(false); // season
+                table.columns([3]).visible(false); // series
+                table.columns([1]).visible(true); //original title
+        }
     });
 
     function getProductionsByType(productionType) {
