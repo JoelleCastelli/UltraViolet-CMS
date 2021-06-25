@@ -7,7 +7,9 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
 use App\Models\Media;
+use App\Models\ProductionArticle;
 use App\Models\ProductionPerson;
+use App\Models\ProductionMedia;
 use App\Models\Person;
 
 class Production
@@ -209,10 +211,39 @@ class Production
 
     public function deleteProductionAction() {
         if(!empty($_POST['productionId'])) {
-            $production = new ProductionModel();
-            $production->setId($_POST['productionId']);
-            $production->delete();
+            $response = [];
+            // Check if articles are linked to the production
+            $articles = new ProductionArticle;
+            $articles = $articles->select()->where('articleId', $_POST['productionId'])->get();
+            if(empty($articles)) {
+                // check if there are child productions
+                $childProductions = new ProductionModel();
+                $childProductions = $childProductions->select()->where('parentProductionId', $_POST['productionId'])->get();
+                if(empty($childProductions)) {
+                    // delete productionMedia
+                    $productionMedias = new ProductionMedia;
+                    $productionMedias->hardDelete()->where('productionId', $_POST['productionId'])->execute();
+
+                    // delete productionPerson
+                    $productionPersons = new ProductionPerson;
+                    $productionPersons->hardDelete()->where('productionId', $_POST['productionId'])->execute();
+
+                    // delete Production
+                    $production = new ProductionModel();
+                    $production->hardDelete()->where('id', $_POST['productionId'])->execute();
+
+                    $response['success'] = true;
+                    $response['message'] = 'La production a bien été supprimée';
+                } else {
+                    $response['success'] = false;
+                    $response['message'] = "La production ne peut pas être supprimée : d'autres productions y sont rattachées (saisons ou épisodes)";
+                }
+            } else {
+                $response['success'] = false;
+                $response['message'] = "La production ne peut pas être supprimée : des articles y sont rattachés";
+            }
+            echo json_encode($response);
         }
     }
-
+    
 }

@@ -111,15 +111,19 @@ $(document).ready( function () {
     }
 
     table.on('click', '.delete', function () {
-        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette production ? Tous les articles relatifs à cette production seront supprimés')) {
+        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette production ?')) {
             let productionId = this.id.substring(this.id.lastIndexOf('-') + 1);
             let row = table.row($(this).parents('tr'));
             $.ajax({
                 type: 'POST',
                 url: '/admin/productions/supprimer',
                 data: { productionId },
-                success: function() {
-                    row.remove().draw();
+                dataType: 'json',
+                success: function(response) {
+                    if (response['success'])
+                        row.remove().draw();
+                    else
+                        alert(response['message']);
                 },
                 error: function() {
                     console.log("Erreur dans la suppression de la production ID " + productionId);
