@@ -22,7 +22,7 @@ USE `ultraviolet` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_media` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(50) NULL DEFAULT NULL,
+  `title` VARCHAR(150) NULL DEFAULT NULL,
   `path` VARCHAR(255) NOT NULL,
   `video` TINYINT NOT NULL DEFAULT '0',
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
