@@ -178,21 +178,24 @@ class Production
 
     public function getApiResponse($urlArray){
         $results = [];
-        foreach ($urlArray as $url) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Résultat de curl_exec() = string au lieu de l'afficher
-            curl_setopt($ch, CURLOPT_FAILONERROR, 1); // Echoue verbalement si code HTTP >= 400
-            if (curl_exec($ch)) {
-                $results[] = curl_exec($ch);
-                curl_close($ch);
-            } else {
-                curl_close($ch);
-                return false;
+        if($urlArray) {
+            foreach ($urlArray as $url) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Résultat de curl_exec() = string au lieu de l'afficher
+                curl_setopt($ch, CURLOPT_FAILONERROR, 1); // Echoue verbalement si code HTTP >= 400
+                if (curl_exec($ch)) {
+                    $results[] = curl_exec($ch);
+                    curl_close($ch);
+                } else {
+                    curl_close($ch);
+                    return false;
+                }
             }
+            if(empty($results)) return false;
+            return $results;
         }
-        if(empty($results)) return false;
-        return $results;
+        return false;
     }
 
     public function updateProductionAction($id) {
