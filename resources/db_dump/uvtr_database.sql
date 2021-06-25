@@ -131,11 +131,11 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_production` (
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt` DATETIME NULL DEFAULT NULL,
-  `productionId` INT NULL DEFAULT NULL,
+  `parentProductionId` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_uvtr_production_uvtr_production1_idx` (`productionId` ASC),
+  INDEX `fk_uvtr_production_uvtr_production1_idx` (`parentProductionId` ASC),
   CONSTRAINT `fk_uvtr_production_uvtr_production1`
-    FOREIGN KEY (`productionId`)
+    FOREIGN KEY (`parentProductionId`)
     REFERENCES `ultraviolet`.`uvtr_production` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

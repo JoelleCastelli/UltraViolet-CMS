@@ -69,7 +69,7 @@ $(document).ready( function () {
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
         $(this).addClass('active');
-        getProductionsByType(this.id)
+        getProductionsByType(this.id);
     });
 
     function getProductionsByType(productionType) {
@@ -80,7 +80,7 @@ $(document).ready( function () {
             dataType: 'json',
             success: function(response) {
                 table.clear();
-                table.rows.add(response.productions).draw();
+                table.rows.add(response).draw();
             },
             error: function(){
                 console.log("Erreur dans la récupération des productions de type " + productionType);

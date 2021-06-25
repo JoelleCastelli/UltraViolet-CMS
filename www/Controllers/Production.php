@@ -54,7 +54,7 @@ class Production
                 ];
             }
 
-            echo json_encode(["productions" => $productionArray]);
+            echo json_encode($productionArray);
         }
     }
 
@@ -114,13 +114,6 @@ class Production
                                 $errors[] = "La production avec l'ID TMDB ".$production->getTmdbId()." existe déjà dans la base de données";
                             } else {
                                 $production->save();
-                                $production->savePoster();
-                                $production->saveCrew('actors');
-                                if($production->getType() == 'movie') {
-                                    $production->saveCrew('writers');
-                                    $production->saveCrew('directors');
-                                }
-
                                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
                                 Helpers::redirect(Helpers::callRoute('productions_list'));
                             }

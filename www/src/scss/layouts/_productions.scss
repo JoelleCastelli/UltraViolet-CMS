@@ -17,32 +17,41 @@
         width: 100%;
         line-height: 1.5;
         text-align: justify;
+        display: flex;
+        flex-direction: column;
         p {
             text-align: center;
         }
-        #poster {
-            width: 200px;
-            float: left;
-            margin-right: 10px;
+
+        #productionInfos {
+            min-height: 110px;
+            #poster {
+                width: 200px;
+                float: left;
+                margin-right: 10px;
+            }
         }
 
-        #actors {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            .actorCard {
-                border: solid $grey4 1px;
-                border-radius: 8px;
-                margin-bottom: 5px;
-                box-shadow: 2px 2px 5px $grey4;;
+        #cast {
+            #actors {
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                .actorCard {
+                    border: solid $grey4 1px;
+                    border-radius: 8px;
+                    margin-bottom: 5px;
+                    box-shadow: 2px 2px 5px $grey4;;
 
-                .actorName {
-                    text-align: center;
-                    padding-bottom: 5px;
-                }
-                .actorImg {
-                    border-radius: 8px 8px 0 0;
-                    width: 150px;
+                    .actorName {
+                        text-align: center;
+                        padding-bottom: 5px;
+                    }
+                    .actorImg {
+                        border-radius: 8px 8px 0 0;
+                        width: 150px;
+                    }
                 }
             }
         }

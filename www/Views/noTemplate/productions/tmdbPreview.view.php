@@ -4,10 +4,20 @@
             echo "<img id='poster' src='".PATH_TO_IMG."default_poster.jpg'/>";
         else
             echo "<img id='poster' src='".$production->getPoster()->getTmdbPosterPath()."'/>";
+
+        if($production->getType() == "episode") {
+            echo "<div><b>Série : </b>".$production->getGrandParentProduction()->getTitle()." (Titre original : ".$production->getGrandParentProduction()->getOriginalTitle().")</div>";
+            echo "<div><b>Saison : </b>".$production->getParentProduction()->getTitle()."</div>";
+            echo "<div><b>Titre de l'épisode : </b>".$production->getTitle()."</div>";
+        } else if($production->getType() == "season") {
+            echo "<div><b>Série : </b>".$production->getParentProduction()->getTitle()." (Titre original : ".$production->getParentProduction()->getOriginalTitle().")</div>";
+            echo "<div><b>Saison : </b>".$production->getTitle()."</div>";
+        } else {
+            echo "<div><b>Titre : </b>".$production->getTitle()."</div>";
+            echo "<div><b>Titre original :</b> ".$production->getOriginalTitle()."</div>";
+        }
     ?>
-    
-    <div><b>Titre :</b> <?= $production->getTitle() ?></div>
-    <div><b>Titre original :</b> <?= $production->getOriginalTitle() != '' ? $production->getOriginalTitle() : '?' ?></div>
+
     <div><b>Résumé :</b> <?= $production->getOverview() != '' ? $production->getOverview() : '?' ?></div>
     <div><b>Date de sortie :</b> <?= $production->getCleanReleaseDate() ?? '?' ?></div>
     <?php $label = $production->getType() == "movie" ? "Durée" : "Durée d'un épisode"; ?>
@@ -23,9 +33,7 @@
                 }
             echo "</div>";
         }
-    ?>
 
-    <?php
         $writers = $production->getWriters();
         if(!empty($writers)) {
             echo "<div>";
@@ -35,23 +43,23 @@
                 }
             echo "</div>";
         }
-    ?>
 
-    <?php
         $creators = $production->getCreators();
         if(!empty($creators)) {
             echo "<div>";
-            echo "<b>Réalisation : </b>";
-            for ($n = count($creators), $i = 0; $i < $n; $i++) {
-                echo $creators[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
-            }
+                echo "<b>Réalisation : </b>";
+                for ($n = count($creators), $i = 0; $i < $n; $i++) {
+                    echo $creators[$i]->getFullName(). ($i < $n-1 ? ', ' : '');
+                }
             echo "</div>";
         }
     ?>
+</div>
 
-    <?php
-        $actors = $production->getActors();
-        if(!empty($actors)) {
+<?php
+    $actors = $production->getActors();
+    if(!empty($actors)) {
+        echo "<div id='cast'>";
             echo '<b>Acteurs principaux :</b>';
             echo '<div id="actors">';
                 for ($n = count($actors), $i = 0; $i < $n; $i++) {
@@ -68,7 +76,7 @@
                     echo "</div>";
                 }
             echo "</div>";
-        }
-    ?>
+        echo "</div>";
+    }
+?>
 
-</div>
