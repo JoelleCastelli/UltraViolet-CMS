@@ -43,7 +43,10 @@ if(isset($errors)) {
                 echo "<div id='productionsList'>";
                     foreach ($productions as $production) {
                         echo "<div class='productionCard'>";
-                            echo "<div class='productionImg' style=\"background-image: url('".$production->getPoster()->getPath()."')\"></div>";
+                            if (file_exists(getcwd().$production->getPoster()->getPath()))
+                                echo "<div class='productionImg' style=\"background-image: url('".$production->getPoster()->getPath()."')\"></div>";
+                            else
+                                echo "<div class='productionImg' style=\"background-image: url('".PATH_TO_IMG."default_poster.jpg')\"></div>";
                             echo "<div class='productionName'>";
                                 if($production->getParentProduction()) {
                                     if($production->getParentProduction()->getParentProduction()) {

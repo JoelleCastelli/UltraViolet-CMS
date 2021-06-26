@@ -10,8 +10,8 @@ class Media extends Database
     use ModelsTrait;
 
     private ?int $id = null;
-    protected ?string $title;
-    protected string $path;
+    protected string $title;
+    protected ?string $path = null;
     private ?string $tmdbPosterPath = null;
     protected bool $video = false;
     private string $createdAt;
@@ -38,12 +38,12 @@ class Media extends Database
         $this->title = $title;
     }
 
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
-    public function setPath($path): void
+    public function setPath(?string $path): void
     {
         $this->path = $path;
     }
