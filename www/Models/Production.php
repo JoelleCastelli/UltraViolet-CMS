@@ -477,7 +477,7 @@ class Production extends Database
                 "class" => "form_control card",
                 "id" => "formAddProduction",
                 "submit" => "Valider",
-                "referer" => '/admin/productions/creation'
+                "referer" => Helpers::callRoute('productions_creation')
             ],
             "fields" => [
                 "type" => [
@@ -553,7 +553,8 @@ class Production extends Database
         ];
     }
 
-    public function formBuilderAddProductionTmdb(){
+    public function formBuilderAddProductionTmdb(): array
+    {
         return [
             "config" => [
                 "method" => "POST",
