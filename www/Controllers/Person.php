@@ -136,7 +136,6 @@ class Person
                     $this->columnsTable['actions'] => $user->generateActionsMenu(),
                 ];
             }
-           
             echo json_encode(["users" => $usersArray]);
         }
     }
@@ -165,6 +164,20 @@ class Person
 		//Affichage du résultat
 
 	}
+
+    public function updatePersonAction($id) {
+        $view = new View("utilisateurs/update");
+        $view->assign('title', 'Modification d\'un utilisateur');
+        $view->assign('param2', $id);
+    }
+
+    public function deletePersonAction() {
+        if(!empty($_POST['personId'])) {
+            $persons = new PersonModel();
+            $persons->setId($_POST['personId']);
+            $persons->delete();
+        }
+    }
 
     
 

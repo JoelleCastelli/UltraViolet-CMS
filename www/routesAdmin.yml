@@ -150,6 +150,22 @@ users_data:
   controller: Person
   action:     getUsers
 
+users_update:
+  path:       /admin/utilisateurs/modification/{id}
+  controller: Person
+  action:     updatePerson
+  middleware: Editor
+  requirements:
+    id:       (\d+)
+
+users_delete:
+  path:       /admin/utilisateurs/supprimer
+  controller: Person
+  action:     deletePerson
+  middleware: Editor
+  requirements:
+    id:       (\d+)
+
 user_show:
   path:       /admin/utilisateur
   controller: Person

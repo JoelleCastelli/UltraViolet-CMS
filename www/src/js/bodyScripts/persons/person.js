@@ -16,13 +16,13 @@ $(document).ready(function () {
 
         // Column Actions 
         columnDefs: [
-            {
-                targets: 4,
-                data: "Actions",
-                searchable: false,
-                orderable: false
-            }
-        ],
+        {
+            targets: 4,
+            data: "Actions",
+            searchable: false,
+            orderable: false
+        }],
+        
 
         language: {
             "sEmptyTable": "Aucune donnée disponible dans le tableau",
@@ -56,7 +56,7 @@ $(document).ready(function () {
     });
 
           
-    // On page load, display movies
+    // On page load, display user
     getUsersByRole('user');
 
     // Display different types on filtering button click
@@ -68,13 +68,10 @@ $(document).ready(function () {
             table.columns( [0] ).visible( false );
         }
         getUsersByRole(this.id);
-        
-
     });
 
     function getUsersByRole(role) {
         $.ajax({
-
             type: 'POST',
             url: '/admin/utilisateurs/utilisateurs-data',
             data: { role },
@@ -88,5 +85,4 @@ $(document).ready(function () {
             }
         });
     }
-
 });
