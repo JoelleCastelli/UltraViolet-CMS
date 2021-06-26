@@ -29,7 +29,6 @@ class Page
     {
         $page = new PageModel();
         $formCreatePage = $page->formBuilderRegister();
-        $formUpdatePage = $page->formBuilderUpdate();
         $pages = $page->findAll();
 
         if (!$pages) $pages = [];
@@ -43,7 +42,6 @@ class Page
         $view->assign('title', 'Pages');
         $view->assign('pages', $pages);
         $view->assign('formCreatePage', $formCreatePage);
-        $view->assign('formUpdatePage', $formUpdatePage);
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
@@ -100,11 +98,10 @@ class Page
         $page = new PageModel();
         $form = $page->formBuilderRegister();
         $response = [];
-        $response['post'] = $_POST;
 
         if (!empty($_POST)) {
 
-            $_POST["state"] ?? $_POST["state"] = "";
+            $_POST["state"] ?? $_POST["state"] = ""; // to add the radio field if not exist (for xss validator)
 
             $errors = FormValidator::check($form, $_POST);
 
@@ -121,8 +118,8 @@ class Page
                     $page->setSlug($slug);
                     $page->setTitle($_POST["title"]);
                     $page->setPosition($_POST["position"]);
-                    $page->setTitleSeo($_POST["titleSEO"]);
-                    $page->setDescriptionSeo($_POST["descriptionSEO"]);
+                    $page->setTitleSeo($_POST["titleSeo"]);
+                    $page->setDescriptionSeo($_POST["descriptionSeo"]);
                     $page->setCreatedAt(Helpers::getCurrentTimestamp());
                     $save = $page->save();
 
@@ -136,7 +133,7 @@ class Page
                     }
 
                 } else {
-                    $response['message'] = 'Le slug est déjà existant, veuillez le modifier svp ';
+                    $response['message'] = 'Le slug est déjà existant, veuillez en choisir un autre svp ';
                     $response['success'] = false;
                 }
             } else {
@@ -146,7 +143,69 @@ class Page
         }
 
         echo json_encode($response);
+    }
 
+    public function updatePageAction($id)
+    {
+        $page = new PageModel();
+        $view = new View('pages/updatePage');
+
+        // if page not exist
+        if (empty($page->findOneBy("id", $id))) {
+            Helpers::redirect(Helpers::callRoute("articles_list"), "404");
+        }
+
+        $form = $page->formBuilderUpdate($id);
+        $page->setId($id);
+
+        if (!empty($_POST)) {
+
+            $errors = FormValidator::check($form, $_POST);
+            $errors = [];
+
+            if (empty($errors)) {
+
+                $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
+                $publicationDate  = empty($_POST["publicationDate"]) ? null : $_POST["publicationDate"];
+                $isNotUniqueSlug = $page->select()->where('slug', $slug)->andWhere('id', $id, "!=")->get(); // check unicity of slug
+
+                if (count($isNotUniqueSlug) === 0) {
+                    $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
+
+                    $page->setSlug($slug);
+                    $page->setTitle($_POST["title"]);
+                    $page->setPosition($_POST["position"]);
+                    $page->setTitleSeo($_POST["titleSeo"]);
+                    $page->setDescriptionSeo($_POST["descriptionSeo"]);
+
+                    $save = $page->save();
+
+                    if ($save) {
+                        $response['message'] = 'Votre page a bien été modifiée !';
+                        $response['success'] = true;
+                    } else {
+                        $response['message'] = 'Oops, un problème serveur est survenu, veuillez recommencer s\'il vous plaît';
+                        $response['success'] = false;
+                    }
+
+                } else {
+                    $response['message'] = 'Erreur : Ce slug est déjà existant';
+                    $response['success'] = false;
+                }
+
+                $view->assign('response', $response);
+            }
+        }
+
+        //get page
+        if($page->getPublicationDate() != null)
+            $page->cleanPublicationDate();
+        $arrayPage = $page->jsonSerialize();
+
+        // return view
+        $view->assign('form', $form);
+        $view->assign('data', $arrayPage);
+        $view->assign('title', 'Modifier la page n° ' . $page->getId());
     }
 
     public function updateVisibilityAction()
@@ -169,74 +228,6 @@ class Page
                 }
             }
         }
-    }
-
-    public function updatePageAction($id)
-    {
-        $view = new View('pages/createPage');
-
-        $page = new PageModel();
-        $form = $page->formBuilderUpdate();
-        $page->setId($id);
-
-        if (!empty($_POST)) {
-
-            //$errors = FormValidator::check($form, $_POST);
-            $errors = [];
-
-            if (empty($errors)) {
-
-                if (empty($_POST['slug'])) {
-                    $slug = Helpers::slugify($_POST['title']);
-                } else {
-                    $slug = htmlspecialchars($_POST['slug']);
-                }
-
-                $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
-                if (count($isNotUniqueSlug) < 2) {
-
-                    $page->setSlug($slug);
-
-                    $this->stateValidator($page, $_POST['publicationDate'], $_POST['state']??null);
-
-                    if (!empty($page->getState())) {
-
-                        $page->setTitle($_POST["title"]);
-                        $page->setPosition(($_POST["position"]));
-                        $page->setTitleSeo(empty($_POST["titleSEO"]) ? "mon tire seo deuxième" : $_POST["titleSEO"]);
-                        $page->setDescriptionSeo(empty($_POST["descriptionSEO"]) ? "ma description seo" : $_POST["descriptionSEO"]);
-                        $page->setCreatedAt(Helpers::getCurrentTimestamp());
-                        $save = $page->save();
-
-                        if ($save) {
-                            $response['message'] = 'Votre page a bien été sauvegardée !';
-                            $response['success'] = true;
-                        } else {
-                            $response['message'] = 'Oops, un problème serveur est survenu';
-                            $response['success'] = false;
-                        }
-                    } else {
-                        $response['message'] = 'Erreur : Le statut choisi est incorrect';
-                        $response['success'] = false;
-                    }
-                } else {
-                    $response['message'] = 'Erreur : Ce slug est déjà existant';
-                    $response['success'] = false;
-                }
-
-                $view->assign('response', $response);
-
-            }
-        }
-
-        //get page
-        $arrayPage = $page->jsonSerialize();
-        $arrayPage['publicationDate'] = date("Y-m-d\TH:i:s", strtotime($arrayPage['publicationDate'])); // format date
-
-        // return view
-        $view->assign('form', $form);
-        $view->assign('data', $arrayPage);
-        $view->assign('title', 'Modifier une page');
     }
 
     public function updatePageStateAction($state, $id){
