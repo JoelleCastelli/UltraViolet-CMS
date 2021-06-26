@@ -1,13 +1,16 @@
 <div>
 
-    <h2>Test : Modifier un article par id</h2>
+    <section class="grid-form-add-page">
 
-    <div>
-        <h3>Valeur de l'id :</h3>
-        <?php
-            if (isset($articleId)) echo $articleId;
-            else echo "Article id non définie ou vide";
-        ?>
-    </div>
+        <section class="card">
+
+            <article>
+                <article class="container-form">
+                    <?php App\Core\FormBuilder::render($form, $data); ?>
+                </article><br>
+            </article>
+        </section>
+
+    </section>
 
 </div>
