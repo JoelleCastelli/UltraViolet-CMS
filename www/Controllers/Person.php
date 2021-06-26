@@ -167,7 +167,7 @@ class Person
 
     public function updatePersonAction($id) {
         if(!empty($id)){
-            
+            echo 'salut';
         }
 
     }

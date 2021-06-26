@@ -85,4 +85,31 @@ $(document).ready(function () {
             }
         });
     }
+
+    function deleteUserById(){
+        $.ajax({
+            type: 'POST',
+            url: '/admin/utilisateurs/supprimer',
+            data: { id },
+            dataType: 'json',
+            success: function(response) {
+                table.clear();
+                table.rows.delete(response.user).draw();
+            },
+            error: function(){
+                console.log("Erreur dans la récupération des utilisateurs de role " + role);
+            }
+        });
+    }
+
+    // var myTable = $('#myTable').DataTable();
+    // var rows = myTable.rows( '.selected' );
+    //
+    // rows.delete( {
+    //     buttons: [
+    //         { label: 'Cancel', fn: function () { this.close(); } },
+    //         'Delete'
+    //     ]
+    // } );
+
 });
