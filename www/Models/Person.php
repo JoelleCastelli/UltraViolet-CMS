@@ -31,7 +31,7 @@ class Person extends Database implements JsonSerializable
 
     // VIP-related
     protected ?int $tmdbId = null;
-    private ?string $character;
+    private ?string $character = null;
 
     // Foreign properties
     protected int $mediaId;
