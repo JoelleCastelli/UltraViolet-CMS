@@ -30,7 +30,7 @@ class Person extends Database implements JsonSerializable
     protected bool $optin = true;
 
     // VIP-related
-    private ?int $tmdbId = null;
+    protected ?int $tmdbId = null;
     private ?string $character;
 
     // Foreign properties
