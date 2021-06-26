@@ -188,20 +188,17 @@ class Production extends Database
         }
     }
 
-    public function translateType() {
+    public function getTranslatedType(): string
+    {
         switch ($this->getType()) {
             case 'movie':
-                $this->setType('Film');
-                break;
+                return 'Film';
             case 'season':
-                $this->setType('Saison');
-                break;
+                return 'Saison';
             case 'series':
-                $this->setType('Série');
-                break;
+                return 'Série';
             case 'episode':
-                $this->setType('Episode');
-                break;
+                return 'Episode';
         }
     }
 
