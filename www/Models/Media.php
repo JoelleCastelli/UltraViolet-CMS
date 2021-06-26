@@ -10,7 +10,7 @@ class Media extends Database
     use ModelsTrait;
 
     private ?int $id = null;
-    protected string $title;
+    protected ?string $title;
     protected string $path;
     private ?string $tmdbPosterPath = null;
     protected bool $video = false;
