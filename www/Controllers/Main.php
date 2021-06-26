@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Core\Helpers;
 use App\Core\View;
+use App\Models\Article;
+use App\Models\Comment;
+use App\Models\Production;
 
 class Main
 {
@@ -12,8 +15,33 @@ class Main
 		$view = new View("dashboard");
 		$view->assign('title', 'Back office');
         $view->assignFlash();
-		$view->assign('headScript', Helpers::urlJS('headScripts/home'));
-		$view->assign('bodyScript',  Helpers::urlJS('bodyScripts/home'));
+
+        $articles = new Article();
+        $articles = $articles->select()->where('deletedAt', null)->andWhere('publicationDate', date('Y-m-d H:i:s'), '<=')
+            ->orderBy('publicationDate', 'DESC')->limit(3)->get();
+        $view->assign('articles', $articles);
+
+        $comments = new Comment();
+        $comments = [];
+        $view->assign('comments', $comments);
+
+        $productions = new Production();
+        $productions = $productions->select()->orderBy('createdAt', 'DESC')->limit(4)->get();
+        foreach ($productions as $production) {
+            if($production->getParentProductionId() != null) {
+                $parentProduction = new Production();
+                $parentProduction = $parentProduction->findOneBy('id', $production->getParentProductionId());
+                $production->setParentProduction($parentProduction);
+                if($parentProduction->getParentProductionId() != null) {
+                    $grandParentProduction = new Production();
+                    $grandParentProduction = $grandParentProduction->findOneBy('id', $parentProduction->getParentProductionId());
+                    $parentProduction->setParentProduction($grandParentProduction);
+                }
+            }
+            $production->setPoster(null);
+        }
+        $view->assign('productions', $productions);
+
 	}
 
 	public function getRouteAction()

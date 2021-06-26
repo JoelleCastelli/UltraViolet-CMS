@@ -273,12 +273,15 @@ class Production extends Database
         return $this->poster;
     }
 
-    public function setPoster($tmdbId, $productionType): void
+    public function setPoster(?string $tmdbPoster): void
     {
         $media = new Media();
-        $imgPath = PATH_TO_IMG_POSTERS ."/$productionType/poster_$tmdbId.png";
+        if($tmdbPoster != '')
+            $media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbPoster);
+        $imgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getTmdbId().".png";
         $media->setPath($imgPath);
-        $media->setTitle("poster_$tmdbId");
+        $media->setTitle("poster_".$this->getTmdbId());
+        $this->poster = $media;
     }
 
     public function savePoster() {
@@ -289,7 +292,7 @@ class Production extends Database
 
     public function saveMedia() {
         // Save poster file
-        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle()).".png";
+        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getTmdbId().".png";
         if(!empty($this->poster->getTmdbPosterPath()) && $this->poster->getTmdbPosterPath() != TMDB_IMG_PATH)
             file_put_contents(getcwd().$productionImgPath, file_get_contents($this->poster->getTmdbPosterPath()));
 
@@ -630,15 +633,14 @@ class Production extends Database
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
         $this->setActors($item->credits->cast);
-        if($item->poster_path != '')
-            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
+        $this->setPoster($item->poster_path);
+
         //$production0['genres'] = $item->genres; TODO
 
         switch ($post['productionType']) {
             case 'movie':
                 $this->setDirectors($item->credits->crew);
                 $this->setWriters($item->credits->crew);
-                $this->setPoster($item->id, 'movie');
                 break;
             case 'series':
                 $this->setCreators($item->created_by);
@@ -646,7 +648,6 @@ class Production extends Database
                 $nbEpisodes = 0;
                 foreach ($item->seasons as $season) { $nbEpisodes += $season->episode_count; }
                 $this->setTotalEpisodes($nbEpisodes);
-                $this->setPoster($item->id, 'series');
 
                 // Season
                 if(!empty($_POST['seasonNb'])) {
@@ -660,9 +661,7 @@ class Production extends Database
                         $this->setTotalEpisodes($item->seasons[$post['seasonNb']]->episode_count);
                         $this->setNumber($post['seasonNb']);
                         $this->setOverview($item->seasons[$post['seasonNb']]->overview);
-                        $this->setPoster($item->id, 'season');
-                        if($item->seasons[$post['seasonNb']]->poster_path != '')
-                            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
+                        $this->setPoster($item->seasons[$post['seasonNb']]->poster_path);
 
                         // Episode
                         if(!empty($episode)) {
@@ -676,9 +675,7 @@ class Production extends Database
                             $this->setTotalEpisodes(null);
                             $this->setTotalSeasons(null);
                             $this->setReleaseDate($episode->air_date);
-                            $this->setPoster($item->id, 'episode');
-                            if($item->seasons[$post['seasonNb']]->poster_path != '')
-                                $this->poster->setTmdbPosterPath(TMDB_IMG_PATH . $episode->still_path);
+                            $this->setPoster($episode->still_path);
                         }
                     } else {
                         echo '<p class="error-message-form">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</p>";

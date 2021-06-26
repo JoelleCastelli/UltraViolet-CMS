@@ -1,0 +1,71 @@
+#dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    #productions {
+
+        #productionsList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+            .productionCard {
+                border: solid $grey4 1px;
+                border-radius: 8px;
+                margin-bottom: 5px;
+                box-shadow: 2px 2px 5px $grey4;
+                display: flex;
+                flex-direction: column;
+                width: 130px;
+                align-items: center;
+                justify-content: center;
+
+                .productionName {
+                    text-align: center;
+                    padding-bottom: 5px;
+                    overflow-wrap: anywhere;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 35px;
+                }
+                .productionImg {
+                    border-radius: 8px 8px 0 0;
+                    width: 130px;
+                    min-height: 195px;
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center center;
+
+                    img {
+                        width: 100%;
+                        border-radius: 8px 8px 0 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .card {
+        flex-grow: 1;
+        min-width: 400px;
+        width: 40%;
+        min-height: 400px;
+        margin: 5px;
+
+        .cardTitle {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        a {
+            float: right;
+            margin-top: 20px;
+        }
+    }
+}

@@ -1,1 +1,0 @@
-console.log("coucou depuis le script body");
