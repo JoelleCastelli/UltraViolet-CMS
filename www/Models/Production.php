@@ -10,7 +10,7 @@ use App\Core\View;
 class Production extends Database
 {
     private ?int $id = null;
-    protected ?int $tmdbId;
+    protected ?int $tmdbId = null;
     protected string $title;
     protected ?string $originalTitle;
     protected ?string $releaseDate;
@@ -278,7 +278,7 @@ class Production extends Database
         $media = new Media();
         if($tmdbPoster != '')
             $media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbPoster);
-        $imgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getTmdbId().".png";
+        $imgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getId().".png";
         $media->setPath($imgPath);
         $media->setTitle("poster_".$this->getTmdbId());
         $this->poster = $media;
@@ -292,7 +292,7 @@ class Production extends Database
 
     public function saveMedia() {
         // Save poster file
-        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getTmdbId().".png";
+        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getLastInsertId().".png";
         if(!empty($this->poster->getTmdbPosterPath()) && $this->poster->getTmdbPosterPath() != TMDB_IMG_PATH)
             file_put_contents(getcwd().$productionImgPath, file_get_contents($this->poster->getTmdbPosterPath()));
 
