@@ -21,6 +21,7 @@ class FormBuilder
 
             $required = isset($field["required"]) && $field["required"] == true ? "required" : '';
             $disabled = isset($field["disabled"]) && $field["disabled"] == true ? "disabled" : '';
+            $readonly = isset($field["readonly"]) && $field["readonly"] == true ? "readonly" : '';
             $multiple = isset($field["multiple"]) && $field["multiple"] == true ? "multiple" : '';
 
             $html .= "<label class='".($field["classLabel"] ?? "")."' for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
@@ -83,7 +84,7 @@ class FormBuilder
                                    placeholder='".($field["placeholder"] ?? "")."'
                                    class='".($field["class"] ?? "")."'
                                    id='".($field["id"] ?? $fieldName)."'
-                                   $required $disabled>$value</textarea>";
+                                   $required $disabled $readonly>$value</textarea>";
 
             // OTHER INPUTS
             } else {
@@ -99,13 +100,14 @@ class FormBuilder
                 $html .="<input
                     type='".($field["type"] ?? "text")."'
                     name='".$fieldName."'
-                    value='".$value."'
-                    placeholder='".($field["placeholder"] ?? "")."'
+                    value=\"".$value."\"
+                    placeholder=\"".($field["placeholder"] ?? "")."\"
                     class='".($field["class"] ?? "")."'
                     min='".($field["min"] ?? "")."'
                     max='".($field["max"] ?? "")."'
                     id='".($field["id"] ?? $fieldName)."'
-                    $required $disabled $multiple
+                    accept='".($field["accept"] ?? "")."'
+                    $required $disabled $readonly $multiple
                 >";
             }
 		}
