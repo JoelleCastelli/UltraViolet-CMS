@@ -19,6 +19,11 @@ if(isset($errors)) {
     </div>
 </div>
 
+<div class="card uploadBanner">
+    <?php App\Core\FormBuilder::render($form); ?>
+    <div id="filesList"></div>
+</div>
+
 <table id="datatable" class="display">
     <thead>
     <tr>
@@ -33,13 +38,6 @@ if(isset($errors)) {
     </thead>
     <tbody></tbody>
 </table>
-
-
-<section class="card">
-    <article class="upload-medias-container">
-        <?php App\Core\FormBuilder::render($form, true); ?>
-    </article>
-</section>
 
 
 

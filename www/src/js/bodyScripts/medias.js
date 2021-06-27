@@ -66,6 +66,22 @@ $(document).ready( function () {
         });
     }
 
+    //hide form input
+    $(":submit").css("display", "none");
+    $("#filesList").css("display", "none");
+
+    // File list under input
+    const files = document.querySelector('#mediaSelector');
+    files.addEventListener('change', (e) => {
+        $(":submit").css("display", "inline");
+        $("#filesList").css("display", "block");
+        Array.from(e.target.files).forEach(file => {
+            let node = document.createElement("div");
+            let fileInfo = document.createTextNode(file.name + ' - ' + (file.size / 1000).toFixed(2) + 'KB');
+            node.appendChild(fileInfo);
+            document.getElementById("filesList").appendChild(node);
+        });
+    });
 
     /*table.on('click', '.delete', function () {
         if (confirm('Êtes-vous sûr.e de vouloir supprimer cette production ?')) {

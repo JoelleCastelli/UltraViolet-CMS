@@ -16,8 +16,12 @@
     border-radius: 5px;
     background-color: $button-bg;
     color: $button-font-color;
-    font-family: $poppins;
-    font-weight: semibold;
+    font-family: $mulish;
+    font-style: normal;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 20px;
+    align-items: center;
     border-style: none;
     box-shadow: 1px 6px 20px -4px $button-shadow-color;
     transition: all 0.3s ease-out;

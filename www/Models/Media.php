@@ -116,11 +116,12 @@ class Media extends Database
             ],
             "fields" => [
                 "media[]" => [
+                    "id" => "mediaSelector",
                     "type" => "file",
                     "classLabel" => "btn",
                     "class" => "hiddenInputFile",
                     "accept" => ".jpg, .jpeg, .png",
-                    "label" => "Cliquez pour ajouter un document",
+                    "label" => "Ajouter un fichier",
                     "required" => true,
                     "multiple" => true,
                 ],
