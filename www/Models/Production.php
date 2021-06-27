@@ -218,7 +218,8 @@ class Production extends Database
         }
     }
 
-    public function getCleanRuntime() {
+    public function getCleanRuntime(): string
+    {
         if($this->getRuntime() != '') {
             return $this->getRuntime()." minutes";
         } else {
@@ -378,6 +379,8 @@ class Production extends Database
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
                 $person->setTmdbId($crew->id);
+                if($crew->profile_path != '')
+                    $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$crew->profile_path);
                 $directors[] = $person;
             }
         }
@@ -398,6 +401,8 @@ class Production extends Database
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
                 $person->setTmdbId($crew->id);
+                if($crew->profile_path != '')
+                    $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$crew->profile_path);
                 $writers[] = $person;
             }
         }
@@ -417,6 +422,8 @@ class Production extends Database
             $person->setRole('vip');
             $person->setFullName($creator->name);
             $person->setTmdbId($creator->id);
+            if($creator->profile_path != '')
+                $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$creator->profile_path);
             $creators[] = $person;
         }
         $this->creators = $creators;
