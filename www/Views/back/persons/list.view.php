@@ -19,7 +19,9 @@ if (isset($columnsTable)) {
                         echo "<th>$value</th>";
                     }
                 }
-                Helpers::dd(Helpers::callRoute('users_update', ['id' => 1] ));
+
+
+
             ?>
         </tr>
     </thead>

@@ -24,7 +24,6 @@ class Person
     }
 
     public function showAllAction() {
-        Helpers::dd('coucou');
         $persons = new PersonModel();
         $persons = $persons->selectWhere('role', 'admin');
         if(!$persons) $persons = [];
