@@ -39,6 +39,7 @@ class Media
                 $errors = $mediaManager->check($_FILES['media'], 'other');
                 if(empty($errors)) {
                     $mediaManager->uploadFile($mediaManager->getFiles());
+                    $mediaManager->saveFile($mediaManager->getFiles());
                     Helpers::redirect(Helpers::callRoute('media_list'));
                 }
             }
@@ -71,20 +72,6 @@ class Media
                 ];
             }
             echo json_encode($mediasArray);
-        }
-    }
-
-    public function uploadAction()
-    {
-        if (!empty($_FILES)) {
-            $mediaManager = new MediaManager();
-            $result = $mediaManager->check($_FILES['media'], 'other');
-            if(!$result['errors']) {
-                Helpers::dd("aucune erreur");
-            } else {
-                Helpers::dd($result['errors']);
-            }
-            Helpers::redirect(Helpers::callRoute('media_list'));
         }
     }
 }

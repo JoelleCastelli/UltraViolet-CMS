@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Models\Media;
+
 class MediaManager
 {
     protected array $files = [];
@@ -36,7 +38,7 @@ class MediaManager
             //init
             $fileSize = $file['size'];
             $fileName = basename($file["name"]);
-            $filePath = getcwd().PATH_TO_IMG.$type."/".$fileName;
+            $filePath = PATH_TO_IMG.$type."/".$fileName;
             $fileTempPath = $file['tmp_name'];
             $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
 
@@ -116,6 +118,22 @@ class MediaManager
             }
         }
         return true;
+    }
+
+    public function saveFile($mediaManagerFiles) {
+        foreach ($mediaManagerFiles as $file) {
+            $existingMedia = new Media();
+            $existingMedia = $existingMedia->findOneBy('path', $file['path']);
+            if($existingMedia) {
+                $existingMedia->setTitle($file['title']);
+                $existingMedia->save();
+            } else {
+                $media = new Media();
+                $media->setPath($file['path']);
+                $media->setTitle($file['title']);
+                $media->save();
+            }
+        }
     }
 
     public function generateFilesArray(&$file_post): array
