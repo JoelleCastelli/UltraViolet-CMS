@@ -1,54 +1,33 @@
-<div class="grid-list-medias">
-
-    <section class="card">
-        <div class="grid-filter-list-medias">
-
-            <!-- FILTER -->
-            <article class="grid-filter-container-list-medias">
-                <span class="label-card-1">Filtre: </span>
-
-            </article>
-
-            <!-- SEARCH BAR -->
-            <article class="grid-search-bar-container-list-medias">
-                <label class="radio-line">
-                    <label class="radio-btn-outline">
-                        <input class="media-type" value="0" type="checkbox" name="publication-radio" checked>
-                        <span class="radio-btn-checkmark">
-							<span class=radio-btn-checkmark-inside></span>
-						</span>
-                    </label>
-                    <span class="radio-label">Image</span>
-                </label>
-
-                <label class="radio-line">
-                    <label class="radio-btn-outline">
-                        <input class="media-type" value="1" type="checkbox" name="publication-radio" checked>
-                        <span class="radio-btn-checkmark">
-							<span class=radio-btn-checkmark-inside></span>
-						</span>
-                    </label>
-                    <span class="radio-label">Vidéo</span>
-                </label>
-
-            </article>
-
-        </div>
-    </section>
-
-    <section class="card">
-
-        <!-- Upload form-->
-        <article class="upload-medias-container">
-            <?php App\Core\FormBuilder::render($form, true); ?>
-
-        </article>
-    </section>
-
-    <section class="card">
-        LIST
-    </section>
+<div id="tableActions">
+    <div class="filtering-status">
+        <div class="filtering-btn active" id="poster">Poster</div>
+        <div class="filtering-btn" id="vip">Portraits</div>
+        <div class="filtering-btn" id="video">Vidéos</div>
+        <div class="filtering-btn" id="other">Autres</div>
+    </div>
 </div>
+
+<table id="datatable" class="display">
+    <thead>
+    <tr>
+        <?php
+            if (isset($columnsTable)) {
+                foreach ($columnsTable as $key => $value) {
+                    echo "<th>$value</th>";
+                }
+            }
+        ?>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<section class="card">
+    <article class="upload-medias-container">
+        <?php App\Core\FormBuilder::render($form, true); ?>
+    </article>
+</section>
 
 
 

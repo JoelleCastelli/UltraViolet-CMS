@@ -1,0 +1,22 @@
+#datatable {
+    .thumbnail {
+        width: 90px;
+    }
+
+
+    .hiddenInputFile {
+        background-color: #1CB1E0;
+        // to keep it in the browsers
+        width: 0.1px;
+        height: 0.1px;
+
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+
+        & + .btn {
+            cursor: pointer; /* "hand" cursor */
+        }
+    }
+}

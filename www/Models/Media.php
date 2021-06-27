@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
 
 class Media extends Database
@@ -17,10 +18,15 @@ class Media extends Database
     private string $createdAt;
     private ?string $updatedAt;
     protected ?string $deletedAt = null;
+    private ?array $actions;
 
     public function __construct()
     {
         parent::__construct();
+        $this->actions = [
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('')],
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute(''), 'role' => 'admin'],
+        ];
     }
 
     public function getId(): ?int
@@ -68,6 +74,16 @@ class Media extends Database
         $this->video = $video;
     }
 
+    public function getActions(): ?array
+    {
+        return $this->actions;
+    }
+
+    public function setActions(?array $actions): void
+    {
+        $this->actions = $actions;
+    }
+
     public function getCreatedAt(): string
     {
         return $this->createdAt;
@@ -107,12 +123,6 @@ class Media extends Database
                     "required" => true,
                     "multiple" => true,
                 ],
-
-              /*  "test" => [
-                    "type" => "hidden",
-                    "value" => "here",
-                    "required" => true,
-                ],*/
             ]
         ];
     }
