@@ -297,8 +297,9 @@ class Person extends Database implements JsonSerializable
     public function saveMedia() {
         $actorImgPath = PATH_TO_IMG_VIP.$this->getTmdbId().".png";
         // Save vip's image file
-        if(!empty($this->media->getTmdbPosterPath()) && $this->media->getTmdbPosterPath() != TMDB_IMG_PATH)
+        if(!empty($this->media->getTmdbPosterPath()) && $this->media->getTmdbPosterPath() != TMDB_IMG_PATH){
             file_put_contents(getcwd().$actorImgPath, file_get_contents($this->media->getTmdbPosterPath()));
+        }
 
         // Save or update vip's image in database
         $existingMedia = new Media();

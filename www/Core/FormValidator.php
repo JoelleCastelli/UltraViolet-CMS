@@ -10,6 +10,15 @@ class FormValidator
         self::validateCSRFToken($config['config']['referer'], $data['csrfToken']);
         $errors = [];
 
+        // Remove field from config if it's a file upload
+        foreach ($config["fields"] as $name => $configList) {
+            foreach ($configList as $key => $value) {
+                if($key === 'type' && $value == 'file') {
+                    unset($config["fields"][$name]);
+                }
+            }
+        }
+
         if(count($data) != count($config["fields"])) {
             $errors[] = "Tentative de HACK - Faille XSS";
         } else {

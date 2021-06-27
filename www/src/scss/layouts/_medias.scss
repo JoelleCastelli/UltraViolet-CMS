@@ -1,0 +1,34 @@
+.uploadBanner {
+
+    margin-bottom: 10px;
+
+    form {
+        display: flex;
+        justify-content: space-between;
+
+        .hiddenInputFile {
+            background-color: #1CB1E0;
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+
+            & + .btn {
+                cursor: pointer;
+            }
+        }
+    }
+
+    #filesList {
+        padding-top: 10px;
+        line-height: 1.5;
+    }
+}
+
+#datatable {
+    .thumbnail {
+        width: 90px;
+    }
+}

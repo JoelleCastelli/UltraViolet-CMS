@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\FormBuilder;
+use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
 
 class Media extends Database
@@ -17,10 +19,15 @@ class Media extends Database
     private string $createdAt;
     private ?string $updatedAt;
     protected ?string $deletedAt = null;
+    private ?array $actions;
 
     public function __construct()
     {
         parent::__construct();
+        $this->actions = [
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('')],
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute(''), 'role' => 'admin'],
+        ];
     }
 
     public function getId(): ?int
@@ -68,6 +75,16 @@ class Media extends Database
         $this->video = $video;
     }
 
+    public function getActions(): ?array
+    {
+        return $this->actions;
+    }
+
+    public function setActions(?array $actions): void
+    {
+        $this->actions = $actions;
+    }
+
     public function getCreatedAt(): string
     {
         return $this->createdAt;
@@ -93,26 +110,25 @@ class Media extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "medias/chargement",
-                "referer" => 'admin/medias',
+                "action" => '',
+                "referer" => Helpers::callRoute('media_list'),
                 "enctype" => "multipart/form-data"
             ],
             "fields" => [
-
                 "media[]" => [
+                    "id" => "mediaSelector",
                     "type" => "file",
                     "classLabel" => "btn",
                     "class" => "hiddenInputFile",
-                    "label" => "Cliquez pour ajouter un document",
+                    "accept" => ".jpg, .jpeg, .png",
+                    "label" => "Ajouter un fichier",
                     "required" => true,
                     "multiple" => true,
                 ],
-
-              /*  "test" => [
-                    "type" => "hidden",
-                    "value" => "here",
-                    "required" => true,
-                ],*/
+                "csrfToken" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
             ]
         ];
     }
