@@ -101,8 +101,6 @@ class Page
 
         if (!empty($_POST)) {
 
-            $_POST["state"] ?? $_POST["state"] = ""; // to add the radio field if not exist (for xss validator)
-
             $errors = FormValidator::check($form, $_POST);
 
             if (empty($errors)) {
@@ -112,7 +110,7 @@ class Page
                 $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
 
                 if (empty($isNotUniqueSlug)) {
-                    
+                     
                     $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
 
                     $page->setSlug($slug);
@@ -122,7 +120,6 @@ class Page
                     $page->setDescriptionSeo($_POST["descriptionSeo"]);
                     $page->setCreatedAt(Helpers::getCurrentTimestamp());
                     $save = $page->save();
-
 
                     if ($save) {
                         $response['message'] = 'La nouvelle s\'est bien crée';
@@ -206,6 +203,7 @@ class Page
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
         $view->assign('title', 'Modifier la page n° ' . $page->getId());
+        // $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
 
     public function updateVisibilityAction()

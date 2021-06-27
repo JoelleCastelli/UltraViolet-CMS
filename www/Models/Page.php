@@ -358,20 +358,23 @@ class Page extends Database implements JsonSerializable
                 "state" => [
                     "type" => "radio",
                     "label" => "État *",
-                    "class" => "",
+                    "class" => "state",
                     "required" => true,
                     "error" => "Le champs état est vide",
                     "options" => [
                         [
                             "value" => "draft",
+                            "class" => "stateDraft",
                             "text" => "Brouillon"
                         ],
                         [
                             "value" => "published",
+                            "class" => "statePublished",
                             "text" => "Publier maintenant"
                         ],
                         [
                             "value" => "scheduled",
+                            "class" => "stateScheduled",
                             "text" => "Planifier"
                         ],
                     ],
@@ -379,7 +382,7 @@ class Page extends Database implements JsonSerializable
                 "publicationDate" => [
                     "type" => "datetime-local",
                     "label" => "Date de la planification",
-                    "class" => "search-bar",
+                    "class" => "search-bar publicationDateInput",
                     "error" => "Votre date de publication doit être au minimum " . $todayText ,
                     "min" => $today,
                 ],
@@ -459,18 +462,22 @@ class Page extends Database implements JsonSerializable
                     "options" => [
                         [
                             "value" => "draft",
+                            "class" => "stateDraft",
                             "text" => "Brouillon"
                         ],
                         [
                             "value" => "published",
+                            "class" => "statePublished",
                             "text" => "Publier maintenant"
                         ],
                         [
                             "value" => "scheduled",
+                            "class" => "stateScheduled",
                             "text" => "Planifier"
                         ],
                         [
                             "value" => "hidden",
+                            "class" => "statePublishedHidden",
                             "text" => "Publier mais cacher"
                         ]
                     ],
@@ -478,7 +485,7 @@ class Page extends Database implements JsonSerializable
                 "publicationDate" => [
                     "type" => "datetime-local",
                     "label" => "Date de la planification",
-                    "class" => "search-bar",
+                    "class" => "search-bar publicationDateInput",
                     "error" => "Votre date de publication doit être au minimum " . $todayText,
                 ],
                 "csrfToken" => [

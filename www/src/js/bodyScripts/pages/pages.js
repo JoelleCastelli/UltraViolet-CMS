@@ -117,6 +117,8 @@ $(document).ready(function() {
                 },
                 error: function(response, statut, erreur) {
                     $('#add-page-modal .container-message').html(errorMessageForm(errorServerJS));
+                    $('#add-page-modal .container-message').html(errorMessageForm(response));
+                    console.log(response);
                 }
             });
         }
@@ -181,9 +183,22 @@ $(document).ready(function() {
 
     // RESET MODAL CONTENT AT CLOSING
     $('.modal .btn-close-modal').click(function() {
-
         $('#add-page-modal .content-modal').show();
         $('#add-page-modal .footer-modal').empty();
-
     })
+
+    // DISABLE DATE INPUT WHEN SELECTED OTHER THAN SCHEDULED CHECKBOX AT FIRST REFRESH
+    if ($('.stateScheduled').not(':checked')){
+        $(".publicationDateInput").prop("readonly", true);
+    }
+
+    // DISABLE DATE INPUT WHEN SELECTED OTHER THAN SCHEDULED CHECKBOX
+    $('.stateDraft, .statePublished, .stateScheduled, .statePublishedHidden').click(function() {
+        
+        if ($(this).hasClass('stateScheduled'))
+            $(".publicationDateInput").prop("readonly", false);
+        else
+            $(".publicationDateInput").prop("readonly", true);
+    })
+
 });
