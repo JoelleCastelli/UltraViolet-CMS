@@ -25,7 +25,7 @@ class MediaManager
 
         // Max number of simultaneous files
         if(sizeof($this->files) > 10) {
-            $this->result['errors'] = "Vous ne pouvez pas sélectionner plus de 10 fichiers";
+            $this->result['errors'][] = "Vous ne pouvez pas sélectionner plus de 10 fichiers";
         }
 
         // verifications files
@@ -42,7 +42,7 @@ class MediaManager
 
             // validate files
             if(!$this->isCorrectFileType($fileExtension)) {
-                $this->result['errors'] = "Seules les images et les vidéos sont acceptées";
+                $this->result['errors'][] = "Seules les images et les vidéos sont acceptées";
                 return $this->result['errors'];
             }
 
@@ -91,32 +91,18 @@ class MediaManager
             return true;
     }
 
-    public function getFileType($fileExtension): bool
-    {
-        $imageExtensions = ['jpg', 'jpeg', 'png'];
-        $videoExtensions = ['mp4', 'mov', 'avi', 'flv', 'wmv'];
-
-        if (in_array($fileExtension, $imageExtensions))
-            return "image";
-        elseif (in_array($fileExtension, $videoExtensions))
-            return false;
-        else
-            $this->result['errors'] = "Seules les images et les vidéos sont acceptées";
-        return false;
-    }
-
     public function imageSizeValidator($fileSize)
     {
         $max = 10 * $this->oneMegabytesInBytes;
         if($fileSize > $max)
-            $this->result['errors'] = "Le poids de l'image ne peut pas être supérieur à 10MB";
+            $this->result['errors'][] = "Le poids de l'image ne peut pas être supérieur à 10MB";
     }
 
     public function videoSizeValidator($fileSize)
     {
         $max = 30 * $this->oneMegabytesInBytes;
         if($fileSize > $max)
-            $this->result['errors'] = "Le poids de la vidéo ne peut pas être supérieur à 30MB";
+            $this->result['errors'][] = "Le poids de la vidéo ne peut pas être supérieur à 30MB";
     }
 
     public function uploadFile($mediaManagerFiles): bool
@@ -125,7 +111,7 @@ class MediaManager
             try {
                 move_uploaded_file($file['tempPath'], $file['path']);
             } catch (\Exception $e) {
-                $this->result['errors'] = "Le téléchargement n'a pas pu être effectué. " . $e;
+                $this->result['errors'][] = "Le téléchargement n'a pas pu être effectué. " . $e;
                 return false;
             }
         }
