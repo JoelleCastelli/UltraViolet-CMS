@@ -86,30 +86,24 @@ $(document).ready(function () {
         });
     }
 
-    function deleteUserById(){
-        $.ajax({
-            type: 'POST',
-            url: '/admin/utilisateurs/supprimer',
-            data: { id },
-            dataType: 'json',
-            success: function(response) {
-                table.clear();
-                table.rows.delete(response.user).draw();
-            },
-            error: function(){
-                console.log("Erreur dans la récupération des utilisateurs de role " + role);
-            }
-        });
-    }
-
-    // var myTable = $('#myTable').DataTable();
-    // var rows = myTable.rows( '.selected' );
-    //
-    // rows.delete( {
-    //     buttons: [
-    //         { label: 'Cancel', fn: function () { this.close(); } },
-    //         'Delete'
-    //     ]
-    // } );
+    /* Delete User*/
+    table.on('click', '.delete', function(event) {
+        event.preventDefault();
+        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette personne ?')) {
+            let pageId = this.id.substring(this.id.lastIndexOf('-') + 1);
+            let row = table.row($(this).parents('tr'));
+            $.ajax({
+                type: 'POST',
+                url: callRoute("users_delete"),
+                data: { id: personId },
+                success: function() {
+                    row.remove().draw();
+                },
+                error: function() {
+                    $('.header').after("Erreur dans la suppression de l'utilisateur ID " + personId);
+                }
+            });
+        }
+    });
 
 });
