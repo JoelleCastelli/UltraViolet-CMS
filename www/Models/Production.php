@@ -615,6 +615,78 @@ class Production extends Database
         ];
     }
 
+    public function formBuilderUpdateProduction($id): array
+    {
+        $production = new Production();
+        $production = $production->findOneBy('id', $id);
+        if($production) {
+            return [
+                "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "class" => "form_control card",
+                    "id" => "formUpdateProductionTmdb",
+                    "submit" => "Valider",
+                    "referer" => Helpers::callRoute('production_update', ['id' => $id])
+                ],
+                "fields" => [
+                    "id" => [
+                        "type" => "hidden",
+                        "value" => $production->getId()
+                    ],
+                    "type" => [
+                        "type" => "hidden",
+                        "value" => $production->getType()
+                    ],
+                    "tmdbID" => [
+                        "type" => "number",
+                        "class" => "search-bar",
+                        "value" => $production->getTmdbId(),
+                        "label" => "ID TMDB :",
+                        "readonly" => true
+                    ],
+                    "title" => [
+                        "type" => "text",
+                        "class" => "search-bar",
+                        "value" => $production->getTitle(),
+                        "label" => "Titre :"
+                    ],
+                    "originalTitle" => [
+                        "type" => "text",
+                        "class" => "search-bar",
+                        "value" => $production->getOriginalTitle(),
+                        "label" => "Titre original :"
+                    ],
+                    "runtime" => [
+                        "type" => "number",
+                        "class" => "search-bar",
+                        "label" => "Durée (en minutes) :",
+                        "value" => $production->getRuntime(),
+                    ],
+                    "releaseDate" => [
+                        "type" => "date",
+                        "class" => "search-bar",
+                        "label" => "Date de sortie :",
+                        "value" => $production->getReleaseDate(),
+                    ],
+                    "overview" => [
+                        "type" => "textarea",
+                        "class" => "search-bar",
+                        "value" => $production->getOverview(),
+                        "label" => "Résumé :",
+                        "maxLength" => 1000,
+                        "error" => "Le résumé ne peut pas dépasser 1000 caractères"
+                    ],
+                    "csrfToken" => [
+                        "type" => "hidden",
+                        "value" => FormBuilder::generateCSRFToken(),
+                    ]
+                ],
+            ];
+        }
+        return [];
+    }
+
     public function populateFromTmdb($post, $jsonResponseArray): bool
     {
         // index 0: movie or series

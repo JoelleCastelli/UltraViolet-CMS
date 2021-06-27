@@ -202,9 +202,32 @@ class Production
     }
 
     public function updateProductionAction($id) {
+        $production = new ProductionModel();
+        $form = $production->formBuilderUpdateProduction($id);
         $view = new View("productions/update");
-        $view->assign('title', 'Update de production');
-        $view->assign('param2', $id);
+        $view->assign('title', 'Modifier une production');
+        $view->assign("form", $form);
+
+        if(!empty($_POST)) {
+            $errors = FormValidator::check($form, $_POST);
+
+            if(empty($errors)) {
+                // Dynamic setters
+                foreach ($_POST as $key => $value) {
+                    if ($key !== 'csrfToken' && $value !== '') {
+                        if(!empty($value)) {
+                            $functionName = "set".ucfirst($key);
+                            $production->$functionName(htmlspecialchars($value));
+                        }
+                    }
+                }
+                $production->save();
+                Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été mise à jour");
+                Helpers::redirect(Helpers::callRoute('productions_list'));
+            } else {
+                $view->assign("errors", $errors);
+            }
+        }
     }
 
     public function deleteProductionAction() {
