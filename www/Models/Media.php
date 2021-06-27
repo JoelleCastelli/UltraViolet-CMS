@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\FormBuilder;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
 
@@ -109,20 +110,24 @@ class Media extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "medias/chargement",
-                "referer" => 'admin/medias',
+                "action" => '',
+                "referer" => Helpers::callRoute('media_list'),
                 "enctype" => "multipart/form-data"
             ],
             "fields" => [
-
                 "media[]" => [
                     "type" => "file",
                     "classLabel" => "btn",
                     "class" => "hiddenInputFile",
+                    "accept" => ".jpg, .jpeg, .png",
                     "label" => "Cliquez pour ajouter un document",
                     "required" => true,
                     "multiple" => true,
                 ],
+                "csrfToken" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
             ]
         ];
     }

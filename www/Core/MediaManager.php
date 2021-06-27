@@ -4,11 +4,9 @@ namespace App\Core;
 
 class MediaManager
 {
-    protected $files;
-    protected $video;
-    protected $oneMegabytesInBytes = 1048576;
-
-    protected $result = [];
+    protected array $files = [];
+    protected int $oneMegabytesInBytes = 1048576;
+    protected array $result = [];
 
     public function __construct()
     {
@@ -18,23 +16,20 @@ class MediaManager
         ];
     }
 
-    public function check($files) {
+    public function check($files, $type) {
 
         // init array files correctly
-        $this->files = $this->formatArrayFiles($files);
+        $this->files = $this->generateFilesArray($files);
 
         // verifications files
-        foreach ($this->files as $file) {
+        foreach ($this->getFiles() as $file) {
 
-            if($file['error'] != UPLOAD_ERR_OK)
-            {
-                return "error file oops";
-            }
+            if($file['error'] != UPLOAD_ERR_OK) return "Erreur dans le chargement du fichier";
 
             //init
             $fileSize = $file['size'];
-            $fileName = md5(time() . htmlspecialchars($file['name'])) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
-            $filePath = "dist/images/back/" . $fileName;
+            $fileName = basename($file["name"]);
+            $filePath = getcwd().PATH_TO_IMG.$type."/".$fileName;
             $fileTempPath = $file['tmp_name'];
             $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
 
@@ -48,31 +43,23 @@ class MediaManager
                 "tempPath" => $fileTempPath
             ];
 
-            if ($this->video === false) { // file is image
+            if ($this->video === false) {
+                // file is image
                 $this->imageSizeValidator($fileSize);
-
                 if (!empty($this->result['errors']))
-                    return $this->result;
-
-            } elseif ($this->video === true) { // file is video
+                    return $this->result['errors'];
+            } elseif ($this->video === true) {
+                // file is video
                 $this->videoSizeValidator($fileSize);
-
                 if (!empty($this->result['errors']))
-                    return $this->result;
-
+                    return $this->result['errors'];
             } else {
-                return $this->result;
+                return $this->result['errors'];
             }
 
         }
-
-        // upload files
-        foreach ($this->result['files'] as $file) {
-            $this->uploadFile($file['path'], $file['tempPath']);
-        }
-
-        return $this->result;
-
+        $this->setFiles($this->result['files']);
+        return $this->result['errors'];
     }
 
     public function typeAndExtensionValidator($fileExtension)
@@ -85,42 +72,39 @@ class MediaManager
         elseif (in_array($fileExtension, $videoExtensions))
             $this->video = true;
         else
-            $this->result['errors'] = "Veuillez envoyer seulement les vidéos ou photos";
+            $this->result['errors'] = "Seules les images et les vidéos sont acceptées";
     }
 
     public function imageSizeValidator($fileSize)
     {
         $max = 10 * $this->oneMegabytesInBytes;
-
-        if($fileSize > $max) {
-            $this->result['errors'] = "Votre image est de taille supérieur à 10MB";
-        }
-
+        if($fileSize > $max)
+            $this->result['errors'] = "Le poids de l'image ne peut pas être supérieur à 10MB";
     }
 
     public function videoSizeValidator($fileSize)
     {
         $max = 30 * $this->oneMegabytesInBytes;
-
-        if($fileSize > $max) {
-            $this->result['errors'] = "Votre vidéo est de taille supérieur à 30MB";
-        }
-
+        if($fileSize > $max)
+            $this->result['errors'] = "Le poids de la vidéo ne peut pas être supérieur à 30MB";
     }
 
-    public function uploadFile($filePath, $fileTempPath) {
-
-        try {
-            move_uploaded_file($fileTempPath, $filePath);
-
-        }catch (\Exception $e) {
-            $this->result['errors'] = "oops, problème au déplacement des fichiers exception " . $e;
-
+    public function uploadFile($mediaManagerFiles): bool
+    {
+        foreach ($mediaManagerFiles as $file) {
+            try {
+                move_uploaded_file($file['tempPath'], $file['path']);
+            } catch (\Exception $e) {
+                Helpers::dd("on est là ?");
+                $this->result['errors'] = "Le téléchargement n'a pas pu être effectué. " . $e;
+                return false;
+            }
         }
+        return true;
     }
 
-    public function formatArrayFiles(&$file_post){
-
+    public function generateFilesArray(&$file_post): array
+    {
         //init
         $isMulti = is_array($file_post['name']);
         $fileCount = $isMulti?count($file_post['name']):1;
@@ -138,6 +122,16 @@ class MediaManager
             }
         }
         return $fileArr;
+    }
+
+    public function setFiles(array $files): void
+    {
+        $this->files = $files;
+    }
+
+    public function getFiles(): array
+    {
+        return $this->files;
     }
 
 }

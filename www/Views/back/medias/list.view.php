@@ -1,3 +1,15 @@
+<?php
+if(isset($errors)) {
+    echo "<div class='error-message-form'>";
+    foreach ($errors as $error) {
+        if(count($errors) == 1)
+            echo $error;
+        else
+            echo "<li>$error</li>";
+    }
+    echo "</div>";
+}
+?>
 <div id="tableActions">
     <div class="filtering-status">
         <div class="filtering-btn active" id="poster">Poster</div>

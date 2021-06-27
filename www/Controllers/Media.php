@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Core\FormValidator;
+use App\Core\Helpers;
 use App\Core\View;
 use App\Core\MediaManager;
 use App\Models\Media as MediaModel;
@@ -24,12 +26,24 @@ class Media
 
     public function showAllAction() {
         $view = new View("medias/list");
-        $view->assign('title', 'Média');
+        $view->assign('title', 'Médias');
+        $view->assign('columnsTable', $this->columnsTable);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/medias.js']);
         $media = new MediaModel();
         $form = $media->formBuilderUpload();
         $view->assign("form", $form);
-        $view->assign('columnsTable', $this->columnsTable);
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/medias.js']);
+        if(!empty($_POST) && !empty($_FILES)) {
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)) {
+                $mediaManager = new MediaManager();
+                $errors = $mediaManager->check($_FILES['media'], 'other');
+                if(empty($errors)) {
+                    $mediaManager->uploadFile($mediaManager->getFiles());
+                    Helpers::redirect(Helpers::callRoute('media_list'));
+                }
+            }
+            $view->assign("errors", $errors);
+        }
     }
 
     public function getMediasAction() {
@@ -63,22 +77,15 @@ class Media
 
     public function uploadAction()
     {
-        echo "<pre>";
-
-
         if (!empty($_FILES)) {
-
-            print_r($_FILES);
-
             $mediaManager = new MediaManager();
-            $result = $mediaManager->check($_FILES['media']);
-            print_r($result);
-            die();
-        }else {
-            echo "empty file";
-            print_r($_FILES);
+            $result = $mediaManager->check($_FILES['media'], 'other');
+            if(!$result['errors']) {
+                Helpers::dd("aucune erreur");
+            } else {
+                Helpers::dd($result['errors']);
+            }
+            Helpers::redirect(Helpers::callRoute('media_list'));
         }
-
-
     }
 }
