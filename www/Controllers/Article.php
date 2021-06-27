@@ -106,16 +106,16 @@ class Article {
         $view->assign("articleId", $id);
     }
 
-    public function deleteArticleAction($id) {
+    public function deleteArticleAction() {
         // TODO : check and redirect if id exist or invalid
-        Helpers::dd("COUCOU");
+
+        if (empty($_POST["id"]))  return;
 
         $article = new ArticleModel();
-        $article->setId($id);
+        $article->setId($_POST["id"]);
         $article->setState("deleted");
         $article->delete();
 
-        $this->redirect("articles_list");
 
     }
 
