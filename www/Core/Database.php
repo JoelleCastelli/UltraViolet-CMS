@@ -112,9 +112,9 @@ class Database {
     /* BUILDING QUERY */
 
     // QUERY BEGINNING
-    public function select(): Database
+    public function select($values = '*'): Database
     {
-        $this->query = "SELECT * FROM " . $this->table . " ";
+        $this->query = "SELECT ".$values." FROM " . $this->table . " ";
         return $this; // Activate chaining
     }
 

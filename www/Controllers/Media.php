@@ -48,19 +48,18 @@ class Media
 
     public function getMediasAction() {
         if(!empty($_POST['mediaType'])) {
-            $media = new MediaModel();
+            $medias = new MediaModel();
 
             if($_POST['mediaType'] === 'poster') {
-                $media = $media->findOneBy('id', 615);
+                $medias = $medias->select()->like('path', "%/posters/%")->get();
             } elseif($_POST['mediaType'] === 'vip') {
-                $media = $media->findOneBy('id', 616);
+                $medias = $medias->select()->like('path', "%/vip/%")->get();
             } elseif($_POST['mediaType'] === 'video') {
-                $media = $media->findOneBy('id', 617);
+                $medias = $medias->select()->where('video', 1)->get();
             } elseif($_POST['mediaType'] === 'other') {
-                $media = $media->findOneBy('id', 618);
+                $medias = $medias->select()->like('path', "%/other/%")->get();
             }
 
-            $medias[] = $media;
             if(!$medias) $medias = [];
 
             $mediasArray = [];
