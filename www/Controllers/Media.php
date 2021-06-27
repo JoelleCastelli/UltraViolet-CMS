@@ -36,7 +36,7 @@ class Media
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)) {
                 $mediaManager = new MediaManager();
-                $errors[] = $mediaManager->check($_FILES['media'], 'other');
+                $errors = $mediaManager->check($_FILES['media'], 'other');
                 if(empty($errors)) {
                     $mediaManager->uploadFile($mediaManager->getFiles());
                     Helpers::redirect(Helpers::callRoute('media_list'));
