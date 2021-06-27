@@ -60,7 +60,21 @@
 
 // MANUAL CREATION
 #formAddProduction {
+    textarea {
+        min-height: 100px;
+        font-size: 16px;
+        resize: vertical;
+    }
     .btn {
         margin-top: 15px;
+    }
+}
+
+// UPDATE
+#formUpdateProductionTmdb {
+    textarea {
+        min-height: 200px;
+        font-size: 16px;
+        resize: vertical;
     }
 }
