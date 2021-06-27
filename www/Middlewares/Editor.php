@@ -11,7 +11,7 @@ class Editor {
         $user = Request::getUser();
         if (!($user && $user->isLogged() && $user->isEditor() || $user->isAdmin())) {
             Helpers::setFlashMessage('errors', "Accès interdit : vous n'avez pas les droits d'édition");
-            Helpers::redirect('/admin');
+            Helpers::redirect(Helpers::callRoute('admin'));
         }
     }
 
