@@ -162,7 +162,7 @@ users_update:
   path:       /admin/utilisateurs/modification/{id}
   controller: Person
   action:     updatePerson
-  middleware: Editor
+  middleware: Admin
   requirements:
     id:       (\d+)
 
@@ -170,7 +170,7 @@ users_delete:
   path:       /admin/utilisateurs/supprimer/{id}
   controller: Person
   action:     deletePerson
-  middleware: Editor
+  middleware: Admin
   requirements:
     id:       (\d+)
 

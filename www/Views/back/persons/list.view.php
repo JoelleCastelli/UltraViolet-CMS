@@ -5,15 +5,7 @@
         <div class="filtering-btn" id="editor">Rédacteurs</div>
         <div class="filtering-btn" id="admin">Administrateurs</div>
     </div>
-
-    <div class="buttons">
-        <a href="<?= \App\Core\Helpers::callRoute('') ?>">
-            <button class="btn">Ajouter un utilisateur</button>
-        </a>
-    </div>
 </div>
-
-
 
 <table id="datatable" class="display">
     <thead>

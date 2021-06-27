@@ -173,16 +173,28 @@ class Person
     }
 
     public function deletePersonAction($id) {
+        // if(!empty($id)){
+        //     $user = new PersonModel();
+        //     $user->setId($id);
+        //     $user->delete();
+        //     $response['success'] = true;
+        //     $response['message'] = "Cette personne à bien été supprier";
+        // }else{
+        //     $response['success'] = false;
+        //     $response['message'] = "Cette personne ne peut pas être supprimée : l'id n'existe pas";
+        // }
+        // echo json_encode($response);
+
         if(!empty($id)){
-            $persons->setId($id);
-            $persons->delete();
-            $response['success'] = true;
-            $response['message'] = "Cette personne à bien été supprier";
-        }else{
-            $response['success'] = false;
-            $response['message'] = "Cette personne ne peut pas être supprimée : l'id n'existe pas";
+            $response = [];
+            $user = new PersonModel();
+            $user->setId($id);
+            
+            $artciles = 
+            if(0){
+
+            }
         }
-        echo json_encode($response);
 
     }
 

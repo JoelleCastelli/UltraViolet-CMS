@@ -41,8 +41,8 @@ class Person extends Database implements JsonSerializable
         parent::__construct();
         $this->media = new Media();
         $this->actions = [
-            ['name' => 'Modifier','action'=> 'modify', 'url' => '/admin/utilisateurs/modification'],
-            ['name' => 'Supprimer', 'action'=> 'delete', 'url' => '/admin/utilisateurs/supprimer']
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => 'users_update', ['id' => $this->id]],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin']
         ];
     }
 
@@ -51,7 +51,7 @@ class Person extends Database implements JsonSerializable
     }
 
     public function getTmdbId(): ?int
-    {
+    { 
         return $this->tmdbId;
     }
 
