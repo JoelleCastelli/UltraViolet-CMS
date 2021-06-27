@@ -7,6 +7,8 @@ class MediaManager
     protected array $files = [];
     protected int $oneMegabytesInBytes = 1048576;
     protected array $result = [];
+    private array $imageExtensions = ['jpg', 'jpeg', 'png'];
+    private array $videoExtensions = ['mp4', 'mov', 'avi', 'flv', 'wmv'];
 
     public function __construct()
     {
@@ -21,6 +23,11 @@ class MediaManager
         // init array files correctly
         $this->files = $this->generateFilesArray($files);
 
+        // Max number of simultaneous files
+        if(sizeof($this->files) > 10) {
+            $this->result['errors'] = "Vous ne pouvez pas sélectionner plus de 10 fichiers";
+        }
+
         // verifications files
         foreach ($this->getFiles() as $file) {
 
@@ -34,21 +41,25 @@ class MediaManager
             $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
 
             // validate files
-            $this->typeAndExtensionValidator($fileExtension);
+            if(!$this->isCorrectFileType($fileExtension)) {
+                $this->result['errors'] = "Seules les images et les vidéos sont acceptées";
+                return $this->result['errors'];
+            }
 
+            $video = $this->isVideo($fileExtension);
             $this->result['files'][] =  [
-                "video" => $this->video,
+                "video" => $video,
                 "path" => $filePath,
                 "title" => $fileName,
                 "tempPath" => $fileTempPath
             ];
 
-            if ($this->video === false) {
+            if ($video === false) {
                 // file is image
                 $this->imageSizeValidator($fileSize);
                 if (!empty($this->result['errors']))
                     return $this->result['errors'];
-            } elseif ($this->video === true) {
+            } elseif ($video === true) {
                 // file is video
                 $this->videoSizeValidator($fileSize);
                 if (!empty($this->result['errors']))
@@ -62,17 +73,36 @@ class MediaManager
         return $this->result['errors'];
     }
 
-    public function typeAndExtensionValidator($fileExtension)
+    public function isCorrectFileType($fileExtension): bool
     {
-        $imageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg');
-        $videoExtensions = array('mp4', 'mov', 'avi', 'flv', 'wmv');
+        if (in_array($fileExtension, $this->imageExtensions))
+            return true;
+        elseif (in_array($fileExtension, $this->videoExtensions))
+            return true;
+        else
+            return false;
+    }
+
+    public function isVideo($fileExtension): bool
+    {
+        if (in_array($fileExtension, $this->imageExtensions))
+            return false;
+        elseif (in_array($fileExtension, $this->videoExtensions))
+            return true;
+    }
+
+    public function getFileType($fileExtension): bool
+    {
+        $imageExtensions = ['jpg', 'jpeg', 'png'];
+        $videoExtensions = ['mp4', 'mov', 'avi', 'flv', 'wmv'];
 
         if (in_array($fileExtension, $imageExtensions))
-            $this->video = false;
+            return "image";
         elseif (in_array($fileExtension, $videoExtensions))
-            $this->video = true;
+            return false;
         else
             $this->result['errors'] = "Seules les images et les vidéos sont acceptées";
+        return false;
     }
 
     public function imageSizeValidator($fileSize)
@@ -95,7 +125,6 @@ class MediaManager
             try {
                 move_uploaded_file($file['tempPath'], $file['path']);
             } catch (\Exception $e) {
-                Helpers::dd("on est là ?");
                 $this->result['errors'] = "Le téléchargement n'a pas pu être effectué. " . $e;
                 return false;
             }
