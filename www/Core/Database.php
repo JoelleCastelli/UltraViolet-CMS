@@ -64,6 +64,9 @@ class Database {
             foreach ($columns as $key => $value) {
                 if(gettype($value) === "boolean" && $value === false) { $columns[$key] = 0; }
             }
+            foreach ($columns as $key => $value) {
+                $columns[$key] = htmlspecialchars($value, ENT_QUOTES);
+            }
             return $query->execute($columns);
         } catch (\Exception $e) {
             echo "EXCEPTION : Incorrect query<br>" . $e->getMessage();
@@ -90,7 +93,7 @@ class Database {
     }
 
     public function findOneBy($column, $value)  {
-        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'.$value.'"');
+        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'.htmlspecialchars($value).'"');
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetch();
     }
@@ -104,7 +107,7 @@ class Database {
 
     public function selectWhere($column, $value): array
     {
-        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'.$value.'"');
+        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'. htmlspecialchars($value).'"');
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetchAll();
     }
@@ -186,7 +189,7 @@ class Database {
 
     public function whereIn($column, $value): Database
     {
-        $this->query .= 'WHERE `' . $column . '` IN ' . $value . ' ';
+        $this->query .= 'WHERE `' . $column . '` IN ' . htmlspecialchars($value, ENT_QUOTES) . ' ';
         return $this;
     }
 
