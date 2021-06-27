@@ -774,7 +774,8 @@ class Production extends Database
         } else {
             // Movie or Series
             $this->dbSave();
-            $this->savePoster();
+            if($this->getPoster()->getPath() != null)
+                $this->savePoster();
             $this->saveCrew('actors');
             if($this->getType() == 'movie') {
                 $this->saveCrew('writers');
