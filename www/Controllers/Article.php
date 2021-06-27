@@ -54,6 +54,7 @@ class Article {
                 $article->setPersonId(1);
 
                 $article->save();
+                $this->redirect("articles_list");
             } 
             else 
                 $view->assign("errors", $errors);
@@ -93,6 +94,7 @@ class Article {
                 $article->setPersonId(1);
 
                 $article->save();
+                $this->redirect("articles_list");
             }
             else
                 $view->assign("errors", $errors);
@@ -106,20 +108,9 @@ class Article {
         $view->assign("articleId", $id);
     }
 
-    public function deleteArticleAction() {
-        // TODO : check and redirect if id exist or invalid
-
-        if (empty($_POST["id"]))  return;
-
-        $article = new ArticleModel();
-        $article->setId($_POST["id"]);
-        $article->setState("deleted");
-        $article->delete();
 
 
-    }
-
-    // API methods : Always return a json object
+    // API methods
 
     public function getArticlesAction() {
         if (empty($_POST['state'])) return;
@@ -148,6 +139,24 @@ class Article {
             "state" => $state,
             "articles" => $articlesArray
         ]);
+    }
+
+    public function deleteArticleAction() {
+
+        if (empty($_POST["id"]))  return;
+
+        $article = new ArticleModel();
+        $article->setId($_POST["id"]);
+
+        if ($article->getState() === "deleted") {
+            $article->hardDelete()->where("id", $_POST["id"])->execute();
+            return;
+        }
+
+        $article->setState("deleted");
+        $article->delete();
+
+
     }
 
 }
