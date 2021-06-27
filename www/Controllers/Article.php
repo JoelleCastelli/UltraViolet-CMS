@@ -60,6 +60,7 @@ class Article {
         }
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js']);
     }
 
     public function updateArticleAction($id) {
@@ -104,7 +105,7 @@ class Article {
         $view->assign('form', $form);
         $view->assign("data", $arrayArticle);
         $view->assign("title", "Modifier un article");
-        $view->assign("articleId", $id);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js']);
     }
 
 
