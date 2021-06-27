@@ -41,7 +41,7 @@ class Person
 
 	public function deleteAction() {
 	    $user = new PersonModel();
-	    $user->setId(3);
+	    $user->getId();
 	    $user->setDeletedAt(Helpers::getCurrentTimestamp());
 	    $user->save();
     }
@@ -166,17 +166,24 @@ class Person
 	}
 
     public function updatePersonAction($id) {
-        $view = new View("utilisateurs/update");
-        $view->assign('title', 'Modification d\'un utilisateur');
-        $view->assign('param2', $id);
+        if(!empty($id)){
+            echo 'salut';
+        }
+
     }
 
-    public function deletePersonAction() {
-        if(!empty($_POST['personId'])) {
-            $persons = new PersonModel();
-            $persons->setId($_POST['personId']);
+    public function deletePersonAction($id) {
+        if(!empty($id)){
+            $persons->setId($id);
             $persons->delete();
+            $response['success'] = true;
+            $response['message'] = "Cette personne à bien été supprier";
+        }else{
+            $response['success'] = false;
+            $response['message'] = "Cette personne ne peut pas être supprimée : l'id n'existe pas";
         }
+        echo json_encode($response);
+
     }
 
     
