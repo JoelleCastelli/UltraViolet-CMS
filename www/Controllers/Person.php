@@ -24,27 +24,20 @@ class Person
     }
 
     public function showAllAction() {
+        Helpers::dd('coucou');
         $persons = new PersonModel();
         $persons = $persons->selectWhere('role', 'admin');
         if(!$persons) $persons = [];
-
 
         $view = new View("persons/list");
         $view->assign('title', 'Utilisateurs');
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/person.js']);
     }
-
+    
 	public function defaultAction() {
 		echo "User default";
 	}
-
-	public function deleteAction() {
-	    $user = new PersonModel();
-	    $user->getId();
-	    $user->setDeletedAt(Helpers::getCurrentTimestamp());
-	    $user->save();
-    }
 
     public function loginAction() {
         $user = new PersonModel();
@@ -145,16 +138,6 @@ class Person
         Helpers::redirect('/');
     }
 
-    public function updateAction()
-    {
-        $user = new UserModel();
-        $user->setId(3);
-        $user->setFirstname("NON");
-        $user->setCountry("pr");
-        $user->setRole("6");
-        $user->save();
-    }
-
 	//Method : Action
 	public function addAction(){
 		
@@ -190,18 +173,17 @@ class Person
             $user = new PersonModel();
             $user->setId($id);
             
-            $artciles = 
-            if(0){
+            //if article lié -> changer la signature 
+            
+            $page->setState("deleted");
+            $user->delete();
+            $user->save();
 
-            }
         }
-
     }
 
     
-
 	public function showAction(){
-		
 		//Affiche la vue user intégrée dans le template du front
 		$view = new View("user"); 
 	}

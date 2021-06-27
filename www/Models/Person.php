@@ -41,7 +41,7 @@ class Person extends Database implements JsonSerializable
         parent::__construct();
         $this->media = new Media();
         $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'url' => 'users_update', ['id' => $this->id]],
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])],
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin']
         ];
     }

@@ -11,11 +11,15 @@
     <thead>
         <tr>
             <?php
-                if (isset($columnsTable)) {
+
+use App\Core\Helpers;
+
+if (isset($columnsTable)) {
                     foreach ($columnsTable as $key => $value) {
                         echo "<th>$value</th>";
                     }
                 }
+                Helpers::dd(Helpers::callRoute('users_update', ['id' => 1] ));
             ?>
         </tr>
     </thead>

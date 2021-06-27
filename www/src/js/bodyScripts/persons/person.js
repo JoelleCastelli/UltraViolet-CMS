@@ -90,7 +90,7 @@ $(document).ready(function () {
     table.on('click', '.delete', function(event) {
         event.preventDefault();
         if (confirm('Êtes-vous sûr de vouloir supprimer cette utilisateur ?')) {
-            let pageId = this.id.substring(this.id.lastIndexOf('-') + 1);
+            let personId = this.id.substring(this.id.lastIndexOf('-') + 1);
             let row = table.row($(this).parents('tr'));
             $.ajax({
                 type: 'POST',
