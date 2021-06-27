@@ -11,7 +11,7 @@ class Article {
 
     // utils
 
-    private function redirect(string $route, string $code = "302") {
+    private function redirect(string $route, string $code = "307") {
         Helpers::redirect(Helpers::callRoute($route), $code);
     }
 
@@ -115,7 +115,7 @@ class Article {
         $article->setState("deleted");
         $article->delete();
 
-        Helpers::redirect(Helpers::callRoute("articles_list"), "302");
+        $this->redirect("articles_list");
 
     }
 
