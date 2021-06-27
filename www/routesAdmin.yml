@@ -62,12 +62,9 @@ article_update:
     id: (\d+)
 
 article_delete:
-  path: /admin/articles/delete/{id}
+  path: /admin/articles/delete
   controller: Article
   action: deleteArticle
-  middleware: Editor
-  requirements:
-    id: (\d+)
 
 article_data:
   path: /admin/articles/articles-data

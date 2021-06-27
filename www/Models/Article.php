@@ -421,4 +421,71 @@ class Article extends Database implements JsonSerializable
         ];
     }
 
+    // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
+    public function formBuilderUpdateArticle() {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "form_create_article",
+                "submit" => "Créer un article",
+            ],
+            "fields" => [
+                "csrf_token" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
+                ],
+                "title" => [
+                    "type" => "text",
+                    "placeholder" => "Titre de l'article",
+                    "minLength" => 2,
+                    "maxLength" => 100,
+                    "class" => "input",
+                    "error" => "Le longueur du titre doit être comprise entre 2 et 100 caractères",
+                    // "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "required" => true,
+                ],
+                "description" => [
+                    "type" => "text",
+                    "placeholder" => "Description de l'article",
+                    "minLength" => 2,
+                    // "class" => "input",
+                    "error" => "La longeur doit être de plus de 2 caracrtères",
+                    "required" => true,
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "placeholder" => "Contenu de l article",
+                    "minLength" => 2,
+                    // "maxLength" => 255,
+                    "class" => "input",
+                    "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
+                    "required" => true,
+                ],
+                "state"=>[
+                    "type"=>"radio",
+                    "label"=>"État :",
+                    "class"=>"",
+                    "error"=>"Erreur test",
+                    "required" => true,
+                    "options" => [
+                        [
+                            "value"=>"draft",
+                            "text"=>"Brouillon",
+                        ],
+                        [
+                            "value"=>"scheduled",
+                            "text"=>"Planifié",
+                        ],
+                        [
+                            "value"=>"published",
+                            "text"=>"Publié",
+                        ],
+                    ],
+                ],
+            ]
+        ];
+    }
+
 }

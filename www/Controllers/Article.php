@@ -9,6 +9,12 @@ use App\Models\Article as ArticleModel;
 
 class Article {
 
+    // utils
+
+    private function redirect(string $route, string $code = "307") {
+        Helpers::redirect(Helpers::callRoute($route), $code);
+    }
+
     // Standard controller methods
 
     public function showAllAction() {
@@ -48,6 +54,7 @@ class Article {
                 $article->setPersonId(1);
 
                 $article->save();
+                $this->redirect("articles_list");
             } 
             else 
                 $view->assign("errors", $errors);
@@ -59,23 +66,51 @@ class Article {
     public function updateArticleAction($id) {
         // TODO : check and redirect if id exist or invalid
 
+        $article = new ArticleModel();
+        $article->setId($id);
+
         $view = new View("articles/updateArticle");
+        $form = $article->formBuilderUpdateArticle();
+
+        if (!empty($_POST)) {
+
+            // $errors = FormValidator::check($form, $_POST);
+            $errors = [];
+
+//              if (empty($errors)) {
+            if (true) {
+
+                $title = htmlspecialchars($_POST["title"]);
+
+                $article->setTitle($title);
+                $article->setSlug(Helpers::slugify($title));
+
+                $article->setDescription(htmlspecialchars($_POST["description"]));
+                $article->setContent(htmlspecialchars($_POST["content"]));
+                $article->setState(htmlspecialchars($_POST["state"]));
+
+                // TODO : Get real connected Person and Media used
+                $article->setMediaId(1);
+                $article->setPersonId(1);
+
+                $article->save();
+                $this->redirect("articles_list");
+            }
+            else
+                $view->assign("errors", $errors);
+        }
+
+        $arrayArticle = $article->jsonSerialize();
+
+        $view->assign('form', $form);
+        $view->assign("data", $arrayArticle);
         $view->assign("title", "Modifier un article");
         $view->assign("articleId", $id);
     }
 
-    public function deleteArticleAction($id) {
-        // TODO : check and redirect if id exist or invalid
 
-        $article = new ArticleModel();
-        $article->setId($id);
-        $article->setState("deleted");
-        $article->delete();
 
-        Helpers::redirect(Helpers::callRoute("articles_list"), "302");
-    }
-
-    // API methods : Always return a json object
+    // API methods
 
     public function getArticlesAction() {
         if (empty($_POST['state'])) return;
@@ -104,6 +139,24 @@ class Article {
             "state" => $state,
             "articles" => $articlesArray
         ]);
+    }
+
+    public function deleteArticleAction() {
+
+        if (empty($_POST["id"]))  return;
+
+        $article = new ArticleModel();
+        $article->setId($_POST["id"]);
+
+        if ($article->getState() === "deleted") {
+            $article->hardDelete()->where("id", $_POST["id"])->execute();
+            return;
+        }
+
+        $article->setState("deleted");
+        $article->delete();
+
+
     }
 
 }
