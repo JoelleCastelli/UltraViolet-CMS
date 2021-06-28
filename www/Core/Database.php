@@ -64,9 +64,7 @@ class Database {
             foreach ($columns as $key => $value) {
                 if(gettype($value) === "boolean" && $value === false) { $columns[$key] = 0; }
             }
-            foreach ($columns as $key => $value) {
-                $columns[$key] = htmlspecialchars($value, ENT_QUOTES);
-            }
+            
             return $query->execute($columns);
         } catch (\Exception $e) {
             echo "EXCEPTION : Incorrect query<br>" . $e->getMessage();
