@@ -158,7 +158,6 @@ class Page
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
-            $errors = [];
 
             if (empty($errors)) {
 
@@ -189,9 +188,13 @@ class Page
                     $response['message'] = 'Erreur : Ce slug est déjà existant';
                     $response['success'] = false;
                 }
-
-                $view->assign('response', $response);
+                
+            }else {
+                $response['message'] = $errors;
+                $response['success'] = false;
             }
+            $view->assign('response', $response);
+
         }
 
         //get page
@@ -203,7 +206,7 @@ class Page
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
         $view->assign('title', 'Modifier la page n° ' . $page->getId());
-        // $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
 
     public function updateVisibilityAction()
@@ -287,6 +290,9 @@ class Page
         } else if ($state == 'published' ) { // published
 
             $page->setStateToPublished();
+        } else if ($state == "hidden") {
+            $page->setStateToPublishedHidden();
+
         }
     }
 }

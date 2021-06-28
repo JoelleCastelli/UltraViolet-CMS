@@ -111,14 +111,13 @@ $(document).ready(function() {
                         $('#add-page-modal .footer-modal').prepend(button);
                         $('#add-page-modal .footer-modal').prepend(successMessageForm(response['message']));
                     }
-                    else
+                    else{
                         $('#add-page-modal .container-message').html(errorMessageForm(response['message']));
+                    }
 
                 },
                 error: function(response, statut, erreur) {
                     $('#add-page-modal .container-message').html(errorMessageForm(errorServerJS));
-                    $('#add-page-modal .container-message').html(errorMessageForm(response));
-                    console.log(response);
                 }
             });
         }

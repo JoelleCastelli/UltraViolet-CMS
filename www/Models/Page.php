@@ -310,7 +310,6 @@ class Page extends Database implements JsonSerializable
 				"id"=>"form_register",
 				"submit"=>"Ajout d'une page",
                 "referer" => '/admin/pages/creation'
-
 			],
 			"fields"=>[
 				"title" => [
@@ -328,7 +327,7 @@ class Page extends Database implements JsonSerializable
                     "placeholder" => "meilleures-animees",
                     "label" => "Slug",
                     "class" => "search-bar",
-                    "error" => "Votre slug doit mal formé et doit faire entre 1 et 100 caractères",
+                    "error" => "Votre slug est incorrect et doit faire entre 1 et 100 caractères",
                     "minLength" => 1,
                     "maxLength" => 100,
                     "regex" => "/^[a-z0-9]+(?:-[a-z0-9]+)*$/", // correct slug
@@ -338,8 +337,9 @@ class Page extends Database implements JsonSerializable
                     "placeholder" => "3",
                     "label" => "Position * ",
                     "class" => "search-bar",
-                    "error" => "Le champs position est vide",
+                    "error" => "Le champs position est vide et doit être supérieur à 0",
                     "min" => 1,
+                    "max" => 127,
                     "required" => true,
                 ],
 				"titleSeo"=>[
@@ -404,8 +404,8 @@ class Page extends Database implements JsonSerializable
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control form-add-page",
-                "id" => "form_register",
+                "class" => "form_control",
+                "id" => "",
                 "submit" => "Modifier la page",
                 "referer" => '/admin/pages/update/' . $id
             ],
@@ -426,7 +426,7 @@ class Page extends Database implements JsonSerializable
                     "placeholder" => "meilleures-animees",
                     "label" => "Slug",
                     "class" => "search-bar",
-                    "error" => "Votre slug doit mal formé et doit faire entre 1 et 100 caractères",
+                    "error" => "Votre slug est incorrect et doit faire entre 1 et 100 caractères",
                     "minLength" => 1,
                     "maxLength" => 100,
                     "regex" => "/^[a-z0-9]+(?:-[a-z0-9]+)*$/", // correct slug
@@ -436,8 +436,9 @@ class Page extends Database implements JsonSerializable
                     "placeholder" => "3",
                     "label" => "Position * ",
                     "class" => "search-bar",
-                    "error" => "Le champs position est vide",
+                    "error" => "Le champs position est vide et doit être supérieur à 0",
                     "min" => 1,
+                    "max" => 127,
                     "required" => true,
                 ],
                 "titleSeo" => [
@@ -461,21 +462,25 @@ class Page extends Database implements JsonSerializable
                     "error" => "Le champs état est vide",
                     "options" => [
                         [
+                            "id" => "draft",
                             "value" => "draft",
                             "class" => "stateDraft",
                             "text" => "Brouillon"
                         ],
                         [
+                            "id" => "published",
                             "value" => "published",
                             "class" => "statePublished",
                             "text" => "Publier maintenant"
                         ],
                         [
+                            "id" => "scheduled",
                             "value" => "scheduled",
                             "class" => "stateScheduled",
                             "text" => "Planifier"
                         ],
                         [
+                            "id" => "hidden",
                             "value" => "hidden",
                             "class" => "statePublishedHidden",
                             "text" => "Publier mais cacher"

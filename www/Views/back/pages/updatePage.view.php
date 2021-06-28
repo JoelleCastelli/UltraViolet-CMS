@@ -16,17 +16,19 @@
             </p>
 
         <?php else : ?>
+            <?php foreach ($response['message'] as $value) :?>
 
-            <p class="error-message-form fadeOut">
-                <i class="fas fa-check icon-message-form"></i>
-                <?= $response['message'] ?>
-            </p>
+                <p class="error-message-form fadeOut">
+                    <i class="fas fa-check icon-message-form"></i>
+                    <?= $value ?>
+                </p>
 
+            <?php endforeach; ?>
         <?php endif; ?>
 
     <?php endif; ?>
 
-    <section class="grid-form-add-page">
+    <section class="grid-form-create-page">
 
         <section class="card">
 
