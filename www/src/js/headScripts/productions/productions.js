@@ -97,7 +97,7 @@ $(document).ready( function () {
     function getProductionsByType(productionType) {
         $.ajax({
             type: 'POST',
-            url: '/admin/productions/productions-data', //TODO changer l'URL en dur
+            url: callRoute('productions_data'),
             data: { productionType },
             dataType: 'json',
             success: function(response) {

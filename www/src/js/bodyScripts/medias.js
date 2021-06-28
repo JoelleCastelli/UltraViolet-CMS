@@ -53,7 +53,7 @@ $(document).ready( function () {
     function getMediasByType(mediaType) {
         $.ajax({
             type: 'POST',
-            url: '/admin/medias/medias-data', //TODO changer l'URL en dur
+            url: callRoute('medias-data'),
             data: { mediaType },
             dataType: 'json',
             success: function(response) {
