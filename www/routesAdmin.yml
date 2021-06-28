@@ -115,8 +115,6 @@ production_delete:
   controller: Production
   action:     deleteProduction
   middleware: Editor
-  requirements:
-    id:       (\d+)
 
 # COMMENTS
 comments_list:
