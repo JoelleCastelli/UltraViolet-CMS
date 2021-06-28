@@ -32,7 +32,7 @@ class FormValidator
 
                 // check if required field is not empty
                 if (isset($fieldConfig['required']) && empty($data[$fieldName])) {
-                    echo "Tentative de hack : le champ est obligatoire !";
+                    echo "Tentative de hack : le champ $fieldName est obligatoire !";
                     exit;
                 }
 
@@ -66,10 +66,10 @@ class FormValidator
 
     public static function numberInputValidator($numberInput, $fieldConfig, &$errors){
         if($fieldConfig["type"] == "number") {
-            if (!empty($field["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
+            if (!empty($fieldConfig["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
                 $errors[] = $fieldConfig["error"];
             }
-            if (!empty($field["max"]) && is_numeric($fieldConfig["max"]) && $numberInput > $field["max"]) {
+            if (!empty($fieldConfig["max"]) && is_numeric($fieldConfig["max"]) && $numberInput > $fieldConfig["max"]) {
                 $errors[] = $fieldConfig["error"];
             }
         }
