@@ -26,7 +26,7 @@ $params = $route->getParameters();
 if($office == 'back') {
     $user = Request::getUser();
     if (!($user && $user->isLogged() && $user->canAccessBackOffice())) {
-        Helpers::redirect('/404', 404);
+        Helpers::redirect(Helpers::callRoute('404'), 404);
     }
 }
 
