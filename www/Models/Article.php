@@ -394,7 +394,7 @@ class Article extends Database implements JsonSerializable
                      // "maxLength" => 255,
                      "class" => "input",
                      "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
-                     "required" => true,
+                     "required" => false,
                  ],
                 "state"=>[
                     "type"=>"radio",
@@ -461,7 +461,7 @@ class Article extends Database implements JsonSerializable
                     // "maxLength" => 255,
                     "class" => "input",
                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
-                    "required" => true,
+                    "required" => false,
                 ],
                 "state"=>[
                     "type"=>"radio",
