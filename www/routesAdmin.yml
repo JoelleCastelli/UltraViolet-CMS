@@ -187,6 +187,12 @@ medias-data:
   controller: Media
   action:     getMedias
 
+media_delete:
+  path:       /admin/medias/supprimer
+  controller: Media
+  action:     deleteMedia
+  middleware: Editor
+
 # SETTINGS
 settings:
   path:       /admin/parametres

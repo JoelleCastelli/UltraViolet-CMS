@@ -25,7 +25,6 @@ class Media extends Database
     {
         parent::__construct();
         $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('')],
             ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute(''), 'role' => 'admin'],
         ];
     }
