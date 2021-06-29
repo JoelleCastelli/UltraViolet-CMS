@@ -11,15 +11,13 @@ use App\Models\Media as MediaModel;
 class Media
 {
 
-    /**
-     * @var string[]
-     */
-    protected $columnsTable;
+    protected array $columnsTable;
 
     public function __construct() {
         $this->columnsTable = [
             "thumbnail" => 'Miniature',
             "title" => 'Nom',
+            "createdAt" => "Date d'ajout",
             "actions" => 'Actions'
         ];
     }
@@ -68,6 +66,7 @@ class Media
                 $mediasArray[] = [
                     $this->columnsTable['title'] => $media->getTitle(),
                     $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$media->getPath()."'/>",
+                    $this->columnsTable['createdAt'] => $media->getCleanCreatedAtDate(),
                     $this->columnsTable['actions'] => $media->generateActionsMenu(),
                 ];
             }

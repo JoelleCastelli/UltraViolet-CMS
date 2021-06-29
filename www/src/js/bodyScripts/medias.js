@@ -10,6 +10,7 @@ $(document).ready( function () {
         columns: [
             { data: 'Miniature' },
             { data: 'Nom' },
+            { data: "Date d'ajout" },
             { data: 'Actions' }
         ],
 
@@ -44,7 +45,7 @@ $(document).ready( function () {
         },
     });
 
-    table.columns([2]).visible(false); //actions
+    table.columns([3]).visible(false); //actions
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
         $(this).addClass('active');
@@ -52,10 +53,9 @@ $(document).ready( function () {
         getMediasByType(this.id);
 
         if(this.id === 'other')
-            table.columns([2]).visible(true);
+            table.columns([3]).visible(true);
         else
-            table.columns([2]).visible(false);
-
+            table.columns([3]).visible(false);
     });
 
     function getMediasByType(mediaType) {
