@@ -187,7 +187,7 @@ $(document).ready(function() {
     })
 
     // DISABLE DATE INPUT WHEN SELECTED OTHER THAN SCHEDULED CHECKBOX AT FIRST REFRESH
-    if ($('.stateScheduled').not(':checked')){
+    if (!$('.stateScheduled').is(':checked')){
         $(".publicationDateInput").prop("readonly", true);
     }
 
