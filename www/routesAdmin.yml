@@ -115,8 +115,6 @@ production_delete:
   controller: Production
   action:     deleteProduction
   middleware: Editor
-  requirements:
-    id:       (\d+)
 
 # COMMENTS
 comments_list:
@@ -188,6 +186,12 @@ medias-data:
   path:       /admin/medias/medias-data
   controller: Media
   action:     getMedias
+
+media_delete:
+  path:       /admin/medias/supprimer
+  controller: Media
+  action:     deleteMedia
+  middleware: Editor
 
 # SETTINGS
 settings:

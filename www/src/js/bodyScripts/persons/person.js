@@ -73,7 +73,7 @@ $(document).ready(function () {
     function getUsersByRole(role) {
         $.ajax({
             type: 'POST',
-            url: '/admin/utilisateurs/utilisateurs-data',
+            url: callRoute('users_data'),
             data: { role },
             dataType: 'json',
             success: function(response) {

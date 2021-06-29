@@ -135,7 +135,8 @@ class Database {
         }
     }
 
-    public function hardDelete() {
+    public function hardDelete(): Database
+    {
         $this->query = 'DELETE FROM ' . $this->table . ' ';
         return $this;
     }

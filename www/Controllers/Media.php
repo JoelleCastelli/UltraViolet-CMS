@@ -74,4 +74,20 @@ class Media
             echo json_encode($mediasArray);
         }
     }
+
+    public function deleteMediaAction() {
+        if(!empty($_POST['mediaId'])) {
+            $response = [];
+            $media = new MediaModel();
+            $deleteOk = $media->hardDelete()->where('id', $_POST['mediaId'])->execute();
+            if($deleteOk) {
+                $response['success'] = true;
+                $response['message'] = "L'image a été supprimée";
+            } else {
+                $response['false'] = true;
+                $response['message'] = "L'image n'a pas pu être supprimée";
+            }
+            echo json_encode($response);
+        }
+    }
 }

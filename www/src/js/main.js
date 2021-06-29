@@ -4,9 +4,7 @@ window.addEventListener("load", function(event) {
 
 /* ROUTING */
 function callRoute(path) {
-
     let routeJS = "";
-
     $.ajax({
         type: "POST",
         url: '/admin/routes',
@@ -15,7 +13,6 @@ function callRoute(path) {
         data: {
             name: path
         },
-
         success: function(obj, textstatus) {
             routeJS = obj;
         },
@@ -23,10 +20,8 @@ function callRoute(path) {
             routeJS = "";
         }
     });
-
     return routeJS;
 }
-
 /* END ROUTING */
 
 const toggleSwitch = (element) => element.classList.toggle("switched-on");
