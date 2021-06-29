@@ -27,7 +27,7 @@ class Person extends Database implements JsonSerializable
     protected ?string $emailKey;
     protected ?string $password;
     protected bool $emailConfirmed = false;
-    protected bool $option = true;
+    protected bool $optin = true;
 
     // VIP-related
     protected ?int $tmdbId = null;
