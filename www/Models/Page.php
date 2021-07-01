@@ -309,7 +309,7 @@ class Page extends Database implements JsonSerializable
 				"class"=>"form_control form-add-page",
 				"id"=>"form_register",
 				"submit"=>"Ajout d'une page",
-                "referer" => '/admin/pages/creation'
+                "referer" => Helpers::callRoute('page_creation')
 			],
 			"fields"=>[
 				"title" => [
@@ -407,7 +407,7 @@ class Page extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "",
                 "submit" => "Modifier la page",
-                "referer" => '/admin/pages/update/' . $id
+                "referer" => Helpers::callRoute('updatePage', ['id' => $id])
             ],
 
             "fields" => [
