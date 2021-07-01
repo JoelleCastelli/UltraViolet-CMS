@@ -45,7 +45,7 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
                     
                 $article->setDescription(htmlspecialchars($_POST["description"]));
-                $article->setContent($_POST["content"]); 
+                $article->setContent($_POST["content"]);
                 $article->setState(htmlspecialchars($_POST["state"]));
 
                 // TODO : Get real connected Person and Media used
@@ -86,7 +86,7 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
 
                 $article->setDescription(htmlspecialchars($_POST["description"]));
-                $article->setContent($_POST["content"]); // ! HTML SPECIAL CHARS "REQUIS"
+                $article->setContent($_POST["content"]);
                 $article->setState(htmlspecialchars($_POST["state"]));
 
                 // TODO : Get real connected Person and Media used
