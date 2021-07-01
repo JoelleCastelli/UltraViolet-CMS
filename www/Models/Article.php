@@ -429,7 +429,7 @@ class Article extends Database implements JsonSerializable
                 "action" => "",
                 "class" => "form_control",
                 "id" => "form_create_article",
-                "submit" => "Créer un article",
+                "submit" => "Valider les modifications",
             ],
             "fields" => [
                 "csrf_token" => [
