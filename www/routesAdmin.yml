@@ -4,6 +4,11 @@ admin:
   controller: Main
   action:     default
 
+test:
+  path:       /admin/test
+  controller: Main
+  action:     test
+
 routes: 
   path:       /admin/routes
   controller: Main
