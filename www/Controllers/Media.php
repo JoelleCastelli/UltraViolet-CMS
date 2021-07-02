@@ -53,13 +53,13 @@ class Media
             $medias = new MediaModel();
 
             if($_POST['mediaType'] === 'poster') {
-                $medias = $medias->select()->like('path', "%/posters/%")->get();
+                $medias = $medias->select()->like('path', "%/posters/%")->orderBy('createdAt', 'DESC')->get();
             } elseif($_POST['mediaType'] === 'vip') {
-                $medias = $medias->select()->like('path', "%/vip/%")->get();
+                $medias = $medias->select()->like('path', "%/vip/%")->orderBy('createdAt', 'DESC')->get();
             } elseif($_POST['mediaType'] === 'video') {
-                $medias = $medias->select()->where('video', 1)->get();
+                $medias = $medias->select()->where('video', 1)->orderBy('createdAt', 'DESC')->get();
             } elseif($_POST['mediaType'] === 'other') {
-                $medias = $medias->select()->like('path', "%/other/%")->get();
+                $medias = $medias->select()->like('path', "%/other/%")->orderBy('createdAt', 'DESC')->get();
             }
 
             if(!$medias) $medias = [];
