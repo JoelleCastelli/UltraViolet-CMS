@@ -111,7 +111,7 @@ class MediaManager
     {
         foreach ($mediaManagerFiles as $file) {
             try {
-                move_uploaded_file($file['tempPath'], $file['path']);
+                move_uploaded_file($file['tempPath'], getcwd().$file['path']);
             } catch (\Exception $e) {
                 $this->result['errors'][] = "Le téléchargement n'a pas pu être effectué. " . $e;
                 return false;
