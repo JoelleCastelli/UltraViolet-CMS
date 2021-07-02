@@ -19,6 +19,7 @@ class Production
 
     public function __construct() {
         $this->columnsTable = [
+            "thumbnail" => 'Miniature',
             "title" => 'Titre',
             "originalTitle" => 'Titre original',
             "season" => 'Saison',
@@ -37,6 +38,9 @@ class Production
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/productions.js']);
     }
 
+    /**
+     * Called by AJAX script to display productions filtered by type
+     */
     public function getProductionsAction() {
         if(!empty($_POST['productionType'])) {
             $productions = new ProductionModel();
@@ -48,8 +52,14 @@ class Production
 
             $productionArray = [];
             foreach ($productions as $production) {
+                // Find production key art media and populate poster object
+                $productionMedia = new ProductionMedia();
+                $productionMedia = $productionMedia->select()->where('productionId', $production->getId())->andWhere('keyArt', 1)->first();
+                $production->getPoster()->setId($productionMedia->getMediaId());
+
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
+                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$production->getPoster()->getPath()."'/>",
                     $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
                     $this->columnsTable['season'] => $production->getParentSeasonName(),
                     $this->columnsTable['series'] => $production->getParentSeriesName(),
