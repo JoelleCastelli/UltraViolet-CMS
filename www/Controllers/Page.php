@@ -46,6 +46,11 @@ class Page
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
 
+    public function accessPageAction()
+    {
+        echo "YO";
+    }
+
     public function getPagesAction()
     {
 
@@ -122,6 +127,17 @@ class Page
                     $save = $page->save();
 
                     if ($save) {
+
+                        if($page->getState() === 'published') // if published, add route to file
+                        {
+                            $id = $page->getLastInsertId();
+                            $key = $page->getSlug() . '-page-' . $id;
+                            $path[$key]['path'] = '/' . $page->getSlug();
+                            $path[$key]['controller'] = 'Page';
+                            $path[$key]['action'] = 'accessPage';
+                            $this->writePathInRouteFile($path, $id);
+                        }
+
                         $response['message'] = 'La nouvelle s\'est bien crée';
                         $response['success'] = true;
                     } else {
@@ -177,6 +193,8 @@ class Page
                     $save = $page->save();
 
                     if ($save) {
+                        $this->updatePathInRouteFile($page, $page->getId());
+
                         $response['message'] = 'Votre page a bien été modifiée !';
                         $response['success'] = true;
                     } else {
@@ -221,8 +239,11 @@ class Page
 
                     if ($page->getState() === "published") {
                         $page->setState('hidden');
+                        $this->updatePathInRouteFile($page, $page->getId());
+
                     } else if ($page->getState() === "hidden") {
                         $page->setState('published');
+                        $this->updatePathInRouteFile($page, $page->getId());
                     }
 
                     $page->save();
@@ -264,12 +285,21 @@ class Page
               
                 if($check){
                     $check = $page->delete();
+                    if($check)
+                    {
+                        $key = $page->getSlug() . '-page-' . $id;
+                        $this->deletePathInRouteFile($key);
+                    }
                 }
             }
             else {
                 $page->setState("deleted");
-                $page->delete();
-                $page->save();
+                $check = $page->delete();
+
+                if ($check) {
+                    $key = $page->getSlug() . '-page-' . $id;
+                    $this->deletePathInRouteFile($key);
+                }
             }
         }
     }
@@ -294,5 +324,47 @@ class Page
             $page->setStateToPublishedHidden();
 
         }
+    }
+
+    private function updatePathInRouteFile($page, $id)
+    {
+        $key = $page->getSlug() . '-page-' . $id;
+        $this->deletePathInRouteFile($key);
+
+        if ($page->getState() === 'published') // if published, add route to file
+        {
+            $path[$key]['path'] = '/' . $page->getSlug();
+            $path[$key]['controller'] = 'Page';
+            $path[$key]['action'] = 'accessPage';
+            $this->writePathInRouteFile($path);
+        }
+    }
+
+    private function writePathInRouteFile($path)
+    {
+        $key = key($path);
+
+        if(!file_exists(PATH_TO_ROUTES))
+            $file = fopen(PATH_TO_ROUTES, 'a+');
+
+        $routes = yaml_parse_file(PATH_TO_ROUTES);
+        $routes[$key] = $path[$key];
+        yaml_emit_file(PATH_TO_ROUTES, $routes, YAML_UTF8_ENCODING);
+
+        if(isset($file))
+            fclose($file);
+    }
+
+    private function deletePathInRouteFile($key)
+    {
+        if (!file_exists(PATH_TO_ROUTES))
+            return;
+
+        $routes = yaml_parse_file(PATH_TO_ROUTES);
+
+        if(key_exists($key, $routes))
+            unset($routes[$key]);
+
+        yaml_emit_file(PATH_TO_ROUTES, $routes, YAML_UTF8_ENCODING);
     }
 }
