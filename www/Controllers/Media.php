@@ -45,27 +45,37 @@ class Media
         }
     }
 
+    /**
+     * Called by AJAX script to display media filtered by type
+     */
     public function getMediasAction() {
         if(!empty($_POST['mediaType'])) {
             $medias = new MediaModel();
 
             if($_POST['mediaType'] === 'poster') {
-                $medias = $medias->select()->like('path', "%/posters/%")->get();
+                $medias = $medias->select()->like('path', "%/posters/%")->orderBy('createdAt', 'DESC')->get();
             } elseif($_POST['mediaType'] === 'vip') {
-                $medias = $medias->select()->like('path', "%/vip/%")->get();
+                $medias = $medias->select()->like('path', "%/vip/%")->orderBy('createdAt', 'DESC')->get();
             } elseif($_POST['mediaType'] === 'video') {
-                $medias = $medias->select()->where('video', 1)->get();
+                $medias = $medias->select()->where('video', 1)->orderBy('createdAt', 'DESC')->get();
             } elseif($_POST['mediaType'] === 'other') {
-                $medias = $medias->select()->like('path', "%/other/%")->get();
+                $medias = $medias->select()->like('path', "%/other/%")->orderBy('createdAt', 'DESC')->get();
             }
 
             if(!$medias) $medias = [];
 
             $mediasArray = [];
             foreach ($medias as $media) {
+
+                // Display default image if file is not found
+                if(file_exists(getcwd().$media->getPath()))
+                    $path = $media->getPath();
+                else
+                    $path = PATH_TO_IMG.'default_poster.jpg';
+
                 $mediasArray[] = [
                     $this->columnsTable['title'] => $media->getTitle(),
-                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$media->getPath()."'/>",
+                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$path."'/>",
                     $this->columnsTable['createdAt'] => $media->getCleanCreatedAtDate(),
                     $this->columnsTable['actions'] => $media->generateActionsMenu(),
                 ];
