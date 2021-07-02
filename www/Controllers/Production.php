@@ -55,12 +55,17 @@ class Production
                 // Find production key art media and populate poster object
                 $productionMedia = new ProductionMedia();
                 $productionMedia = $productionMedia->select()->where('productionId', $production->getId())->andWhere('keyArt', 1)->first();
-                $production->getPoster()->setId($productionMedia->getMediaId());
-                // Display default image if file is not found
-                if(file_exists(getcwd().$production->getPoster()->getPath()))
-                    $path = $production->getPoster()->getPath();
-                else
+                if($productionMedia) {
+                    $production->getPoster()->setId($productionMedia->getMediaId());
+                    // Display default image if file is not found
+                    if(file_exists(getcwd().$production->getPoster()->getPath()))
+                        $path = $production->getPoster()->getPath();
+                    else
+                        $path = PATH_TO_IMG.'default_poster.jpg';
+                } else {
+                    // Display default image if no key art is associated
                     $path = PATH_TO_IMG.'default_poster.jpg';
+                }
 
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
