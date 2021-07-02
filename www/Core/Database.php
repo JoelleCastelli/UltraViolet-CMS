@@ -132,7 +132,7 @@ class Database {
         } else {
             // soft
             $this->setDeletedAt(Helpers::getCurrentTimestamp());
-            $this->save();
+            return $this->save();
         }
     }
 
