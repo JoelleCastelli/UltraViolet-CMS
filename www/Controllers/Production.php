@@ -60,7 +60,7 @@ class Production
                 if(file_exists(getcwd().$production->getPoster()->getPath()))
                     $path = $production->getPoster()->getPath();
                 else
-                    $path = PATH_TO_IMG.'default.jpg';
+                    $path = PATH_TO_IMG.'default_poster.jpg';
 
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
