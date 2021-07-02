@@ -16,7 +16,6 @@ class Article {
     }
 
     // Standard controller methods
-
     public function showAllAction() {
         $article = new ArticleModel;
         $articles = $article->selectWhere('state', 'published');
@@ -155,8 +154,6 @@ class Article {
 
         $article->setState("deleted");
         $article->delete();
-
-
     }
 
 }
