@@ -45,6 +45,9 @@ class Media
         }
     }
 
+    /**
+     * Called by AJAX script to display media filtered by type
+     */
     public function getMediasAction() {
         if(!empty($_POST['mediaType'])) {
             $medias = new MediaModel();
@@ -63,9 +66,16 @@ class Media
 
             $mediasArray = [];
             foreach ($medias as $media) {
+
+                // Display default image if file is not found
+                if(file_exists(getcwd().$media->getPath()))
+                    $path = $media->getPath();
+                else
+                    $path = PATH_TO_IMG.'default_poster.jpg';
+
                 $mediasArray[] = [
                     $this->columnsTable['title'] => $media->getTitle(),
-                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$media->getPath()."'/>",
+                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$path."'/>",
                     $this->columnsTable['createdAt'] => $media->getCleanCreatedAtDate(),
                     $this->columnsTable['actions'] => $media->generateActionsMenu(),
                 ];

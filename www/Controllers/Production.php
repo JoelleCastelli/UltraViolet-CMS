@@ -56,10 +56,15 @@ class Production
                 $productionMedia = new ProductionMedia();
                 $productionMedia = $productionMedia->select()->where('productionId', $production->getId())->andWhere('keyArt', 1)->first();
                 $production->getPoster()->setId($productionMedia->getMediaId());
+                // Display default image if file is not found
+                if(file_exists(getcwd().$production->getPoster()->getPath()))
+                    $path = $production->getPoster()->getPath();
+                else
+                    $path = PATH_TO_IMG.'default.jpg';
 
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
-                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$production->getPoster()->getPath()."'/>",
+                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$path."'/>",
                     $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
                     $this->columnsTable['season'] => $production->getParentSeasonName(),
                     $this->columnsTable['series'] => $production->getParentSeriesName(),
