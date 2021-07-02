@@ -131,4 +131,12 @@ class Media extends Database
             ]
         ];
     }
+
+    public function getCleanCreatedAtDate() {
+        if ($this->getCreatedAt() != '') {
+            return date("d/m/Y", strtotime($this->getCreatedAt()));
+        } else {
+            return "-";
+        }
+    }
 }
