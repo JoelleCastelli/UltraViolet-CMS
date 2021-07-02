@@ -24,10 +24,6 @@ class Person
     }
 
     public function showAllAction() {
-        $persons = new PersonModel();
-        $persons = $persons->selectWhere('role', 'admin');
-        if(!$persons) $persons = [];
-
         $view = new View("persons/list");
         $view->assign('title', 'Utilisateurs');
         $view->assign('columnsTable', $this->columnsTable);

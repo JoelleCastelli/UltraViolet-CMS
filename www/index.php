@@ -12,15 +12,15 @@ use App\Core\ConstantManager;
 require 'Autoload.php';
 Autoload::register();
 new ConstantManager();
-Request::init();
 
-$slug = mb_strtolower(Request::getURI());
+$slug = '/'.Helpers::sanitizeString(rtrim(substr($_SERVER["REQUEST_URI"], 1), '/'));
 $route = new Router($slug);
 $controller = $route->getController();
 $action = $route->getAction();
 $middlewares = $route->getMiddlewares();
 $office = $route->getOffice();
 $params = $route->getParameters();
+Request::init();
 
 // Check privileges
 if($office == 'back') {

@@ -19,8 +19,6 @@ if(isset($errors)) {
                         <button class='btn'>Ecrire un article</button>
                       </a>";
                 }
-
-            Helpers::dd(Helpers::callRoute('users_update', ['id' => 4]));
             ?>
 
         </div>
