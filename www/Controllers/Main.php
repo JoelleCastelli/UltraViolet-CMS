@@ -49,20 +49,6 @@ class Main
 		echo json_encode(Helpers::callRoute($_POST['name']));
 	}
 
-
-    public function testAction()
-    {
-        $file = 'people.txt';
-        // Une nouvelle personne à ajouter
-        $person = "Jean Dupond\n";
-        // Ecrit le contenu dans le fichier, en utilisant le drapeau
-        // FILE_APPEND pour rajouter à la suite du fichier et
-        // LOCK_EX pour empêcher quiconque d'autre d'écrire dans le fichier
-        // en même temps
-        file_put_contents($file, $person, FILE_APPEND | LOCK_EX);
-        echo "the end";
-    }
-
 	public function page404Action(){
 		$view = new View("404", "front");
 	}
