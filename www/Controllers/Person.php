@@ -74,30 +74,31 @@ class Person
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)) {
-                if($user->findOneBy("pseudo", $_POST['pseudo'])) {
+                // Check if pseudo is available
+                if($user->findOneBy("pseudo", $_POST['pseudo']))
                     $errors[] = 'Ce pseudonyme est indisponible';
-                }
-                if($user->findOneBy("email", $_POST['email'])) {
+                // Check if email is not already in database
+                if($user->findOneBy("email", $_POST['email']))
                     $errors[] = 'Cette adresse e-mail est déjà utilisée';
-                }
+
+                // If no error in form, populate Person object and save in the database
                 if(empty($errors)) {
                     $user->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $user->setEmail(htmlspecialchars($_POST['email']));
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
-                    //$user->setDefaultProfilePicture();
-                    $user->setMediaId(1);
                     $user->generateEmailKey();
+                    $user->setDefaultProfilePicture();
+                    $user->save();
 
+                    // Send confirmation email
                     $to   = $_POST['email'];
                     $from = 'ultravioletcms@gmail.com';
-                    $name = 'Ultaviolet';
-                    $subj = 'Confirmation mail';
+                    $name = 'UltraViolet';
+                    $subj = 'UltraViolet - Confirmez votre email';
                     $msg = $user->verificationMail($_POST['pseudo'], $user->getEmailKey());
-                    
                     $mail = new Mail();
                     $mail->sendMail($to, $from, $name, $subj, $msg);
-                    $user->save();
-                
+
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
                     vous a été envoyé sur " .$_POST['email'].". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
                     Helpers::redirect('/connexion');
@@ -196,11 +197,11 @@ class Person
                 $user->setEmailConfirmed(1);
 
                 $user->save();
-                Helpers::setFlashMessage('success', "Votre compte à bien était activée.");
+                Helpers::setFlashMessage('success', "Votre compte a bien était activé");
                 Helpers::redirect('/connexion');
             }else
             {
-                Helpers::setFlashMessage('error', "Votre compte est déja activée");
+                Helpers::setFlashMessage('error', "Votre compte est déjà activé");
             }
 
         }else 
