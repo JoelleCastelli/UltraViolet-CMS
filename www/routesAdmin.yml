@@ -61,6 +61,13 @@ category_creation:
   controller: Category
   action:     addCategory
 
+category_update:
+  path:       /admin/categories/modifier/{id}
+  controller: Category
+  action:     updateCategory
+  requirements:
+    id: (\d+)
+
 category_delete:
   path:       /admin/categories/supprimer
   controller: Category

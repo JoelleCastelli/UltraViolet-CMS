@@ -43,7 +43,7 @@ class Category
         $view->assign('title', 'Nouvelle catégorie');
         $view->assign("form", $form);
 
-        // If form is submitted, check the data and save production
+        // If form is submitted, check the data and save category
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)) {
@@ -58,6 +58,37 @@ class Category
         }
     }
 
+    /**
+     * Update a category
+     */
+    public function updateCategoryAction($id) {
+        $category = new CategoryModel();
+        $form = $category->formBuilderUpdateCategory($id);
+        $view = new View("categories/update");
+        $view->assign('title', 'Modifier une catégorie');
+        $view->assign("form", $form);
+
+        // If form is submitted, check the data and save the category
+        if(!empty($_POST)) {
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)) {
+                // Dynamic setters
+                foreach ($_POST as $key => $value) {
+                    if ($key !== 'csrfToken' && $value !== '') {
+                        if(!empty($value)) {
+                            $functionName = "set".ucfirst($key);
+                            $category->$functionName(htmlspecialchars($value));
+                        }
+                    }
+                }
+                $category->save();
+                Helpers::setFlashMessage('success', "La catégorie a bien été mise à jour");
+                Helpers::redirect(Helpers::callRoute('categories_list'));
+            } else {
+                $view->assign("errors", $errors);
+            }
+        }
+    }
 
     /**
      * Delete a category in the database
