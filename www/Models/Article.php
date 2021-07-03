@@ -366,7 +366,7 @@ class Article extends Database implements JsonSerializable
                 "referer" => Helpers::callRoute('article_creation'),
             ],
             "fields" => [
-                "csrf_token" => [
+                "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],
@@ -413,7 +413,7 @@ class Article extends Database implements JsonSerializable
                 "referer" => Helpers::callRoute('article_update', ['id' => $id]),
             ],
             "fields" => [
-                "csrf_token" => [
+                "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],

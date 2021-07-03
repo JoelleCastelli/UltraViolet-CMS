@@ -51,23 +51,24 @@ $(document).ready( function () {
         },
     });
 
-    getArticleByState();
+    getArticleByState("published");
 
     // Display different types on filtering button click
-    $(".filtering-btn").click(function() {
-        $(".filtering-btn").removeClass('active');
-        table.column([4]).visible(true);
-        $(this).addClass('active');
-        if (this.id !== "published") {
-            table.column([4]).visible(false);
-        }
-        getArticleByState(this.id);
-    });
+    // $(".filtering-btn").click(function() {
+    //     $(".filtering-btn").removeClass('active');
+    //     table.column([4]).visible(true);
+    //     $(this).addClass('active');
+    //     if (this.id !== "published") {
+    //         table.column([4]).visible(false);
+    //     }
+    //     getArticleByState(this.id);
+    // });
 
-    function getArticleByState() {
+    function getArticleByState(state) {
         $.ajax({
             type: 'POST',
             url: callRoute("article_data"),
+            data: { state: state },
             dataType: 'json',
             success: function(response) {
                 console.log("Requete réussis");

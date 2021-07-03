@@ -37,10 +37,10 @@ class Article {
 
         if (!empty($_POST)) {
 
-            //  $errors = FormValidator::check($form, $_POST);
-            $errors = [];
-            //  if (empty($errors)) {
-            if (true) {
+             $errors = FormValidator::check($form, $_POST);
+            // $errors = [];
+             if (empty($errors)) {
+            // if (true) {
 
                 $title = htmlspecialchars($_POST["title"]);
 
@@ -80,10 +80,10 @@ class Article {
 
         if (!empty($_POST)) {
 
-            // $errors = FormValidator::check($form, $_POST);
-            $errors = [];
-            // if (empty($errors)) {
-            if (true) {
+            $errors = FormValidator::check($form, $_POST);
+            // $errors = [];
+            if (empty($errors)) {
+            // if (true) {
 
 
                 $title = htmlspecialchars($_POST["title"]);
