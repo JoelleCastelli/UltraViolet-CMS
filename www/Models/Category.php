@@ -123,8 +123,8 @@ class Category extends Database
             "fields" => [
                 "name" => [
                     "type" => "text",
-                    "min" => 1,
-                    "max" => 60,
+                    "minLength" => 1,
+                    "maxLength" => 60,
                     "label" => "Nom",
                     "class" => "search-bar",
                     "error" => "Le nom de catégorie doit contenir entre 1 et 60 caractères",
@@ -170,8 +170,8 @@ class Category extends Database
                     ],
                     "name" => [
                         "type" => "text",
-                        "min" => 1,
-                        "max" => 60,
+                        "minLength" => 1,
+                        "maxLength" => 60,
                         "label" => "Nom",
                         "class" => "search-bar",
                         "value" => $category->getName(),
