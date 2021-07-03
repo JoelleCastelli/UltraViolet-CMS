@@ -53,7 +53,7 @@ class Page
             $view = new View('staticPage', 'front');
             $view->assign('content', $page->getContent());
         }else {
-            Helpers::redirectionErreur404();
+            Helpers::redirect404();
         }
 
     }

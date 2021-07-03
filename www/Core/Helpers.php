@@ -28,7 +28,7 @@ class Helpers{
         exit;
     }
 
-    public static function redirectionErreur404()
+    public static function redirect404()
     {
         header('HTTP/1.0 404 Not Found');
         exit;
