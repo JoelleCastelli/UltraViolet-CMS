@@ -43,3 +43,10 @@ forget_password:
   path:       /404
   controller: Main
   action:     page404
+
+display_static_page:
+  path:       /{slug}
+  controller: Page
+  action:     showStaticPage
+  requirements:
+    slug: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
