@@ -21,6 +21,7 @@ class Page extends Database implements JsonSerializable
 	protected $titleSeo;
 	protected $descriptionSeo;
 	protected $publicationDate;
+    protected $content;
 	protected $createdAt;
 	protected $updatedAt;
 	protected $deletedAt;
@@ -166,6 +167,22 @@ class Page extends Database implements JsonSerializable
     /**
      * @return mixed
      */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content): void
+    {
+        $this->content = $content;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -277,6 +294,7 @@ class Page extends Database implements JsonSerializable
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),
+            "content" => $this->getContent(),
             "createdAt" => $this->getCreatedAt(),
             "updatedAt" => $this->getUpdatedAt(),
             "deletedAt" => $this->getDeletedAt()
@@ -354,7 +372,11 @@ class Page extends Database implements JsonSerializable
                     "placeholder" => "Description de la page",
                     "class"=>"search-bar",
                 ],
-              
+                "content" => [
+                    "type" => "textarea",
+                    "placeholder" => "Contenu de la page",
+                    "class" => "input",
+                ],
                 "state" => [
                     "type" => "radio",
                     "label" => "État *",
@@ -396,7 +418,6 @@ class Page extends Database implements JsonSerializable
 
     public function formBuilderUpdate($id)
     {
-
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
 
@@ -453,7 +474,11 @@ class Page extends Database implements JsonSerializable
                     "placeholder" => "Description de la page",
                     "class" => "search-bar",
                 ],
-
+                "content" => [
+                    "type" => "textarea",
+                    "placeholder" => "Contenu de la page",
+                    "class" => "input",
+                ],
                 "state" => [
                     "type" => "radio",
                     "label" => "État *",

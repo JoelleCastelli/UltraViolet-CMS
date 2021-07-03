@@ -109,7 +109,7 @@ class Page
         $view = new View('pages/create');
         $view->assign('title', 'Créer une page');
         $view->assign('form', $form);
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/pages/tinymce.js']);
 
         if (!empty($_POST)) {
 
@@ -132,6 +132,7 @@ class Page
                     $page->setTitle($_POST["title"]);
                     $page->setPosition($_POST["position"]);
                     $page->setTitleSeo($_POST["titleSeo"]);
+                    $page->setContent($_POST["content"]);
                     $page->setDescriptionSeo($_POST["descriptionSeo"]);
                     $page->setCreatedAt(Helpers::getCurrentTimestamp());
                     $save = $page->save();
@@ -173,7 +174,7 @@ class Page
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
         $view->assign('title', 'Modifier la page n° ' . $page->getId());
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/pages/tinymce.js']);
 
         if (!empty($_POST)) {
 
@@ -199,6 +200,7 @@ class Page
                     $page->setPosition($_POST["position"]);
                     $page->setTitleSeo($_POST["titleSeo"]);
                     $page->setDescriptionSeo($_POST["descriptionSeo"]);
+                    $page->setContent($_POST["content"]);
 
                     $save = $page->save();
 
