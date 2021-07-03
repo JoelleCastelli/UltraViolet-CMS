@@ -9,8 +9,20 @@
 <table id="datatable" class="display">
     <thead>
         <tr>
-
+            <?php if (isset($columnsTable)) {
+                foreach ($columnsTable as $key => $value) {
+                    echo "<th>$value</th>";
+                }
+            } ?>
         </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+        <?php foreach($categories as $category) { ?>
+            <tr>
+                <td><?= $category->getName() ?></td>
+                <td><?= $category->getPosition() ?></td>
+                <td><?= $category->generateActionsMenu() ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
 </table>
