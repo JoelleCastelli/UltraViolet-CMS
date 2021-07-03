@@ -347,6 +347,7 @@ class Article extends Database implements JsonSerializable
             "totalViews" => $this->getTotalViews(),
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
+            "publicationDate" => $this->getPublicationDate(),
             "contentUpdatedAt" => $this->getContentUpdatedAt(),
             "createdAt" => $this->getCreatedAt(),
             "updatedAt" => $this->getUpdatedAt(),
@@ -356,6 +357,10 @@ class Article extends Database implements JsonSerializable
 
     // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
     public function formBuilderCreateArticle() {
+
+        $today = date("Y-m-d\TH:i");
+        $todayText = date("Y-m-d H:i");
+
         return [
             "config" => [
                 "method" => "POST",
@@ -388,6 +393,13 @@ class Article extends Database implements JsonSerializable
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
                 ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "label" => "Date de la planification",
+                    "class" => "search-bar publicationDateInput",
+                    "error" => "Votre date de publication doit être au minimum " . $todayText ,
+                    "min" => $today,
+                ],
                  "content" => [
                      "type" => "textarea",
                      "placeholder" => "Contenu de l article",
@@ -403,6 +415,10 @@ class Article extends Database implements JsonSerializable
 
     // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
     public function formBuilderUpdateArticle($id) {
+
+        $today = date("Y-m-d\TH:i");
+        $todayText = date("Y-m-d H:i");
+
         return [
             "config" => [
                 "method" => "POST",
@@ -434,6 +450,13 @@ class Article extends Database implements JsonSerializable
                     "class" => "input",
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
+                ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "label" => "Date de la planification",
+                    "class" => "search-bar publicationDateInput",
+                    "error" => "Votre date de publication doit être au minimum " . $todayText ,
+                    "min" => $today,
                 ],
                 "content" => [
                     "type" => "textarea",

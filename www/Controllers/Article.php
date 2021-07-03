@@ -5,21 +5,43 @@ namespace App\Controller;
 use App\Core\View;
 use App\Core\Helpers;
 use App\Core\FormValidator;
+use App\Core\Request;
 use App\Models\Article as ArticleModel;
 
 class Article {
 
     // utils
 
-    private function redirect(string $route, string $code = "307") {
+    private function redirect(string $route, string $code = "0") {
         Helpers::redirect(Helpers::callRoute($route), $code);
+    }
+
+    private function getArticlesBySate($state) : array {
+        $article = new ArticleModel;
+        $now = date('Y-m-d H:i:s');
+
+        if ($state == "published") {
+           return $article->select()->where("publicationDate", $now, "<=")->andWhere("deletedAt", "NULL")->get();
+        } elseif ($state == "scheduled") {
+            return $article->select()->where("publicationDate", $now, ">=")->get();
+        } elseif ($state == "draft") {
+
+        } elseif ($state == "removed") {
+
+        }
+
+        return [];
+
     }
 
     // Standard controller methods
     public function showAllAction() {
         $article = new ArticleModel;
         // $articles = $article->selectWhere('state', 'published'); // TODO : Need to fetch without state
-        $articles = [];
+
+        // $articles = $this->getArticlesBySate("published");
+        $articles = $this->getArticlesBySate("scheduled");
+        Helpers::dd($articles);
         
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
@@ -27,7 +49,6 @@ class Article {
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/articles/articles.js']);
     }
 
-    // TODO : How to managae the state ?
     public function createArticleAction() {
         // TODO : check and redirect if id exist or invalid
 
@@ -37,36 +58,36 @@ class Article {
 
         if (!empty($_POST)) {
 
-             $errors = FormValidator::check($form, $_POST);
-            // $errors = [];
-             if (empty($errors)) {
-            // if (true) {
+            $errors = FormValidator::check($form, $_POST);
+            if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
+                $user = Request::getUser();
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
-                    
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                // State was here
+                if (!empty($_POST["publicationDate"])) {
+                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
+                }
 
-                // TODO : Get real connected Person and Media used
+                // TODO : Get Real Media
                 $article->setMediaId(1);
-                $article->setPersonId(1);
-
+                $article->setPersonId($user->getId());
+                
                 $article->save();
                 $this->redirect("articles_list");
-            } 
-            else 
+            }
+            else
                 $view->assign("errors", $errors);
         }
+
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
     }
 
-    // TODO : How to managae the state ?
     public function updateArticleAction($id) {
         // TODO : check and redirect if id exist or invalid
 
@@ -81,24 +102,25 @@ class Article {
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
-            // $errors = [];
             if (empty($errors)) {
-            // if (true) {
-
 
                 $title = htmlspecialchars($_POST["title"]);
+                $user = Request::getUser();
+                
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
-
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                // State was here
+                if (!empty($_POST["publicationDate"])) {
+                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
+                }
 
-                // TODO : Get real connected Person and Media used
+
+                // TODO : Get Real Media
                 $article->setMediaId(1);
-                $article->setPersonId(1);
-
+                $article->setPersonId($user->getId());
+                
                 $article->save();
                 $this->redirect("articles_list");
             }
@@ -107,6 +129,7 @@ class Article {
         }
 
         $arrayArticle = $article->jsonSerialize();
+        // Helpers::dd($arrayArticle);
 
         $view->assign('form', $form);
         $view->assign("data", $arrayArticle);
