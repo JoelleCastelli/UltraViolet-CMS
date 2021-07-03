@@ -229,5 +229,5 @@ medias_user_data:
 settings:
   path: /admin/parametres
   controller: Settings
-  action: showAll
-  middleware: Admin, Editor, Moderator
+  action:     showAll
+  middleware: Admin

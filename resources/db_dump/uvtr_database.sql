@@ -35,6 +35,19 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_category` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+-- -----------------------------------------------------
+-- Table `ultraviolet`.`uvtr_settings`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_settings` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(20) NOT NULL,
+  `value` VARCHAR(60) NOT NULL,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 
 -- -----------------------------------------------------
 -- Table `ultraviolet`.`uvtr_media`
@@ -141,7 +154,6 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_category_article` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-USE `ultraviolet` ;
 
 -- -----------------------------------------------------
 -- Table `ultraviolet`.`uvtr_production`
