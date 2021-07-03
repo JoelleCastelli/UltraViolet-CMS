@@ -4,7 +4,6 @@
         <div class="filtering-btn" id="moderator">Modérateurs</div>
         <div class="filtering-btn" id="editor">Rédacteurs</div>
         <div class="filtering-btn" id="admin">Administrateurs</div>
-        <div class="filter-delete" id="admin">Supprimer</div>
     </div>
 </div>
 
