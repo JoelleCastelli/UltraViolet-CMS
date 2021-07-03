@@ -1,4 +1,8 @@
-<?php use App\Core\Helpers; ?>
+<?php
+    use App\Core\Helpers;
+    use App\Core\Request;
+    $user = Request::getUser();
+?>
 <nav id="sidebar">
     <a href="<?= Helpers::callRoute('admin') ?>" class="brandLogo">
         <img src='<?= PATH_TO_IMG ?>logo_uv.png' alt='ultraviolet logo'>
@@ -46,8 +50,10 @@
         <i class="fas fa-chart-line fa-fw"></i>
         <div class="navLabel">Statistiques</div>
     </a>
-    <a href="<?= Helpers::callRoute('settings') ?>">
-        <i class="fas fa-cogs fa-fw"></i>
-        <div class="navLabel">Paramètres</div>
-    </a>
+    <?php if ($user && $user->isLogged() && $user->isAdmin()) { ?>
+        <a href="<?= Helpers::callRoute('settings') ?>">
+            <i class="fas fa-cogs fa-fw"></i>
+            <div class="navLabel">Paramètres</div>
+        </a>
+    <?php } ?>
 </nav>
