@@ -4,11 +4,6 @@ admin:
   controller: Main
   action:     default
 
-test:
-  path:       /admin/test
-  controller: Main
-  action:     test
-
 routes: 
   path:       /admin/routes
   controller: Main
@@ -54,6 +49,30 @@ pages_data:
   path:       /admin/pages-data
   controller: Page
   action:     getPages
+
+# CATEGORIES
+categories_list:
+  path:       /admin/categories
+  controller: Category
+  action:     showAll
+
+category_creation:
+  path:       /admin/categories/creation
+  controller: Category
+  action:     addCategory
+
+category_update:
+  path:       /admin/categories/modifier/{id}
+  controller: Category
+  action:     updateCategory
+  requirements:
+    id: (\d+)
+
+category_delete:
+  path:       /admin/categories/supprimer
+  controller: Category
+  action:     deleteCategory
+  middleware: Admin
 
 # ARTICLES
 articles_list:

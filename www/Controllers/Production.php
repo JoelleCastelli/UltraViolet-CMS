@@ -258,7 +258,6 @@ class Production
                 $production->save();
                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été mise à jour");
                 Helpers::redirect(Helpers::callRoute('productions_list'));
-                
             } else {
                 $view->assign("errors", $errors);
             }
