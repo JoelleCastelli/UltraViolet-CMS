@@ -302,4 +302,4 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 SET NAMES UTF8;
 
-INSERT INTO `ultraviolet`.`uvtr_media` ('title', 'path') VALUES ('default', '/src/img/default.jpg');
+INSERT INTO `ultraviolet`.`uvtr_media` (`title`, `path`) VALUES ("default", "/src/img/default.jpg");
