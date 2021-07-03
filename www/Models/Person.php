@@ -8,6 +8,8 @@ use App\Core\FormBuilder;
 use App\Core\Traits\ModelsTrait;
 use JsonSerializable;
 
+use App\Core\View;
+
 
 class Person extends Database implements JsonSerializable
 {
@@ -41,8 +43,14 @@ class Person extends Database implements JsonSerializable
         parent::__construct();
         $this->media = new Media();
         $this->actions = [
+
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])] ,
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'admin']
+
+            //['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' =>$this->id])] ,
+            //['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute
+            //('users_delete', ['id' => $this->id]), 'role' => 'admin']
+
         ];
     }
 
