@@ -217,21 +217,17 @@ class Page
 
     public function updateVisibilityAction()
     {
-        if (isset($_POST['form'])) {
-            if ($_POST['form'] == "changeVisibility") {
-                if (isset($_POST['id']) && !empty($_POST['id'])) {
-                    $page = new PageModel();
-                    $page->setId($_POST['id']);
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+            $page = new PageModel();
+            $page->setId($_POST['id']);
 
-                    if ($page->getState() === "published") {
-                        $page->setState('hidden');
+            if ($page->getState() === "published") {
+                $page->setState('hidden');
 
-                    } else if ($page->getState() === "hidden") {
-                        $page->setState('published');
-                    }
-                    $page->save();
-                }
+            } else if ($page->getState() === "hidden") {
+                $page->setState('published');
             }
+            $page->save();
         }
     }
 
@@ -262,17 +258,11 @@ class Page
 
             if($page->getState() == "deleted")
             {
-                $pageArticle = new PageArticle();
-                $check = $pageArticle->hardDelete()->where('pageId', $id)->execute(); // delete foreign keys
-              
-                if($check){
-                    $check = $page->delete();
-                }
+                $check = $page->delete();
             }
             else {
                 $page->setState("deleted");
                 $check = $page->delete();
-
             }
         }
     }

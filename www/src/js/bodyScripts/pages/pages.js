@@ -99,7 +99,6 @@ $(document).ready(function() {
             url: callRoute('page_update_visibility'),
             data: {
                 id: pageId,
-                form: 'changeVisibility'
             },
             async: false,
             error: function(response) {
