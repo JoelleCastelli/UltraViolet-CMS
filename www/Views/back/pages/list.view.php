@@ -31,25 +31,3 @@
     </thead>
     <tbody></tbody>
 </table>
-
-<!-- MODAL ADD PAGE -->
-<div id="add-page-modal" class="modal modal-hidden">
-    <div class="wrapper-modal">
-        <div class="header-modal">
-            <h2 class="title-modal">
-                Ajouter une page
-            </h2>
-            <span class="btn-close-modal"><i class="fas fa-times"></i></span>
-        </div>
-        <div class="content-modal">
-            <?php App\Core\FormBuilder::render($formCreatePage);  ?>
-        </div>
-        <div class="footer-modal">
-
-            <div class="container-message">
-
-            </div>
-
-        </div>
-    </div>
-</div>
