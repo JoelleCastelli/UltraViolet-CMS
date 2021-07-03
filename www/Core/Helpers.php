@@ -28,6 +28,12 @@ class Helpers{
         exit;
     }
 
+    public static function redirectionErreur404()
+    {
+        header('HTTP/1.0 404 Not Found');
+        exit;
+    }
+
     public static function setFlashMessage($key, $msg) {
         if(gettype($msg) == 'array'){
             foreach ($msg as $item) {
