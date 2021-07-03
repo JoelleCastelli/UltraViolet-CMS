@@ -18,11 +18,11 @@ class Article extends Database implements JsonSerializable
     protected $content;
     protected $rating;
     protected $slug;
-    protected $state;
     protected $totalViews = 0;
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
+    protected $publicationDate;
     protected $mediaId;
     protected $personId;
     private $createdAt;
@@ -132,21 +132,6 @@ class Article extends Database implements JsonSerializable
         $this->slug = $slug;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param mixed $state
-     */
-    public function setState($state): void
-    {
-        $this->state = $state;
-    }
 
     /**
      * @return mixed
@@ -226,6 +211,22 @@ class Article extends Database implements JsonSerializable
     public function setContentUpdatedAt($contentUpdatedAt): void
     {
         $this->contentUpdatedAt = $contentUpdatedAt;
+    }
+
+    /**
+     * @return mixed $publicationDate
+     */
+    public function getPublicationDate()
+    {
+        return $this->publicationDate;
+    }
+
+    /**
+     * @param mixed $publicationDate
+     */
+    public function setPublicationDate($publicationDate): void
+    {
+        $this->publicationDate = $publicationDate;
     }
 
     /**
@@ -343,7 +344,6 @@ class Article extends Database implements JsonSerializable
             "content" => $this->getContent(),
             "rating" => $this->getRating(),
             "slug" => $this->getSlug(),
-            "state" => $this->getState(),
             "totalViews" => $this->getTotalViews(),
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
@@ -396,33 +396,13 @@ class Article extends Database implements JsonSerializable
                      "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
                      "required" => false,
                  ],
-                "state"=>[
-                    "type"=>"radio",
-                    "label"=>"État :",
-                    "class"=>"input",
-                    "error"=>"Erreur test",
-                    "required" => true,
-                    "options" => [
-                        [
-                            "value"=>"draft",
-                            "text"=>"Brouillon",
-                        ],
-                        [
-                            "value"=>"scheduled",
-                            "text"=>"Planifié",
-                        ],
-                        [
-                            "value"=>"published",
-                            "text"=>"Publié",
-                        ],
-                    ],
-                ],
+                // State radio was here
             ]
         ];
     }
 
     // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
-    public function formBuilderUpdateArticle() {
+    public function formBuilderUpdateArticle($id) {
         return [
             "config" => [
                 "method" => "POST",
@@ -430,8 +410,7 @@ class Article extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "form_create_article",
                 "submit" => "Valider les modifications",
-                "referer" => Helpers::callRoute('article_update'),
-
+                "referer" => Helpers::callRoute('article_update', ['id' => $id]),
             ],
             "fields" => [
                 "csrf_token" => [
@@ -465,27 +444,7 @@ class Article extends Database implements JsonSerializable
                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
                     "required" => false,
                 ],
-                "state"=>[
-                    "type"=>"radio",
-                    "label"=>"État :",
-                    "class"=>"",
-                    "error"=>"Erreur test",
-                    "required" => true,
-                    "options" => [
-                        [
-                            "value"=>"draft",
-                            "text"=>"Brouillon",
-                        ],
-                        [
-                            "value"=>"scheduled",
-                            "text"=>"Planifié",
-                        ],
-                        [
-                            "value"=>"published",
-                            "text"=>"Publié",
-                        ],
-                    ],
-                ],
+                // State radio was here
             ]
         ];
     }

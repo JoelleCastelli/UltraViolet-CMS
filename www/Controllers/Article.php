@@ -18,7 +18,8 @@ class Article {
     // Standard controller methods
     public function showAllAction() {
         $article = new ArticleModel;
-        $articles = $article->selectWhere('state', 'published');
+        // $articles = $article->selectWhere('state', 'published'); // TODO : Need to fetch without state
+        $articles = [];
         
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
@@ -26,7 +27,9 @@ class Article {
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/articles/articles.js']);
     }
 
+    // TODO : How to managae the state ?
     public function createArticleAction() {
+        // TODO : check and redirect if id exist or invalid
 
         $article = new ArticleModel();
         $form = $article->formBuilderCreateArticle();
@@ -35,7 +38,7 @@ class Article {
         if (!empty($_POST)) {
 
             //  $errors = FormValidator::check($form, $_POST);
-            $error = [];
+            $errors = [];
             //  if (empty($errors)) {
             if (true) {
 
@@ -46,7 +49,7 @@ class Article {
                     
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                $article->setState(htmlspecialchars($_POST["state"]));
+                // State was here
 
                 // TODO : Get real connected Person and Media used
                 $article->setMediaId(1);
@@ -63,19 +66,22 @@ class Article {
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
     }
 
+    // TODO : How to managae the state ?
     public function updateArticleAction($id) {
         // TODO : check and redirect if id exist or invalid
+
 
         $article = new ArticleModel();
         $article->setId($id);
 
         $view = new View("articles/updateArticle");
-        $form = $article->formBuilderUpdateArticle();
+        $form = $article->formBuilderUpdateArticle($id);
+
 
         if (!empty($_POST)) {
 
             // $errors = FormValidator::check($form, $_POST);
-            $error = [];
+            $errors = [];
             // if (empty($errors)) {
             if (true) {
 
@@ -87,7 +93,7 @@ class Article {
 
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                $article->setState(htmlspecialchars($_POST["state"]));
+                // State was here
 
                 // TODO : Get real connected Person and Media used
                 $article->setMediaId(1);
@@ -112,13 +118,11 @@ class Article {
 
     // API methods
 
+    // TODO : Need to secure this
     public function getArticlesAction() {
-        if (empty($_POST['state'])) return;
 
-        $state = $_POST['state'];
         $articles = new ArticleModel();
-
-        $articles = $articles->selectWhere('state', htmlspecialchars($_POST['state']));
+        $articles = $articles->findAll();
 
         if (!$articles) $articles = [];
 
@@ -130,31 +134,28 @@ class Article {
                 "Vues" => $article->getTotalViews(),
                 "Commentaire" => "[NOMBRE COMMENTAIRE]",
                 "Date" => $article->getCreatedAt(),
-                "Publication" => $article->getState(),
+                "Publication" => $article->getPublicationDate(),
                 "Actions" => $article->generateActionsMenu()
             ];
         }
 
         echo json_encode([
-            "state" => $state,
             "articles" => $articlesArray
         ]);
     }
 
     public function deleteArticleAction() {
 
-        if (empty($_POST["id"]))  return;
+        if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
         $article->setId($_POST["id"]);
 
-        if ($article->getState() === "deleted") {
+        if ($article->getDeletedAt()) {
             $article->hardDelete()->where("id", $_POST["id"])->execute();
-            return;
+        } else {
+            $article->delete();
         }
-
-        $article->setState("deleted");
-        $article->delete();
     }
 
 }

@@ -14,7 +14,7 @@ $(document).ready( function () {
         ],
 
         columnDefs: [{
-            targets: 5,
+            targets: 6,
             data: "name",
             searchable: false,
             orderable: false
@@ -51,7 +51,7 @@ $(document).ready( function () {
         },
     });
 
-    getArticleByState("published");
+    getArticleByState();
 
     // Display different types on filtering button click
     $(".filtering-btn").click(function() {
@@ -64,11 +64,10 @@ $(document).ready( function () {
         getArticleByState(this.id);
     });
 
-    function getArticleByState(state) {
+    function getArticleByState() {
         $.ajax({
             type: 'POST',
             url: callRoute("article_data"),
-            data: { state },
             dataType: 'json',
             success: function(response) {
                 console.log("Requete réussis");

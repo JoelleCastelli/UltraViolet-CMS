@@ -13,6 +13,7 @@ class Media extends Database
 
     private ?int $id = null;
     protected ?string $title;
+    // protected ?string $title = null;
     protected ?string $path = null;
     private ?string $tmdbPosterPath = null;
     protected bool $video = false;
