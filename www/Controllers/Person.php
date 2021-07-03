@@ -141,16 +141,6 @@ class Person
         Helpers::redirect('/');
     }
 
-	//Method : Action
-	public function addAction(){
-		
-		//Récupérer le formulaire
-		//Récupérer les valeurs de l'internaute si il y a validation du formulaire
-		//Vérification des champs (uncitié de l'email, complexité du pwd, ...)
-		//Affichage du résultat
-
-	}
-
     public function updatePersonAction($id) {
         if(!empty($id)){
             echo 'salut';
@@ -158,30 +148,17 @@ class Person
 
     }
 
-    public function deletePersonAction($id) {
-        // if(!empty($id)){
-        //     $user = new PersonModel();
-        //     $user->setId($id);
-        //     $user->delete();
-        //     $response['success'] = true;
-        //     $response['message'] = "Cette personne à bien été supprier";
-        // }else{
-        //     $response['success'] = false;
-        //     $response['message'] = "Cette personne ne peut pas être supprimée : l'id n'existe pas";
-        // }
-        // echo json_encode($response);
-
-        if(!empty($id)){
-            $response = [];
+    public function deletePersonAction() {
+            if (!empty($_POST['id'])){ 
             $user = new PersonModel();
+            $id = $_POST['id'];
             $user->setId($id);
-            
-            //if article lié -> changer la signature 
-            
-            $page->setState("deleted");
             $user->delete();
-            $user->save();
 
+            Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
+            
+        }else{
+            Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }
     }
 

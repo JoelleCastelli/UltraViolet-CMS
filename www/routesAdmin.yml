@@ -183,12 +183,10 @@ users_update:
     id:       (\d+)
 
 users_delete:
-  path:       /admin/utilisateurs/supprimer/{id}
+  path:       /admin/utilisateurs/supprimer
   controller: Person
   action:     deletePerson
   middleware: Admin
-  requirements:
-    id:       (\d+)
 
 user_show:
   path:       /admin/utilisateur
