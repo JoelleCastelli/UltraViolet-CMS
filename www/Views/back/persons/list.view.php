@@ -4,10 +4,6 @@
         <div class="filtering-btn" id="moderator">Modérateurs</div>
         <div class="filtering-btn" id="editor">Rédacteurs</div>
         <div class="filtering-btn" id="admin">Administrateurs</div>
-<<<<<<< HEAD
-=======
-        <div class="filter-delete" id="admin">Supprimer</div>
->>>>>>> Test -> front for deleted user
     </div>
 </div>
 
