@@ -1,7 +1,7 @@
 <?php use App\Core\Helpers; ?>
 <nav id="sidebar">
     <a href="<?= Helpers::callRoute('admin') ?>" class="brandLogo">
-        <img src='/src/img/logoSiteMini.png' alt='ultraviolet logo'>
+        <img src='<?= PATH_TO_IMG ?>logoSiteMini.png' alt='ultraviolet logo'>
     </a>
     <span id="cta-toggle-sidebar" onclick="toggleSidebar()">
         <i class="fas fa-angle-left fa-fw"></i>
@@ -13,6 +13,10 @@
     <a href="<?= Helpers::callRoute('pages_list') ?>">
         <i class="fas fa-pager fa-fw"></i>
         <div class="navLabel">Pages</div>
+    </a>
+    <a href="<?= Helpers::callRoute('categories_list') ?>">
+        <i class="fas fa-tags fa-fw"></i>
+        <div class="navLabel">Catégories</div>
     </a>
     <a href="<?= Helpers::callRoute('articles_list') ?>">
         <i class="fas fa-newspaper fa-fw"></i>

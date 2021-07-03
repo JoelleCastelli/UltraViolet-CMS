@@ -4,11 +4,6 @@ admin:
   controller: Main
   action:     default
 
-test:
-  path:       /admin/test
-  controller: Main
-  action:     test
-
 routes: 
   path:       /admin/routes
   controller: Main
@@ -54,6 +49,12 @@ pages_data:
   path:       /admin/pages-data
   controller: Page
   action:     getPages
+
+# CATEGORIES
+categories_list:
+  path:       /admin/categories
+  controller: Category
+  action:     showAll
 
 # ARTICLES
 articles_list:
