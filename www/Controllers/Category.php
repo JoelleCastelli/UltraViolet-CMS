@@ -24,7 +24,7 @@ class Category
     public function showAllAction()
     {
         $categories = new CategoryModel();
-        $categories = $categories->findAll();
+        $categories = $categories->select()->orderBy('position')->get();
         $view = new View("categories/list");
         $view->assign('title', 'Catégories');
         $view->assign('columnsTable', $this->columnsTable);
