@@ -10,6 +10,7 @@ use App\Core\Helpers;
     <title>UltraViolet - <?= $title ?? ' Back office'?></title>
     <meta name="description" content="UltraViolet - Back office">
     <meta name="robots" content="noindex">
+    <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>favicon.ico"/>
 
     <!--JS-->
     <script src="<?=PATH_TO_DIST.'main.js'?>"></script>

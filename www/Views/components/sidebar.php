@@ -1,7 +1,7 @@
 <?php use App\Core\Helpers; ?>
 <nav id="sidebar">
     <a href="<?= Helpers::callRoute('admin') ?>" class="brandLogo">
-        <img src='<?= PATH_TO_IMG ?>logoSiteMini.png' alt='ultraviolet logo'>
+        <img src='<?= PATH_TO_IMG ?>logo_uv.png' alt='ultraviolet logo'>
     </a>
     <span id="cta-toggle-sidebar" onclick="toggleSidebar()">
         <i class="fas fa-angle-left fa-fw"></i>
