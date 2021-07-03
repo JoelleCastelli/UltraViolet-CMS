@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Core\Settings;
+
 class Helpers{
 
 	public static function cleanFirstname($firstname){
@@ -136,6 +138,13 @@ class Helpers{
                 lcfirst($match);
         }
         return implode('_', $ret);
+    }
+
+    public static function getSetting($settingName){
+        if(Settings::getSettings()[$settingName]) {
+            return Settings::getSettings()[$settingName]->getValue();
+        }
+        return false;
     }
 
 }

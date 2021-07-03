@@ -8,6 +8,7 @@ use App\Core\Helpers;
 use App\Core\Request;
 use App\Core\Router;
 use App\Core\ConstantManager;
+use App\Core\Settings;
 
 require 'Autoload.php';
 Autoload::register();
@@ -21,6 +22,7 @@ $middlewares = $route->getMiddlewares();
 $office = $route->getOffice();
 $params = $route->getParameters();
 Request::init();
+Settings::init();
 
 // Check privileges
 if($office == 'back') {

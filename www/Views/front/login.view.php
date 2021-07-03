@@ -1,4 +1,4 @@
-<h1 class="title-form"><?= APP_NAME ?></h1>
+<h1 class="title-form"><?= \App\Core\Helpers::getSetting('appName') ?></h1>
 <div id='login-subscription' class="card">
     <div class="error-message-form">
         <?php
