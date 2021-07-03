@@ -50,9 +50,10 @@ class Page
         $page = $page->findOneBy('slug', $slug);
 
         if(!empty($page)){
-            $view = new View($slug, 'front');
+            $view = new View('staticPage', 'front');
+            $view->assign('content', $page->getContent());
         }else {
-            Helpers::redirect(Helpers::callRoute('404'));
+            Helpers::redirectionErreur404();
         }
 
     }
@@ -159,7 +160,7 @@ class Page
 
          // if page not exist
         if (empty($page->findOneBy("id", $id))) {
-            Helpers::redirect(Helpers::callRoute("articles_list"), "404");
+            Helpers::redirect(Helpers::callRoute("articles_list"));
         }
 
         $form = $page->formBuilderUpdate($id);
