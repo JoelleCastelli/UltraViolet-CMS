@@ -28,4 +28,19 @@ class Category
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/categories/categories.js']);
     }
 
+    public function deleteCategoryAction() {
+        if(!empty($_POST['categoryId'])) {
+            $response = [];
+            $category = new CategoryModel();
+            if($category->hardDelete()->where('id', $_POST['categoryId'])->execute()) {
+                $response['success'] = true;
+                $response['message'] = 'La catégorie a bien été supprimée';
+            } else {
+                $response['success'] = false;
+                $response['message'] = 'La catégorie n\'a pas pu être supprimée';
+            }
+            echo json_encode($response);
+        }
+    }
+
 }

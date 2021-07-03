@@ -52,14 +52,14 @@ $(document).ready( function () {
         },
     });
 
-    /*table.on('click', '.delete', function () {
-        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette production ?')) {
-            let productionId = this.id.substring(this.id.lastIndexOf('-') + 1);
+    table.on('click', '.delete', function () {
+        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette catégorie ?')) {
+            let categoryId = this.id.substring(this.id.lastIndexOf('-') + 1);
             let row = table.row($(this).parents('tr'));
             $.ajax({
                 type: 'POST',
-                url: callRoute('production_delete'),
-                data: { productionId: productionId },
+                url: callRoute('category_delete'),
+                data: { categoryId: categoryId },
                 dataType: 'json',
                 success: function(response) {
                     if (response['success'])
@@ -68,10 +68,10 @@ $(document).ready( function () {
                         alert(response['message']);
                 },
                 error: function() {
-                    console.log("Erreur dans la suppression de la production ID " + productionId);
+                    console.log("Erreur dans la suppression de la production ID " + categoryId);
                 }
             });
         }
-    });*/
+    });
 
 });

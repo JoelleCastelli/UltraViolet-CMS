@@ -56,6 +56,12 @@ categories_list:
   controller: Category
   action:     showAll
 
+category_delete:
+  path:       /admin/categories/supprimer
+  controller: Category
+  action:     deleteCategory
+  middleware: Admin
+
 # ARTICLES
 articles_list:
   path:       /admin/articles
