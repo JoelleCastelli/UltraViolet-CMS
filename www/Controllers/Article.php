@@ -34,10 +34,10 @@ class Article {
 
         if (!empty($_POST)) {
 
-//              $errors = FormValidator::check($form, $_POST);
-                $errors = [];
-//              if (empty($errors)) {
-                if (true) { // CSRF error here always
+            //  $errors = FormValidator::check($form, $_POST);
+            $error = [];
+            //  if (empty($errors)) {
+            if (true) {
 
                 $title = htmlspecialchars($_POST["title"]);
 
@@ -75,10 +75,10 @@ class Article {
         if (!empty($_POST)) {
 
             // $errors = FormValidator::check($form, $_POST);
-            $errors = [];
-
-//              if (empty($errors)) {
+            $error = [];
+            // if (empty($errors)) {
             if (true) {
+
 
                 $title = htmlspecialchars($_POST["title"]);
 

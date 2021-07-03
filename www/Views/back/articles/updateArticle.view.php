@@ -1,6 +1,6 @@
 <div>
 
-    <section class="grid-form-add-page">
+    <section class="grid-create-article">
 
         <section class="card">
 
