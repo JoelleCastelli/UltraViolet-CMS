@@ -4,6 +4,7 @@
         <div class="filtering-btn" id="moderator">Modérateurs</div>
         <div class="filtering-btn" id="editor">Rédacteurs</div>
         <div class="filtering-btn" id="admin">Administrateurs</div>
+        <div class="filtering-btn" id="admin">Supprimer</div>
     </div>
 </div>
 
@@ -11,17 +12,12 @@
     <thead>
         <tr>
             <?php
-
-use App\Core\Helpers;
-
-if (isset($columnsTable)) {
-                    foreach ($columnsTable as $key => $value) {
-                        echo "<th>$value</th>";
-                    }
+            use App\Core\Helpers;
+            if (isset($columnsTable)) {
+                foreach ($columnsTable as $key => $value) {
+                    echo "<th>$value</th>";
                 }
-
-
-
+            }
             ?>
         </tr>
     </thead>
