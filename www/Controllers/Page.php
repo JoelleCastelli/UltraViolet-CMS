@@ -97,6 +97,66 @@ class Page
     {
         $page = new PageModel();
         $form = $page->formBuilderRegister();
+
+        $view = new View('pages/create');
+        $view->assign('title', 'Créer une page');
+        $view->assign('form', $form);
+
+        if (!empty($_POST)) {
+
+            $errors = FormValidator::check($form, $_POST);
+
+            if (empty($errors)) {
+
+                $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
+                $publicationDate  = empty($_POST["publicationDate"]) ? null : $_POST["publicationDate"];
+                $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
+                
+                if (!empty($isNotUniqueSlug)) {
+                    $errors[] = 'Ce slug est déjà existant';
+                }
+
+                if(empty($errors)){
+
+                    $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
+                    $page->setSlug($slug);
+                    $page->setTitle($_POST["title"]);
+                    $page->setPosition($_POST["position"]);
+                    $page->setTitleSeo($_POST["titleSeo"]);
+                    $page->setDescriptionSeo($_POST["descriptionSeo"]);
+                    $page->setCreatedAt(Helpers::getCurrentTimestamp());
+                    $save = $page->save();
+
+                    if (!$save) 
+                        $errors[] = 'Oops ! Un soucis lors de la sauvegarde est survenu, veuillez recommencer svp';
+                    
+                    if(empty($errors)) {
+
+                        if ($page->getState() === 'published') // if published, add route to file
+                        {
+                            $id = $page->getLastInsertId();
+                            $key = $page->getSlug() . '-page-' . $id;
+                            $path[$key]['path'] = '/' . $page->getSlug();
+                            $path[$key]['controller'] = 'Page';
+                            $path[$key]['action'] = 'accessPage';
+                            $this->writePathInRouteFile($path, $id);
+                        }
+
+                        Helpers::setFlashMessage('success', 'La page s\'est bien créée');
+                        Helpers::redirect(Helpers::callRoute('pages_list'));
+
+                    }
+                }
+            }
+            
+            $view->assign('errors', $errors);
+        }
+    }
+
+    public function tempAction()
+    {
+        $page = new PageModel();
+        $form = $page->formBuilderRegister();
         $response = [];
 
         if (!empty($_POST)) {
@@ -154,7 +214,7 @@ class Page
     public function updatePageAction($id)
     {
         $page = new PageModel();
-        $view = new View('pages/updatePage');
+        $view = new View('pages/update');
 
         // if page not exist
         if (empty($page->findOneBy("id", $id))) {

@@ -1,3 +1,5 @@
+<?php use App\Core\Helpers; ?>
+
 <div id="tableActions">
     <div class="filtering-status">
         <div class="filtering-btn" id="published">Publiés</div>
@@ -6,10 +8,12 @@
         <div class="filtering-btn" id="deleted">Corbeille</div>
     </div>
 
-    <div class="buttons">
-        <button id="btnPopup" class="btn btnPopup" data-toggle="modal" data-target="#add-page-modal">
-            Ajouter une page
-        </button>
+   <div class="buttons">
+        <a href="<?= Helpers::callRoute('page_creation') ?>">
+            <button id="btnPopup" class="btn btnPopup">
+                    Ajouter une page
+            </button>
+        </a>
     </div>
 </div>
 

@@ -88,40 +88,7 @@ $(document).ready(function() {
     }
 
     /* FORM ADD PAGE*/
-    $('.form-add-page').submit(function(event) {
-        event.preventDefault();
-
-        if ($('#add-page-modal').hasClass('modal-visible')) { // if modal open
-
-            $.ajax({
-                type: 'POST',
-                url: callRoute('page_creation'),
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function(response) {
-                    if (response['success']) {
-
-                        let button = "<button class='btn add-new-page'>" +
-                            "Ajouter une nouvelle page" +
-                            "</button>";
-
-                        // remove form, show success and button new page
-                        $('#add-page-modal .content-modal').hide();
-                        $('#add-page-modal .content-modal .form-add-page')[0].reset(); // empty form
-                        $('#add-page-modal .footer-modal').prepend(button);
-                        $('#add-page-modal .footer-modal').prepend(successMessageForm(response['message']));
-                    }
-                    else{
-                        $('#add-page-modal .container-message').html(errorMessageForm(response['message']));
-                    }
-
-                },
-                error: function(response, statut, erreur) {
-                    $('#add-page-modal .container-message').html(errorMessageForm(errorServerJS));
-                }
-            });
-        }
-    })
+    
 
     /* UPDATE VISIBILITY PAGE */
     $("#datatable tbody").on('click', '.switch-visibily-page', function() {
@@ -163,7 +130,7 @@ $(document).ready(function() {
     });
 
     // DISABLE DATE INPUT WHEN SELECTED OTHER THAN SCHEDULED CHECKBOX AT FIRST REFRESH
-    if (!$('.stateScheduled').is(':checked')){
+/*     if (!$('.stateScheduled').is(':checked')){
         $(".publicationDateInput").prop("readonly", true);
     }
 
@@ -173,6 +140,6 @@ $(document).ready(function() {
             $(".publicationDateInput").prop("readonly", false);
         else
             $(".publicationDateInput").prop("readonly", true);
-    })
+    }) */
 
 });
