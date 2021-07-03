@@ -109,7 +109,7 @@ class Page
         $view = new View('pages/create');
         $view->assign('title', 'Créer une page');
         $view->assign('form', $form);
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/pages/tinymce.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/tinymce.js']);
 
         if (!empty($_POST)) {
 
@@ -174,7 +174,7 @@ class Page
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
         $view->assign('title', 'Modifier la page n° ' . $page->getId());
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/pages/tinymce.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/tinymce.js']);
 
         if (!empty($_POST)) {
 

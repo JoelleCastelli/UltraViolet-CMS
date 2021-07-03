@@ -60,7 +60,7 @@ class Article {
         }
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
     }
 
     public function updateArticleAction($id) {
@@ -105,7 +105,7 @@ class Article {
         $view->assign('form', $form);
         $view->assign("data", $arrayArticle);
         $view->assign("title", "Modifier un article");
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
     }
 
 
