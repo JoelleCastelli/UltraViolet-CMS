@@ -5,6 +5,7 @@ namespace App\Models;
 
 
 use App\Core\Database;
+use App\Core\FormBuilder;
 use App\Core\Helpers;
 
 class Category extends Database
@@ -20,8 +21,8 @@ class Category extends Database
     {
         parent::__construct();
         $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('production_update', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('production_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('category_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('category_delete', ['id' => $this->id]), 'role' => 'admin'],
         ];
     }
 
@@ -95,6 +96,46 @@ class Category extends Database
     public function setActions(?array $actions): void
     {
         $this->actions = $actions;
+    }
+
+    /**
+     * Form to add a new category
+     */
+    public function formBuilderAddCategory(): array
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control card",
+                "id" => "formAddCategory",
+                "submit" => "Valider",
+                "referer" => Helpers::callRoute('category_creation')
+            ],
+            "fields" => [
+                "name" => [
+                    "type" => "text",
+                    "min" => 1,
+                    "max" => 60,
+                    "label" => "Nom",
+                    "class" => "search-bar",
+                    "error" => "Le nom de catégorie doit contenir entre 1 et 60 caractères",
+                    "required" => true,
+                ],
+                "position" => [
+                    "type" => "number",
+                    "min" => 0,
+                    "label" => "Position dans le menu",
+                    "class" => "search-bar",
+                    "error" => "La position doit être supérieure ou égale à 0",
+                    "required" => true,
+                ],
+                "csrfToken" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
+            ],
+        ];
     }
 
 }

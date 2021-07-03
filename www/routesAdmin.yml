@@ -56,6 +56,11 @@ categories_list:
   controller: Category
   action:     showAll
 
+category_creation:
+  path:       /admin/categories/creation
+  controller: Category
+  action:     addCategory
+
 category_delete:
   path:       /admin/categories/supprimer
   controller: Category

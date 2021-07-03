@@ -1,6 +1,6 @@
 <div id="tableActions">
     <div class="buttons">
-        <a href="<?= \App\Core\Helpers::callRoute('') ?>">
+        <a href="<?= \App\Core\Helpers::callRoute('category_creation') ?>">
             <button class="btn">Ajouter une catégorie</button>
         </a>
     </div>

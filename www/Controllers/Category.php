@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Models\Category as CategoryModel;
 use App\Core\View;
@@ -17,6 +18,9 @@ class Category
         ];
     }
 
+    /**
+     * List all the categories
+     */
     public function showAllAction()
     {
         $categories = new CategoryModel();
@@ -28,6 +32,36 @@ class Category
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/categories/categories.js']);
     }
 
+    /**
+     * Add a category in the database
+     */
+    public function addCategoryAction() {
+        // Generate form
+        $category = new CategoryModel();
+        $form = $category->formBuilderAddCategory();
+        $view = new View("categories/add-category");
+        $view->assign('title', 'Nouvelle catégorie');
+        $view->assign("form", $form);
+
+        // If form is submitted, check the data and save production
+        if(!empty($_POST)) {
+            $errors = FormValidator::check($form, $_POST);
+            if(empty($errors)) {
+                // Set object values
+                $category->setName(htmlspecialchars($_POST['name']));
+                $category->setPosition(htmlspecialchars($_POST['position']));
+                $category->save();
+                Helpers::setFlashMessage('success', "La catégorie ".$_POST["title"]." a bien été ajoutée à la base de données.");
+                Helpers::redirect(Helpers::callRoute('categories_list'));
+            }
+            $view->assign("errors", $errors);
+        }
+    }
+
+
+    /**
+     * Delete a category in the database
+     */
     public function deleteCategoryAction() {
         if(!empty($_POST['categoryId'])) {
             $response = [];
