@@ -6,10 +6,10 @@ use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
-use App\Models\Media;
 use App\Models\ProductionArticle;
 use App\Models\ProductionPerson;
 use App\Models\ProductionMedia;
+use App\Models\Media;
 use App\Models\Person;
 
 class Production
@@ -244,6 +244,7 @@ class Production
                 $production->save();
                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été mise à jour");
                 Helpers::redirect(Helpers::callRoute('productions_list'));
+                
             } else {
                 $view->assign("errors", $errors);
             }

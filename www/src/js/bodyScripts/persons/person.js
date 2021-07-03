@@ -89,8 +89,8 @@ $(document).ready(function () {
     /* Delete User*/
     table.on('click', '.delete', function(event) {
         event.preventDefault();
-        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette personne ?')) {
-            let pageId = this.id.substring(this.id.lastIndexOf('-') + 1);
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette utilisateur ?')) {
+            let personId = this.id.substring(this.id.lastIndexOf('-') + 1);
             let row = table.row($(this).parents('tr'));
             $.ajax({
                 type: 'POST',
