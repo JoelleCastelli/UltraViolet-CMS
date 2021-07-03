@@ -30,8 +30,8 @@ class Page extends Database implements JsonSerializable
 
 	public function __construct(){
 		parent::__construct();
-          $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
+		$this->actions = [
+		    ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
         ];
 

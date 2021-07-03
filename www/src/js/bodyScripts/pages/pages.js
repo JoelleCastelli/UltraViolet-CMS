@@ -1,8 +1,9 @@
-var a = 0;
 $(document).ready(function() {
 
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable({
+        "order": [],
+        "autoWidth": false,
         responsive: true,
 
         // All columns    
@@ -10,14 +11,13 @@ $(document).ready(function() {
             {data: 'Nom de la page'},
             {data: 'URL de la page'},
             {data: 'Ordre', width: "10%"},
-            {data: 'Nombre d\'articles', width: "15%"},
             {data: 'Visibilité', width: "10%"},
             {data: 'Actions', width: "10%"}
         ],
 
         // Column Actions 
         columnDefs: [{
-            targets: 5,
+            targets: 4,
             data: "Actions",
             searchable: false,
             orderable: false
@@ -62,10 +62,10 @@ $(document).ready(function() {
     // Display different types on filtering button click
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
-        table.column([4]).visible(true);
+        table.column([3]).visible(true); // visibility slider
         $(this).addClass('active');
         if (this.id !== "published") {
-            table.column([4]).visible(false);
+            table.column([3]).visible(false); // visibility slider
         }
         getPagesByType(this.id);
     });
@@ -125,10 +125,8 @@ $(document).ready(function() {
 
     /* UPDATE VISIBILITY PAGE */
     $("#datatable tbody").on('click', '.switch-visibily-page', function() {
-
         let id = $(this)[0].id.split("-");
         let pageId = id[id.length - 1];
-
         $.ajax({
             type: 'POST',
             url: callRoute('page_update_visibility'),
@@ -143,7 +141,6 @@ $(document).ready(function() {
             }
         });
     });
-
 
     /* DELETE PAGE */
     table.on('click', '.delete', function(event) {
@@ -165,27 +162,6 @@ $(document).ready(function() {
         }
     });
 
-    /* ADD NEW PAGE WHEN MODAL ALREADY OPEN */
-    $('#add-page-modal').click(function(event) {
-        let targetElement = event.target;
-        let selector = 'add-new-page';
-
-        if (targetElement != null) {
-
-            if ($(targetElement).hasClass(selector)) {
-                $('#add-page-modal .content-modal').show();
-                $('#add-page-modal .footer-modal').empty();
-
-            }
-        }
-    });
-
-    // RESET MODAL CONTENT AT CLOSING
-    $('.modal .btn-close-modal').click(function() {
-        $('#add-page-modal .content-modal').show();
-        $('#add-page-modal .footer-modal').empty();
-    })
-
     // DISABLE DATE INPUT WHEN SELECTED OTHER THAN SCHEDULED CHECKBOX AT FIRST REFRESH
     if (!$('.stateScheduled').is(':checked')){
         $(".publicationDateInput").prop("readonly", true);
@@ -193,7 +169,6 @@ $(document).ready(function() {
 
     // DISABLE DATE INPUT WHEN SELECTED OTHER THAN SCHEDULED CHECKBOX
     $('.stateDraft, .statePublished, .stateScheduled, .statePublishedHidden').click(function() {
-        
         if ($(this).hasClass('stateScheduled'))
             $(".publicationDateInput").prop("readonly", false);
         else

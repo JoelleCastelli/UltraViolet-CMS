@@ -6,18 +6,18 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Models\Page as PageModel;
-use App\Models\PageArticle;
 
 class Page
 {
-    protected $columnsTable;
+
+    protected array $columnsTable;
+
     public function __construct()
     {
         $this->columnsTable = [
             "title" => 'Nom de la page',
             "slug" => 'URL de la page',
             "position" => 'Ordre',
-            "articles" => 'Nombre d\'articles',
             "state" => 'Visibilité',
             "actions" => 'Actions'
         ];
@@ -53,7 +53,6 @@ class Page
     {
         if (!empty($_POST['pageType'])) {
             $pageModel = new PageModel();
-            $pageArticle = new PageArticle();
 
             // get pages
             if ($_POST['pageType'] === 'published') {
@@ -80,7 +79,6 @@ class Page
                     $this->columnsTable['title'] => $page->getTitle(),
                     $this->columnsTable['slug'] => $page->getSlug(),
                     $this->columnsTable['position'] => $page->getPosition(),
-                    $this->columnsTable['articles'] => $pageArticle->count("pageId")->where("pageId", $page->getId())->first()->total,
                     $this->columnsTable['state'] => $page->getState() == "hidden" ?
                         '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switch-visibily-page" onclick="toggleSwitch(this)"></div>'
                         : '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switched-on switch-visibily-page" onclick="toggleSwitch(this)"></div>',
