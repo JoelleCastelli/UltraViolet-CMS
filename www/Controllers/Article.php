@@ -34,10 +34,10 @@ class Article {
 
         if (!empty($_POST)) {
 
-//              $errors = FormValidator::check($form, $_POST);
-                $errors = [];
-//              if (empty($errors)) {
-                if (true) { // CSRF error here always
+            //  $errors = FormValidator::check($form, $_POST);
+            $error = [];
+            //  if (empty($errors)) {
+            if (true) {
 
                 $title = htmlspecialchars($_POST["title"]);
 
@@ -45,7 +45,7 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
                     
                 $article->setDescription(htmlspecialchars($_POST["description"]));
-                $article->setContent(htmlspecialchars($_POST["content"]));
+                $article->setContent($_POST["content"]);
                 $article->setState(htmlspecialchars($_POST["state"]));
 
                 // TODO : Get real connected Person and Media used
@@ -60,6 +60,7 @@ class Article {
         }
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js']);
     }
 
     public function updateArticleAction($id) {
@@ -74,10 +75,10 @@ class Article {
         if (!empty($_POST)) {
 
             // $errors = FormValidator::check($form, $_POST);
-            $errors = [];
-
-//              if (empty($errors)) {
+            $error = [];
+            // if (empty($errors)) {
             if (true) {
+
 
                 $title = htmlspecialchars($_POST["title"]);
 
@@ -85,7 +86,7 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
 
                 $article->setDescription(htmlspecialchars($_POST["description"]));
-                $article->setContent(htmlspecialchars($_POST["content"]));
+                $article->setContent($_POST["content"]);
                 $article->setState(htmlspecialchars($_POST["state"]));
 
                 // TODO : Get real connected Person and Media used
@@ -104,7 +105,7 @@ class Article {
         $view->assign('form', $form);
         $view->assign("data", $arrayArticle);
         $view->assign("title", "Modifier un article");
-        $view->assign("articleId", $id);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js']);
     }
 
 

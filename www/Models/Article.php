@@ -363,6 +363,7 @@ class Article extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "form_create_article",
                 "submit" => "Créer un article",
+                "referer" => Helpers::callRoute('article_creation'),
             ],
             "fields" => [
                 "csrf_token" => [
@@ -383,7 +384,7 @@ class Article extends Database implements JsonSerializable
                     "type" => "text",
                     "placeholder" => "Description de l'article",
                     "minLength" => 2,
-                    // "class" => "input",
+                    "class" => "input",
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
                 ],
@@ -391,15 +392,14 @@ class Article extends Database implements JsonSerializable
                      "type" => "textarea",
                      "placeholder" => "Contenu de l article",
                      "minLength" => 2,
-                     // "maxLength" => 255,
                      "class" => "input",
                      "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
-                     "required" => true,
+                     "required" => false,
                  ],
                 "state"=>[
                     "type"=>"radio",
                     "label"=>"État :",
-                    "class"=>"",
+                    "class"=>"input",
                     "error"=>"Erreur test",
                     "required" => true,
                     "options" => [
@@ -429,7 +429,9 @@ class Article extends Database implements JsonSerializable
                 "action" => "",
                 "class" => "form_control",
                 "id" => "form_create_article",
-                "submit" => "Créer un article",
+                "submit" => "Valider les modifications",
+                "referer" => Helpers::callRoute('article_update'),
+
             ],
             "fields" => [
                 "csrf_token" => [
@@ -450,7 +452,7 @@ class Article extends Database implements JsonSerializable
                     "type" => "text",
                     "placeholder" => "Description de l'article",
                     "minLength" => 2,
-                    // "class" => "input",
+                    "class" => "input",
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
                 ],
@@ -461,7 +463,7 @@ class Article extends Database implements JsonSerializable
                     // "maxLength" => 255,
                     "class" => "input",
                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
-                    "required" => true,
+                    "required" => false,
                 ],
                 "state"=>[
                     "type"=>"radio",

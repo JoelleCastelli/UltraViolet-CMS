@@ -1,12 +1,9 @@
-.grid-create-article {
+.grid-create-article section {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: stretch;
 
-    display: flex;
-    flex-flow: column wrap;
-    align-items: stretch;
-
-    width: 100%;
-
-    align-self: center;
-    justify-self: center;
-
+  textarea {
+    flex-basis: 500px;
+  }
 }

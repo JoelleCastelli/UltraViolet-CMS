@@ -13,6 +13,7 @@ use App\Core\Helpers;
 
     <!--JS-->
     <script src="<?=PATH_TO_DIST.'main.js'?>"></script>
+    <script src="https://cdn.tiny.cloud/1/itne6ytngfhi89x71prh233w7ahp2mgfmc8vwnjxhvue2m6h/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js">
     </script>
     <?php if(isset($headScripts) && !empty($headScripts)) {
