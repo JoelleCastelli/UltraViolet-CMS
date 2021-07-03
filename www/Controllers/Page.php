@@ -10,9 +10,7 @@ use App\Models\PageArticle;
 
 class Page
 {
-
     protected $columnsTable;
-
     public function __construct()
     {
         $this->columnsTable = [
@@ -53,7 +51,6 @@ class Page
 
     public function getPagesAction()
     {
-
         if (!empty($_POST['pageType'])) {
             $pageModel = new PageModel();
             $pageArticle = new PageArticle();
@@ -105,9 +102,7 @@ class Page
         $response = [];
 
         if (!empty($_POST)) {
-
             $errors = FormValidator::check($form, $_POST);
-
             if (empty($errors)) {
                 
                 $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
@@ -230,9 +225,7 @@ class Page
     public function updateVisibilityAction()
     {
         if (isset($_POST['form'])) {
-
             if ($_POST['form'] == "changeVisibility") {
-
                 if (isset($_POST['id']) && !empty($_POST['id'])) {
                     $page = new PageModel();
                     $page->setId($_POST['id']);
@@ -245,7 +238,6 @@ class Page
                         $page->setState('published');
                         $this->updatePathInRouteFile($page, $page->getId());
                     }
-
                     $page->save();
                 }
             }
@@ -282,7 +274,6 @@ class Page
             {
                 $pageArticle = new PageArticle();
                 $check = $pageArticle->hardDelete()->where('pageId', $id)->execute(); // delete foreing keys
-              
                 if($check){
                     $check = $page->delete();
                     if($check)
