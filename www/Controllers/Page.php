@@ -141,16 +141,6 @@ class Page
                     
                     if(empty($errors)) {
 
-                        if ($page->getState() === 'published') // if published, add route to file
-                        {
-                            $id = $page->getLastInsertId();
-                            $key = $page->getSlug() . '-page-' . $id;
-                            $path[$key]['path'] = '/' . $page->getSlug();
-                            $path[$key]['controller'] = 'Page';
-                            $path[$key]['action'] = 'accessPage';
-                            $this->writePathInRouteFile($path, $id);
-                        }
-
                         Helpers::setFlashMessage('success', 'La page s\'est bien créée');
                         Helpers::redirect(Helpers::callRoute('pages_list'));
 
@@ -162,90 +152,48 @@ class Page
         }
     }
 
-    public function tempAction()
-    {
-        $page = new PageModel();
-        $form = $page->formBuilderRegister();
-        $response = [];
-
-        if (!empty($_POST)) {
-            $errors = FormValidator::check($form, $_POST);
-            if (empty($errors)) {
-                
-                $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
-                $publicationDate  = empty($_POST["publicationDate"]) ? null : $_POST["publicationDate"];
-                $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
-
-                if (empty($isNotUniqueSlug)) {
-                     
-                    $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
-
-                    $page->setSlug($slug);
-                    $page->setTitle($_POST["title"]);
-                    $page->setPosition($_POST["position"]);
-                    $page->setTitleSeo($_POST["titleSeo"]);
-                    $page->setDescriptionSeo($_POST["descriptionSeo"]);
-                    $page->setCreatedAt(Helpers::getCurrentTimestamp());
-                    $save = $page->save();
-
-                    if ($save) {
-
-                        if($page->getState() === 'published') // if published, add route to file
-                        {
-                            $id = $page->getLastInsertId();
-                            $key = $page->getSlug() . '-page-' . $id;
-                            $path[$key]['path'] = '/' . $page->getSlug();
-                            $path[$key]['controller'] = 'Page';
-                            $path[$key]['action'] = 'accessPage';
-                            $this->writePathInRouteFile($path, $id);
-                        }
-
-                        $response['message'] = 'La nouvelle s\'est bien crée';
-                        $response['success'] = true;
-                    } else {
-                        $response['message'] = 'Oops ! Le seveur vient de rencontrer un problème durant la sauvegarde, veuillez recommencer.';
-                        $response['success'] = false;
-                    }
-
-                } else {
-                    $response['message'] = 'Le slug est déjà existant, veuillez en choisir un autre svp ';
-                    $response['success'] = false;
-                }
-            } else {
-                $response['message'] = $errors;
-                $response['success'] = false;
-            }
-        }
-
-        echo json_encode($response);
-    }
-
     public function updatePageAction($id)
     {
         $page = new PageModel();
-        $view = new View('pages/update');
 
-        // if page not exist
+         // if page not exist
         if (empty($page->findOneBy("id", $id))) {
             Helpers::redirect(Helpers::callRoute("articles_list"), "404");
         }
 
         $form = $page->formBuilderUpdate($id);
+
+        //get page
         $page->setId($id);
+        if($page->getPublicationDate() != null)
+            $page->cleanPublicationDate();
+        $arrayPage = $page->jsonSerialize();
+
+        $view = new View('pages/update');
+        $view->assign('form', $form);
+        $view->assign('data', $arrayPage);
+        $view->assign('title', 'Modifier la page n° ' . $page->getId());
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
 
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
 
-            if (empty($errors)) {
+            if (!empty($errors))
+                $errors[] = $errors;
+
+            if(empty($errors)) {
 
                 $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
                 $publicationDate  = empty($_POST["publicationDate"]) ? null : $_POST["publicationDate"];
                 $isNotUniqueSlug = $page->select()->where('slug', $slug)->andWhere('id', $id, "!=")->get(); // check unicity of slug
 
-                if (count($isNotUniqueSlug) === 0) {
-                    $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
+                if (count($isNotUniqueSlug) !== 0)
+                    $errors[] = 'Ce slug est déjà existant';
 
+                if (empty($errors)) {
+
+                    $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
                     $page->setSlug($slug);
                     $page->setTitle($_POST["title"]);
                     $page->setPosition($_POST["position"]);
@@ -254,39 +202,17 @@ class Page
 
                     $save = $page->save();
 
-                    if ($save) {
-                        $this->updatePathInRouteFile($page, $page->getId());
+                    if (!$save)
+                        $errors[] = 'Oops, un problème serveur est survenu, veuillez recommencer s\'il vous plaît';
 
-                        $response['message'] = 'Votre page a bien été modifiée !';
-                        $response['success'] = true;
-                    } else {
-                        $response['message'] = 'Oops, un problème serveur est survenu, veuillez recommencer s\'il vous plaît';
-                        $response['success'] = false;
+                    if(empty($errors)){
+                        Helpers::setFlashMessage('success', 'Votre page a bien été modifiée !');
+                        Helpers::redirect(Helpers::callRoute('page_update', ['id' => $id]));
                     }
-
-                } else {
-                    $response['message'] = 'Erreur : Ce slug est déjà existant';
-                    $response['success'] = false;
-                }
-                
-            }else {
-                $response['message'] = $errors;
-                $response['success'] = false;
+                } 
             }
-            $view->assign('response', $response);
-
+            $view->assign('errors', $errors);
         }
-
-        //get page
-        if($page->getPublicationDate() != null)
-            $page->cleanPublicationDate();
-        $arrayPage = $page->jsonSerialize();
-
-        // return view
-        $view->assign('form', $form);
-        $view->assign('data', $arrayPage);
-        $view->assign('title', 'Modifier la page n° ' . $page->getId());
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
 
     public function updateVisibilityAction()
@@ -299,11 +225,9 @@ class Page
 
                     if ($page->getState() === "published") {
                         $page->setState('hidden');
-                        $this->updatePathInRouteFile($page, $page->getId());
 
                     } else if ($page->getState() === "hidden") {
                         $page->setState('published');
-                        $this->updatePathInRouteFile($page, $page->getId());
                     }
                     $page->save();
                 }
@@ -326,8 +250,7 @@ class Page
         }
 
         $page->save();
-
-        $this->showAllAction();
+        Helpers::redirect(Helpers::callRoute('pages_list'));
     }
 
     public function deletePageAction()
@@ -340,24 +263,16 @@ class Page
             if($page->getState() == "deleted")
             {
                 $pageArticle = new PageArticle();
-                $check = $pageArticle->hardDelete()->where('pageId', $id)->execute(); // delete foreing keys
+                $check = $pageArticle->hardDelete()->where('pageId', $id)->execute(); // delete foreign keys
+              
                 if($check){
                     $check = $page->delete();
-                    if($check)
-                    {
-                        $key = $page->getSlug() . '-page-' . $id;
-                        $this->deletePathInRouteFile($key);
-                    }
                 }
             }
             else {
                 $page->setState("deleted");
                 $check = $page->delete();
 
-                if ($check) {
-                    $key = $page->getSlug() . '-page-' . $id;
-                    $this->deletePathInRouteFile($key);
-                }
             }
         }
     }
@@ -367,62 +282,17 @@ class Page
 
         /* Set State */
         if ($state == 'draft') { // draft
-
             $page->setStateToDraft();
 
         } else if ($state == "scheduled") { // scheduled
-
             $page->setStateToScheduled($publicationDate);
-           
 
         } else if ($state == 'published' ) { // published
-
             $page->setStateToPublished();
+
         } else if ($state == "hidden") {
             $page->setStateToPublishedHidden();
-
         }
     }
 
-    private function updatePathInRouteFile($page, $id)
-    {
-        $key = $page->getSlug() . '-page-' . $id;
-        $this->deletePathInRouteFile($key);
-
-        if ($page->getState() === 'published') // if published, add route to file
-        {
-            $path[$key]['path'] = '/' . $page->getSlug();
-            $path[$key]['controller'] = 'Page';
-            $path[$key]['action'] = 'accessPage';
-            $this->writePathInRouteFile($path);
-        }
-    }
-
-    private function writePathInRouteFile($path)
-    {
-        $key = key($path);
-
-        if(!file_exists(PATH_TO_ROUTES))
-            $file = fopen(PATH_TO_ROUTES, 'a+');
-
-        $routes = yaml_parse_file(PATH_TO_ROUTES);
-        $routes[$key] = $path[$key];
-        yaml_emit_file(PATH_TO_ROUTES, $routes, YAML_UTF8_ENCODING);
-
-        if(isset($file))
-            fclose($file);
-    }
-
-    private function deletePathInRouteFile($key)
-    {
-        if (!file_exists(PATH_TO_ROUTES))
-            return;
-
-        $routes = yaml_parse_file(PATH_TO_ROUTES);
-
-        if(key_exists($key, $routes))
-            unset($routes[$key]);
-
-        yaml_emit_file(PATH_TO_ROUTES, $routes, YAML_UTF8_ENCODING);
-    }
 }
