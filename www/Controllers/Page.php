@@ -44,9 +44,17 @@ class Page
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
 
-    public function accessPageAction()
+    public function showStaticPageAction($slug)
     {
-        echo "YO";
+        $page = new PageModel();
+        $page = $page->findOneBy('slug', $slug);
+
+        if(!empty($page)){
+            $view = new View($slug, 'front');
+        }else {
+            Helpers::redirect(Helpers::callRoute('404'));
+        }
+
     }
 
     public function getPagesAction()
@@ -101,6 +109,7 @@ class Page
         $view = new View('pages/create');
         $view->assign('title', 'Créer une page');
         $view->assign('form', $form);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
 
         if (!empty($_POST)) {
 

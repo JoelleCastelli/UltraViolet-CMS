@@ -130,7 +130,7 @@ $(document).ready(function() {
     });
 
     // DISABLE DATE INPUT WHEN SELECTED OTHER THAN SCHEDULED CHECKBOX AT FIRST REFRESH
-/*     if (!$('.stateScheduled').is(':checked')){
+    if (!$('.stateScheduled').is(':checked')){
         $(".publicationDateInput").prop("readonly", true);
     }
 
@@ -140,6 +140,6 @@ $(document).ready(function() {
             $(".publicationDateInput").prop("readonly", false);
         else
             $(".publicationDateInput").prop("readonly", true);
-    }) */
+    }) 
 
 });
