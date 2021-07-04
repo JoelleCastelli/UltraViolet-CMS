@@ -12,22 +12,33 @@ class Article {
 
     // utils
 
-    private function redirect(string $route, string $code = "0") {
-        Helpers::redirect(Helpers::callRoute($route), $code);
-    }
-
     private function getArticlesBySate($state) : array {
         $article = new ArticleModel;
         $now = date('Y-m-d H:i:s');
 
         if ($state == "published") {
-           return $article->select()->where("publicationDate", $now, "<=")->andWhere("deletedAt", "NULL")->get();
-        } elseif ($state == "scheduled") {
-            return $article->select()->where("publicationDate", $now, ">=")->get();
-        } elseif ($state == "draft") {
-
-        } elseif ($state == "removed") {
-
+           return $article->select()
+           ->where("publicationDate", $now, "<=")
+           ->andWhere("deletedAt", "NULL", "=")
+           ->get();
+        } 
+        
+        if ($state == "scheduled") {
+            return $article->select()
+            ->where("publicationDate", $now, ">=")
+            ->andWhere("deletedAt", "NULL")
+            ->get();
+        } 
+        
+        if ($state == "draft") {
+            return $article->select()
+            ->where("publicationDate", "NULL")
+            ->andWhere("deletedAt", "NULL")
+            ->get();
+        } 
+        
+        if ($state == "removed") {
+            return $article->select()->where("deletedAt", "NOT NULL")->get();
         }
 
         return [];
@@ -37,11 +48,12 @@ class Article {
     // Standard controller methods
     public function showAllAction() {
         $article = new ArticleModel;
-        // $articles = $article->selectWhere('state', 'published'); // TODO : Need to fetch without state
 
         // $articles = $this->getArticlesBySate("published");
-        $articles = $this->getArticlesBySate("scheduled");
-        Helpers::dd($articles);
+        // $articles = $this->getArticlesBySate("scheduled");
+        // $articles = $this->getArticlesBySate("draft");
+        // $articles = $this->getArticlesBySate("removed");
+        $articles = [];
         
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
@@ -77,7 +89,7 @@ class Article {
                 $article->setPersonId($user->getId());
                 
                 $article->save();
-                $this->redirect("articles_list");
+                Helpers::namedRedirect("articles_list");
             }
             else
                 $view->assign("errors", $errors);

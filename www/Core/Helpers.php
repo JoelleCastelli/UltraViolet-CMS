@@ -28,6 +28,10 @@ class Helpers{
         exit;
     }
 
+    public static function namedRedirect($routeName, $statusCode = 0) {
+        Helpers::redirect(Helpers::callRoute($routeName), $statusCode);
+    }
+
     public static function redirect404()
     {
         header('HTTP/1.0 404 Not Found');
