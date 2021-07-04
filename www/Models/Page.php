@@ -516,6 +516,7 @@ class Page extends Database implements JsonSerializable
                     "label" => "Date de la planification",
                     "class" => "search-bar publicationDateInput",
                     "error" => "Votre date de publication doit être au minimum " . $todayText,
+                    "min" => $today,
                 ],
                 "csrfToken" => [
                     "type" => "hidden",

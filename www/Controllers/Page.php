@@ -177,10 +177,7 @@ class Page
 
             $errors = FormValidator::check($form, $_POST);
 
-            if (!empty($errors))
-                $errors[] = $errors;
-
-            if(empty($errors)) {
+                if(empty($errors)) {
 
                 $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
                 $publicationDate  = empty($_POST["publicationDate"]) ? null : $_POST["publicationDate"];
