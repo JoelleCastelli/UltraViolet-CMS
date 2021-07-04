@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Core\Database;
 use App\Core\FormBuilder;
 use App\Core\Helpers;
+use App\Controller\Settings as SettingsController;
 
 class Settings extends Database
 {
@@ -70,12 +71,7 @@ class Settings extends Database
      */
     public function formBuilderUpdateSettings(): array
     {
-        $settings = new Settings();
-        $settings = $settings->findAll();
-        $settingsArray = [];
-        foreach ($settings as $setting) {
-            $settingsArray[$setting->name] = $setting->value;
-        }
+        $settings = SettingsController::readConfigFile();
         if($settings) {
             return [
                 "config" => [
@@ -87,92 +83,92 @@ class Settings extends Database
                     "referer" => Helpers::callRoute('settings')
                 ],
                 "fields" => [
-                    "appName" => [
+                    "APP_NAME" => [
                         "type" => "text",
                         "minLength" => 1,
                         "maxLength" => 60,
                         "label" => "Nom de l'application",
                         "class" => "search-bar",
-                        "value" => $settingsArray['appName'],
+                        "value" => $settings['APP_NAME'],
                         "error" => "Le nom l'application doit contenir entre 1 et 60 caractères",
                         "required" => true,
                     ],
-                    "dbName" => [
+                    "DBNAME" => [
                         "type" => "text",
                         "minLength" => 1,
                         "maxLength" => 64,
                         "label" => "Nom de la base de données",
                         "class" => "search-bar",
-                        "value" => $settingsArray['dbName'],
+                        "value" => $settings['DBNAME'],
                         "error" => "Le nom la base de données doit contenir entre 1 et 64 caractères",
                         "required" => true,
                     ],
-                    "dbHost" => [
+                    "DBHOST" => [
                         "type" => "text",
                         "minLength" => 1,
                         "maxLength" => 60,
                         "label" => "Hôte",
                         "class" => "search-bar",
-                        "value" => $settingsArray['dbHost'],
+                        "value" => $settings['DBHOST'],
                         "error" => "Le nom de l'hôte doit contenir entre 1 et 60 caractères",
                         "required" => true,
                     ],
-                    "dbPort" => [
+                    "DBPORT" => [
                         "type" => "text",
                         "minLength" => 1,
                         "maxLength" => 5,
                         "label" => "Port",
                         "class" => "search-bar",
-                        "value" => $settingsArray['dbPort'],
+                        "value" => $settings['DBPORT'],
                         "error" => "Le port doit contenir entre 1 et 5 caractères",
                         "required" => true,
                     ],
-                    "dbUser" => [
+                    "DBUSER" => [
                         "type" => "text",
                         "minLength" => 1,
                         "maxLength" => 16,
                         "label" => "Utilisateur",
                         "class" => "search-bar",
-                        "value" => $settingsArray['dbUser'],
+                        "value" => $settings['DBUSER'],
                         "error" => "Le nom d'utilisateur de la base de données doit contenir entre 1 et 16 caractères",
                         "required" => true,
                     ],
-                    "dbDriver" => [
+                    "DBDRIVER" => [
                         "type" => "text",
                         "minLength" => 1,
                         "maxLength" => 20,
                         "label" => "Driver",
                         "class" => "search-bar",
-                        "value" => $settingsArray['dbDriver'],
+                        "value" => $settings['DBDRIVER'],
                         "error" => "Le nom du driver doit contenir entre 1 et 20 caractères",
                         "required" => true,
                     ],
-                    "dbPwd" => [
+                    "DBPWD" => [
                         "type" => "text",
                         "minLength" => 0,
                         "maxLength" => 32,
                         "label" => "Mot de passe",
                         "class" => "search-bar",
-                        "value" => $settingsArray['dbPwd'],
+                        "value" => $settings['DBPWD'],
                         "error" => "Le mot de passe ne peut pas dépasser 32 caractères",
                     ],
-                    "tmdbApiKey" => [
+                    "TMDB_API_KEY" => [
                         "type" => "text",
                         "minLength" => 1,
                         "maxLength" => 60,
                         "label" => "Clé API TMDB",
                         "class" => "search-bar",
-                        "value" => $settingsArray['tmdbApiKey'],
+                        "value" => $settings['TMDB_API_KEY'],
                         "error" => "La clé API TMDB doit contenir entre 1 et 60 caractères",
                         "required" => true,
                     ],
-                    "tinyApiKey" => [
+                    "TINYMCE_API_KEY" => [
                         "type" => "text",
                         "minLength" => 1,
                         "maxLength" => 60,
                         "label" => "Clé API TinyMCE",
                         "class" => "search-bar",
-                        "value" => $settingsArray['tinyApiKey'],
+                        "value" => $settings['TINYMCE_API_KEY'],
                         "error" => "La clé API TinyMCE doit contenir entre 1 et 60 caractères",
                         "required" => true,
                     ],
