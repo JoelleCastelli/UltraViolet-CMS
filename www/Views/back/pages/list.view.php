@@ -1,9 +1,11 @@
 <?php use App\Core\Helpers; ?>
 
+<div id="response"></div>
+
 <div id="tableActions">
     <div class="filtering-status">
-        <div class="filtering-btn" id="published">Publiés</div>
-        <div class="filtering-btn" id="scheduled">Planifiés</div>
+        <div class="filtering-btn" id="published">Publiées</div>
+        <div class="filtering-btn" id="scheduled">Planifiées</div>
         <div class="filtering-btn" id="draft">Brouillons</div>
         <div class="filtering-btn" id="deleted">Corbeille</div>
     </div>
