@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use App\Core\View;
 use App\Core\Helpers;
 use App\Core\FormValidator;
@@ -9,6 +10,7 @@ use App\Core\Request;
 use App\Models\Article as ArticleModel;
 use App\Models\Media as MediaModel;
 use App\Models\Category as CategoryModel;
+use App\Models\CategoryArticle as CategoryArticleModel;
 
 class Article {
 
@@ -51,6 +53,11 @@ class Article {
                 $article->setPersonId($user->getId());
                 
                 $article->save();
+
+                $articleId = $article->getLastInsertId();
+                $categoryArticle = new CategoryArticleModel();
+              
+
                 Helpers::namedRedirect("articles_list");
             }
             else
