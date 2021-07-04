@@ -33,12 +33,9 @@ page_update:
     id:       (\d+)
 
 page_update_state:
-  path:       /admin/pages/update/{state}-{id}
+  path:       /admin/pages/update-state
   controller: Page
   action:     updatePageState
-  requirements:
-    state:    ([a-zA-Z]+)
-    id:       (\d+)
 
 page_update_visibility:
   path:       /admin/pages/update-visibility

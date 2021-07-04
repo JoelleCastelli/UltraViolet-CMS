@@ -38,10 +38,9 @@ class Page extends Database implements JsonSerializable
 
         $this->actionsDeletedPages = [
             ['name' => 'Supprimer définitivement', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' => 'Restaurer en tant que brouillon', 'action' => 'state-to-draft', 'url' => Helpers::callRoute('page_update_state', ['state' => 'draft', 'id' => $this->id]), 'role' => 'admin'],
-            ['name' => 'Restaurer en tant que publiée', 'action' => 'state-to-hidden', 'url' => Helpers::callRoute('page_update_state', ['state' => 'hidden', 'id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Restaurer en tant que brouillon', 'action' => 'update-state', 'class' => 'state-draft', 'url' => Helpers::callRoute('page_update_state'), 'role' => 'admin'],
+            ['name' =>'Restaurer en tant que publiée', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('page_update_state'), 'role' => 'admin'],
         ];
-
 	}
 
     /**

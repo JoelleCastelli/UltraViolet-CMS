@@ -26,20 +26,9 @@ class Page
     public function showAllAction()
     {
         $page = new PageModel();
-        $formCreatePage = $page->formBuilderRegister();
-        $pages = $page->findAll();
-
-        if (!$pages) $pages = [];
-
-        foreach ($pages as $page) {
-            $page->cleanPublicationDate();
-        }
-
         $view = new View("pages/list");
 
         $view->assign('title', 'Pages');
-        $view->assign('pages', $pages);
-        $view->assign('formCreatePage', $formCreatePage);
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
@@ -47,7 +36,7 @@ class Page
     public function showStaticPageAction($slug)
     {
         $page = new PageModel();
-        $page = $page->findOneBy('slug', $slug);
+        $page = $page->select()->where('slug', $slug)->andWhere('state', 'published')->get();
 
         if(!empty($page)){
             $view = new View('staticPage', 'front');
@@ -65,10 +54,17 @@ class Page
 
             // get pages
             if ($_POST['pageType'] === 'published') {
-                $pages = $pageModel->selectWhere('state', htmlspecialchars($_POST['pageType']));
-                $pages = array_merge($pages, $pageModel->selectWhere('state', 'hidden'));
+                $pages = $pageModel->select()
+                                    ->where('state', htmlspecialchars($_POST['pageType']))
+                                    ->orWhere('state', 'hidden')
+                                    ->orderBy('position')
+                                    ->get();
+
             } else {
-                $pages = $pageModel->selectWhere('state', htmlspecialchars($_POST['pageType']));
+                $pages = $pageModel->select()
+                                    ->where('state', htmlspecialchars($_POST['pageType']))
+                                    ->orderBy('position')
+                                    ->get();
             }
 
             if (!$pages) $pages = [];
@@ -234,22 +230,41 @@ class Page
         }
     }
 
-    public function updatePageStateAction($state, $id){
+    public function updatePageStateAction(){
 
         $page = new PageModel;
-        $page->setId($id);
+        $response = [];
 
-        if($state == "hidden")
-        {
-            $page->setStateToPublishedHidden();
+        // Id validator : set and number
+        // state validator : set and correct
+        // page validator : if exist
+        if(!((isset($_POST['id']) && isset($_POST['state']) && is_numeric($_POST['id']) && 
+            ($_POST['state'] === "hidden" || $_POST['state'] === "draft" ) && 
+            !empty($page->findOneBy('id', $_POST['id']))))){
 
-        }else if ($state == "draft") 
-        {
-            $page->setStateToDraft();
+            $response['message'] = "Une erreur est survenu";
+            $response['success'] = false;
         }
 
-        $page->save();
-        Helpers::redirect(Helpers::callRoute('pages_list'));
+        if (empty($response)) { 
+
+            $page->setId($_POST['id']);
+            $state = $_POST['state'];
+
+            if ($state === "hidden") {
+                $page->setStateToPublishedHidden();
+                $response['message'] = "La page a bien été modifiée";
+                $response['success'] = true;
+            } else if ($state === "draft") {
+                $page->setStateToDraft();
+                $response['message'] = "La page a bien été modifiée";
+                $response['success'] = true;
+            }
+
+            $page->save();
+
+        }  
+        echo json_encode($response);
     }
 
     public function deletePageAction()

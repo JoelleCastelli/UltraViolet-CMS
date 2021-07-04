@@ -86,9 +86,37 @@ $(document).ready(function() {
             }
         });
     }
+    /* UPDATE STATE FOR DELETED PAGE */
+    $("#datatable tbody").on('click', '.state-draft, .state-hidden', function(event) {
 
-    /* FORM ADD PAGE*/
-    
+        const pageId = this.id.substring(this.id.lastIndexOf('-') + 1);
+        const row = table.row($(this).parents('tr'));
+        const state = $(this).attr("class").substring($(this).attr("class").lastIndexOf('-') + 1);
+
+        $.ajax({
+            type: 'POST',
+            url: callRoute("page_update_state"),
+            data: { 
+                id: pageId,
+                state: state
+            },
+            dataType: 'json',
+            success: function(response) {
+                if(response['success']){
+                    $('#response').html(successMessageForm(response['message']));
+                    row.remove().draw();
+
+                }
+                else if (!response['success']){
+                    $('#response').html(errorMessageForm(response['message']));
+                }
+
+            },
+            error: function() {
+                $('#response').html("Erreur dans la suppression de la page ID " + pageId);
+            }
+        });  
+    })
 
     /* UPDATE VISIBILITY PAGE */
     $("#datatable tbody").on('click', '.switch-visibily-page', function() {
