@@ -8,8 +8,8 @@ $(document).ready( function () {
             { data: 'Auteur' },
             { data: 'Vues' },
             { data: 'Commentaire' },
-            { data: 'Date' },
-            { data: 'Publication' },
+            { data: 'Date creation' },
+            { data: 'Date publication' },
             { data: 'Actions' }
         ],
 
@@ -51,7 +51,7 @@ $(document).ready( function () {
         },
     });
 
-    getArticleByState("published");
+    getArticleByState("draft");
 
     // Display different types on filtering button click
     // $(".filtering-btn").click(function() {

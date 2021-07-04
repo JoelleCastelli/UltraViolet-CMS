@@ -12,38 +12,7 @@ class Article {
 
     // utils
 
-    private function getArticlesBySate($state) : array {
-        $article = new ArticleModel;
-        $now = date('Y-m-d H:i:s');
-
-        if ($state == "published") {
-           return $article->select()
-           ->where("publicationDate", $now, "<=")
-           ->andWhere("deletedAt", "NULL", "=")
-           ->get();
-        } 
-        
-        if ($state == "scheduled") {
-            return $article->select()
-            ->where("publicationDate", $now, ">=")
-            ->andWhere("deletedAt", "NULL")
-            ->get();
-        } 
-        
-        if ($state == "draft") {
-            return $article->select()
-            ->where("publicationDate", "NULL")
-            ->andWhere("deletedAt", "NULL")
-            ->get();
-        } 
-        
-        if ($state == "removed") {
-            return $article->select()->where("deletedAt", "NOT NULL")->get();
-        }
-
-        return [];
-
-    }
+    
 
     // Standard controller methods
     public function showAllAction() {
@@ -134,7 +103,7 @@ class Article {
                 $article->setPersonId($user->getId());
                 
                 $article->save();
-                $this->redirect("articles_list");
+                Helpers::namedRedirect("articles_list");
             }
             else
                 $view->assign("errors", $errors);
@@ -156,10 +125,11 @@ class Article {
     // TODO : Need to secure this
     public function getArticlesAction() {
 
-        $articles = new ArticleModel();
-        $articles = $articles->findAll();
+        if (empty($_POST["state"])) return;
+        $state = $_POST["state"];
 
-        if (!$articles) $articles = [];
+        $article = new ArticleModel();
+        $articles = $article->getArticlesBySate($state);
 
         $articlesArray = [];
         foreach ($articles as $article) {
@@ -168,8 +138,8 @@ class Article {
                 "Auteur" => $article->getPerson()->getPseudo(),
                 "Vues" => $article->getTotalViews(),
                 "Commentaire" => "[NOMBRE COMMENTAIRE]",
-                "Date" => $article->getCreatedAt(),
-                "Publication" => $article->getPublicationDate(),
+                "Date creation" => $article->getCreatedAt(),
+                "Date publication" => $article->getPublicationDate(),
                 "Actions" => $article->generateActionsMenu()
             ];
         }

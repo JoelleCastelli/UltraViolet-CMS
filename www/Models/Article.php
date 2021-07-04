@@ -335,6 +335,42 @@ class Article extends Database implements JsonSerializable
         return $this->actions;
     }
 
+    // MODEL-BASED FUNCTIONS
+
+    public function getArticlesBySate($state) : array {
+        $now = date('Y-m-d H:i:s');
+
+        if ($state == "published") {
+           return $this->select()
+           ->where("publicationDate", $now, "<=")
+           ->andWhere("deletedAt", "NULL", "=")
+           ->get();
+        } 
+        
+        if ($state == "scheduled") {
+            return $this->select()
+            ->where("publicationDate", $now, ">=")
+            ->andWhere("deletedAt", "NULL")
+            ->get();
+        } 
+        
+        if ($state == "draft") {
+            return $this->select()
+            ->where("publicationDate", "NULL")
+            ->andWhere("deletedAt", "NULL")
+            ->get();
+        } 
+        
+        if ($state == "removed") {
+            return $this->select()->where("deletedAt", "NOT NULL")->get();
+        }
+
+        return [];
+
+    }
+
+    // JSON FORMAT
+
     public function jsonSerialize(): array
     {
         return [
@@ -354,6 +390,8 @@ class Article extends Database implements JsonSerializable
             "deletedAt" => $this->getDeletedAt(),
         ];
     }
+
+    // FORMS
 
     // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
     public function formBuilderCreateArticle() {
