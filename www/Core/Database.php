@@ -293,8 +293,12 @@ class Database {
         $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
-                $tag = $action['action'] == "delete" ? "span" : "a";
-                $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$action['action']."' href='".$action['url']."'>".$action['name']."</$tag>";
+                $tag = in_array($action['action'], ['delete', 'update-state']) ? "span" : "a";
+                $class = $action['class'] ?? $action['action'];
+                if($tag === 'a')
+                    $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</$tag>";
+                else
+                    $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . "' >" . $action['name'] . "</$tag>";
             }
         }
         $actions .= "</div></div>";
