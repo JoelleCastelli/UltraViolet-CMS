@@ -1,10 +1,16 @@
 <div class="grid-update-page">
 
-    <?php if (isset($errors)) : ?>
-        <?php foreach ($errors as $error) : ?>
-            <li><?= $error ?></li>
-        <?php endforeach; ?>
-    <?php endif; ?>
+    <?php if (isset($errors)) {
+        echo "<div class='error-message-form'>";
+        foreach ($errors as $error) {
+            if (count($errors) == 1)
+                echo "$error";
+            else
+                echo "<li>$error</li>";
+        }
+        echo "</div>";
+    } 
+    ?>
 
     <?php if (isset($response)) : ?>
 
@@ -16,7 +22,7 @@
             </p>
 
         <?php else : ?>
-            <?php foreach ($response['message'] as $value) :?>
+            <?php foreach ($response['message'] as $value) : ?>
 
                 <p class="error-message-form fadeOut">
                     <i class="fas fa-check icon-message-form"></i>
