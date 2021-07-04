@@ -36,8 +36,12 @@ class Article {
     
         if (!empty($_POST)) {
 
+            // Helpers::dd($_POST);
+
             $errors = FormValidator::check($form, $_POST);
             if (empty($errors)) {
+
+                
 
                 $title = htmlspecialchars($_POST["title"]);
                 $user = Request::getUser();
@@ -55,6 +59,7 @@ class Article {
                 $article->save();
 
                 $articleId = $article->getLastInsertId();
+                // Helpers::dd($_POST["categories"]);
                 $categoryArticle = new CategoryArticleModel();
               
 

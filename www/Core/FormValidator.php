@@ -25,6 +25,13 @@ class FormValidator
             foreach ($config["fields"] as $fieldName => $fieldConfig) {
 
                 // check if config field has a matching $_POST field
+                // echo $fieldName;
+                // echo '<br>';
+
+                $fieldName = str_replace("[]", "", $fieldName);
+
+                // echo $fieldName;
+                // echo '<br>';
                 if(!isset($data[$fieldName])) {
                     echo "Tentative de hack !";
                     exit;
@@ -124,12 +131,15 @@ class FormValidator
     public static function optionsValidator($fieldContent, $fieldConfig) {
         $correctOptions = [];
         if(in_array($fieldConfig["type"], ['select', 'radio'])) {
+            // Helpers::dd($fieldConfig);
+
             $correctOptions = [false];
             foreach ($fieldConfig['options'] as $option) {
                 if ($fieldContent == $option['value']) {
                     $correctOptions = [true];
                 }
             }
+
         } elseif($fieldConfig["type"] == 'checkbox') {
             foreach ($fieldContent as $key => $value) {
                 $correctOptions[$key] = false;
