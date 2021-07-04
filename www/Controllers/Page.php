@@ -174,6 +174,10 @@ class Page
             $page->cleanPublicationDate();
         $arrayPage = $page->jsonSerialize();
 
+        if (isset($_POST['state']) && ($_POST['state'] !== 'scheduled'))
+            if(isset($_POST['publicationDate']))
+                $_POST['publicationDate'] = '';
+
         $view = new View('pages/update');
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
