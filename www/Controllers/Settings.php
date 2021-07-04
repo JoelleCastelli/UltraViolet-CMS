@@ -9,6 +9,21 @@ use App\Models\Settings as SettingsModel;
 
 class Settings
 {
+
+    /**
+     * Create config at installation
+     */
+    public function installationAction() {
+        /*$str = file_get_contents('.env.dev');
+        $str = str_replace("INSTALLING=true", "INSTALLING=false", $str);
+        file_put_contents('.env.dev', $str);*/
+        $settings = new SettingsModel();
+        $form = $settings->formBuilderInstallation();
+        $view = new View("config/step1");
+        $view->assign('title', 'Installation');
+        $view->assign("form", $form);
+    }
+
     /**
      * Update settings
      */
@@ -28,11 +43,13 @@ class Settings
                 // Remove csrfToken from settings list before save loop
                 unset($settingsList['csrfToken']);
                 // Get current config file (before update)
-                $settings = $this->readConfigFile();
+                $settings = $settings->readConfigFile();
                 foreach ($settingsList as $name => $value) {
                     // Replace current value by new value and write back in file
                     $currentSettingValue = "$name=$settings[$name]";
                     $newSettingValue = "$name=$value";
+                    /*$currentSettingValue = $name.'='.$settings[$name];
+                    $newSettingValue = (strpos($value, ' ') && !strpos($value, '"')) ? $name.'="'.$value.'"' : $name.'='.$value;*/
                     $str = file_get_contents('.env.dev');
                     $str = str_replace($currentSettingValue, $newSettingValue, $str);
                     file_put_contents('.env.dev', $str);
@@ -42,36 +59,6 @@ class Settings
             }
             $view->assign("errors", $errors);
         }
-    }
-
-    /**
-     * Read config file and store data into array
-     * Example: $settings['APP_NAME'] = 'MyApp'
-     */
-    public static function readConfigFile(): array
-    {
-        $settings = [];
-        $config = file('.env.dev', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($config as $setting) {
-            if(substr($setting, 0, 1) !== '#') {
-                $pieces = explode("=", $setting);
-                $settings[$pieces[0]] = htmlspecialchars($pieces[1]);
-            }
-        }
-        return $settings;
-    }
-
-    public static function writeConfigFile($settings): array
-    {
-        $settings = [];
-        $config = file('.env.dev', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($config as $setting) {
-            if(substr($setting, 0, 1) !== '#') {
-                $pieces = explode("=", $setting);
-                $settings[$pieces[0]] = htmlspecialchars($pieces[1]);
-            }
-        }
-        return $settings;
     }
 
 }

@@ -226,6 +226,11 @@ medias_user_data:
   action: getMediasUser
 
 # SETTINGS
+config:
+  path:       /configuration
+  controller: Settings
+  action:     installation
+
 settings:
   path: /admin/parametres
   controller: Settings

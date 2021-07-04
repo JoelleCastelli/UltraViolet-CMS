@@ -92,6 +92,11 @@ $(document).ready(function() {
             $('.fadeOut').remove();
 
     }, 3000);
+
+    // During installation, remove the "sidebar" left margin
+    if($('#installation').length) {
+        $('#main').css('margin-left', 0);
+    }
 })
 
 /* Message Error and Success */
