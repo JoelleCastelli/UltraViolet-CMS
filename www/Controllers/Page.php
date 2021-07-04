@@ -27,6 +27,13 @@ class Page
     {
         $page = new PageModel();
         $view = new View("pages/list");
+        
+        $now = Helpers::getCurrentTimestamp();
+        $pages = $page->select()->where('publicationDate', $now, '<=')->andWhere('state', 'scheduled')->get();
+        foreach ($pages as $page) {
+            $page->setState("published");
+            $page->save();
+        }
 
         $view->assign('title', 'Pages');
         $view->assign('columnsTable', $this->columnsTable);
