@@ -393,11 +393,27 @@ class Article extends Database implements JsonSerializable
 
     // FORMS
 
-    // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
-    public function formBuilderCreateArticle() {
+    public function formBuilderCreateArticle($data) {
 
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
+
+        $mediaOptions = [];
+        $categoryOptions = [];
+
+        foreach ($data["media"] as $media) {
+           array_push($mediaOptions, [
+                "value" => $media->getId(),
+                "text" => $media->getTitle()
+           ]);
+        }
+
+        foreach ($data["categories"] as $category) {
+            array_push($categoryOptions, [
+                 "value" => $category->getId(),
+                 "text" => $category->getName()
+            ]);
+         }
 
         return [
             "config" => [
@@ -415,6 +431,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "title" => [
                     "type" => "text",
+                    "label" => "Titre de l'article",
                     "placeholder" => "Titre de l'article",
                     "minLength" => 2,
                     "maxLength" => 100,
@@ -425,6 +442,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "description" => [
                     "type" => "text",
+                    "label" => "Description de l'article",
                     "placeholder" => "Description de l'article",
                     "minLength" => 2,
                     "class" => "input",
@@ -438,20 +456,34 @@ class Article extends Database implements JsonSerializable
                     "error" => "Votre date de publication doit être au minimum " . $todayText ,
                     "min" => $today,
                 ],
+                "media" => [
+                    "type" => "select",
+                    "label" => "Image de cover",
+                    "class" => "search-bar",
+                    "options" => $mediaOptions,
+                    "required" => true,
+                ],
+                "categories" => [
+                    "type" => "select",
+                    "label" => "Categorie de l'article",
+                    "class" => "search-bar",
+                    "options" => $categoryOptions,
+                    "multiple" => true,
+                    "error" => "Vous devez selectionner au moins une catégories"
+                ],
                  "content" => [
                      "type" => "textarea",
+                    "label" => "Contenu de l'article",
                      "placeholder" => "Contenu de l article",
                      "minLength" => 2,
                      "class" => "input",
                      "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
                      "required" => false,
                  ],
-                // State radio was here
             ]
         ];
     }
 
-    // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
     public function formBuilderUpdateArticle($id) {
 
         $today = date("Y-m-d\TH:i");
@@ -505,7 +537,6 @@ class Article extends Database implements JsonSerializable
                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
                     "required" => false,
                 ],
-                // State radio was here
             ]
         ];
     }

@@ -7,36 +7,31 @@ use App\Core\Helpers;
 use App\Core\FormValidator;
 use App\Core\Request;
 use App\Models\Article as ArticleModel;
+use App\Models\Media as MediaModel;
+use App\Models\Category as CategoryModel;
 
 class Article {
 
-    // utils
-
-    
-
-    // Standard controller methods
-    public function showAllAction() {
-        $article = new ArticleModel;
-
-        // $articles = $this->getArticlesBySate("published");
-        // $articles = $this->getArticlesBySate("scheduled");
-        // $articles = $this->getArticlesBySate("draft");
-        // $articles = $this->getArticlesBySate("removed");
-        $articles = [];
-        
+    public function showAllAction() {        
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
-        $view->assign('articles', $articles);
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/articles/articles.js']);
     }
 
     public function createArticleAction() {
-        // TODO : check and redirect if id exist or invalid
 
         $article = new ArticleModel();
-        $form = $article->formBuilderCreateArticle();
-        $view = new View("articles/createArticle");
+        $media = new MediaModel();
+        $category = new CategoryModel();
 
+        $data = [
+            "media" => $media->findAll(),
+            "categories" => $category->findAll()
+        ];
+
+        $form = $article->formBuilderCreateArticle($data);
+        $view = new View("articles/createArticle");
+    
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
@@ -52,9 +47,7 @@ class Article {
                 if (!empty($_POST["publicationDate"])) {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
                 }
-
-                // TODO : Get Real Media
-                $article->setMediaId(1);
+                $article->setMediaId(htmlspecialchars($_POST["media"]));
                 $article->setPersonId($user->getId());
                 
                 $article->save();
@@ -64,6 +57,7 @@ class Article {
                 $view->assign("errors", $errors);
         }
 
+        $view->assign("data", $data);
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
@@ -72,9 +66,10 @@ class Article {
     public function updateArticleAction($id) {
         // TODO : check and redirect if id exist or invalid
 
-
         $article = new ArticleModel();
-        $article->setId($id);
+        $articleExist = $article->setId($id);
+
+        if (!$articleExist) Helpers::redirect404();
 
         $view = new View("articles/updateArticle");
         $form = $article->formBuilderUpdateArticle($id);
@@ -96,7 +91,6 @@ class Article {
                 if (!empty($_POST["publicationDate"])) {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
                 }
-
 
                 // TODO : Get Real Media
                 $article->setMediaId(1);

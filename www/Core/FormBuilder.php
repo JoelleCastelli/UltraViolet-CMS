@@ -28,7 +28,7 @@ class FormBuilder
 
             // SELECT
 		    if ($field["type"] == "select") {
-                $html .= "<select name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
+                $html .= "<select $multiple name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
                     $html .= "<option value='".$option["value"]."' $selected $disabled>".$option["text"]."</option>";
