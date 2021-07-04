@@ -36,7 +36,7 @@ class Page
     public function showStaticPageAction($slug)
     {
         $page = new PageModel();
-        $page = $page->select()->where('slug', $slug)->andWhere('state', 'published')->get();
+        $page = $page->select()->where('slug', $slug)->andWhere('state', 'published')->first();
 
         if(!empty($page)){
             $view = new View('staticPage', 'front');
