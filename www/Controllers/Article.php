@@ -14,6 +14,12 @@ use App\Models\CategoryArticle as CategoryArticleModel;
 
 class Article {
 
+    /*
+    $present = $categoryArticle->select()
+    ->where("articleId", $articleId, "=")
+    ->andWhere("categoryId", $categoryId, "=");
+    */
+
     public function showAllAction() {        
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
@@ -51,7 +57,6 @@ class Article {
                 if (!empty($_POST["publicationDate"])) {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
                 }
-                
                 $article->save();
 
                 $articleId = $article->getLastInsertId();
@@ -61,7 +66,6 @@ class Article {
                     $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
                     $categoryArticle->save();
                 }  
-
                 Helpers::namedRedirect("articles_list");
             }
             else
@@ -75,8 +79,6 @@ class Article {
     }
 
     public function updateArticleAction($id) {
-        // TODO : check and redirect if id exist or invalid
-
         $article = new ArticleModel();
         $articleExist = $article->setId($id);
 
@@ -99,13 +101,19 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
+                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setPersonId($user->getId());
                 if (!empty($_POST["publicationDate"])) {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
                 }
 
-                // TODO : Get Real Media
-                $article->setMediaId(1);
-                $article->setPersonId($user->getId());
+                // $articleId = $article->getLastInsertId();
+                // foreach ($_POST["categories"] as $categoryId) {
+                //     $categoryArticle = new CategoryArticleModel();
+                //     $categoryArticle->setArticleId($articleId);
+                //     $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
+                //     $categoryArticle->save();
+                // }  
                 
                 $article->save();
                 Helpers::namedRedirect("articles_list");
@@ -114,11 +122,8 @@ class Article {
                 $view->assign("errors", $errors);
         }
 
-        $arrayArticle = $article->jsonSerialize();
-        // Helpers::dd($arrayArticle);
-
         $view->assign('form', $form);
-        $view->assign("data", $arrayArticle);
+        $view->assign("data", $article->jsonSerialize());
         $view->assign("title", "Modifier un article");
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
     }

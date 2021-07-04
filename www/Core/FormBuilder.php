@@ -58,7 +58,7 @@ class FormBuilder
                 $html .= "<fieldset id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $disabledOption = isset($option["disabled"]) &&  $option["disabled"] == true ? "disabled" : '';
-                    $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
+                    $selected = isset($option["checked"]) &&  $option["checked"] == true ? "checked" : '';
                     
                     if (!empty($_POST[$fieldName]) && in_array($option['value'], $_POST[$fieldName])) {
                         $selected = "checked";
