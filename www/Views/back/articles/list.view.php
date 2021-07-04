@@ -1,10 +1,9 @@
 <div id="tableActions">
     <div class="filtering-status">
         <div class="filtering-btn articleState" id="published">Publiés</div>
-        <div class="filtering-btn articleState" id="draft">Brouillons</div>
         <div class="filtering-btn articleState" id="scheduled">Planifiés</div>
-        <div class="filtering-btn articleState" id="hidden">Cachés</div>
-        <div class="filtering-btn articleState" id="deleted">Supprimés</div>
+        <div class="filtering-btn articleState" id="draft">Brouillons</div>
+        <div class="filtering-btn articleState" id="removed">Supprimés</div>
     </div>
 
     <div class="buttons">

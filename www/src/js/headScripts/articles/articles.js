@@ -53,16 +53,16 @@ $(document).ready( function () {
 
     getArticleByState("draft");
 
-    // Display different types on filtering button click
-    // $(".filtering-btn").click(function() {
-    //     $(".filtering-btn").removeClass('active');
-    //     table.column([4]).visible(true);
-    //     $(this).addClass('active');
-    //     if (this.id !== "published") {
-    //         table.column([4]).visible(false);
-    //     }
-    //     getArticleByState(this.id);
-    // });
+  //  Display different types on filtering button click
+    $(".filtering-btn").click(function() {
+        $(".filtering-btn").removeClass('active');
+        table.column([4]).visible(true);
+        $(this).addClass('active');
+        if (this.id !== "published") {
+            table.column([4]).visible(false);
+        }
+        getArticleByState(this.id);
+    });
 
     function getArticleByState(state) {
         $.ajax({
