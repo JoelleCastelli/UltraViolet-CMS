@@ -42,7 +42,7 @@ class FormValidator
                     self::passwordValidator($fieldName, $data[$fieldName], $fieldConfig, $errors);
                     self::passwordConfirmationValidator($fieldName, $data, $fieldConfig, $errors);
                     self::emailInputValidator($data[$fieldName], $fieldConfig, $errors);
-                    self::dateInputValidator($data[$fieldName], "Y-m-d", $fieldConfig, $errors);
+                    self::dateInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::optionsValidator($data[$fieldName], $fieldConfig);
                 }
             }
@@ -99,10 +99,18 @@ class FormValidator
         }
     }
 
-    public static function dateInputValidator($date, $format, $fieldConfig, &$errors) {
-        if($fieldConfig["type"] == "date") {
+    public static function dateInputValidator($date, $fieldConfig, &$errors) {
+        if($fieldConfig["type"] == "date" || $fieldConfig["type"] == "datetime-local") {
+
+            if($fieldConfig["type"] == "datetime-local")
+                $format = "Y-m-d\TH:i";
+            else
+                $format = "Y-m-d";
+
             $d = \DateTime::createFromFormat($format, $date);
-            if($d && $d->format($format) == $date) {
+            
+            if ($d && $d->format($format) == $date) {
+
                 if (!empty($fieldConfig["min"]) && (new \DateTime($date) <= new \DateTime($fieldConfig["min"]))) {
                     $errors[] = $fieldConfig["error"];
                 }
