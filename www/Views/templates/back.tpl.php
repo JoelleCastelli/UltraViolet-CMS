@@ -1,5 +1,4 @@
 <?php
-    use App\Core\Helpers;
     use App\Core\Request;
 ?>
 <!DOCTYPE html>
@@ -33,12 +32,12 @@
 
 <body class="preload">
     <?php
-        if(Request::getURI() !== Helpers::callRoute('config'))
+        if(!strpos(Request::getURI(), 'configuration'))
             include 'Views/components/sidebar.php'
     ?>
     <main id="main">
         <?php
-            if(Request::getURI() !== Helpers::callRoute('config'))
+            if(!strpos(Request::getURI(), 'configuration'))
                 include 'Views/components/header.php';
             if(isset($flash)) $this->displayFlash($flash);
             include $this->view;

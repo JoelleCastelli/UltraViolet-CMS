@@ -85,7 +85,7 @@ class Settings extends Database
     /**
      * Form to update a category
      */
-    public function formBuilderInstallation(): array
+    public function formBuilderInstallDB(): array
     {
         $settings = $this->readConfigFile();
         if($settings) {
@@ -94,21 +94,11 @@ class Settings extends Database
                     "method" => "POST",
                     "action" => "",
                     "class" => "form_control card",
-                    "id" => "formAddCategory",
+                    "id" => "formBuilderInstallDB",
                     "submit" => "Valider",
-                    "referer" => Helpers::callRoute('settings')
+                    "referer" => Helpers::callRoute('configStep2')
                 ],
                 "fields" => [
-                    "APP_NAME" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 60,
-                        "label" => "Nom de l'application",
-                        "class" => "search-bar",
-                        "value" => $settings['APP_NAME'],
-                        "error" => "Le nom l'application doit contenir entre 1 et 60 caractères",
-                        "required" => true,
-                    ],
                     "DBNAME" => [
                         "type" => "text",
                         "minLength" => 1,
@@ -167,26 +157,6 @@ class Settings extends Database
                         "class" => "search-bar",
                         "value" => $settings['DBPWD'],
                         "error" => "Le mot de passe ne peut pas dépasser 32 caractères",
-                    ],
-                    "TMDB_API_KEY" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 60,
-                        "label" => "Clé API TMDB",
-                        "class" => "search-bar",
-                        "value" => $settings['TMDB_API_KEY'],
-                        "error" => "La clé API TMDB doit contenir entre 1 et 60 caractères",
-                        "required" => true,
-                    ],
-                    "TINYMCE_API_KEY" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 60,
-                        "label" => "Clé API TinyMCE",
-                        "class" => "search-bar",
-                        "value" => $settings['TINYMCE_API_KEY'],
-                        "error" => "La clé API TinyMCE doit contenir entre 1 et 60 caractères",
-                        "required" => true,
                     ],
                     "csrfToken" => [
                         "type"=>"hidden",

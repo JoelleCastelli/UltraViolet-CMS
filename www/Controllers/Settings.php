@@ -13,14 +13,20 @@ class Settings
     /**
      * Create config at installation
      */
-    public function installationAction() {
+    public function step1Action() {
+        /*$str = file_get_contents('.env.dev');
+        $str = str_replace("INSTALLING=true", "INSTALLING=false", $str);
+        file_put_contents('.env.dev', $str);*/
+        $view = new View("config/step1");
+    }
+
+    public function step2Action() {
         /*$str = file_get_contents('.env.dev');
         $str = str_replace("INSTALLING=true", "INSTALLING=false", $str);
         file_put_contents('.env.dev', $str);*/
         $settings = new SettingsModel();
-        $form = $settings->formBuilderInstallation();
-        $view = new View("config/step1");
-        $view->assign('title', 'Installation');
+        $form = $settings->formBuilderInstallDB();
+        $view = new View("config/step2");
         $view->assign("form", $form);
     }
 
