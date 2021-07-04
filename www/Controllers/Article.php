@@ -36,12 +36,8 @@ class Article {
     
         if (!empty($_POST)) {
 
-            // Helpers::dd($_POST);
-
             $errors = FormValidator::check($form, $_POST);
             if (empty($errors)) {
-
-                
 
                 $title = htmlspecialchars($_POST["title"]);
                 $user = Request::getUser();
@@ -50,18 +46,21 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
+                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setPersonId($user->getId());
                 if (!empty($_POST["publicationDate"])) {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
                 }
-                $article->setMediaId(htmlspecialchars($_POST["media"]));
-                $article->setPersonId($user->getId());
                 
                 $article->save();
 
                 $articleId = $article->getLastInsertId();
-                // Helpers::dd($_POST["categories"]);
-                $categoryArticle = new CategoryArticleModel();
-              
+                foreach ($_POST["categories"] as $categoryId) {
+                    $categoryArticle = new CategoryArticleModel();
+                    $categoryArticle->setArticleId($articleId);
+                    $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
+                    $categoryArticle->save();
+                }  
 
                 Helpers::namedRedirect("articles_list");
             }

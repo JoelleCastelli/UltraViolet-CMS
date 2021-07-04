@@ -460,48 +460,14 @@ class Article extends Database implements JsonSerializable
                     "type" => "select",
                     "label" => "Image de cover",
                     "class" => "search-bar",
-                    "options" => [
-                        [
-                            "value"=>"movie",
-                            "text"=>"Film",
-                        ],
-                        [
-                            "value"=>"series",
-                            "text"=>"Série",
-                        ],
-                        [
-                            "value"=>"season",
-                            "text"=>"Saison",
-                        ],
-                        [
-                            "value"=>"episode",
-                            "text"=>"Episode",
-                        ]
-                    ],
+                    "options" => $mediaOptions,
                     "required" => true,
                 ],
                 "categories[]" => [
                     "type" => "select",
                     "label" => "Categorie de l'article",
                     "class" => "search-bar",
-                    "options" => [
-                        [
-                            "value"=>"movie",
-                            "text"=>"Film",
-                        ],
-                        [
-                            "value"=>"series",
-                            "text"=>"Série",
-                        ],
-                        [
-                            "value"=>"season",
-                            "text"=>"Saison",
-                        ],
-                        [
-                            "value"=>"episode",
-                            "text"=>"Episode",
-                        ]
-                    ],
+                    "options" => $categoryOptions,
                     "multiple" => true,
                     "error" => "Vous devez selectionner au moins une catégories"
                 ],
