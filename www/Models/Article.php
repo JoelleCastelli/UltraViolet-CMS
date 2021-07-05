@@ -402,7 +402,6 @@ class Article extends Database implements JsonSerializable
         $todayText = date("Y-m-d H:i");
 
         $mediaOptions = [];
-        $categoryOptions = [];
 
         foreach ($data["media"] as $media) {
            array_push($mediaOptions, [
@@ -410,6 +409,8 @@ class Article extends Database implements JsonSerializable
                 "text" => $media->getTitle()
            ]);
         }
+
+        $categoryOptions = [];
 
         foreach ($data["categories"] as $category) {
             array_push($categoryOptions, [
@@ -466,13 +467,13 @@ class Article extends Database implements JsonSerializable
                     "options" => $mediaOptions,
                     "required" => true,
                 ],
-                "categories[]" => [
-                    "type" => "select",
+                "categories" => [
+                    "type" => "checkbox",
                     "label" => "Categorie de l'article",
-                    "class" => "search-bar",
+                    "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
-                    "error" => "Vous devez selectionner au moins une catégories"
+                    "error" => "Vous devez selectionner au moins une catégories."
                 ],
                  "content" => [
                      "type" => "textarea",

@@ -107,13 +107,15 @@ class Article {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
                 }
 
+                Helpers::dd($_POST["categories"]);
+
                 // $articleId = $article->getLastInsertId();
                 // foreach ($_POST["categories"] as $categoryId) {
                 //     $categoryArticle = new CategoryArticleModel();
                 //     $categoryArticle->setArticleId($articleId);
                 //     $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
                 //     $categoryArticle->save();
-                // }  
+                // }
                 
                 $article->save();
                 Helpers::namedRedirect("articles_list");
