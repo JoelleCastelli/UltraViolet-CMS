@@ -372,6 +372,10 @@ class Article extends Database implements JsonSerializable
 
     }
 
+    public function cleanPublicationDate() {
+        $this->setPublicationDate(date("Y-m-d\TH:i", strtotime($this->getPublicationDate())));
+    }
+
     // JSON FORMAT
 
     public function jsonSerialize(): array
@@ -535,6 +539,10 @@ class Article extends Database implements JsonSerializable
             array_push($categoryOptions, $options);
          }
 
+         if ($this->getPublicationDate()) {
+             $this->cleanPublicationDate();
+         }
+
         return [
             "config" => [
                 "method" => "POST",
@@ -575,6 +583,7 @@ class Article extends Database implements JsonSerializable
                     "class" => "search-bar publicationDateInput",
                     "error" => "Votre date de publication doit être au minimum " . $todayText ,
                     "min" => $today,
+                    "value" => $this->getPublicationDate()
                 ],
                 "media" => [
                     "type" => "select",
