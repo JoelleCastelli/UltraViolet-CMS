@@ -65,7 +65,6 @@ class FormBuilder
                     //     // "2" => $fieldName
                     // ];
 
-                    Helpers::dd($data["categories"]);
                     if (!empty($_POST[$fieldName]) && in_array($option['value'], $_POST[$fieldName])) {
                         $selected = "checked";
                     }else if (!empty($data[$fieldName]) && in_array($option['value'], $data[$fieldName])){

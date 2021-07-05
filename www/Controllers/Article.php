@@ -71,6 +71,11 @@ class Article {
             else
                 $view->assign("errors", $errors);
         }
+        $categories = $category->select('id')->get(null);
+        $data['categories'] = [];
+        foreach ($categories as $categorie => $value) {
+            array_push($data['categories'], $value['id']);
+        }
 
         $view->assign("data", $data);
         $view->assign("title", "Créer un article");
