@@ -2,7 +2,8 @@
     <div class="logo">
         <img src='<?= PATH_TO_IMG ?>logo_uv_transparent.png' alt='ultraviolet logo'>
     </div>
-    <h1 class="title-form">UltraViolet</h1>
+    <div class="details">Vous devez saisir ci-dessous les détails de connexion à votre base de données. Si vous ne les
+        connaissez pas, contactez votre hébergeur.</div>
     <div class="error-message-form">
         <?php
         if(isset($errors)) {
