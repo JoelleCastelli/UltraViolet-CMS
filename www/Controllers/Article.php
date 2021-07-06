@@ -14,12 +14,6 @@ use App\Models\CategoryArticle as CategoryArticleModel;
 
 class Article {
 
-    /*
-    $present = $categoryArticle->select()
-    ->where("articleId", $articleId, "=")
-    ->andWhere("categoryId", $categoryId, "=");
-    */
-
     public function showAllAction() {        
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
@@ -85,6 +79,9 @@ class Article {
 
     public function updateArticleAction($id) {
         $article = new ArticleModel();
+        $category = new CategoryModel();
+        
+
         $articleExist = $article->setId($id);
 
         if (!$articleExist) Helpers::redirect404();
@@ -112,16 +109,64 @@ class Article {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
                 }
 
-                Helpers::dd($_POST["categories"]);
+                // Helpers::dd($_POST["categories"]);
 
-                // $articleId = $article->getLastInsertId();
-                // foreach ($_POST["categories"] as $categoryId) {
-                //     $categoryArticle = new CategoryArticleModel();
-                //     $categoryArticle->setArticleId($articleId);
-                //     $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
-                //     $categoryArticle->save();
-                // }
-                
+                /*
+                    si catégorie coché
+                        si catégorie coché + article id -> dans category_article = rien faire
+                        sinon -> insérer dans category_article
+                    si catégorie pas coché
+                        si catégorie + article id -> pas dans category_article = ne rien faire
+                        sinon -> supprimer la ligne
+
+                        toi aussi tu aimes les films de gladiateurs ?
+                */
+
+                $articleId = $article->getId();
+                $categories = $category->findAll();
+            
+                foreach ($categories as $category) {
+                    $categoryId = $category->getId();
+
+                    foreach ($_POST["categories"] as $postCategory) {
+                        
+                        // si coché 
+                        if ($categoryId == $postCategory) {
+
+                            // check si la ligne existe
+                            $categoryArticle = new CategoryArticleModel();
+                            $match = $categoryArticle->select()
+                            ->where("articleId", $articleId, "=")
+                            ->andWhere("categoryId", $categoryId, "=")->first();
+
+                            // si la ligne n'est pas présente
+                            if (empty($match)) {
+                                $categoryArticle = new CategoryArticleModel();
+                                $categoryArticle->setArticleId(htmlspecialchars($articleId));
+                                $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
+                                $categoryArticle->save();
+                            }
+
+                        } else {
+
+                            // check si la ligne existe
+                            $categoryArticle = new CategoryArticleModel();
+                            $match = $categoryArticle->select()
+                            ->where("articleId", $articleId, "=")
+                            ->andWhere("categoryId", $postCategory, "=")->first();
+
+                            // si la ligne est présente
+                            if (!empty($match)) {
+                                $id = $match->getId();
+                                $match->hardDelete()->where("id", $id, "=")->execute();
+                            }
+
+                        }
+                    }
+
+                }
+
+
                 $article->save();
                 Helpers::namedRedirect("articles_list");
             }
@@ -136,10 +181,8 @@ class Article {
     }
 
 
-
     // API methods
 
-    // TODO : Need to secure this
     public function getArticlesAction() {
 
         if (empty($_POST["state"])) return;
