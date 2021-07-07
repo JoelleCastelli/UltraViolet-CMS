@@ -18,23 +18,6 @@ class Settings extends Database
     }
 
     /**
-     * Read config file and store data into array
-     * Example: $settings['APP_NAME'] = 'MyApp'
-     */
-    public static function readConfigFile(): array
-    {
-        $settings = [];
-        $config = file('.env.dev', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($config as $setting) {
-            if(substr($setting, 0, 1) !== '#') {
-                $pieces = explode("=", $setting);
-                $settings[$pieces[0]] = htmlspecialchars($pieces[1]);
-            }
-        }
-        return $settings;
-    }
-
-    /**
      * @return null
      */
     public function getId()
@@ -85,94 +68,9 @@ class Settings extends Database
     /**
      * Form to update a category
      */
-    public function formBuilderInstallDB(): array
-    {
-        $settings = $this->readConfigFile();
-        if($settings) {
-            return [
-                "config" => [
-                    "method" => "POST",
-                    "action" => "",
-                    "class" => "form_control card",
-                    "id" => "formBuilderInstallDB",
-                    "submit" => "Valider",
-                    "referer" => Helpers::callRoute('configStep2')
-                ],
-                "fields" => [
-                    "DBNAME" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 64,
-                        "label" => "Nom de la base de données",
-                        "class" => "search-bar",
-                        "value" => $settings['DBNAME'],
-                        "error" => "Le nom la base de données doit contenir entre 1 et 64 caractères",
-                        "required" => true,
-                    ],
-                    "DBHOST" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 60,
-                        "label" => "Hôte",
-                        "class" => "search-bar",
-                        "value" => $settings['DBHOST'],
-                        "error" => "Le nom de l'hôte doit contenir entre 1 et 60 caractères",
-                        "required" => true,
-                    ],
-                    "DBPORT" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 5,
-                        "label" => "Port",
-                        "class" => "search-bar",
-                        "value" => $settings['DBPORT'],
-                        "error" => "Le port doit contenir entre 1 et 5 caractères",
-                        "required" => true,
-                    ],
-                    "DBUSER" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 16,
-                        "label" => "Utilisateur",
-                        "class" => "search-bar",
-                        "value" => $settings['DBUSER'],
-                        "error" => "Le nom d'utilisateur de la base de données doit contenir entre 1 et 16 caractères",
-                        "required" => true,
-                    ],
-                    "DBDRIVER" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 20,
-                        "label" => "Driver",
-                        "class" => "search-bar",
-                        "value" => $settings['DBDRIVER'],
-                        "error" => "Le nom du driver doit contenir entre 1 et 20 caractères",
-                        "required" => true,
-                    ],
-                    "DBPWD" => [
-                        "type" => "text",
-                        "minLength" => 0,
-                        "maxLength" => 32,
-                        "label" => "Mot de passe",
-                        "class" => "search-bar",
-                        "value" => $settings['DBPWD'],
-                        "error" => "Le mot de passe ne peut pas dépasser 32 caractères",
-                    ],
-                    "csrfToken" => [
-                        "type"=>"hidden",
-                        "value"=> FormBuilder::generateCSRFToken(),
-                    ]
-                ],
-            ];
-        }
-    }
-
-    /**
-     * Form to update a category
-     */
     public function formBuilderUpdateSettings(): array
     {
-        $settings = $this->readConfigFile();
+        $settings = Helpers::readConfigFile();
         if($settings) {
             return [
                 "config" => [
