@@ -100,12 +100,17 @@ class Media
         }
     }
 
+    /**
+     * Called by AJAX script to return array of ugc images
+     */
     public function getMediasUserAction() { 
-        /* return list of all ugc images for tinymce */
+        
+        /* return list of all ugc images */
         $files = array_diff(scandir('src/img/other'), ['..', '.']);
         $images = [];
         $regex = '([a-zA-Z-_]+(\.(?i)(jpg|png|gif|bmp))$)';
 
+        // return array format for tinymce
         foreach ($files as $file) {
             if(preg_match($regex, $file))
                 array_push($images, [
