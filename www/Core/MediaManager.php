@@ -9,8 +9,7 @@ class MediaManager
     protected array $files = [];
     protected int $oneMegabytesInBytes = 1048576;
     protected array $result = [];
-    private array $imageExtensions = ['jpg', 'jpeg', 'png'];
-    private array $videoExtensions = ['mp4', 'mov', 'avi', 'flv', 'wmv'];
+    private array $imageExtensions = ['jpg', 'jpeg', 'png', 'svg'];
 
     public function __construct()
     {
@@ -37,38 +36,27 @@ class MediaManager
 
             //init
             $fileSize = $file['size'];
-            $fileName = basename($file["name"]);
-            $filePath = PATH_TO_IMG.$type."/".$fileName;
+            $fileName = pathinfo($file['name'], PATHINFO_FILENAME);
+            $filePath = PATH_TO_IMG.$type."/". $file['name'];
             $fileTempPath = $file['tmp_name'];
             $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
 
             // validate files
             if(!$this->isCorrectFileType($fileExtension)) {
-                $this->result['errors'][] = "Seules les images et les vidéos sont acceptées";
+                $this->result['errors'][] = "Seules les images sont acceptées";
                 return $this->result['errors'];
             }
 
-            $video = $this->isVideo($fileExtension);
             $this->result['files'][] =  [
-                "video" => $video,
                 "path" => $filePath,
                 "title" => $fileName,
                 "tempPath" => $fileTempPath
             ];
 
-            if ($video === false) {
-                // file is image
-                $this->imageSizeValidator($fileSize);
-                if (!empty($this->result['errors']))
-                    return $this->result['errors'];
-            } elseif ($video === true) {
-                // file is video
-                $this->videoSizeValidator($fileSize);
-                if (!empty($this->result['errors']))
-                    return $this->result['errors'];
-            } else {
+            // file is image
+            $this->imageSizeValidator($fileSize);
+            if (!empty($this->result['errors']))
                 return $this->result['errors'];
-            }
 
         }
         $this->setFiles($this->result['files']);
@@ -79,18 +67,8 @@ class MediaManager
     {
         if (in_array($fileExtension, $this->imageExtensions))
             return true;
-        elseif (in_array($fileExtension, $this->videoExtensions))
-            return true;
         else
             return false;
-    }
-
-    public function isVideo($fileExtension): bool
-    {
-        if (in_array($fileExtension, $this->imageExtensions))
-            return false;
-        elseif (in_array($fileExtension, $this->videoExtensions))
-            return true;
     }
 
     public function imageSizeValidator($fileSize)
@@ -100,20 +78,35 @@ class MediaManager
             $this->result['errors'][] = "Le poids de l'image ne peut pas être supérieur à 10MB";
     }
 
-    public function videoSizeValidator($fileSize)
-    {
-        $max = 30 * $this->oneMegabytesInBytes;
-        if($fileSize > $max)
-            $this->result['errors'][] = "Le poids de la vidéo ne peut pas être supérieur à 30MB";
-    }
-
     public function uploadFile($mediaManagerFiles): bool
     {
-        foreach ($mediaManagerFiles as $file) {
-            try {
-                move_uploaded_file($file['tempPath'], getcwd().$file['path']);
-            } catch (\Exception $e) {
-                $this->result['errors'][] = "Le téléchargement n'a pas pu être effectué. " . $e;
+        foreach ($mediaManagerFiles as $key => $file ) {
+
+            $media = new Media();
+            $existingMediaCount = $media->count('path')->where('path', $file['path'])->first();
+
+            if ($existingMediaCount->total > 0) {
+                $number = 1;
+
+                // to format image name with number
+                while($existingMediaCount->total > 0)
+                {
+                    $title = $file['title'] . '(' . $number . ')';
+                    $path = pathinfo($file['path'], PATHINFO_DIRNAME) . '/' . $title . '.' . pathinfo($file['path'], PATHINFO_EXTENSION);
+                $existingMediaCount = $media->count('path')->where('path', $path)->first();
+                    $number++;
+                }
+
+                $this->files[$key]['path'] = pathinfo($file['path'], PATHINFO_DIRNAME) . '/' . $title . '.' . pathinfo($file['path'], PATHINFO_EXTENSION);
+                $this->files[$key]['title'] = $title;
+
+                $file['path'] = $this->files[$key]['path'];
+            }
+
+            $check = move_uploaded_file($file['tempPath'], getcwd() . $file['path']);
+
+            if($check){
+                $this->result['errors'][] = "Le téléchargement n'a pas pu être effectué. ";
                 return false;
             }
         }
@@ -122,17 +115,12 @@ class MediaManager
 
     public function saveFile($mediaManagerFiles) {
         foreach ($mediaManagerFiles as $file) {
-            $existingMedia = new Media();
-            $existingMedia = $existingMedia->findOneBy('path', $file['path']);
-            if($existingMedia) {
-                $existingMedia->setTitle($file['title']);
-                $existingMedia->save();
-            } else {
-                $media = new Media();
-                $media->setPath($file['path']);
-                $media->setTitle($file['title']);
-                $media->save();
-            }
+
+            $media = new Media();
+            $media->setPath($file['path']);
+            $media->setTitle($file['title']);
+            $media->save();
+            
         }
     }
 
