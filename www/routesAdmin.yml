@@ -1,3 +1,19 @@
+#CONFIG
+configStep1:
+  path:       /configuration/introduction
+  controller: Installer
+  action:     step1
+
+configStep2:
+  path:       /configuration/database
+  controller: Installer
+  action:     step2
+
+configStep3:
+  path:       /configuration/installation
+  controller: Settings
+  action:     step3
+
 # GLOBAL
 admin:
   path: /admin
@@ -226,16 +242,6 @@ medias_user_data:
   action: getMediasUser
 
 # SETTINGS
-configStep1:
-  path:       /configuration
-  controller: Settings
-  action:     step1
-
-configStep2:
-  path:       /configuration/database
-  controller: Settings
-  action:     step2
-
 settings:
   path: /admin/parametres
   controller: Settings

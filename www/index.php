@@ -4,11 +4,11 @@ namespace App;
 
 session_start();
 
+use App\Controller\Installer;
 use App\Core\Helpers;
 use App\Core\Request;
 use App\Core\Router;
 use App\Core\ConstantManager;
-use App\Models\Settings;
 
 require 'Autoload.php';
 Autoload::register();
@@ -21,12 +21,26 @@ $action = $route->getAction();
 $middlewares = $route->getMiddlewares();
 $office = $route->getOffice();
 $params = $route->getParameters();
-Request::init();
 
-$settings = new Settings();
-$settings = $settings->readConfigFile();
-if($settings['INSTALLING'] === "true")
-    Helpers::redirect('/configuration');
+// Run the installer if UltraViolet is not installed
+$installRelatedUrls = [
+    Helpers::callRoute('configStep1'),
+    Helpers::callRoute('configStep2'),
+    Helpers::callRoute('configStep3'),
+];
+if(UV_INSTALLED !== "true") {
+    // Redirect to install URL if any URL (other than those installation-related) is reached
+    if(!in_array($slug, $installRelatedUrls)) {
+        Helpers::redirect(Helpers::callRoute('configStep1'));
+    } else {
+        require_once './Controllers/Installer.php';
+        $installer = new Installer;
+        $installer->install($route);
+        die();
+    }
+}
+
+Request::init();
 
 // Check privileges
 if($office == 'back') {
