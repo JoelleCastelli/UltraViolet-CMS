@@ -252,13 +252,21 @@ class Database {
         return $this;
     }
 
-    public function get(): array
+    public function get($setFetchMode = true): array
     {
         $query = $this->pdo->query($this->query);
-        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
+        if ($setFetchMode)
+            $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
         try {
-            return $query->fetchAll();
-        }catch (\Exception $e) {
+
+            if ($setFetchMode)
+                return $query->fetchAll();
+            else
+                return $query->fetchAll(\PDO::FETCH_COLUMN);
+
+        } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
         }
@@ -275,11 +283,20 @@ class Database {
         }
     }
 
-    public function first(){
+    public function first($setFetchMode = true)
+    {
         $query = $this->pdo->query($this->query);
-        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
+        if ($setFetchMode)
+            $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
         try {
-            return $query->fetch();
+
+            if ($setFetchMode)
+                return $query->fetch();
+            else
+                return $query->fetch(\PDO::FETCH_COLUMN);
+
         } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
