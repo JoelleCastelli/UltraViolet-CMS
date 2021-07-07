@@ -222,6 +222,11 @@ media_delete:
   action:     deleteMedia
   middleware: Editor
 
+medias_user_data:
+  path:       /admin/medias/user
+  controller: Media
+  action:     getMediasUser
+
 # SETTINGS
 settings:
   path:       /admin/parametres

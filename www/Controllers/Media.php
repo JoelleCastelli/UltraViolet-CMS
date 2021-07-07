@@ -99,4 +99,21 @@ class Media
             echo json_encode($response);
         }
     }
+
+    public function getMediasUserAction() { 
+        /* return list of all ugc images for tinymce */
+        $files = array_diff(scandir('src/img/other'), ['..', '.']);
+        $images = [];
+        $regex = '([a-zA-Z-_]+(\.(?i)(jpg|png|gif|bmp))$)';
+
+        foreach ($files as $file) {
+            if(preg_match($regex, $file))
+                array_push($images, [
+                    'title' => $file,
+                    'value' => PATH_TO_IMG . 'other/' . $file]
+                );
+        }
+
+        echo json_encode($images);
+    }
 }

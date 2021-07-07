@@ -1,35 +1,34 @@
-tinymce.init({
-  selector: "textarea",
-  plugins: ['advlist autolink lists link image charmap print preview anchor',
-              'searchreplace visualblocks code fullscreen',
-              'insertdatetime media table paste imagetools wordcount'
-            ],
-  toolbar_mode: "floating",
-  height: 500,
-  preformatted: true,
-  verify_html: true,
-  a11y_advanced_options: true,
-  image_caption: true,
-  image_title: true,
-  image_uploadtab: false,
-  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-  image_list: [
-    { title: 'My image 1', value: 'https://picsum.photos/200/300' },
-    { title: 'My image 2', value: 'https://picsum.photos/200' },
-    { title: 'source', value: '/src/img/default_poster.jpg' }
-  ]
+let images = [];
+$.ajax({
+  type: 'POST',
+  url: callRoute('medias_user_data'),
+  dataType: 'json',
+  async: false,
+  success: function(response) {
+    images = response;
+    console.log(response);
+    console.log(images);
+  },
 });
-
-/* tinymce.init({
+tinymce.init({
   selector: 'textarea',
   height: 500,
   plugins: [
     'advlist autolink lists link image charmap print preview anchor',
     'searchreplace visualblocks code fullscreen',
-    'insertdatetime media table paste imagetools wordcount'
+    'insertdatetime media table paste wordcount'
   ],
-  verify_html: false,
-  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-}); */
+  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | removeformat | help',
+  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+
+  // IMAGE
+  image_list: images,
+  paste_block_drop: false, // disable drag and drop
+  paste_data_images: false, // disable paste image
+  smart_paste: false, // disable from url to embedded image
+  paste_preprocess: function(plugin, args) {
+    console.log(args);
+    console.log(plugin);
+    console.log(args.content);
+  }
+});
