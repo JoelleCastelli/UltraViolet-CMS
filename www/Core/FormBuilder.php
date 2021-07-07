@@ -28,7 +28,7 @@ class FormBuilder
 
             // SELECT
 		    if ($field["type"] == "select") {
-                $html .= "<select name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
+                $html .= "<select $multiple name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
                     $html .= "<option value='".$option["value"]."' $selected $disabled>".$option["text"]."</option>";
@@ -58,8 +58,13 @@ class FormBuilder
                 $html .= "<fieldset id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $disabledOption = isset($option["disabled"]) &&  $option["disabled"] == true ? "disabled" : '';
-                    $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
+                    $selected = isset($option["checked"]) &&  $option["checked"] == true ? "checked" : '';
                     
+                    // $test = [
+                    //     "1" => $data["categories"]
+                    //     // "2" => $fieldName
+                    // ];
+
                     if (!empty($_POST[$fieldName]) && in_array($option['value'], $_POST[$fieldName])) {
                         $selected = "checked";
                     }else if (!empty($data[$fieldName]) && in_array($option['value'], $data[$fieldName])){

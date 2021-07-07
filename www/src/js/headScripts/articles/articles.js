@@ -8,13 +8,13 @@ $(document).ready( function () {
             { data: 'Auteur' },
             { data: 'Vues' },
             { data: 'Commentaire' },
-            { data: 'Date' },
-            { data: 'Publication' },
+            { data: 'Date creation' },
+            { data: 'Date publication' },
             { data: 'Actions' }
         ],
 
         columnDefs: [{
-            targets: 5,
+            targets: 6,
             data: "name",
             searchable: false,
             orderable: false
@@ -51,9 +51,9 @@ $(document).ready( function () {
         },
     });
 
-    getArticleByState("published");
+    getArticleByState("draft");
 
-    // Display different types on filtering button click
+  //  Display different types on filtering button click
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
         table.column([4]).visible(true);
@@ -68,7 +68,7 @@ $(document).ready( function () {
         $.ajax({
             type: 'POST',
             url: callRoute("article_data"),
-            data: { state },
+            data: { state: state },
             dataType: 'json',
             success: function(response) {
                 console.log("Requete réussis");

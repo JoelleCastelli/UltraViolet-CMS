@@ -19,6 +19,38 @@ class Helpers{
         echo "</pre>";
     }
 
+    public static function cleanDump($data, $title = null) {
+        echo "<div class='debug'>";
+
+        if ($title) {
+            echo "<br>";
+            echo "### ".$title." ###";
+        }
+        echo "<br>";
+        echo "<pre>";
+        var_dump($data);
+        echo "</pre>";
+        echo "<br>";
+
+        echo "</div>";
+    }
+
+    public static function cleanDumpArray($data, $title = null) {
+        echo "<div class='debug'>";
+
+        if ($title) {
+            echo "<br>";
+            echo "### ".$title." ###";
+        }
+        echo "<br>";
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+        echo "<br>";
+
+        echo "</div>";
+    }
+
     public static function sanitizeString($url) {
         return htmlspecialchars(strip_tags($url));
     }
@@ -26,6 +58,10 @@ class Helpers{
     public static function redirect($url, $statusCode = 0) {
         header('Location: ' . $url, true, $statusCode);
         exit;
+    }
+
+    public static function namedRedirect($routeName, $statusCode = 0) {
+        Helpers::redirect(Helpers::callRoute($routeName), $statusCode);
     }
 
     public static function redirect404()

@@ -2,27 +2,21 @@
 
 namespace App\Controller;
 
+
 use App\Core\View;
 use App\Core\Helpers;
 use App\Core\FormValidator;
+use App\Core\Request;
 use App\Models\Article as ArticleModel;
+use App\Models\Media as MediaModel;
+use App\Models\Category as CategoryModel;
+use App\Models\CategoryArticle as CategoryArticleModel;
 
 class Article {
 
-    // utils
-
-    private function redirect(string $route, string $code = "307") {
-        Helpers::redirect(Helpers::callRoute($route), $code);
-    }
-
-    // Standard controller methods
-    public function showAllAction() {
-        $article = new ArticleModel;
-        $articles = $article->selectWhere('state', 'published');
-        
+    public function showAllAction() {        
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
-        $view->assign('articles', $articles);
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/articles/articles.js']);
     }
 
@@ -31,96 +25,115 @@ class Article {
         $article = new ArticleModel();
         $form = $article->formBuilderCreateArticle();
         $view = new View("articles/createArticle");
-
+    
         if (!empty($_POST)) {
 
-            //  $errors = FormValidator::check($form, $_POST);
-            $error = [];
-            //  if (empty($errors)) {
-            if (true) {
+            $errors = FormValidator::check($form, $_POST);
+            if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
+                $user = Request::getUser();
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
-                    
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                $article->setState(htmlspecialchars($_POST["state"]));
-
-                // TODO : Get real connected Person and Media used
-                $article->setMediaId(1);
-                $article->setPersonId(1);
-
+                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setPersonId($user->getId());
+                if (!empty($_POST["publicationDate"])) {
+                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
+                }
                 $article->save();
-                $this->redirect("articles_list");
-            } 
-            else 
+
+                $articleId = $article->getLastInsertId();
+                foreach ($_POST["categories"] as $categoryId) {
+                    $categoryArticle = new CategoryArticleModel();
+                    $categoryArticle->setArticleId($articleId);
+                    $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
+                    $categoryArticle->save();
+                }  
+                Helpers::namedRedirect("articles_list");
+            }
+            else
                 $view->assign("errors", $errors);
         }
+        
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
     }
 
     public function updateArticleAction($id) {
-        // TODO : check and redirect if id exist or invalid
-
         $article = new ArticleModel();
-        $article->setId($id);
+
+        $articleExist = $article->setId($id);
+        if (!$articleExist) Helpers::redirect404();
 
         $view = new View("articles/updateArticle");
-        $form = $article->formBuilderUpdateArticle();
+        $form = $article->formBuilderUpdateArticle($id);
 
         if (!empty($_POST)) {
 
-            // $errors = FormValidator::check($form, $_POST);
-            $error = [];
-            // if (empty($errors)) {
-            if (true) {
-
+            $errors = FormValidator::check($form, $_POST);
+            if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
+                $user = Request::getUser();
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
-
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                $article->setState(htmlspecialchars($_POST["state"]));
+                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setPersonId($user->getId());
 
-                // TODO : Get real connected Person and Media used
-                $article->setMediaId(1);
-                $article->setPersonId(1);
+                if (!empty($_POST["publicationDate"])) {
+                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
+                }
+
+                $categoryArticle = new CategoryArticleModel();
+
+                $entriesInDB = $categoryArticle->select("categoryId")->where("articleId", $id)->get(false);
+                $categoriesInPost = $_POST["categories"];
+                
+                $entriesToRemove = array_diff($entriesInDB, $categoriesInPost);
+                $entriesToAdd = array_diff($categoriesInPost, $entriesInDB);
+
+                foreach($entriesToRemove as $entry) {
+                    $categoryArticle->hardDelete()->where("articleId", $id)->andWhere("categoryId", $entry)->execute();
+                }
+        
+                foreach($entriesToAdd as $entry) {
+                    $newCategory = new CategoryArticleModel();
+                    $newCategory->setArticleId($id);
+                    $newCategory->setCategoryId($entry);
+                    $newCategory->save();
+                }
 
                 $article->save();
-                $this->redirect("articles_list");
-            }
-            else
+                Helpers::namedRedirect("articles_list");
+            
+            } else {
                 $view->assign("errors", $errors);
+            }
         }
 
-        $arrayArticle = $article->jsonSerialize();
-
         $view->assign('form', $form);
-        $view->assign("data", $arrayArticle);
+        $view->assign("data", $article->jsonSerialize());
         $view->assign("title", "Modifier un article");
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
     }
 
 
-
     // API methods
 
     public function getArticlesAction() {
-        if (empty($_POST['state'])) return;
 
-        $state = $_POST['state'];
-        $articles = new ArticleModel();
+        if (empty($_POST["state"])) return;
+        $state = $_POST["state"];
 
-        $articles = $articles->selectWhere('state', htmlspecialchars($_POST['state']));
-
-        if (!$articles) $articles = [];
+        $article = new ArticleModel();
+        $articles = $article->getArticlesBySate($state);
 
         $articlesArray = [];
         foreach ($articles as $article) {
@@ -129,32 +142,29 @@ class Article {
                 "Auteur" => $article->getPerson()->getPseudo(),
                 "Vues" => $article->getTotalViews(),
                 "Commentaire" => "[NOMBRE COMMENTAIRE]",
-                "Date" => $article->getCreatedAt(),
-                "Publication" => $article->getState(),
+                "Date creation" => $article->getCreatedAt(),
+                "Date publication" => $article->getPublicationDate(),
                 "Actions" => $article->generateActionsMenu()
             ];
         }
 
         echo json_encode([
-            "state" => $state,
             "articles" => $articlesArray
         ]);
     }
 
     public function deleteArticleAction() {
 
-        if (empty($_POST["id"]))  return;
+        if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
         $article->setId($_POST["id"]);
 
-        if ($article->getState() === "deleted") {
+        if ($article->getDeletedAt()) {
             $article->hardDelete()->where("id", $_POST["id"])->execute();
-            return;
+        } else {
+            $article->delete();
         }
-
-        $article->setState("deleted");
-        $article->delete();
     }
 
 }

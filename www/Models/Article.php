@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Controller\Category;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
 use App\Core\FormBuilder;
 use JsonSerializable;
+use App\Models\Media as MediaModel;
+use App\Models\Category as CategoryModel; 
+use App\Models\CategoryArticle as CategoryArticleModel;
 
 class Article extends Database implements JsonSerializable
 {
@@ -18,11 +22,11 @@ class Article extends Database implements JsonSerializable
     protected $content;
     protected $rating;
     protected $slug;
-    protected $state;
     protected $totalViews = 0;
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
+    protected $publicationDate;
     protected $mediaId;
     protected $personId;
     private $createdAt;
@@ -132,21 +136,6 @@ class Article extends Database implements JsonSerializable
         $this->slug = $slug;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param mixed $state
-     */
-    public function setState($state): void
-    {
-        $this->state = $state;
-    }
 
     /**
      * @return mixed
@@ -226,6 +215,22 @@ class Article extends Database implements JsonSerializable
     public function setContentUpdatedAt($contentUpdatedAt): void
     {
         $this->contentUpdatedAt = $contentUpdatedAt;
+    }
+
+    /**
+     * @return mixed $publicationDate
+     */
+    public function getPublicationDate()
+    {
+        return $this->publicationDate;
+    }
+
+    /**
+     * @param mixed $publicationDate
+     */
+    public function setPublicationDate($publicationDate): void
+    {
+        $this->publicationDate = $publicationDate;
     }
 
     /**
@@ -334,6 +339,46 @@ class Article extends Database implements JsonSerializable
         return $this->actions;
     }
 
+    // MODEL-BASED FUNCTIONS
+
+    public function getArticlesBySate($state) : array {
+        $now = date('Y-m-d H:i:s');
+
+        if ($state == "published") {
+           return $this->select()
+           ->where("publicationDate", $now, "<=")
+           ->andWhere("deletedAt", "NULL", "=")
+           ->get();
+        } 
+        
+        if ($state == "scheduled") {
+            return $this->select()
+            ->where("publicationDate", $now, ">=")
+            ->andWhere("deletedAt", "NULL")
+            ->get();
+        } 
+        
+        if ($state == "draft") {
+            return $this->select()
+            ->where("publicationDate", "NULL")
+            ->andWhere("deletedAt", "NULL")
+            ->get();
+        } 
+        
+        if ($state == "removed") {
+            return $this->select()->where("deletedAt", "NOT NULL")->get();
+        }
+
+        return [];
+
+    }
+
+    public function cleanPublicationDate() {
+        $this->setPublicationDate(date("Y-m-d\TH:i", strtotime($this->getPublicationDate())));
+    }
+
+    // JSON FORMAT
+
     public function jsonSerialize(): array
     {
         return [
@@ -343,10 +388,10 @@ class Article extends Database implements JsonSerializable
             "content" => $this->getContent(),
             "rating" => $this->getRating(),
             "slug" => $this->getSlug(),
-            "state" => $this->getState(),
             "totalViews" => $this->getTotalViews(),
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
+            "publicationDate" => $this->getPublicationDate(),
             "contentUpdatedAt" => $this->getContentUpdatedAt(),
             "createdAt" => $this->getCreatedAt(),
             "updatedAt" => $this->getUpdatedAt(),
@@ -354,8 +399,37 @@ class Article extends Database implements JsonSerializable
         ];
     }
 
-    // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
+    // FORMS
+
     public function formBuilderCreateArticle() {
+
+        $today = date("Y-m-d\TH:i");
+        $todayText = date("Y-m-d H:i");
+
+        $media = new MediaModel();
+        $category = new CategoryModel();
+
+        $medias = $media->findAll();
+        $categories = $category->findAll();
+
+        $mediaOptions = [];
+
+        foreach ($medias as $media) {
+           array_push($mediaOptions, [
+                "value" => $media->getId(),
+                "text" => $media->getTitle()
+           ]);
+        }
+
+        $categoryOptions = [];
+
+        foreach ($categories as $category) {
+            array_push($categoryOptions, [
+                 "value" => $category->getId(),
+                 "text" => $category->getName()
+            ]);
+         }
+
         return [
             "config" => [
                 "method" => "POST",
@@ -366,12 +440,13 @@ class Article extends Database implements JsonSerializable
                 "referer" => Helpers::callRoute('article_creation'),
             ],
             "fields" => [
-                "csrf_token" => [
+                "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],
                 "title" => [
                     "type" => "text",
+                    "label" => "Titre de l'article",
                     "placeholder" => "Titre de l'article",
                     "minLength" => 2,
                     "maxLength" => 100,
@@ -382,47 +457,99 @@ class Article extends Database implements JsonSerializable
                 ],
                 "description" => [
                     "type" => "text",
+                    "label" => "Description de l'article",
                     "placeholder" => "Description de l'article",
                     "minLength" => 2,
                     "class" => "input",
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
                 ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "label" => "Date de la planification",
+                    "class" => "search-bar publicationDateInput",
+                    "error" => "Votre date de publication doit être au minimum " . $todayText ,
+                    "min" => $today,
+                ],
+                "media" => [
+                    "type" => "select",
+                    "label" => "Image de cover",
+                    "class" => "search-bar",
+                    "options" => $mediaOptions,
+                    "required" => true,
+                ],
+                "categories" => [
+                    "type" => "checkbox",
+                    "label" => "Categorie de l'article",
+                    "class" => "form_select",
+                    "options" => $categoryOptions,
+                    "multiple" => true,
+                    "error" => "Vous devez selectionner au moins une catégories."
+                ],
                  "content" => [
                      "type" => "textarea",
+                    "label" => "Contenu de l'article",
                      "placeholder" => "Contenu de l article",
                      "minLength" => 2,
                      "class" => "input",
                      "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
                      "required" => false,
                  ],
-                "state"=>[
-                    "type"=>"radio",
-                    "label"=>"État :",
-                    "class"=>"input",
-                    "error"=>"Erreur test",
-                    "required" => true,
-                    "options" => [
-                        [
-                            "value"=>"draft",
-                            "text"=>"Brouillon",
-                        ],
-                        [
-                            "value"=>"scheduled",
-                            "text"=>"Planifié",
-                        ],
-                        [
-                            "value"=>"published",
-                            "text"=>"Publié",
-                        ],
-                    ],
-                ],
             ]
         ];
     }
 
-    // TODO : Voir plus tard SLUG et STATE et aussi avec la jointure de media(pour la photo) et l'auteur
-    public function formBuilderUpdateArticle() {
+    public function formBuilderUpdateArticle($articleId) {
+
+        $today = date("Y-m-d\TH:i");
+        $todayText = date("Y-m-d H:i");
+
+        $media = new MediaModel();
+        $category = new CategoryModel();
+        $categoryArticle = new CategoryArticleModel();
+        $this->setId($articleId);
+        
+        $medias = $media->findAll();
+        $mediaOptions = [];
+
+        // Get all media and select one of them is the article is using it
+        foreach ($medias as $media) {
+            $mediaIsAlreadySelected = false;
+            if ($this->getMediaId() == $media->getId()) {
+                $mediaIsAlreadySelected = true;
+            }
+            $options = [
+                "value" => $media->getId(),
+                "text" => $media->getTitle(),
+                "selected" => $mediaIsAlreadySelected,
+            ];
+           array_push($mediaOptions, $options);
+        }
+
+        $categories = $category->findAll();
+        $categoriesByArticle = $categoryArticle->select()->where("articleId", $articleId, "=")->get();
+        $categoryOptions = [];
+
+        // Get all categories and check its checboxes if necessary
+        foreach ($categories as $category) {
+            $categoryIsAlreadySelected = false;
+            foreach ($categoriesByArticle as $categoryArticle) {
+                if ($categoryArticle->getCategoryId() == $category->getId()) {
+                    $categoryIsAlreadySelected = true;
+                }
+            }
+            $options = [
+                "value" => $category->getId(),
+                "text" => $category->getName(),
+                "checked" => $categoryIsAlreadySelected,
+            ];
+            array_push($categoryOptions, $options);
+         }
+
+         if ($this->getPublicationDate()) {
+             $this->cleanPublicationDate();
+         }
+
         return [
             "config" => [
                 "method" => "POST",
@@ -430,17 +557,17 @@ class Article extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "form_create_article",
                 "submit" => "Valider les modifications",
-                "referer" => Helpers::callRoute('article_update'),
-
+                "referer" => Helpers::callRoute('article_update', ['id' => $articleId]),
             ],
             "fields" => [
-                "csrf_token" => [
+                "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],
                 "title" => [
                     "type" => "text",
                     "placeholder" => "Titre de l'article",
+                    "label" => "Titre de l'article",
                     "minLength" => 2,
                     "maxLength" => 100,
                     "class" => "input",
@@ -451,40 +578,44 @@ class Article extends Database implements JsonSerializable
                 "description" => [
                     "type" => "text",
                     "placeholder" => "Description de l'article",
+                    "label" => "Description de l'article",
                     "minLength" => 2,
                     "class" => "input",
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
                 ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "label" => "Date de la planification",
+                    "class" => "search-bar publicationDateInput",
+                    "error" => "Votre date de publication doit être au minimum " . $todayText ,
+                    "min" => $today,
+                    "value" => $this->getPublicationDate()
+                ],
+                "media" => [
+                    "type" => "select",
+                    "label" => "Image de cover",
+                    "class" => "search-bar",
+                    "options" => $mediaOptions,
+                    "required" => true,
+                    "error" => "Vous devez sélectionner un media."
+                ],
+                "categories" => [
+                    "type" => "checkbox",
+                    "label" => "Categorie de l'article",
+                    "class" => "form_select",
+                    "options" => $categoryOptions,
+                    "multiple" => true,
+                    "error" => "Vous devez selectionner au moins une catégories."
+                ],
                 "content" => [
                     "type" => "textarea",
                     "placeholder" => "Contenu de l article",
+                    "label" => "Contenu de l'article",
                     "minLength" => 2,
-                    // "maxLength" => 255,
                     "class" => "input",
                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
                     "required" => false,
-                ],
-                "state"=>[
-                    "type"=>"radio",
-                    "label"=>"État :",
-                    "class"=>"",
-                    "error"=>"Erreur test",
-                    "required" => true,
-                    "options" => [
-                        [
-                            "value"=>"draft",
-                            "text"=>"Brouillon",
-                        ],
-                        [
-                            "value"=>"scheduled",
-                            "text"=>"Planifié",
-                        ],
-                        [
-                            "value"=>"published",
-                            "text"=>"Publié",
-                        ],
-                    ],
                 ],
             ]
         ];

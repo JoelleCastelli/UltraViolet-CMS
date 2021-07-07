@@ -25,6 +25,13 @@ class FormValidator
             foreach ($config["fields"] as $fieldName => $fieldConfig) {
 
                 // check if config field has a matching $_POST field
+                // echo $fieldName;
+                // echo '<br>';
+
+                $fieldName = str_replace("[]", "", $fieldName);
+
+                // echo $fieldName;
+                // echo '<br>';
                 if(!isset($data[$fieldName])) {
                     echo "Tentative de hack !";
                     exit;
@@ -37,6 +44,7 @@ class FormValidator
                 }
 
                 if(!empty($data[$fieldName])) {
+        
                     self::textInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::numberInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::passwordValidator($fieldName, $data[$fieldName], $fieldConfig, $errors);
@@ -122,27 +130,46 @@ class FormValidator
     }
 
     public static function optionsValidator($fieldContent, $fieldConfig) {
+    
         $correctOptions = [];
-        if(in_array($fieldConfig["type"], ['select', 'radio'])) {
-            $correctOptions = [false];
-            foreach ($fieldConfig['options'] as $option) {
-                if ($fieldContent == $option['value']) {
-                    $correctOptions = [true];
+
+        if(in_array($fieldConfig["type"], ['select', 'radio', 'checkbox'])) {
+
+            if(in_array($fieldConfig["type"], ['select', 'radio'])) {
+       
+                $correctOptions = [false];
+
+                if(isset($fieldConfig['multiple']) && $fieldConfig['multiple'] == true ){
+                    foreach ($fieldConfig['options'] as $option) {
+                        foreach ($fieldContent as $content) {
+                            if ($content == $option['value']) {
+                                $correctOptions = [true];
+                            }
+                        }
+                    }
+                }else{
+                    foreach ($fieldConfig['options'] as $option) {
+                        if ($fieldContent == $option['value']) {
+                            $correctOptions = [true];
+                        }
+                    }
                 }
-            }
-        } elseif($fieldConfig["type"] == 'checkbox') {
-            foreach ($fieldContent as $key => $value) {
-                $correctOptions[$key] = false;
-                foreach ($fieldConfig['options'] as $option) {
-                    if ($value == $option['value']) {
-                        $correctOptions[$key] = true;
+
+            } elseif($fieldConfig["type"] == 'checkbox') {
+                foreach ($fieldContent as $key => $value) {
+                    $correctOptions[$key] = false;
+                    foreach ($fieldConfig['options'] as $option) {
+                        if ($value == $option['value']) {
+                            $correctOptions[$key] = true;
+                        }
                     }
                 }
             }
-        }
-        if(in_array(false, $correctOptions)) {
-            echo "Tentative de hack : l'option n'existe pas !";
-            exit;
+
+            if (in_array(false, $correctOptions)) {
+                echo "Tentative de hack : l'option n'existe pas !";
+                exit;
+            }
         }
     }
 
