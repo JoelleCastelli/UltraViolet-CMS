@@ -32,12 +32,12 @@
 
 <body class="preload">
     <?php
-        if(!strpos(Request::getURI(), 'configuration'))
+        if(UV_INSTALLED === "true")
             include 'Views/components/sidebar.php'
     ?>
     <main id="main">
         <?php
-            if(!strpos(Request::getURI(), 'configuration'))
+            if(UV_INSTALLED === "true")
                 include 'Views/components/header.php';
             if(isset($flash)) $this->displayFlash($flash);
             include $this->view;
