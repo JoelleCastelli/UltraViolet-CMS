@@ -19,6 +19,38 @@ class Helpers{
         echo "</pre>";
     }
 
+    public static function cleanDump($data, $title = null) {
+        echo "<div class='debug'>";
+
+        if ($title) {
+            echo "<br>";
+            echo "### ".$title." ###";
+        }
+        echo "<br>";
+        echo "<pre>";
+        var_dump($data);
+        echo "</pre>";
+        echo "<br>";
+
+        echo "</div>";
+    }
+
+    public static function cleanDumpArray($data, $title = null) {
+        echo "<div class='debug'>";
+
+        if ($title) {
+            echo "<br>";
+            echo "### ".$title." ###";
+        }
+        echo "<br>";
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+        echo "<br>";
+
+        echo "</div>";
+    }
+
     public static function sanitizeString($url) {
         return htmlspecialchars(strip_tags($url));
     }

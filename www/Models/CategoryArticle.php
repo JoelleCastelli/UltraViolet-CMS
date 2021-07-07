@@ -62,4 +62,11 @@ class CategoryArticle extends Database {
         $this->categoryId = $categoryId;
     }
 
+    public function jsonSerialize(): array {
+        return [
+            "id" => $this->getId(),
+            "articleId" => $this->getArticleId(),
+            "categoryId" => $this->getCategoryId(),
+        ];
+    }
 }

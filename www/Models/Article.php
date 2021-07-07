@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Controller\Category;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
@@ -400,14 +401,20 @@ class Article extends Database implements JsonSerializable
 
     // FORMS
 
-    public function formBuilderCreateArticle($data) {
+    public function formBuilderCreateArticle() {
 
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
 
+        $media = new MediaModel();
+        $category = new CategoryModel();
+
+        $medias = $media->findAll();
+        $categories = $category->findAll();
+
         $mediaOptions = [];
 
-        foreach ($data["media"] as $media) {
+        foreach ($medias as $media) {
            array_push($mediaOptions, [
                 "value" => $media->getId(),
                 "text" => $media->getTitle()
@@ -416,7 +423,7 @@ class Article extends Database implements JsonSerializable
 
         $categoryOptions = [];
 
-        foreach ($data["categories"] as $category) {
+        foreach ($categories as $category) {
             array_push($categoryOptions, [
                  "value" => $category->getId(),
                  "text" => $category->getName()
