@@ -6,6 +6,7 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Core\Mail;
+use App\Core\Request;
 use App\Models\Person as PersonModel;
 
 class Person
@@ -35,6 +36,9 @@ class Person
 	}
 
     public function loginAction() {
+
+        $this->redirectHomeIfLogged();
+
         $user = new PersonModel();
         $view = new View("login", "front");
         $form = $user->formBuilderLogin();
@@ -66,6 +70,9 @@ class Person
     }
 
 	public function registerAction() {
+
+        $this->redirectHomeIfLogged();
+
 		$user = new PersonModel();
         $view = new View('register', 'front');
         $form = $user->formBuilderRegister();
@@ -267,4 +274,12 @@ class Person
             $view->assign("errors", $errors);
         }
 	}
+
+    public function redirectHomeIfLogged()
+    {
+        $user = Request::getUser();
+        if ($user && $user->isLogged()) {
+            Helpers::namedRedirect('front_home');
+        }
+    }
 }
