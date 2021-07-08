@@ -250,7 +250,7 @@ class Database {
             $this->order++;
         }
         else
-            $this->query .= ', `' . $column . '` '. $order . '" ';
+            $this->query .= ', `' . $column . '` '. $order . ' ';
         return $this;
     }
 
