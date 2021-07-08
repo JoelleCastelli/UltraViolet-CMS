@@ -7,6 +7,8 @@ use App\Core\View;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Production;
+use App\Models\Category as CategoryModel;
+use App\Models\CategoryArticle;
 
 class Main
 {
@@ -75,7 +77,28 @@ class Main
 	}
 
 	public function frontHomeAction(){
+
+        $category = new CategoryModel;
+        $categoryArticle = new CategoryArticle;
+        $mainCategories = $category->select()->orderBy('position')->orderBy('name')->limit(5)->get();
+        $otherCategories = $category->findAll();
+
+        foreach ($mainCategories as $key => $mainCategorie) {
+            $mainCategorie->getArticles();
+        }
+        foreach ($otherCategories as $key => $otherCategorie) {
+            $otherCategorie->getArticles();
+        }
+        array_splice($otherCategories, 0, 5);
+
+        Helpers::cleanDumpArray($mainCategories);
+        Helpers::cleanDumpArray($otherCategories);
+
+        die();
+
         $view = new View("home", "front");
+
+
     }
 
 }

@@ -17,6 +17,8 @@ class Category extends Database
     private ?string $updatedAt;
     private ?array $actions;
 
+    private ?array $articles;
+
     public function __construct()
     {
         parent::__construct();
@@ -104,6 +106,17 @@ class Category extends Database
     public function setActions(?array $actions): void
     {
         $this->actions = $actions;
+    }
+
+    /**
+     * @param array[]|null $actions
+     */
+    public function getArticles() 
+    {
+        
+        $categoryArticle = new CategoryArticle;
+        $this->articles = $categoryArticle->selectWhere('categoryId', $this->id);
+        return $this->articles;
     }
 
     /**
