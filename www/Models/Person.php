@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Controller\Person as ControllerPerson;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\FormBuilder;
 use App\Core\Traits\ModelsTrait;
 use JsonSerializable;
-
 use App\Core\View;
+
 
 
 class Person extends Database implements JsonSerializable
@@ -457,6 +458,63 @@ class Person extends Database implements JsonSerializable
                 ],
             ]
         ];
+    }
+
+    public function formBuilderUpdatePerson($id): array {
+        
+        $user = new Person();
+        $user = $user->findOneBy('id', $id);
+
+        $roleOptions = [];
+        
+        if($user) {
+            return [
+                "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "class" => "form_control",
+                    "id" => "formUpdateUser",
+                    "submit" => "Valider",
+                    "referer" => Helpers::callRoute('users_update', ['id' => $id])
+
+                ],
+                "fields" => [
+                    "email" => [
+                        "type" => "email",
+                        "placeholder" => "Email",
+                        "class" => "input",
+                        "id" => "email",
+                        "error" => "Le format du champ e-mail est incorrect",
+                        "required" => true,
+    
+                    ],
+                    "password" => [
+                        "type" => "password",
+                        "placeholder" => "Mot de passe",
+                        "class" => "input",
+                        "error" => "Votre champ mot de passe est vide.",
+                        "required" => true,
+    
+                    ],
+                    "role" => [
+                        "type" => "select",
+                        "label" => "Role de l'\utilisateur",
+                        "class" => "search-bar",
+                        "options" => $roleOptions,
+                        "required" => true,
+                        "error" => "Vous devez sélectionner un role."
+                    ],
+                    "csrfToken" => [
+                        "type" => "hidden",
+                        "value" => FormBuilder::generateCSRFToken()
+                    ],
+                ]
+            ];
+        }
+        
+        
+
+        
     }
 
     public function formBuilderForgetPassword(): array {

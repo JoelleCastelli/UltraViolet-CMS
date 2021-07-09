@@ -142,10 +142,13 @@ class Person
     }
 
     public function updatePersonAction($id) {
-        if(!empty($id)){
-            echo 'salut';
-        }
-
+        $user = new PersonModel();
+        $form = $user->formBuilderUpdatePerson($id);
+        $view = new View("persons/update");
+        $id = $_POST['id'];
+        $user->setId($id);
+            
+        
     }
 
     public function deletePersonAction() {
