@@ -54,7 +54,7 @@ class Person
                             $_SESSION['loggedIn'] = true;
                             $_SESSION['user_id'] = $user->getId();
                             Helpers::setFlashMessage('success', "Bienvenue ".$user->getPseudo());
-                            Helpers::redirect('/');
+                            Helpers::namedRedirect('front_home');
                         } else {
                             $errors[] = "Merci de confirmer votre adresse e-mail. Renvoyer l'email de confirmation";
                         }
@@ -108,7 +108,7 @@ class Person
 
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
                     vous a été envoyé sur " .$_POST['email'].". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
-                    Helpers::redirect('/connexion');
+                    Helpers::namedRedirect('login');
                 }
 			}
             $view->assign("errors", $errors);
@@ -149,7 +149,7 @@ class Person
 
 	public function logoutAction() {
         session_destroy();
-        Helpers::redirect('/');
+        Helpers::namedRedirect('front_home');
     }
 
     public function updatePersonAction($id) {
@@ -219,7 +219,7 @@ class Person
 
                 $user->save();
                 Helpers::setFlashMessage('success', "Votre compte a bien était activé");
-                Helpers::redirect('/connexion');
+                Helpers::namedRedirect('login');
             }else
             {
                 Helpers::setFlashMessage('error', "Votre compte est déjà activé");
@@ -253,7 +253,7 @@ class Person
                     $mail->sendMail($to, $from, $name, $subj, $msg);
                     Helpers::setFlashMessage('success', " Un e-mail
                     vous a été envoyé sur " .$_POST['email']);
-                    Helpers::redirect('/connexion');
+                    Helpers::namedRedirect('login');
                 } else {
                     $errors[] = "Aucun compte n'a été trouvé";
                 }
@@ -279,7 +279,7 @@ class Person
                         $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                         $user->save();
                         Helpers::setFlashMessage('success', "Votre mot de passe à bien était changée.");
-                        Helpers::redirect('/connexion');
+                        Helpers::namedRedirect('login');
                     }
                 } else {
                     $errors[] = "Les identifiants ne sont pas reconnus";
