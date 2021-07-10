@@ -38,7 +38,8 @@ class Comment
         
             $comments = new CommentModel();
             $comments = $comments->findAll();
-
+            if(!$comments) $comments = [];
+            
             $commentsArray = [];
             foreach ($comments as $comment) {
                 $commentsArray[] = [

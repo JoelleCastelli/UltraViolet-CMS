@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Core\Helpers;
 use App\Core\Database;
 use App\Core\Traits\ModelsTrait;
 

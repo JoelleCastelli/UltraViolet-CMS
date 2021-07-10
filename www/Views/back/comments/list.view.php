@@ -39,30 +39,6 @@
                     <span>Oeuvre 3 avec un nom vachement plus long</span>
                     <i class="fas fa-times"></i>
                 </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
             </article>
         </div>
     </section>
