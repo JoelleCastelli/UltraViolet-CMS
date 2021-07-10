@@ -106,3 +106,16 @@ $(document).ready(function () {
     }
   });
 });
+
+document.addEventListener("readystatechange", (event) => {
+  if (document.readyState === "complete") {
+    document.querySelector("#state").addEventListener("click", (event) => {
+      console.log("AKE COUCOU");
+      console.log(event);
+      console.log(event.target);
+      console.log(event.target.value);
+    });
+
+    console.log("READY POUR ARTICLES");
+  }
+});

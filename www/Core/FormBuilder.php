@@ -49,8 +49,7 @@ class FormBuilder
                     } else if (isset($option["checked"]) && $option["checked"] == true){
                         $checked = "checked";
                     }
-                    Helpers::cleanDumpArray($option, "options");
-                    
+                                        
                     $html .= "<input id='" . ($option["id"] ?? ""). "' type='radio' class='".($option["class"] ?? "")."' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
                 }

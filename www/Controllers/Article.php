@@ -24,14 +24,26 @@ class Article {
 
         $article = new ArticleModel();
         $form = $article->formBuilderCreateArticle();
+
+        $scripts = [
+            "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+        ];
+
         $view = new View("articles/createArticle");
+        $view->assign("title", "Créer un article");
+        $view->assign("form", $form);
+        $view->assign('bodyScripts', $scripts);
+
     
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
+
             if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
+                $state = $_POST["state"];
                 $user = Request::getUser();
 
                 $article->setTitle($title);
@@ -44,6 +56,19 @@ class Article {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
                 }
                 $article->save();
+
+                
+                if ($state == "published") {
+                    Helpers::cleanDumpArray("publiéé");
+                } else if ($state == "scheduled") {
+                    Helpers::cleanDumpArray("panifié");
+                } else if ($state == "draft") {
+                    Helpers::cleanDumpArray("brouillon");
+                } else {
+                    Helpers::cleanDumpArray("par défaut : maintenant");
+                } 
+
+                // die();
 
                 $articleId = $article->getLastInsertId();
                 foreach ($_POST["categories"] as $categoryId) {
@@ -58,9 +83,7 @@ class Article {
                 $view->assign("errors", $errors);
         }
         
-        $view->assign("title", "Créer un article");
-        $view->assign("form", $form);
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
+        
     }
 
     public function updateArticleAction($id) {
@@ -72,9 +95,20 @@ class Article {
         $view = new View("articles/updateArticle");
         $form = $article->formBuilderUpdateArticle($id);
 
+        $scripts = [
+            "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+        ];
+
+        $view->assign('form', $form);
+        $view->assign("data", $article->jsonSerialize());
+        $view->assign("title", "Modifier un article");
+        $view->assign('bodyScripts', $scripts);
+
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
+
             if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
@@ -117,11 +151,6 @@ class Article {
                 $view->assign("errors", $errors);
             }
         }
-
-        $view->assign('form', $form);
-        $view->assign("data", $article->jsonSerialize());
-        $view->assign("title", "Modifier un article");
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/tinymce.js']);
     }
 
 
