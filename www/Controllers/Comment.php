@@ -30,16 +30,24 @@ class Comment
         $view->assign('title', 'Commentaires');
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('comments', $comments);
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/comements/comments.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/comments/comments.js']);
     }
 
     public function defaultAction() {
 		echo "Comment default";
 	}
 
-    public function defaultAction() {
-		echo "Comment default";
-	}
-
+    public function deleteCommentAction() {
+        if (!empty($_POST['id'])){ 
+        $comment = new CommentModel();
+        $id = $_POST['id'];
+        $comment->setId($id);
+        $comment->delete();
+        Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
+        
+        }else{
+            Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
+        }
+    }
     
 }
