@@ -189,13 +189,22 @@ class Article {
 
     public function deleteArticleAction() {
 
+        Helpers::cleanDumpArray($_POST["id"], "id de l'article à supprimer");
+        die();
+
         if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
-        $article->setId($_POST["id"]);
+        $id = $_POST["id"];
+        $article->setId($id);
 
         if ($article->getDeletedAt()) {
-            $article->hardDelete()->where("id", $_POST["id"])->execute();
+            $categoryArticle = new CategoryArticleModel();
+            $entries = $categoryArticle->select()->where("articleId", $id)->get();
+            foreach ($entries as $entry) {
+                $entry->hardDelete()->execute();
+            }
+            $article->hardDelete()->where("id", $id)->execute();
         } else {
             $article->setDeletedAt(Helpers::getCurrentTimestamp());
         }

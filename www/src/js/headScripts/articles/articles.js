@@ -87,6 +87,7 @@ $(document).ready(function () {
 
   /* DELETE Article */
   table.on("click", ".delete", function (event) {
+    console.log("delete article CTA");
     event.preventDefault();
     if (confirm("Êtes-vous sûr.e de vouloir supprimer cet article ?")) {
       const id = this.id.substring(this.id.lastIndexOf("-") + 1);
