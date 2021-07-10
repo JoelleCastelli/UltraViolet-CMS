@@ -44,18 +44,28 @@
     </section>
 </div>
 
+
 <table id="datatable" class="display">
     <thead>
         <tr>
-            <?php
-            use App\Core\Helpers;
-            if (isset($columnsTable)) {
+            <?php if (isset($columnsTable)) {
                 foreach ($columnsTable as $key => $value) {
                     echo "<th>$value</th>";
                 }
-            }
-            ?>
+            } ?>
         </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+        <?php foreach($comments as $comment) { ?>
+            <tr>
+                <td><?= $comment->getFullName() ?></td>
+                <td><?= $comment->getCreatedAt() ?></td>
+                <td><?= $comment->getArticle() ?></td>
+                <td><?= $comment->getContent() ?></td>
+                <td><?= $comment->getVisible() ?></td>
+                <td><?= $comment->getVisible() ?></td>
+                <td><?= $category->generateActionsMenu() ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
 </table>
