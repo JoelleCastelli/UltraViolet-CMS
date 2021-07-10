@@ -25,15 +25,13 @@ class Article {
         $article = new ArticleModel();
         $form = $article->formBuilderCreateArticle();
 
-        $scripts = [
-            "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
-            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
-        ];
-
         $view = new View("articles/createArticle");
         $view->assign("title", "Créer un article");
         $view->assign("form", $form);
-        $view->assign('bodyScripts', $scripts);
+        $view->assign('bodyScripts', [
+            "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+        ]);
 
     
         if (!empty($_POST)) {
@@ -52,23 +50,26 @@ class Article {
                 $article->setContent($_POST["content"]);
                 $article->setMediaId(htmlspecialchars($_POST["media"]));
                 $article->setPersonId($user->getId());
-                if (!empty($_POST["publicationDate"])) {
-                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
-                }
-                $article->save();
-
                 
                 if ($state == "published") {
                     Helpers::cleanDumpArray("publiéé");
-                } else if ($state == "scheduled") {
+                    $today = date("Y-m-d\TH:i");
+                    $article->setPublicationDate($today);
+
+                } else if ($state == "scheduled" && !empty($_POST["publicationDate"])) {
                     Helpers::cleanDumpArray("panifié");
+                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
+
                 } else if ($state == "draft") {
                     Helpers::cleanDumpArray("brouillon");
+
                 } else {
-                    Helpers::cleanDumpArray("par défaut : maintenant");
+                    Helpers::cleanDumpArray("par défaut publié");
+                    $today = date("Y-m-d\TH:i");
+                    $article->setPublicationDate($today);
                 } 
 
-                // die();
+                $article->save();
 
                 $articleId = $article->getLastInsertId();
                 foreach ($_POST["categories"] as $categoryId) {
@@ -95,15 +96,13 @@ class Article {
         $view = new View("articles/updateArticle");
         $form = $article->formBuilderUpdateArticle($id);
 
-        $scripts = [
-            "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
-            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
-        ];
-
         $view->assign('form', $form);
         $view->assign("data", $article->jsonSerialize());
         $view->assign("title", "Modifier un article");
-        $view->assign('bodyScripts', $scripts);
+        $view->assign('bodyScripts', [
+            "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+        ]);
 
         if (!empty($_POST)) {
 

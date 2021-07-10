@@ -99,6 +99,7 @@ class FormBuilder
                     $value = ($field['type'] === 'password') ? '' : htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
+
                 $html .="<input
                     type='".($field["type"] ?? "text")."'
                     name='".$fieldName."'

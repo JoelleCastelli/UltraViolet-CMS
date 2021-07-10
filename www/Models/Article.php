@@ -495,6 +495,7 @@ class Article extends Database implements JsonSerializable
                     "class" => "search-bar publicationDateInput",
                     "error" => "Votre date de publication doit être au minimum " . $todayText ,
                     "min" => $today,
+                    "readonly" => true,
                 ],
                 "media" => [
                     "type" => "select",
@@ -640,7 +641,7 @@ class Article extends Database implements JsonSerializable
                     "class" => "search-bar publicationDateInput",
                     "error" => "Votre date de publication doit être au minimum " . $todayText ,
                     "min" => $today,
-                    "value" => $this->getPublicationDate()
+                    "value" => $this->getPublicationDate(),
                 ],
                 "media" => [
                     "type" => "select",
