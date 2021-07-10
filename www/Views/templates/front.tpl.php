@@ -1,3 +1,15 @@
+<?php
+
+use App\Core\Helpers;
+
+$noTemplateUrl = [
+    Helpers::callRoute('login'),
+    Helpers::callRoute('subscription'),
+    Helpers::callRoute('forget_password')
+];
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -11,7 +23,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
     <?php
 
-    use App\Core\Helpers;
     use App\Core\Request;
 
     if (isset($headScript) && !empty($headScript)) {
@@ -22,16 +33,15 @@
 <body>
     <div class="container">
 
-        <?php if (Request::getSegments()[1] != 'inscription' && Request::getSegments()[1] != 'connexion') : ?>
+        <?php if (!in_array(Request::getURI(), $noTemplateUrl)) : ?>
             <?php include 'Views/components/navbar-front.php' ?>
         <?php endif; ?>
 
         <main class="main main-front">
             <div class="main-content">
                 <?php
-
-                if (isset($flash)) $this->displayFlash($flash);
-                include $this->view;
+                    if (isset($flash)) $this->displayFlash($flash);
+                    include $this->view;
                 ?>
             </div>
         </main>
@@ -40,13 +50,6 @@
         echo "<script src='$bodyScript'></script>";
     } ?>
 </body>
-<?php
-echo "<pre>";
-print_r(Request::getSegments()[1] == 'inscription' || Request::getSegments()[1] == 'connexion');
-echo "</pre>";
-
-
-?>
 
 <script type="text/javascript" src="../../dist/main.js"></script>
 </body>
