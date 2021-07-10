@@ -142,8 +142,6 @@ class Person
     }
 
     public function updatePersonAction($id) {
-
-        
         if (!empty($id)){ 
             // Helpers::cleanDumpArray($id,'id post');
             $user = new PersonModel();
@@ -153,22 +151,21 @@ class Person
             $view->assign('title', 'Modifier un utilisateur');
             $view->assign("form", $form);
             
+            $user->setId($id);
+
             // If form is submitted, check the data and save the category
             if(!empty($_POST)) {
                 $errors = FormValidator::check($form, $_POST);
                 if(empty($errors)) {
-                    // Dynamic setters
-                    foreach ($_POST as $key => $value) {
-                        if ($key !== 'csrfToken' && $value !== '') {
-                            if(!empty($value)) {
-                                $functionName = "set".ucfirst($key);
-                                $user->$functionName(htmlspecialchars($value));
-                            }
-                        }
-                    }
+                    $user->setEmail(htmlspecialchars($_POST["email"]));
+                    $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
+                    $user->setRole(htmlspecialchars($_POST["role"]));
+                    
                     $user->save();
+                    
                     Helpers::setFlashMessage('success', "L'utilisateur a bien été mise à jour");
                     Helpers::redirect(Helpers::callRoute('users_list'));
+                    
                 } else {
                     $view->assign("errors", $errors);
                 }

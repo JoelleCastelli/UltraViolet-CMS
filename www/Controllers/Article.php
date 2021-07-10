@@ -82,7 +82,7 @@ class Article {
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
-                $article->setDescription(htmlspecialchars($_POST["description"]));
+                
                 $article->setContent($_POST["content"]);
                 $article->setMediaId(htmlspecialchars($_POST["media"]));
                 $article->setPersonId($user->getId());

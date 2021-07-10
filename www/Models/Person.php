@@ -467,28 +467,17 @@ class Person extends Database implements JsonSerializable
         
         $user = $user->findOneBy('id', $id);
 
-        $roleOptions = [];
-
-        $personRole = new PersonModel();
-
-        // $media = new MediaModel();
-        // $medias = $media->findAll();
-        // $mediaOptions = [];
-
-        $personRole = new PersonModel();
-        $roles = $personRole->findAll();
-        $rolesptions = [];
+        $roles = array("user","moderator","editor","vip");
+        $rolesoptions= [];
 
         foreach ($roles as $role) {
-            
             $options = [
-                "value" => $role->getRole(),
-                "text" => $role->getRole()
+                "value" => $role,
+                "text" => $role
             ];
-           array_push($rolesptions, $options);
-        }
+            array_push($rolesoptions, $options);
+         }
 
-        
         if($user) {
             return [
                 "config" => [
@@ -530,7 +519,7 @@ class Person extends Database implements JsonSerializable
                         "type" => "select",
                         "label" => "Role de l'utilisateur",
                         "class" => "search-bar",
-                        "options" => $rolesptions,
+                        "options" => $rolesoptions,
                         "required" => true,
                         "error" => "Vous devez sélectionner un role.",
                         
@@ -540,13 +529,9 @@ class Person extends Database implements JsonSerializable
                         "type" => "hidden",
                         "value" => FormBuilder::generateCSRFToken()
                     ],
-                ]
+                ]       
             ];
         }
-        
-        
-
-        
     }
 
     public function formBuilderForgetPassword(): array {
