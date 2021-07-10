@@ -35,6 +35,7 @@ class Article {
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
+            if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
 
             if (empty($errors)) {
 
@@ -99,6 +100,7 @@ class Article {
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
+            if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
 
             if (empty($errors)) {
 
@@ -195,7 +197,7 @@ class Article {
         if ($article->getDeletedAt()) {
             $article->hardDelete()->where("id", $_POST["id"])->execute();
         } else {
-            $article->delete();
+            $article->setDeletedAt(Helpers::getCurrentTimestamp());
         }
     }
 
