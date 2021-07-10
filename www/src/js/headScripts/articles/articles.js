@@ -52,7 +52,7 @@ $(document).ready(function () {
     },
   });
 
-  getArticleByState("draft");
+  getArticleByState("published");
 
   //  Display different types on filtering button click
   $(".filtering-btn").click(function () {
@@ -66,6 +66,7 @@ $(document).ready(function () {
   });
 
   function getArticleByState(state) {
+    console.log("state selectioné pour le getArticlesState : " + state);
     $.ajax({
       type: "POST",
       url: callRoute("article_data"),

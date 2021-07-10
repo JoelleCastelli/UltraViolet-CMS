@@ -373,7 +373,23 @@ class Article extends Database implements JsonSerializable
 
     }
 
-    public function cleanPublicationDate() {
+    public function getArticleState() : string {
+        if (!empty($this->getDeletedAt())) 
+            return "removed";
+
+        if (empty($this->getDeletedAt()) && empty($this->getPublicationDate()))
+            return "draft";
+
+        if (empty($this->getDeletedAt()) && (strtotime($this->getPublicationDate()) <= strtotime("now"))) 
+            return "published";
+
+        if (empty($this->getDeletedAt()) && (strtotime($this->getPublicationDate()) > strtotime("now")))
+            return "scheduled";
+
+        return NULL;        
+    }
+
+    public function getCleanPublicationDate() {
         $this->setPublicationDate(date("Y-m-d\TH:i", strtotime($this->getPublicationDate())));
     }
 
@@ -573,8 +589,18 @@ class Article extends Database implements JsonSerializable
          }
 
          if ($this->getPublicationDate()) {
-             $this->cleanPublicationDate();
+             $this->getCleanPublicationDate();
          }
+
+         $readonly = false;
+         $state = $this->getArticleState();
+         if ($state !== "scheduled") {
+             $readonly = true;
+         } 
+
+         
+         
+        //  die();
 
         return [
             "config" => [
@@ -614,25 +640,34 @@ class Article extends Database implements JsonSerializable
                     "type" => "radio",
                     "label" => "État *",
                     "class" => "state",
-                    "required" => true,
                     "error" => "Le champs état est vide",
                     "options" => [
                         [
                             "value" => "published",
                             "class" => "statePublished",
-                            "text" => "Publier maintenant",
-                            "checked" => true,
+                            "text" => "Republier maintenant",
                         ],
                         [
                             "value" => "scheduled",
                             "class" => "stateScheduled",
-                            "text" => "Planifier"
+                            "text" => "Re planifier à plus tard"
                         ],
                         [
                             "value" => "draft",
                             "class" => "stateDraft",
-                            "text" => "Brouillon"
+                            "text" => "Brouillon",
+                            "checked" => $state === "draft" ? true : false
                         ],
+                        [
+                            "value" => "removed",
+                            "text" => "Supprimer",
+                        ],
+                        [
+                            "value" => "nothing",
+                            "text" => "Ne rien changer",
+                            "checked" => $state !== "draft" ? true : false
+
+                        ]
                     ],
                 ],
                 "publicationDate" => [
@@ -642,6 +677,7 @@ class Article extends Database implements JsonSerializable
                     "error" => "Votre date de publication doit être au minimum " . $todayText ,
                     "min" => $today,
                     "value" => $this->getPublicationDate(),
+                    "readonly" => $state !== "scheduled" ? true : false
                 ],
                 "media" => [
                     "type" => "select",

@@ -21,7 +21,6 @@ class Article {
     }
 
     public function createArticleAction() {
-
         $article = new ArticleModel();
         $form = $article->formBuilderCreateArticle();
 
@@ -32,7 +31,6 @@ class Article {
             "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
             "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
         ]);
-
     
         if (!empty($_POST)) {
 
@@ -52,19 +50,13 @@ class Article {
                 $article->setPersonId($user->getId());
                 
                 if ($state == "published") {
-                    Helpers::cleanDumpArray("publiéé");
                     $today = date("Y-m-d\TH:i");
                     $article->setPublicationDate($today);
-
                 } else if ($state == "scheduled" && !empty($_POST["publicationDate"])) {
-                    Helpers::cleanDumpArray("panifié");
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
-
                 } else if ($state == "draft") {
-                    Helpers::cleanDumpArray("brouillon");
-
+                    // continue
                 } else {
-                    Helpers::cleanDumpArray("par défaut publié");
                     $today = date("Y-m-d\TH:i");
                     $article->setPublicationDate($today);
                 } 
@@ -78,13 +70,13 @@ class Article {
                     $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
                     $categoryArticle->save();
                 }  
+
                 Helpers::namedRedirect("articles_list");
-            }
-            else
+
+            } else {
                 $view->assign("errors", $errors);
+            }
         }
-        
-        
     }
 
     public function updateArticleAction($id) {
@@ -111,7 +103,9 @@ class Article {
             if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
+                $state = $_POST["state"];
                 $user = Request::getUser();
+                $today = date("Y-m-d\TH:i");
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
@@ -120,8 +114,19 @@ class Article {
                 $article->setMediaId(htmlspecialchars($_POST["media"]));
                 $article->setPersonId($user->getId());
 
-                if (!empty($_POST["publicationDate"])) {
+                if ($state == "published") {
+                    $article->setPublicationDate($today);
+                    $article->setDeletedAt(null);
+                } else if ($state == "scheduled" && !empty($_POST["publicationDate"])) {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
+                    $article->setDeletedAt(null);
+                } else if ($state == "draft") {
+                    $article->setPublicationDate(null);
+                    $article->setDeletedAt(null);
+                } else if ($state == "removed") {
+                    $article->setDeletedAt(Helpers::getCurrentTimestamp());
+                } else {
+                    
                 }
 
                 $categoryArticle = new CategoryArticleModel();
@@ -156,7 +161,6 @@ class Article {
     // API methods
 
     public function getArticlesAction() {
-
         if (empty($_POST["state"])) return;
         $state = $_POST["state"];
 
