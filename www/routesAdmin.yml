@@ -186,13 +186,13 @@ comments_delete:
   path: /admin/commentaires/supprimer
   controller: Comment
   action: getComments
-  middleware: Editor
+  middleware: Moderator
 
 comments_update:
   path: /admin/commentaires/modification/{id}
   controller: Comment
   action: getComments
-  middleware: Editor
+  middleware: Moderator
   requirements:
     id: (\d+)
 

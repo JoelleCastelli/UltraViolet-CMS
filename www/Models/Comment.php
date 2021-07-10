@@ -29,9 +29,10 @@ class Comment extends Database {
         $this->article = new Article();
         $this->person = new Person();
         $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('comments_update', ['id' => $this->id]), 'role' => 'Editor'],
-            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('comments_delete', ['id' => $this->id]), 'role' => 'Editor'],
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('comments_update', ['id' => $this->id]), 'role' => 'moderator'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('comments_delete', ['id' => $this->id]), 'role' => 'moderator'],
         ];
+        
     }
 
     
