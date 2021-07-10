@@ -64,14 +64,22 @@
                     <i class="fas fa-times"></i>
                 </button>
             </article>
-
-        </div>
-    </section>
-
-    <!-- COMMENTS -->
-    <section class="card">
-        <div class="grid-display-list-comments">
-
         </div>
     </section>
 </div>
+
+<table id="datatable" class="display">
+    <thead>
+        <tr>
+            <?php
+            use App\Core\Helpers;
+            if (isset($columnsTable)) {
+                foreach ($columnsTable as $key => $value) {
+                    echo "<th>$value</th>";
+                }
+            }
+            ?>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>

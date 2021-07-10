@@ -182,6 +182,11 @@ comments_list:
   controller: Comment
   action: showAll
 
+users_data:
+  path: /admin/commentaires/commentaires-data
+  controller: Comment
+  action: getComments
+
 # TEMPLATES
 templates_lists:
   path: /admin/templates
