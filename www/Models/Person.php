@@ -467,7 +467,7 @@ class Person extends Database implements JsonSerializable
         
         $user = $user->findOneBy('id', $id);
 
-        $roles = array("user","moderator","editor","vip");
+        $roles = array("user","moderator","editor","vip","admin");
         $rolesoptions= [];
 
         foreach ($roles as $role) {
