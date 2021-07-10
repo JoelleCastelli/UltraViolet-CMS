@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\Helpers;
+use App\Core\FormValidator;
 use App\Core\View;
 use App\Models\Comment as CommentModel;
 class Comment
@@ -12,18 +13,19 @@ class Comment
     public function __construct()
     {
         $this->columnsTable = [
-            "pseudo" => "Auteur",
-            "creatAt" => "Créer le",
+            "author" => "Auteur",
+            "updateAt" => "Créer le",
             "article" => "Liée à",
             "content" => "Contenu",
-            "visibility" => "Visibilité",
+            "visible" => "Visibilité",
             "actions" => "Actions"
         ];
     }
 
-    public function showAllAction() {
+    public function showAllAction() 
+    {
         $comments = new CommentModel();
-        $comments = $comments->select()->orderBy('person')->get();
+        $comments = $comments->select()->orderBy('updatedAt')->get();
         $view = new View("comments/list");
         $view->assign('title', 'Commentaires');
         $view->assign('columnsTable', $this->columnsTable);

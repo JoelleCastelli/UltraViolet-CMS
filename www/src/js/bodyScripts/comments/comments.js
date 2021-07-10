@@ -53,26 +53,4 @@ $(document).ready(function () {
       },
     },
   });
-
-  // /* Delete Comments*/
-  // table.on("click", ".delete", function (event) {
-  //   event.preventDefault();
-  //   if (confirm("Êtes-vous sûr de vouloir supprimer cette utilisateur ?")) {
-  //     let personId = this.id.substring(this.id.lastIndexOf("-") + 1);
-  //     let row = table.row($(this).parents("tr"));
-  //     $.ajax({
-  //       type: "POST",
-  //       url: callRoute("users_delete"),
-  //       data: { id: personId },
-  //       success: function () {
-  //         row.remove().draw();
-  //       },
-  //       error: function () {
-  //         $(".header").after(
-  //           "Erreur dans la suppression de l'utilisateur ID " + personId
-  //         );
-  //       },
-  //     });
-  //   }
-  // });
 });
