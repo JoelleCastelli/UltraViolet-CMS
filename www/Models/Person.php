@@ -11,8 +11,6 @@ use JsonSerializable;
 use App\Core\View;
 use App\Models\Person as PersonModel;
 
-
-
 class Person extends Database implements JsonSerializable
 {
     use ModelsTrait;

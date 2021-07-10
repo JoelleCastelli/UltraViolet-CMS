@@ -53,4 +53,26 @@ $(document).ready(function () {
       },
     },
   });
+
+  /* Delete Comment*/
+  table.on("click", ".delete", function (event) {
+    event.preventDefault();
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce commentaire ?")) {
+      let commentId = this.id.substring(this.id.lastIndexOf("-") + 1);
+      let row = table.row($(this).parents("tr"));
+      $.ajax({
+        type: "POST",
+        url: callRoute("comments_delete"),
+        data: { id: commentId },
+        success: function () {
+          row.remove().draw();
+        },
+        error: function () {
+          $(".header").after(
+            "Erreur dans la suppression du commentaire ID: " + commentId
+          );
+        },
+      });
+    }
+  });
 });

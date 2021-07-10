@@ -174,13 +174,12 @@ class Person
     }
 
     public function deletePersonAction() {
-            if (!empty($_POST['id'])){ 
+        if (!empty($_POST['id'])){ 
             $user = new PersonModel();
             $id = $_POST['id'];
             $user->setId($id);
             $user->delete();
             Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
-            
         }else{
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }

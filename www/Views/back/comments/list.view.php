@@ -58,12 +58,12 @@
     <tbody>
         <?php foreach($comments as $comment) { ?>
             <tr>
-                <td><?= $comment->getPerson()->getPseudo() ?></td>
-                <td><?= $comment->getCreatedAt() ?></td>
-                <td><?= $comment->getArticle()->getTitle() ?></td>
-                <td><?= $comment->getContent() ?></td>
-                <td><?= $comment->getVisible() ?></td>
-                <td><?= $comment->generateActionsMenu() ?></td>
+                <td><?= $comment->getPerson()->getPseudo()  ?></td>
+                <td><?= $comment->getCreatedAt()            ?></td>
+                <td><?= $comment->getArticle()->getTitle()  ?></td>
+                <td><?= $comment->getContent()              ?></td>
+                <td><?= $comment->getVisible()              ?></td>
+                <td><?= $comment->generateActionsMenu()     ?></td>
             </tr>
         <?php } ?>
     </tbody>
