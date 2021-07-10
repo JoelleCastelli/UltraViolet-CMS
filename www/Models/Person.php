@@ -479,6 +479,15 @@ class Person extends Database implements JsonSerializable
         $roles = $personRole->findAll();
         $rolesptions = [];
 
+        foreach ($roles as $role) {
+            
+            $options = [
+                "value" => $role->getRole(),
+                "text" => $role->getRole()
+            ];
+           array_push($rolesptions, $options);
+        }
+
         
         if($user) {
             return [
@@ -491,9 +500,11 @@ class Person extends Database implements JsonSerializable
                     "referer" => Helpers::callRoute('users_update', ['id' => $id])
 
                 ],
+                
                 "fields" => [
                     "email" => [
                         "type" => "email",
+                        "label" => "Email *",
                         "placeholder" => "Email",
                         "class" => "input",
                         "id" => "email",
@@ -502,23 +513,29 @@ class Person extends Database implements JsonSerializable
                         "value" => $user->getEmail()
     
                     ],
-                    "password" => [
-                        "type" => "password",
-                        "placeholder" => "Mot de passe",
+
+                    "pseudo" => [
+                        "type" => "pseudo",
+                        "label" => "Pseudonyme *",
+                        "placeholder" => "Pseudonyme",
                         "class" => "input",
-                        "error" => "Votre champ mot de passe est vide.",
+                        "id" => "pseudo",
+                        "error" => "Le format du champs pseudo est incorrect",
                         "required" => true,
-    
+                        "value" => $user->getPseudo()
+
                     ],
+
                     "role" => [
                         "type" => "select",
-                        "label" => "Role de l'\utilisateur",
+                        "label" => "Role de l'utilisateur",
                         "class" => "search-bar",
-                        "options" => $roleOptions,
+                        "options" => $rolesptions,
                         "required" => true,
                         "error" => "Vous devez sélectionner un role.",
                         
                     ],
+
                     "csrfToken" => [
                         "type" => "hidden",
                         "value" => FormBuilder::generateCSRFToken()
