@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use Exception;
+
 class Database {
 
     protected ?\PDO $pdo = null;

@@ -1,18 +1,33 @@
 #CONFIG
 configStep1:
-  path:       /configuration/introduction
+  path:       /installation/introduction
   controller: Installer
   action:     step1
 
 configStep2:
-  path:       /configuration/database
+  path:       /installation/database
   controller: Installer
   action:     step2
 
 configStep3:
-  path:       /configuration/installation
-  controller: Settings
+  path:       /installation/lancement
+  controller: Installer
   action:     step3
+
+configStep4:
+  path:       /installation/populate-database
+  controller: Installer
+  action:     step4
+
+configStep5:
+  path:       /installation/nouvel-utilisateur
+  controller: Installer
+  action:     step5
+
+configStep6:
+  path:       /installation/conclusion
+  controller: Installer
+  action:     step6
 
 # GLOBAL
 admin:

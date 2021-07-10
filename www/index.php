@@ -22,12 +22,12 @@ $middlewares = $route->getMiddlewares();
 $office = $route->getOffice();
 $params = $route->getParameters();
 
+// Install-related routes = configStep1 to configStep6
+$installRelatedUrls = [];
+for($i = 1 ; $i <= 6 ; $i++) {
+    $installRelatedUrls[] = Helpers::callRoute('configStep'.$i);
+}
 // Run the installer if UltraViolet is not installed
-$installRelatedUrls = [
-    Helpers::callRoute('configStep1'),
-    Helpers::callRoute('configStep2'),
-    Helpers::callRoute('configStep3'),
-];
 if(UV_INSTALLED !== "true") {
     // Redirect to install URL if any URL (other than those installation-related) is reached
     if(!in_array($slug, $installRelatedUrls)) {

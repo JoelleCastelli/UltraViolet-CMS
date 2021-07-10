@@ -5,8 +5,8 @@
     <div class="details">
         <p>
             C’est parfait ! Vous avez passé la première partie de l’installation. UltraViolet peut désormais communiquer
-            avec votre base de données. Préparez-vous, il est maintenant temps de…
+            avec votre base de données. Préparez-vous, il est maintenant temps de...
         </p>
     </div>
-    <a class="btn" href="<?= \App\Core\Helpers::callRoute()?>">Lancer l'installation</a>
+    <a class="btn" href="<?= \App\Core\Helpers::callRoute('configStep4')?>">Lancer l'installation</a>
 </div>
