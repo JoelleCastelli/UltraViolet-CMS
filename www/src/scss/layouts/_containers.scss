@@ -10,7 +10,6 @@
     flex-basis: 100%;
 }
 
-
 // Alignement of the main content 
 
 .main {
@@ -25,6 +24,12 @@
 .main > *:nth-child(n) {
     flex: none;
 }
+
+.main-front {
+    padding: 16px;
+    margin-top: $navbarFrontHeight;
+}
+
 
 // Rare container needed
 

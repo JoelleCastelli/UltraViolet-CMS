@@ -238,6 +238,9 @@ class Article extends Database implements JsonSerializable
      */
     public function getMedia(): Media
     {
+        if (!empty($this->mediaId) && is_numeric($this->mediaId))
+            $this->media->setId($this->mediaId);
+
         return $this->media;
     }
 

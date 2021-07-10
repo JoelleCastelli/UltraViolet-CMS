@@ -115,7 +115,15 @@ class Category extends Database
     {
         
         $categoryArticle = new CategoryArticle;
-        $this->articles = $categoryArticle->selectWhere('categoryId', $this->id);
+        $article = new Article;
+
+        $articlesId = $categoryArticle->select('articleId')->where('categoryId', $this->id)->first(false);
+
+        if(!empty($articlesId))
+            $this->articles = $article->select()->whereIn('id', $articlesId)->get();
+        else
+            $this->articles = [];
+
         return $this->articles;
     }
 

@@ -108,4 +108,22 @@ class Category
         }
     }
 
+    public function showCategoryArticlesAction($categorySlug = null) {
+        
+        $category = new CategoryModel;
+        $categories = $category->findAll();
+
+        foreach ($categories as $category) {
+
+            if(strcmp(Helpers::slugify($category->getName()), $categorySlug) == 0) {
+               
+                // Helpers::cleanDumpArray($category->getArticles());
+                $view = new View('articles/list', 'front');
+                $view->assign('articles',  $category->getArticles()); 
+                return;
+            }
+        }
+
+    }
+
 }

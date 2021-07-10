@@ -12,6 +12,7 @@
     <?php
 
     use App\Core\Helpers;
+    use App\Core\Request;
 
     if (isset($headScript) && !empty($headScript)) {
         echo "<script src='$headScript'></script>";
@@ -21,48 +22,14 @@
 <body>
     <div class="container">
 
-        <nav id="sidebar-front">
-            <a href="<?= Helpers::callRoute('admin') ?>" class="brandLogo">
-                <img src='<?= PATH_TO_IMG ?>logo_uv.png' alt='ultraviolet logo'>
-            </a>
-            <a href="<?= Helpers::callRoute('admin') ?>">
-                <i class="fas fa-circle-notch fa-fw"></i>
-                <div class="navLabel">Tableau de bord</div>
-            </a>
-            <a href="<?= Helpers::callRoute('pages_list') ?>">
-                <i class="fas fa-pager fa-fw"></i>
-                <div class="navLabel">Pages</div>
-            </a>
-            <a href="<?= Helpers::callRoute('categories_list') ?>">
-                <i class="fas fa-tags fa-fw"></i>
-                <div class="navLabel">Catégories</div>
-            </a>
-            <a href="<?= Helpers::callRoute('articles_list') ?>">
-                <i class="fas fa-newspaper fa-fw"></i>
-                <div class="navLabel">Articles</div>
-            </a>
-            <a href="<?= Helpers::callRoute('comments_list') ?>">
-                <i class="fas fa-comments fa-fw"></i>
-                <div class="navLabel">Commentaires</div>
-            </a>
-            <a href="<?= Helpers::callRoute('productions_list') ?>">
-                <i class="fas fa-book fa-fw"></i>
-                <div class="navLabel">Productions</div>
-            </a>
-        </nav>
+        <?php if (Request::getSegments()[1] != 'inscription' && Request::getSegments()[1] != 'connexion') : ?>
+            <?php include 'Views/components/navbar-front.php' ?>
+        <?php endif; ?>
 
-        <main class="main">
+        <main class="main main-front">
             <div class="main-content">
                 <?php
-                if (\App\Core\Request::getUser()->isLogged()) {
-                    echo "<a href='" . Helpers::callRoute('logout') . "'>Déconnexion</a>";
-                    if (\App\Core\Request::getUser()->canAccessBackOffice()) {
-                        echo "<a href='" . Helpers::callRoute('admin') . "'>Administration</a>";
-                    }
-                } else {
-                    echo "<a href='" . Helpers::callRoute('login') . "'>Connexion</a>";
-                    echo "<a href='" . Helpers::callRoute('subscription') . "'>Inscription</a>";
-                }
+
                 if (isset($flash)) $this->displayFlash($flash);
                 include $this->view;
                 ?>
@@ -73,6 +40,13 @@
         echo "<script src='$bodyScript'></script>";
     } ?>
 </body>
+<?php
+echo "<pre>";
+print_r(Request::getSegments()[1] == 'inscription' || Request::getSegments()[1] == 'connexion');
+echo "</pre>";
+
+
+?>
 
 <script type="text/javascript" src="../../dist/main.js"></script>
 </body>

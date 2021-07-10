@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Models\Category;
 class Helpers{
 
 	public static function cleanFirstname($firstname){

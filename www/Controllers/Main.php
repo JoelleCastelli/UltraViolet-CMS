@@ -12,7 +12,6 @@ use App\Models\CategoryArticle;
 
 class Main
 {
-
 	public function defaultAction(){
 		$view = new View("dashboard");
 		$view->assign('title', 'Back office');
@@ -91,13 +90,9 @@ class Main
         }
         array_splice($otherCategories, 0, 5);
 
-        Helpers::cleanDumpArray($mainCategories);
-        Helpers::cleanDumpArray($otherCategories);
-
-        die();
-
         $view = new View("home", "front");
-
+        $view->assign('mainCategories', $mainCategories);
+        $view->assign('otherCategories', $otherCategories);
 
     }
 

@@ -44,9 +44,27 @@ forget_password:
   controller: Main
   action:     page404
 
+# PAGE
 display_static_page:
   path:       /{slug}
   controller: Page
   action:     showStaticPage
   requirements:
     slug: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
+
+# CATEGORY
+display_category:
+  path:       /categorie/{category}
+  controller: Category
+  action:     showCategoryArticles
+  requirements:
+    category: ([a-z0-9]*(?:-[a-z0-9]+)*) # slug format
+
+# ARTICLE
+display_article:
+  path:       /{category}/{article}
+  controller: Articles
+  action:     showArticles
+  requirements:
+    category: ([a-z0-9]*(?:-[a-z0-9]+)*) # slug format
+    article: ([a-z0-9]*(?:-[a-z0-9]+)*) 

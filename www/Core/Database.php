@@ -189,7 +189,14 @@ class Database {
 
     public function whereIn($column, $value): Database
     {
-        $this->query .= 'WHERE `' . $column . '` IN ' . htmlspecialchars($value, ENT_QUOTES) . ' ';
+
+        if (is_array($value)) {
+            $result = "('" . implode("','", $value) . "')";
+        } else {
+            $result = "('" . $value . "')";
+        }
+
+        $this->query .= 'WHERE `' . $column . '` IN ' . $result . ' ';
         return $this;
     }
 
@@ -256,6 +263,8 @@ class Database {
 
     public function get($setFetchMode = true): array
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->query($this->query);
 
         if ($setFetchMode)
@@ -275,6 +284,8 @@ class Database {
 
     public function execute(): bool
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->prepare($this->query);
         try {
             return $query->execute();
@@ -286,6 +297,8 @@ class Database {
 
     public function first($setFetchMode = true)
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->query($this->query);
 
         if ($setFetchMode)
