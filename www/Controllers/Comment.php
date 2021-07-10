@@ -7,25 +7,27 @@ use App\Core\View;
 use App\Models\Comment as CommentModel;
 class Comment
 {
-
     protected $columnsTable;
 
     public function __construct()
     {
         $this->columnsTable = [
-            "pseudo" => 'Pseudonyme',
-            "creatAt" => 'Créer le',
-            "article" => 'Liée à',
-            "content" => 'Contenu',
-            "visibility" => 'visibilité',
-            "actions" => 'Actions'
+            "pseudo" => "Auteur",
+            "creatAt" => "Créer le",
+            "article" => "Liée à",
+            "content" => "Contenu",
+            "visibility" => "Visibilité",
+            "actions" => "Actions"
         ];
     }
 
     public function showAllAction() {
+        $comments = new CommentModel();
+        $comments = $comments->select()->orderBy('person')->get();
         $view = new View("comments/list");
         $view->assign('title', 'Commentaires');
         $view->assign('columnsTable', $this->columnsTable);
+        $view->assign('comments', $comments);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/comements/comments.js']);
     }
 
@@ -34,24 +36,5 @@ class Comment
 		echo "Comment default";
 	}
 
-    public function getCommentsAction() {
-        
-            $comments = new CommentModel();
-            $comments = $comments->findAll();
-            if(!$comments) $comments = [];
-            
-            $commentsArray = [];
-            foreach ($comments as $comment) {
-                $commentsArray[] = [
-                    $this->columnsTable['pseudo'] => $comment->getFullName(),
-                    $this->columnsTable['creatAt'] => $comment->getPseudo(),
-                    $this->columnsTable['article'] => $comment->getEmail(),
-                    $this->columnsTable['content'] => $comment->isEmailConfirmed(),
-                    $this->columnsTable['visibility'] => $comment->isEmailConfirmed(),
-                    $this->columnsTable['actions'] => $comment->generateActionsMenu()
-                ];
-            }
-            echo json_encode(["comments" => $commentsArray]);
-        
-    }
+    
 }

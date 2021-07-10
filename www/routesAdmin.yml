@@ -196,6 +196,11 @@ comments_update:
   requirements:
     id: (\d+)
 
+comments_data:
+  path: /admin/commentaire-data
+  controller: Page
+  action: getPages
+
 # TEMPLATES
 templates_lists:
   path: /admin/templates

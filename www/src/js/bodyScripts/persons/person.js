@@ -57,22 +57,10 @@ $(document).ready(function () {
 
   // On page load, display user
   getUsersByRole("user");
-  getUsersdeletedAt("user");
 
   // Display different types on filtering button click
   $(".filtering-btn").click(function () {
     $(".filtering-btn").removeClass("active");
-    $(this).addClass("active");
-    table.columns([0]).visible(true);
-    if (this.id === "user") {
-      table.columns([0]).visible(false);
-    }
-    getUsersByRole(this.id);
-  });
-
-  // Display last filtering column to show deleted user
-  $(".filter-delete").click(function () {
-    $(".filter-delete").removeClass("active");
     $(this).addClass("active");
     table.columns([0]).visible(true);
     if (this.id === "user") {
@@ -94,26 +82,6 @@ $(document).ready(function () {
       error: function () {
         console.log(
           "Erreur dans la récupération des utilisateurs de role " + role
-        );
-      },
-    });
-  }
-
-  //getUser if deletedAt
-  function getUsersdeletedAt(deletedAt) {
-    $.ajax({
-      type: "POST",
-      url: callRoute("users_data"),
-      data: { deletedAt },
-      dataType: "json",
-      success: function (response) {
-        table.clear();
-        table.rows.add(response.users).draw();
-      },
-      error: function () {
-        console.log(
-          "Erreur dans la récupération des utilisateurs de deletedAt " +
-            deletedAt
         );
       },
     });
