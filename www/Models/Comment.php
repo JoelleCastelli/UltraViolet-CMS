@@ -92,6 +92,14 @@ class Comment extends Database {
         $this->updatedAt = $updatedAt;
     }
 
+      /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
     /**
      * @return int
      */
@@ -122,6 +130,14 @@ class Comment extends Database {
     public function setpersonId(int $personId): void
     {
         $this->personId = $personId;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getActions(): ?array {
+        return $this->actions;
     }
 
     /**
