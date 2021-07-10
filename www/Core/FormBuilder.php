@@ -44,9 +44,12 @@ class FormBuilder
                     
                     if (!empty($_POST[$fieldName]) && $_POST[$fieldName] == $option["value"]) {
                         $checked = "checked";
-                    }else if (!empty($data[$fieldName]) && $data[$fieldName] == $option["value"]){
+                    } else if (!empty($data[$fieldName]) && $data[$fieldName] == $option["value"]){
+                        $checked = "checked";
+                    } else if (isset($option["checked"]) && $option["checked"] == true){
                         $checked = "checked";
                     }
+                    Helpers::cleanDumpArray($option, "options");
                     
                     $html .= "<input id='" . ($option["id"] ?? ""). "' type='radio' class='".($option["class"] ?? "")."' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
@@ -59,11 +62,6 @@ class FormBuilder
                 foreach($field["options"] as $option) {
                     $disabledOption = isset($option["disabled"]) &&  $option["disabled"] == true ? "disabled" : '';
                     $selected = isset($option["checked"]) &&  $option["checked"] == true ? "checked" : '';
-                    
-                    // $test = [
-                    //     "1" => $data["categories"]
-                    //     // "2" => $fieldName
-                    // ];
 
                     if (!empty($_POST[$fieldName]) && in_array($option['value'], $_POST[$fieldName])) {
                         $selected = "checked";

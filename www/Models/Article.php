@@ -446,7 +446,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "title" => [
                     "type" => "text",
-                    "label" => "Titre de l'article",
+                    "label" => "Titre de l'article *",
                     "placeholder" => "Titre de l'article",
                     "minLength" => 2,
                     "maxLength" => 100,
@@ -457,12 +457,37 @@ class Article extends Database implements JsonSerializable
                 ],
                 "description" => [
                     "type" => "text",
-                    "label" => "Description de l'article",
+                    "label" => "Description de l'article *",
                     "placeholder" => "Description de l'article",
                     "minLength" => 2,
                     "class" => "input",
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
+                ],
+                "state" => [
+                    "type" => "radio",
+                    "label" => "État *",
+                    "class" => "state",
+                    "required" => true,
+                    "error" => "Le champs état est vide",
+                    "options" => [
+                        [
+                            "value" => "published",
+                            "class" => "statePublished",
+                            "text" => "Publier maintenant",
+                            "checked" => true,
+                        ],
+                        [
+                            "value" => "scheduled",
+                            "class" => "stateScheduled",
+                            "text" => "Planifier"
+                        ],
+                        [
+                            "value" => "draft",
+                            "class" => "stateDraft",
+                            "text" => "Brouillon"
+                        ],
+                    ],
                 ],
                 "publicationDate" => [
                     "type" => "datetime-local",
@@ -473,14 +498,14 @@ class Article extends Database implements JsonSerializable
                 ],
                 "media" => [
                     "type" => "select",
-                    "label" => "Image de cover",
+                    "label" => "Image de cover *",
                     "class" => "search-bar",
                     "options" => $mediaOptions,
                     "required" => true,
                 ],
                 "categories" => [
                     "type" => "checkbox",
-                    "label" => "Categorie de l'article",
+                    "label" => "Categorie de l'article *",
                     "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
@@ -488,7 +513,7 @@ class Article extends Database implements JsonSerializable
                 ],
                  "content" => [
                      "type" => "textarea",
-                    "label" => "Contenu de l'article",
+                     "label" => "Contenu de l'article",
                      "placeholder" => "Contenu de l article",
                      "minLength" => 2,
                      "class" => "input",
@@ -567,7 +592,7 @@ class Article extends Database implements JsonSerializable
                 "title" => [
                     "type" => "text",
                     "placeholder" => "Titre de l'article",
-                    "label" => "Titre de l'article",
+                    "label" => "Titre de l'article *",
                     "minLength" => 2,
                     "maxLength" => 100,
                     "class" => "input",
@@ -578,11 +603,36 @@ class Article extends Database implements JsonSerializable
                 "description" => [
                     "type" => "text",
                     "placeholder" => "Description de l'article",
-                    "label" => "Description de l'article",
+                    "label" => "Description de l'article *",
                     "minLength" => 2,
                     "class" => "input",
                     "error" => "La longeur doit être de plus de 2 caracrtères",
                     "required" => true,
+                ],
+                "state" => [
+                    "type" => "radio",
+                    "label" => "État *",
+                    "class" => "state",
+                    "required" => true,
+                    "error" => "Le champs état est vide",
+                    "options" => [
+                        [
+                            "value" => "published",
+                            "class" => "statePublished",
+                            "text" => "Publier maintenant",
+                            "checked" => true,
+                        ],
+                        [
+                            "value" => "scheduled",
+                            "class" => "stateScheduled",
+                            "text" => "Planifier"
+                        ],
+                        [
+                            "value" => "draft",
+                            "class" => "stateDraft",
+                            "text" => "Brouillon"
+                        ],
+                    ],
                 ],
                 "publicationDate" => [
                     "type" => "datetime-local",
@@ -594,7 +644,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "media" => [
                     "type" => "select",
-                    "label" => "Image de cover",
+                    "label" => "Image de cover *",
                     "class" => "search-bar",
                     "options" => $mediaOptions,
                     "required" => true,
@@ -602,7 +652,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "categories" => [
                     "type" => "checkbox",
-                    "label" => "Categorie de l'article",
+                    "label" => "Categorie de l'article *",
                     "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
