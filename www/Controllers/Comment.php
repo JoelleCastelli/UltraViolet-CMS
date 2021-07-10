@@ -39,12 +39,12 @@ class Comment
 
     public function deleteCommentAction() {
         if (!empty($_POST['id'])){ 
-        $comment = new CommentModel();
-        $id = $_POST['id'];
-        $comment->setId($id);
-        $comment->delete();
-        Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
-        
+            $comment = new CommentModel();
+            $id = $_POST['id'];
+            $comment->setId($id);
+            $comment->delete();
+            
+            Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
         }else{
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }
