@@ -175,7 +175,7 @@ users_data:
   action: getUsers
 
 users_update:
-  path: /admin/utilisateurs/modification
+  path: /admin/utilisateurs/modification/{id}
   controller: Person
   action: updatePerson
   middleware: Admin

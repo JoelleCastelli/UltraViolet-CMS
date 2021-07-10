@@ -142,13 +142,18 @@ class Person
     }
 
     public function updatePersonAction($id) {
-        $user = new PersonModel();
-        $form = $user->formBuilderUpdatePerson($id);
-        $view = new View("persons/update");
-        $id = $_POST['id'];
-        $user->setId($id);
-            
+
         
+        if (!empty($id)){ 
+            // Helpers::cleanDumpArray($id,'id post');
+            $user = new PersonModel();
+            $form = $user->formBuilderUpdatePerson($id);
+
+            $view = new View("persons/update");
+            $view->assign('title', 'Modifier un utilisateur');
+            $view->assign("form", $form);
+            
+        }
     }
 
     public function deletePersonAction() {
@@ -157,7 +162,6 @@ class Person
             $id = $_POST['id'];
             $user->setId($id);
             $user->delete();
-
             Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
             
         }else{

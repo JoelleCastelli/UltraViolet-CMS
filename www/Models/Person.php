@@ -9,6 +9,7 @@ use App\Core\FormBuilder;
 use App\Core\Traits\ModelsTrait;
 use JsonSerializable;
 use App\Core\View;
+use App\Models\Person as PersonModel;
 
 
 
@@ -463,16 +464,28 @@ class Person extends Database implements JsonSerializable
     public function formBuilderUpdatePerson($id): array {
         
         $user = new Person();
+        
         $user = $user->findOneBy('id', $id);
 
         $roleOptions = [];
+
+        $personRole = new PersonModel();
+
+        // $media = new MediaModel();
+        // $medias = $media->findAll();
+        // $mediaOptions = [];
+
+        $personRole = new PersonModel();
+        $roles = $personRole->findAll();
+        $rolesptions = [];
+
         
         if($user) {
             return [
                 "config" => [
                     "method" => "POST",
                     "action" => "",
-                    "class" => "form_control",
+                    "class" => "form_control card",
                     "id" => "formUpdateUser",
                     "submit" => "Valider",
                     "referer" => Helpers::callRoute('users_update', ['id' => $id])
@@ -486,6 +499,7 @@ class Person extends Database implements JsonSerializable
                         "id" => "email",
                         "error" => "Le format du champ e-mail est incorrect",
                         "required" => true,
+                        "value" => $user->getEmail()
     
                     ],
                     "password" => [
@@ -502,7 +516,8 @@ class Person extends Database implements JsonSerializable
                         "class" => "search-bar",
                         "options" => $roleOptions,
                         "required" => true,
-                        "error" => "Vous devez sélectionner un role."
+                        "error" => "Vous devez sélectionner un role.",
+                        
                     ],
                     "csrfToken" => [
                         "type" => "hidden",
