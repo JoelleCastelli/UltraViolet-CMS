@@ -1,18 +1,14 @@
 #settings {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
-    flex-grow: 1;
-    flex-shrink: 1;
+    justify-content: space-between;
     line-height: 1.5;
 
     & > * {
-        min-width: 430px;
-        width: 50%;
-    }
-
-    #formAddCategory {
-        margin-right: 20px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        width: 49%;
+        margin: 5px;
     }
 
     #dbSettings {
