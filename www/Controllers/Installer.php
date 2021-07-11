@@ -16,10 +16,16 @@ class Installer
         $this->$action();
     }
 
+    /**
+     * Introduction page
+     **/
     public function step1Action() {
         $view = new View("installer/step1");
     }
 
+    /**
+     * Update .env file with database information
+     **/
     public function step2Action() {
         $settings = new InstallerModel();
         $form = $settings->formBuilderInstallDB();
@@ -56,10 +62,16 @@ class Installer
         }
     }
 
+    /**
+     * .env file update confirmation + database creation announcement
+     **/
     public function step3Action() {
         $view = new View("installer/step3");
     }
 
+    /**
+     * Tables creation in the database
+     **/
     public function step4Action() {
         // Get default SQL script
         $str = file_get_contents(getcwd().'/uv_database.sql');
@@ -93,6 +105,9 @@ class Installer
 
     }
 
+    /**
+     * Form to specify app name + create admin user
+     **/
     public function step5Action() {
         $settings = new InstallerModel();
         $form = $settings->formBuilderCreateAdminUser();
@@ -102,18 +117,19 @@ class Installer
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)) {
+                $admin = new Person();
+
                 // Update app name in .env file
                 Helpers::updateConfigField('APP_NAME', htmlspecialchars($_POST['APP_NAME']));
-                // Create new user in database
-                $admin = new Person();
-                // Check if pseudo is available
+                // Check if pseudo is available (should not be necessary)
                 if($admin->findOneBy("pseudo", $_POST['pseudo']))
                     $errors[] = 'Ce pseudonyme est indisponible';
-                // Check if email is not already in database
+                // Check if email is not already in database (should not be necessary)
                 if($admin->findOneBy("email", $_POST['email']))
                     $errors[] = 'Cette adresse e-mail est déjà utilisée';
 
                 if(empty($errors)) {
+                    // Create new user in database
                     $admin->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $admin->setEmail(htmlspecialchars($_POST['email']));
                     $admin->setPassword(password_hash(htmlspecialchars($_POST['password']), PASSWORD_DEFAULT));
@@ -131,8 +147,10 @@ class Installer
         }
     }
 
+    /**
+     * Confirm installation
+     **/
     public function step6Action() {
-        // Installation is complete
         // Update .env file to prevent installer to start again
         Helpers::updateConfigField('UV_INSTALLED', "true");
         $view = new View("installer/step6");
