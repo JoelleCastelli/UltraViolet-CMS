@@ -11,10 +11,25 @@
         echo "</div>";
     }
     ?>
+
+
+    <button class="btn" id="media-cta">POP Media modal</button> 
+
     <section>
 
         <?php App\Core\FormBuilder::render($form, true); ?>
 
     </section>
+
+    <div class="background-modal">
+
+        <div class="modal-media">
+            <h1>Selectionnez l'image de votre article</h1>
+        </div>
+
+    </div>
+
+
+
 
 </div>

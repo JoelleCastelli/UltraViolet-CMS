@@ -68,3 +68,31 @@ html body .debug {
   justify-content: center;
   align-items: center;
 }
+
+.background-modal {
+  z-index: 10000;
+  display: none;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.759);
+  position: fixed;
+  cursor: pointer;
+}
+
+.visible {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-media {
+  background: white;
+  position: relative;
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
