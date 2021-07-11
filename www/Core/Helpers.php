@@ -138,4 +138,37 @@ class Helpers{
         return implode('_', $ret);
     }
 
+    /**
+     * Read config file and store data into array
+     * Example: $settings['APP_NAME'] = 'MyApp'
+     */
+    public static function readConfigFile(): array
+    {
+        $settings = [];
+        $config = file('.env.dev', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($config as $setting) {
+            if(substr($setting, 0, 1) !== '#') {
+                $pieces = explode("=", $setting);
+                $settings[$pieces[0]] = htmlspecialchars($pieces[1]);
+            }
+        }
+        return $settings;
+    }
+
+    /**
+     * Update a specific field in config file
+     */
+    public static function updateConfigField($field, $newValue) {
+        $settings = Helpers::readConfigFile();
+        foreach ($settings as $name => $value) {
+            if($name == $field) {
+                $currentSetting = "$name=$settings[$name]";
+                $newSetting = "$name=$newValue";
+                $str = file_get_contents('.env.dev');
+                $str = str_replace($currentSetting, $newSetting, $str);
+                file_put_contents('.env.dev', $str);
+            }
+        }
+    }
+
 }

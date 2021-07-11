@@ -14,7 +14,7 @@ use App\Models\ProductionMedia;
 class Production
 {
 
-    protected $columnsTable;
+    protected array $columnsTable;
 
     public function __construct() {
         $this->columnsTable = [

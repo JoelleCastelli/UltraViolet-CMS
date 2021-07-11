@@ -1,3 +1,34 @@
+#CONFIG
+configStep1:
+  path:       /installation/introduction
+  controller: Installer
+  action:     step1
+
+configStep2:
+  path:       /installation/database
+  controller: Installer
+  action:     step2
+
+configStep3:
+  path:       /installation/lancement
+  controller: Installer
+  action:     step3
+
+configStep4:
+  path:       /installation/populate-database
+  controller: Installer
+  action:     step4
+
+configStep5:
+  path:       /installation/nouvel-utilisateur
+  controller: Installer
+  action:     step5
+
+configStep6:
+  path:       /installation/conclusion
+  controller: Installer
+  action:     step6
+
 # GLOBAL
 admin:
   path: /admin
@@ -229,5 +260,5 @@ medias_user_data:
 settings:
   path: /admin/parametres
   controller: Settings
-  action: showAll
-  middleware: Admin, Editor, Moderator
+  action:     showAll
+  middleware: Admin

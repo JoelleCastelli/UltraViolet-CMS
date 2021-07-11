@@ -1,6 +1,5 @@
 <?php
-
-use App\Core\Helpers;
+    use App\Core\Request;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -32,10 +31,14 @@ use App\Core\Helpers;
 </head>
 
 <body class="preload">
-    <?php include 'Views/components/sidebar.php' ?>
+    <?php
+        if(UV_INSTALLED === "true")
+            include 'Views/components/sidebar.php'
+    ?>
     <main id="main">
         <?php
-            include 'Views/components/header.php';
+            if(UV_INSTALLED === "true")
+                include 'Views/components/header.php';
             if(isset($flash)) $this->displayFlash($flash);
             include $this->view;
 

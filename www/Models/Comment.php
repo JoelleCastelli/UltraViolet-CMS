@@ -10,20 +10,21 @@ class Comment extends Database {
     use ModelsTrait;
 
     private $id = null;
-    protected $content;
-    protected $visible;
-    protected $updateAt;
+    protected string $content;
+    protected bool $visible;
+    protected string $updatedAt;
 
-    //foreign key
-    protected $uvtr_article_id;
-    protected $uvtr_person_id;
+    // Foreign keys
+    protected int $articleId;
+    protected int $personId;
 
     //foreign properties
-    public $article;
-    public $person;
+    public Article $article;
+    public Person $person;
 
     public function __construct()
     {
+        parent::__construct();
         $this->article = new Article();
         $this->person = new Person();
     }
@@ -37,83 +38,83 @@ class Comment extends Database {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
     /**
-     * @param mixed $content
+     * @param string $content
      */
-    public function setContent($content): void
+    public function setContent(string $content): void
     {
         $this->content = $content;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getVisible()
+    public function isVisible(): bool
     {
         return $this->visible;
     }
 
     /**
-     * @param mixed $visible
+     * @param bool $visible
      */
-    public function setVisible($visible): void
+    public function setVisible(bool $visible): void
     {
         $this->visible = $visible;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getUpdateAt()
+    public function getUpdatedAt(): string
     {
-        return $this->updateAt;
+        return $this->updatedAt;
     }
 
     /**
-     * @param mixed $updateAt
+     * @param string $updatedAt
      */
-    public function setUpdateAt($updateAt): void
+    public function setUpdatedAt(string $updatedAt): void
     {
-        $this->updateAt = $updateAt;
+        $this->updatedAt = $updatedAt;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getUvtrArticleId()
+    public function getArticleId(): int
     {
-        return $this->uvtr_article_id;
+        return $this->articleId;
     }
 
     /**
-     * @param mixed $uvtr_article_id
+     * @param int $articleId
      */
-    public function setUvtrArticleId($uvtr_article_id): void
+    public function setArticleId(int $articleId): void
     {
-        $this->uvtr_article_id = $uvtr_article_id;
+        $this->articleId = $articleId;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getUvtrPersonId()
+    public function getPersonId(): int
     {
-        return $this->uvtr_person_id;
+        return $this->personId;
     }
 
     /**
-     * @param mixed $uvtr_person_id
+     * @param int $personId
      */
-    public function setUvtrPersonId($uvtr_person_id): void
+    public function setpersonId(int $personId): void
     {
-        $this->uvtr_person_id = $uvtr_person_id;
+        $this->personId = $personId;
     }
 
     /**
@@ -121,8 +122,8 @@ class Comment extends Database {
      */
     public function getArticle(): Article
     {
-        if(!empty($this->uvtr_article_id) && is_numeric($this->uvtr_article_id))
-            $this->article->setId($this->uvtr_article_id);
+        if(!empty($this->articleId) && is_numeric($this->articleId))
+            $this->article->setId($this->articleId);
         return $this->article;
     }
 
@@ -139,14 +140,13 @@ class Comment extends Database {
      */
     public function getPerson(): Person
     {
-
-        if(!empty($this->uvtr_person_id) && is_numeric($this->uvtr_person_id))
-            $this->person->setId($this->uvtr_person_id);
+        if(!empty($this->personId) && is_numeric($this->personId))
+            $this->person->setId($this->personId);
         return $this->person;
     }
 
     /**
-     * @param Person $person
+     * @param Person person
      */
     public function setPerson(Person $person): void
     {
