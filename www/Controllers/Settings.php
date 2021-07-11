@@ -11,7 +11,7 @@ class Settings
 {
 
     /**
-     * Update settings
+     * Check and update settings
      */
     public function showAllAction()
     {
@@ -20,6 +20,7 @@ class Settings
         $view = new View("settings/list");
         $view->assign('title', 'Paramètres');
         $view->assign("form", $form);
+        $view->assign("settings", Helpers::readConfigFile());
 
         // If form is submitted, check the data and save settings
         if(!empty($_POST)) {

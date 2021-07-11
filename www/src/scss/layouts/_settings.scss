@@ -1,0 +1,29 @@
+#settings {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    flex-shrink: 1;
+    line-height: 1.5;
+
+    & > * {
+        min-width: 430px;
+        width: 50%;
+    }
+
+    #formAddCategory {
+        margin-right: 20px;
+    }
+
+    #dbSettings {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        h2, strong {
+            font-weight: bold;
+        }
+        h2 {
+            text-align: center;
+        }
+    }
+}
