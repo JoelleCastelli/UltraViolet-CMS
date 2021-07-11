@@ -100,7 +100,7 @@ class Article {
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
-            if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
+            if ($article->hasDuplicateSlug($_POST["title"], $id)) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
 
             if (empty($errors)) {
 

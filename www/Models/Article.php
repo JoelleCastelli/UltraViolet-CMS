@@ -393,9 +393,14 @@ class Article extends Database implements JsonSerializable
         $this->setPublicationDate(date("Y-m-d\TH:i", strtotime($this->getPublicationDate())));
     }
 
-    public function hasDuplicateSlug($title) : bool {
+    public function hasDuplicateSlug($title, $id = null) : bool {
         $slug = Helpers::slugify($title);
-        return $slug == $this->select("slug")->where("slug", $slug)->get();
+        if (empty($id))
+            $DBslug = $this->select("slug")->where("slug", $slug)->first(0);
+        else 
+            $DBslug = $this->select("slug")->where("slug", $slug)->andWhere("id", $id, "!=")->first(0);
+
+        return !empty($DBslug);
     }
 
     // JSON FORMAT
