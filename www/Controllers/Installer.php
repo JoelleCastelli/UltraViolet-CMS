@@ -74,17 +74,17 @@ class Installer
      **/
     public function step4Action() {
         // Get default SQL script
-        $str = file_get_contents(getcwd().'/uv_database.sql');
+        $str = file_get_contents(getcwd().'/_scripts/uv_db_script.sql');
         if($str) {
             // Replace default "ultraviolet" database name by .env value
             $str = str_replace("ultraviolet", DBNAME, $str);
             // Replace default "uv_" prefix name by env value
             $str = str_replace("uv_", DBPREFIXE, $str);
             // Write updated script in user SQL script
-            if(file_put_contents(getcwd().'/user_database.sql', $str)) {
+            if(file_put_contents(getcwd().'/_scripts/custom_db_script.sql', $str)) {
                 // Populate database from custom SQL script
                 $db = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
-                $sql = file_get_contents(getcwd().'/user_database.sql');
+                $sql = file_get_contents(getcwd().'/_scripts/custom_db_script.sql');
                 $db->exec($sql);
                 // Check that the tables have correctly been created in the database (12 tables expected)
                 if(count($db->query("SHOW TABLES")->fetchAll()) == 12) {
