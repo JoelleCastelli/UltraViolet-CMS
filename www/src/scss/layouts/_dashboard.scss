@@ -3,6 +3,49 @@
     flex-wrap: wrap;
     justify-content: space-between;
 
+    #articles {
+
+        #articlesList {
+
+            .articleCard {
+                display: flex;
+                justify-content: space-between;
+                border: solid $grey4 1px;
+                border-radius: 8px;
+                margin-bottom: 5px;
+                box-shadow: 2px 2px 5px $grey4;
+                line-height: 1.5;
+
+                align-items: center;
+                height: 70px;
+                padding: 15px;
+
+                .articleInfos {
+                    flex-basis: 85%;
+
+                    .articleTitle {
+                        font-weight: bolder;
+                    }
+                }
+
+                .articleActions {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    margin-left: 5px;
+                    width: 15%;
+                    align-items: center;
+
+                    i {
+                        font-size: 20px;
+                        color: $purple;
+                    }
+                }
+
+            }
+        }
+    }
+
     #productions {
 
         #productionsList {

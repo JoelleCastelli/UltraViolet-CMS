@@ -10,17 +10,24 @@ if(isset($errors)) {
 <div id="dashboard">
     <div class="card">
         <div class="cardTitle">Derniers articles</div>
-        <div class="cardContent">
-            <?php
-                if($articles) {
-                    echo "Il y a des articles";
-                } else {
-                    echo "<a href='".Helpers::callRoute('article_creation')."'>
-                        <button class='btn'>Ecrire un article</button>
-                      </a>";
-                }
-            ?>
-
+        <div id="articles" class="cardContent">
+            <?php if($articles) { ?>
+                <div id='articlesList'>
+                    <?php foreach ($articles as $article) { ?>
+                        <div class='articleCard'>
+                            <div class="articleInfos">
+                                <div class="articleTitle"><?= $article->getTitle() ?></div>
+                                <div class="articleDetails">Publié le <?= $article->getCleanPublicationDate() ?> par <?= $article->getPerson()->getPseudo() ?></div>
+                            </div>
+                            <div class="articleActions">
+                                <i class="fas fa-comment-dots"></i>
+                                <div class="bubble-actions"></div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            <?php } ?>
+            <a href='<?= Helpers::callRoute('article_creation') ?>'><button class='btn'>Ecrire un article</button></a>
         </div>
     </div>
     <div class="card">

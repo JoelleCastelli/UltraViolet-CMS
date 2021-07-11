@@ -390,7 +390,11 @@ class Article extends Database implements JsonSerializable
     }
 
     public function getCleanPublicationDate() {
-        $this->setPublicationDate(date("Y-m-d\TH:i", strtotime($this->getPublicationDate())));
+        if (!is_null($this->getPublicationDate())) {
+            return date("d/m/Y à H:i", strtotime($this->getPublicationDate()));
+        } else {
+            return "";
+        }
     }
 
     public function hasDuplicateSlug($title, $id = null) : bool {

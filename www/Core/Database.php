@@ -262,7 +262,6 @@ class Database {
             $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
 
         try {
-
             if ($setFetchMode)
                 return $query->fetchAll();
             else
