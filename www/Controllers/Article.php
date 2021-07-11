@@ -42,6 +42,7 @@ class Article {
                 $title = htmlspecialchars($_POST["title"]);
                 $state = $_POST["state"];
                 $user = Request::getUser();
+                $today = date("Y-m-d\TH:i");
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
@@ -49,18 +50,15 @@ class Article {
                 $article->setContent($_POST["content"]);
                 $article->setMediaId(htmlspecialchars($_POST["media"]));
                 $article->setPersonId($user->getId());
-                
+
                 if ($state == "published") {
-                    $today = date("Y-m-d\TH:i");
                     $article->setPublicationDate($today);
+                    $article->setDeletedAt(null);
                 } else if ($state == "scheduled" && !empty($_POST["publicationDate"])) {
                     $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
-                } else if ($state == "draft") {
-                    // continue
                 } else {
-                    $today = date("Y-m-d\TH:i");
-                    $article->setPublicationDate($today);
-                } 
+                    // nothing, will be draft by default
+                }
 
                 $article->save();
 
@@ -128,11 +126,12 @@ class Article {
                 } else if ($state == "removed") {
                     $article->setDeletedAt(Helpers::getCurrentTimestamp());
                 } else {
-                    
+                    // Nothing to change
                 }
 
-                $categoryArticle = new CategoryArticleModel();
+                $article->save();
 
+                $categoryArticle = new CategoryArticleModel();
                 $entriesInDB = $categoryArticle->select("categoryId")->where("articleId", $id)->get(false);
                 $categoriesInPost = $_POST["categories"];
                 
@@ -150,7 +149,6 @@ class Article {
                     $newCategory->save();
                 }
 
-                $article->save();
                 Helpers::namedRedirect("articles_list");
             
             } else {
@@ -189,9 +187,6 @@ class Article {
 
     public function deleteArticleAction() {
 
-        Helpers::cleanDumpArray($_POST["id"], "id de l'article à supprimer");
-        die();
-
         if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
@@ -206,7 +201,7 @@ class Article {
             }
             $article->hardDelete()->where("id", $id)->execute();
         } else {
-            $article->setDeletedAt(Helpers::getCurrentTimestamp());
+            $article->delete();
         }
     }
 

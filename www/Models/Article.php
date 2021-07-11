@@ -596,21 +596,13 @@ class Article extends Database implements JsonSerializable
                 "checked" => $categoryIsAlreadySelected,
             ];
             array_push($categoryOptions, $options);
-         }
+        }
 
-         if ($this->getPublicationDate()) {
-             $this->getCleanPublicationDate();
-         }
+        if ($this->getPublicationDate()) {
+            $this->getCleanPublicationDate();
+        }
 
-         $readonly = false;
-         $state = $this->getArticleState();
-         if ($state !== "scheduled") {
-             $readonly = true;
-         } 
-
-         
-         
-        //  die();
+        $state = $this->getArticleState();
 
         return [
             "config" => [
@@ -717,5 +709,4 @@ class Article extends Database implements JsonSerializable
             ]
         ];
     }
-
 }
