@@ -457,19 +457,31 @@ class Person extends Database implements JsonSerializable
     public function formBuilderUpdatePerson($id): array {
         
         $user = new Person();
-        
+
         $user = $user->findOneBy('id', $id);
 
-        $roles = array("user","moderator","editor","vip","admin");
+        $firstRoleOption = $user->getRole();
+        $roles = array($firstRoleOption,"user","moderator","editor","vip","admin");
         $rolesoptions= [];
 
         foreach ($roles as $role) {
-            $options = [
-                "value" => $role,
-                "text" => $role
-            ];
-            array_push($rolesoptions, $options);
+            if ($firstRoleOption !== $role){
+                $options = [
+                    "value" => $role,
+                    "text" => $role
+                ];
+                array_push($rolesoptions, $options);
+            }
          }
+
+         $options = [
+            "value" => $firstRoleOption,
+            "text" => $firstRoleOption
+        ];
+        array_unshift($rolesoptions, $options);
+        
+        
+    
 
         if($user) {
             return [
