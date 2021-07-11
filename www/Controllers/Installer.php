@@ -45,13 +45,10 @@ class Installer
 
                 // Check if connection is successful
                 try {
-                    $db = new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
+                    new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
                 } catch (Exception $e) {
                     $errors[] = "Nous n'avons pas pu nous connecter à votre base de données. Veuillez vérifier vos informations";
                 }
-
-                // Close DB connection
-                $db = null;
 
                 // If connection OK: next step
                 if (empty($errors))

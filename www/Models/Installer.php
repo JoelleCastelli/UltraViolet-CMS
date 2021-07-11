@@ -53,7 +53,6 @@ class Installer
                         "maxLength" => 32,
                         "label" => "Mot de passe",
                         "class" => "search-bar",
-                        "value" => $settings['DBPWD'],
                         "error" => "Le mot de passe ne peut pas dépasser 32 caractères",
                     ],
                     "DBPREFIXE" => [
