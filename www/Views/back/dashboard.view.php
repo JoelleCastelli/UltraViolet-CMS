@@ -29,11 +29,15 @@ if(isset($errors)) {
                     <?php } ?>
                 </div>
             <?php } else { ?>
-                <p>Aucun article</p>
+                <p>
+                    <a href='<?= Helpers::callRoute('article_creation') ?>'><button class='btn'>Ecrire un article</button></a>
+                </p>
             <?php } ?>
         </div>
         <div class="linkButton">
-            <a href='<?= Helpers::callRoute('article_creation') ?>'><button class='btn'>Ecrire un article</button></a>
+            <?php if($articles) { ?>
+                <a href='<?= Helpers::callRoute('articles_list') ?>'><button class='btn'>Voir tous les articles</button></a>
+            <?php } ?>
         </div>
     </div>
 
@@ -85,12 +89,18 @@ if(isset($errors)) {
                     <?php } ?>
                 </div>
             <?php } else { ?>
-                <p>Aucune production</p>
+                <p>
+                    <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
+                </p>
             <?php } ?>
         </div>
+
         <div class="linkButton">
-            <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
+            <?php if($productions) { ?>
+                <a href='<?= Helpers::callRoute('productions_list') ?>'><button class='btn'>Voir toutes les productions</button></a>
+            <?php } ?>
         </div>
+
     </div>
 
     <!--STATISTICS-->
