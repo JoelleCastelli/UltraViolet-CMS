@@ -63,20 +63,34 @@ class Installer
     public function step4Action() {
         // Get default SQL script
         $str = file_get_contents(getcwd().'/uv_database.sql');
-        // Replace default "ultraviolet" database name by .env value
-        $str = str_replace("ultraviolet", DBNAME, $str);
-        // Replace default "uv_" prefix name by env value
-        $str = str_replace("uv_", DBPREFIXE, $str);
-        // Write updated script in user SQL script
-        file_put_contents(getcwd().'/user_database.sql', $str);
+        if($str) {
+            // Replace default "ultraviolet" database name by .env value
+            $str = str_replace("ultraviolet", DBNAME, $str);
+            // Replace default "uv_" prefix name by env value
+            $str = str_replace("uv_", DBPREFIXE, $str);
+            // Write updated script in user SQL script
+            if(file_put_contents(getcwd().'/user_database.sql', $str)) {
+                // Populate database from custom SQL script
+                $db = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
+                $sql = file_get_contents(getcwd().'/user_database.sql');
+                $db->exec($sql);
+                // Check that the tables have correctly been created in the database (12 tables expected)
+                if(count($db->query("SHOW TABLES")->fetchAll()) == 12) {
+                    $db = null;
+                    Helpers::redirect(Helpers::callRoute('configStep5'));
+                } else {
+                    $db = null;
+                    Helpers::setFlashMessage('error', "Erreur dans la création des tables dans la base de données, veuillez recommencer.");
+                }
+            } else {
+                Helpers::setFlashMessage('error', "Erreur dans l'écriture du script SQL personnalisé, veuillez recommencer.");
+            }
+        } else {
+            Helpers::setFlashMessage('error', "Erreur dans la lecture du script SQL n'a pas pu être lu, veuillez recommencer.");
+        }
+        // Back to previous page with error flash message
+        Helpers::redirect(Helpers::callRoute('configStep3'));
 
-        // Populate database
-        $db = new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
-        $sql = file_get_contents(getcwd().'/user_database.sql');
-        $db->exec($sql);
-        $db = null;
-
-        Helpers::redirect(Helpers::callRoute('configStep5'));
     }
 
     public function step5Action() {
