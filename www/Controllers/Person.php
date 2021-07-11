@@ -177,8 +177,19 @@ class Person
         if (!empty($_POST['id'])){ 
             $user = new PersonModel();
             $id = $_POST['id'];
+
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $randomString = '';
+            for ($i = 0; $i < 8; $i++) {
+                $randomString .= $characters[rand(0, $charactersLength - 1)];
+            }
+        
             $user->setId($id);
+            $user->setPseudo('Anonyme');
+            $user->setEmail($randomString.'@gmail.com');
             $user->delete();
+            $user->save();
             Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
         }else{
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
