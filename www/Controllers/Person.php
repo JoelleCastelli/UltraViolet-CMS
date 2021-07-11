@@ -120,15 +120,21 @@ class Person
             $users = new PersonModel();
             $users = $users->selectWhere('role', htmlspecialchars($_POST['role']));
             
+            
+
             if(!$users) $users = [];
             
             $usersArray = [];
             foreach ($users as $user) {
+                $emailConfirmed = $user->isEmailConfirmed();
+                if ( $emailConfirmed == true ) $emailConfirmed = 'oui';
+                else $emailConfirmed = 'non';
+                
                 $usersArray[] = [
                     $this->columnsTable['name'] => $user->getFullName(),
                     $this->columnsTable['pseudo'] => $user->getPseudo(),
                     $this->columnsTable['mail'] => $user->getEmail(),
-                    $this->columnsTable['checkMail'] => $user->isEmailConfirmed(),
+                    $this->columnsTable['checkMail'] => $emailConfirmed,
                     $this->columnsTable['actions'] => $user->generateActionsMenu(),
                 ];
             }
@@ -177,7 +183,6 @@ class Person
         if (!empty($_POST['id'])){ 
             $user = new PersonModel();
             $id = $_POST['id'];
-
             $user->setId($id);
             $user->setPseudo('Anonyme');
             $user->setEmail('deleted'.$id.'@mail.com');

@@ -460,6 +460,7 @@ class Person extends Database implements JsonSerializable
 
         $user = $user->findOneBy('id', $id);
 
+        //Role option for select
         $firstRoleOption = $user->getRole();
         $roles = array($firstRoleOption,"user","moderator","editor","vip","admin");
         $rolesoptions= [];
@@ -480,9 +481,7 @@ class Person extends Database implements JsonSerializable
         ];
         array_unshift($rolesoptions, $options);
         
-        
-    
-
+        //Form
         if($user) {
             return [
                 "config" => [
