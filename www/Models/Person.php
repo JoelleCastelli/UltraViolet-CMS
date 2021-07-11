@@ -282,16 +282,16 @@ class Person extends Database implements JsonSerializable
     }
 
     public function setDefaultProfilePicture() {
-        if(file_exists(getcwd().PATH_TO_IMG.'default.jpg')) {
+        if(file_exists(getcwd().PATH_TO_IMG.'default_user.jpg')) {
             $media = new Media();
-            $defaultImage = $media->findOneBy('path', PATH_TO_IMG.'default.jpg');
+            $defaultImage = $media->findOneBy('path', PATH_TO_IMG.'default_user.jpg');
             if($defaultImage) {
                 $this->setMediaId($defaultImage->getId());
             } else {
                 die("Default image is not in database");
             }
         } else {
-            die('Default image '.getcwd().PATH_TO_IMG.'default.jpg does not exist');
+            die('Default image '.getcwd().PATH_TO_IMG.'default_user.jpg does not exist');
         }
     }
 

@@ -405,6 +405,20 @@ class Article extends Database implements JsonSerializable
 
     // JSON FORMAT
 
+    public function setDefaultPicture() {
+        if(file_exists(getcwd().PATH_TO_IMG.'default_article.png')) {
+            $media = new Media();
+            $defaultImage = $media->findOneBy('path', PATH_TO_IMG.'default_article.png');
+            if($defaultImage) {
+                $this->setMediaId($defaultImage->getId());
+            } else {
+                die("Article default image is not in database");
+            }
+        } else {
+            die('Default image '.getcwd().PATH_TO_IMG.'default_article.png does not exist');
+        }
+    }
+
     public function jsonSerialize(): array
     {
         return [

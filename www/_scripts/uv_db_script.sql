@@ -294,12 +294,13 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
--- Insert default user image in database
+-- Insert default images in database
 -- -----------------------------------------------------
-INSERT INTO `ultraviolet`.`uv_media` (`title`, `path`) VALUES ("default", "/src/img/default.jpg");
+INSERT INTO `ultraviolet`.`uv_media` (`title`, `path`) VALUES ("Utilisateur - Image par défaut", "/src/img/default_user.jpg");
+INSERT INTO `ultraviolet`.`uv_media` (`title`, `path`) VALUES ("Article - Image par défaut", "/src/img/default_article.png");
 
 -- -----------------------------------------------------
--- Insert default categories
+-- Insert example categories
 -- -----------------------------------------------------
 INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`) VALUES ("Films", 1);
 INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`) VALUES ("Séries", 2);
@@ -307,7 +308,7 @@ INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`) VALUES ("Actualité
 INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`) VALUES ("Critiques", 4);
 
 -- -----------------------------------------------------
--- Insert first default page
+-- Insert example page
 -- -----------------------------------------------------
 INSERT INTO `ultraviolet`.`uv_page` (`title`, `slug`, `position`, `state`, `titleSeo`, `descriptionSeo`, `content`)
 VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Bienvenue chez moi", "Bienvenue sur la première page de mon site", "Ceci est une page d'exemple");

@@ -7,6 +7,8 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Installer as InstallerModel;
 use App\Models\Person;
+use App\Models\Article;
+use App\Models\Comment;
 use Exception;
 
 class Installer
@@ -67,7 +69,7 @@ class Installer
     }
 
     /**
-     * Tables creation in the database
+     * Populate database: create tables + insert categories + insert first page
      **/
     public function step4Action() {
         // Get default SQL script
@@ -103,7 +105,7 @@ class Installer
     }
 
     /**
-     * Form to specify app name + create admin user
+     * Specify app name + create admin user + create first article  + create first comment
      **/
     public function step5Action() {
         $settings = new InstallerModel();
@@ -134,9 +136,22 @@ class Installer
                     $admin->setRole('admin');
                     $admin->setDefaultProfilePicture();
                     if($admin->save()) {
-                        Helpers::redirect(Helpers::callRoute('configStep6'));
+                        // Create first article
+                        $article = $this->createExampleArticle($admin->getLastInsertId());
+                        if($article->save()) {
+                            // Create first comment
+                            $comment = $this->createExampleComment($admin->getLastInsertId(), $article->getLastInsertId());
+                            if($comment->save()) {
+                                // If everything is okay, move on to next step
+                                Helpers::redirect(Helpers::callRoute('configStep6'));
+                            } else {
+                                $errors[] = "Le commentaire d'exemple n'a pas pu être sauvegardé, veuillez recommencer";;
+                            }
+                        } else {
+                            $errors[] = "L'article d'exemple n'a pas pu être sauvegardé, veuillez recommencer";;
+                        }
                     } else {
-                        $errors[] = "Les informations n'ont pas pu être sauvegardées, veuillez recommencer";
+                        $errors[] = "Le compte utilisateur n'a pas pu être sauvegardé, veuillez recommencer";
                     }
                 }
             }
@@ -151,6 +166,31 @@ class Installer
         // Update .env file to prevent installer to start again
         Helpers::updateConfigField('UV_INSTALLED', "true");
         $view = new View("installer/step6");
+    }
+
+    public function createExampleArticle($authorId): Article
+    {
+        $article = new Article();
+        $article->setTitle("Mon premier article");
+        $article->setTitleSeo("Mon premier article : vous n'en croirez pas vos yeux");
+        $article->setSlug("mon-premier-article");
+        $article->setDescription("Découvrez le tout premier article de votre site");
+        $article->setDescriptionSeo("C'est la description SEO de mon site");
+        $article->setContent("C'est le contenu de l'article");
+        $article->setPersonId($authorId);
+        $article->setDefaultPicture();
+        return $article;
+    }
+
+    public function createExampleComment($authorId, $articleId): Comment
+    {
+        $comment = new Comment();
+        $comment->setContent("Voici le premier commentaire de cet article. Vous pouvez agir
+                            dessus via la page dédiée dans l'interface d'administration");
+        $comment->setVisible(true);
+        $comment->setAuthorId($authorId);
+        $comment->setArticleId($articleId);
+        return $comment;
     }
 
 }
