@@ -100,15 +100,21 @@
         width: 40%;
         min-height: 400px;
         margin: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
         .cardTitle {
             font-weight: 700;
             margin-bottom: 10px;
         }
 
-        a {
-            float: right;
-            margin-top: 20px;
+        p {
+            text-align: center;
+        }
+
+        .linkButton {
+            text-align: right;
         }
     }
 }

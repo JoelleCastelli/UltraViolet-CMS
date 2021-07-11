@@ -8,9 +8,11 @@ if(isset($errors)) {
 ?>
 
 <div id="dashboard">
+
+    <!--ARTICLES-->
     <div class="card">
         <div class="cardTitle">Derniers articles</div>
-        <div id="articles" class="cardContent">
+        <div id="articles">
             <?php if($articles) { ?>
                 <div id='articlesList'>
                     <?php foreach ($articles as $article) { ?>
@@ -26,54 +28,79 @@ if(isset($errors)) {
                         </div>
                     <?php } ?>
                 </div>
+            <?php } else { ?>
+                <p>Aucun article</p>
             <?php } ?>
+        </div>
+        <div class="linkButton">
             <a href='<?= Helpers::callRoute('article_creation') ?>'><button class='btn'>Ecrire un article</button></a>
         </div>
     </div>
+
+    <!--COMMENTS-->
     <div class="card">
         <div class="cardTitle">Derniers commentaires</div>
-        <div class="cardContent">
-            <?php
-                if($comments) {
-                    echo "Il y a des commentaires";
-                } else {
-                    echo "Aucun commentaire reçu";
-                }
-            ?>
+        <div id="comments">
+            <?php if($comments) { ?>
+                <div id='commentsList'>
+                    <?php foreach ($comments as $comment) { ?>
+
+                    <?php } ?>
+                </div>
+            <?php } else { ?>
+                <p>Aucun commentaire</p>
+            <?php } ?>
+        </div>
+        <div class="linkButton">
+            <a href='<?= Helpers::callRoute('comments_list') ?>'><button class='btn'>Voir tous les commentaires</button></a>
         </div>
     </div>
+
+    <!--PRODUCTIONS-->
     <div class="card">
         <div class="cardTitle">Dernières productions</div>
-        <div id="productions" class="cardContent">
-            <?php
-            if($productions) {
-                echo "<div id='productionsList'>";
-                    foreach ($productions as $production) {
-                        echo "<div class='productionCard'>";
-                            if (file_exists(getcwd().$production->getPoster()->getPath()))
-                                echo "<div class='productionImg' style=\"background-image: url('".$production->getPoster()->getPath()."')\"></div>";
-                            else
-                                echo "<div class='productionImg' style=\"background-image: url('".PATH_TO_IMG."default_poster.jpg')\"></div>";
-                            echo "<div class='productionName'>";
-                                if($production->getParentProduction()) {
-                                    if($production->getParentProduction()->getParentProduction()) {
-                                        echo $production->getParentProduction()->getParentProduction()->getTitle().' - ';
-                                    }
-                                    echo $production->getParentProduction()->getTitle().' - ';
-                                }
+        <div id="productions">
+            <?php if($productions) { ?>
+                <div id='productionsList'>
+                    <?php foreach ($productions as $production) { ?>
+                        <div class='productionCard'>
+                            <?php if (file_exists(getcwd().$production->getPoster()->getPath())) { ?>
+                                <div class='productionImg' style="background-image: url('<?= $production->getPoster()->getPath() ?>')"></div>
+                            <?php } else { ?>
+                                <div class='productionImg' style="background-image: url('<?= PATH_TO_IMG."default_poster.jpg" ?>')"></div>
+                            <?php } ?>
 
-                                echo $production->getTitle();
-                            echo "</div>";
-                        echo "</div>";
-                    }
-                echo "</div>";
-            }
-            echo "<a href='".Helpers::callRoute('productions_creation_tmdb')."'><button class='btn'>Ajouter une production</button></a>";
-            ?>
+                            <div class='productionName'>
+                                <?php
+                                    if($production->getParentProduction()) {
+                                        if($production->getParentProduction()->getParentProduction()) {
+                                            echo $production->getParentProduction()->getParentProduction()->getTitle().' - ';
+                                        }
+                                        echo $production->getParentProduction()->getTitle().' - ';
+                                    }
+                                    echo $production->getTitle();
+                                ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            <?php } else { ?>
+                <p>Aucune production</p>
+            <?php } ?>
+        </div>
+        <div class="linkButton">
+            <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
         </div>
     </div>
+
+    <!--STATISTICS-->
     <div class="card">
         <div class="cardTitle">Statistiques</div>
-        <div class="cardContent"></div>
+        <div id="statistics">
+        </div>
+        <div class="linkButton">
+            <a href='<?= Helpers::callRoute('stats') ?>'><button class='btn'>Voir toutes les statistiques</button></a>
+        </div>
     </div>
+
 </div>

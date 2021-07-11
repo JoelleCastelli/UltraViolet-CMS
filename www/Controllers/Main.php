@@ -26,7 +26,6 @@ class Main
         $comments = new Comment();
         //$comments = $comments->select()->orderBy('createdAt', 'DESC')->limit(3)->get();
         $comments = [];
-
         $view->assign('comments', $comments);
 
         // Get last 3 productions
@@ -46,7 +45,6 @@ class Main
             $production->setPoster(null);
         }
         $view->assign('productions', $productions);
-
 	}
 
 	public function getRouteAction()
