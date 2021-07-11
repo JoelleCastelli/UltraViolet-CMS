@@ -18,11 +18,12 @@
     <thead>
         <tr>
             <th>Titre</th>
+            <th>Slug</th>
             <th>Auteur</th>
             <th>Vues</th>
             <th>Commentaires</th>
-            <th>Date</th>
-            <th>Publication</th>
+            <th>Date creation</th>
+            <th>Date publication</th>
             <th>Actions</th>
         </tr>
     </thead>

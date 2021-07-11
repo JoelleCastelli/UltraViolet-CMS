@@ -4,6 +4,7 @@ $(document).ready(function () {
     responsive: true,
     columns: [
       { data: "Titre" },
+      { data: "Slug" },
       { data: "Auteur" },
       { data: "Vues" },
       { data: "Commentaire" },

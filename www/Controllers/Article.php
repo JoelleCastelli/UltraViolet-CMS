@@ -171,6 +171,7 @@ class Article {
         foreach ($articles as $article) {
             $articlesArray[] = [
                 "Titre" => $article->getTitle(),
+                "Slug" => $article->getSlug(),
                 "Auteur" => $article->getPerson()->getPseudo(),
                 "Vues" => $article->getTotalViews(),
                 "Commentaire" => "[NOMBRE COMMENTAIRE]",
