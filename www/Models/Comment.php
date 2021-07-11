@@ -16,17 +16,17 @@ class Comment extends Database {
 
     // Foreign keys
     protected int $articleId;
-    protected int $authorId;
+    protected int $personId;
 
     //foreign properties
     public Article $article;
-    public Person $author;
+    public Person $person;
 
     public function __construct()
     {
         parent::__construct();
         $this->article = new Article();
-        $this->author = new Person();
+        $this->person = new Person();
     }
 
     /**
@@ -110,11 +110,11 @@ class Comment extends Database {
     }
 
     /**
-     * @param int $authorId
+     * @param int $personId
      */
-    public function setAuthorId(int $authorId): void
+    public function setpersonId(int $personId): void
     {
-        $this->authorId = $authorId;
+        $this->personId = $personId;
     }
 
     /**
@@ -138,19 +138,19 @@ class Comment extends Database {
     /**
      * @return Person
      */
-    public function getAuthor(): Person
+    public function getPerson(): Person
     {
-        if(!empty($this->authorId) && is_numeric($this->authorId))
-            $this->author->setId($this->authorId);
-        return $this->author;
+        if(!empty($this->personId) && is_numeric($this->personId))
+            $this->person->setId($this->personId);
+        return $this->person;
     }
 
     /**
-     * @param Person $author
+     * @param Person person
      */
-    public function setAuthor(Person $author): void
+    public function setPerson(Person $person): void
     {
-        $this->author = $author;
+        $this->person = $person;
     }
 
 }

@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Core\View;
+use App\Models\CategoryArticle;
 use App\Models\Installer as InstallerModel;
 use App\Models\Person;
 use App\Models\Article;
 use App\Models\Comment;
+use DateTime;
 use Exception;
 
 class Installer
@@ -136,20 +138,12 @@ class Installer
                     $admin->setRole('admin');
                     $admin->setDefaultProfilePicture();
                     if($admin->save()) {
-                        // Create first article
-                        $article = $this->createExampleArticle($admin->getLastInsertId());
-                        if($article->save()) {
-                            // Create first comment
-                            $comment = $this->createExampleComment($admin->getLastInsertId(), $article->getLastInsertId());
-                            if($comment->save()) {
-                                // If everything is okay, move on to next step
-                                Helpers::redirect(Helpers::callRoute('configStep6'));
-                            } else {
-                                $errors[] = "Le commentaire d'exemple n'a pas pu être sauvegardé, veuillez recommencer";;
-                            }
-                        } else {
-                            $errors[] = "L'article d'exemple n'a pas pu être sauvegardé, veuillez recommencer";;
-                        }
+                        // Insert first article
+                        $articleId = $this->insertExampleArticle($admin->getLastInsertId());
+                        // Insert first comment
+                        $this->insertExampleComment($admin->getLastInsertId(), $articleId);
+                        // Move on to next step
+                        Helpers::redirect(Helpers::callRoute('configStep6'));
                     } else {
                         $errors[] = "Le compte utilisateur n'a pas pu être sauvegardé, veuillez recommencer";
                     }
@@ -168,29 +162,47 @@ class Installer
         $view = new View("installer/step6");
     }
 
-    public function createExampleArticle($authorId): Article
+    public function insertExampleArticle($authorId): string
     {
+        // Create and save article
         $article = new Article();
-        $article->setTitle("Mon premier article");
-        $article->setTitleSeo("Mon premier article : vous n'en croirez pas vos yeux");
-        $article->setSlug("mon-premier-article");
-        $article->setDescription("Découvrez le tout premier article de votre site");
-        $article->setDescriptionSeo("C'est la description SEO de mon site");
-        $article->setContent("C'est le contenu de l'article");
+        $article->setTitle("Votre tout premier article");
+        $article->setTitleSeo(APP_NAME . " : découvrez le tout premier article");
+        $article->setSlug(Helpers::slugify($article->getTitle()));
+        $article->setDescription("Découvrez le tout premier article de votre site, et voici le court descriptif
+        qui apparaît dans les listes d'articles !");
+        $article->setDescriptionSeo("Découvrez toute l'actualité des films disponibles en salle cette semaine !");
+        $article->setContent("Voici votre premier article ! Il parle des nouveaux films sortis en salle cette semaine :
+        il est d'ailleurs lié aux catégories 'Films' et 'Actualités' ! Vous pouvez le modifier ou le supprimer directement depuis la page dédiée
+        dans l'interface d'administration.");
         $article->setPersonId($authorId);
         $article->setDefaultPicture();
-        return $article;
+        $now = new DateTime('NOW');
+        $article->setPublicationDate($now->format('Y-m-d H:i:s'));
+        $article->save();
+
+        // Bind article to "Films" and "Actualités" categories
+        $this->bindArticleToCategory($article->getLastInsertId(), 1);
+        $this->bindArticleToCategory($article->getLastInsertId(), 3);
+
+        return $article->getLastInsertId();
     }
 
-    public function createExampleComment($authorId, $articleId): Comment
-    {
+    public function insertExampleComment($authorId, $articleId) {
         $comment = new Comment();
         $comment->setContent("Voici le premier commentaire de cet article. Vous pouvez agir
                             dessus via la page dédiée dans l'interface d'administration");
         $comment->setVisible(true);
-        $comment->setAuthorId($authorId);
+        $comment->setpersonId($authorId);
         $comment->setArticleId($articleId);
-        return $comment;
+        $comment->save();
+    }
+
+    public function bindArticleToCategory($articleId, $categoryId) {
+        $categoryArticle = new CategoryArticle();
+        $categoryArticle->setArticleId($articleId);
+        $categoryArticle->setCategoryId($categoryId);
+        $categoryArticle->save();
     }
 
 }

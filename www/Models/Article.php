@@ -403,8 +403,6 @@ class Article extends Database implements JsonSerializable
         return !empty($DBslug);
     }
 
-    // JSON FORMAT
-
     public function setDefaultPicture() {
         if(file_exists(getcwd().PATH_TO_IMG.'default_article.png')) {
             $media = new Media();
@@ -419,6 +417,7 @@ class Article extends Database implements JsonSerializable
         }
     }
 
+    // JSON FORMAT
     public function jsonSerialize(): array
     {
         return [
