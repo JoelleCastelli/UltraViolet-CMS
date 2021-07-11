@@ -17,13 +17,13 @@ class Installer
     }
 
     public function step1Action() {
-        $view = new View("config/step1");
+        $view = new View("installer/step1");
     }
 
     public function step2Action() {
         $settings = new InstallerModel();
         $form = $settings->formBuilderInstallDB();
-        $view = new View("config/step2");
+        $view = new View("installer/step2");
         $view->assign("form", $form);
 
         if(!empty($_POST)) {
@@ -57,7 +57,7 @@ class Installer
     }
 
     public function step3Action() {
-        $view = new View("config/step3");
+        $view = new View("installer/step3");
     }
 
     public function step4Action() {
@@ -82,7 +82,7 @@ class Installer
     public function step5Action() {
         $settings = new InstallerModel();
         $form = $settings->formBuilderCreateAdminUser();
-        $view = new View("config/step5");
+        $view = new View("installer/step5");
         $view->assign("form", $form);
 
         if(!empty($_POST)) {
@@ -121,7 +121,7 @@ class Installer
         // Installation is complete
         // Update .env file to prevent installer to start again
         Helpers::updateConfigField('UV_INSTALLED', "true");
-        $view = new View("config/step6");
+        $view = new View("installer/step6");
     }
 
 }
