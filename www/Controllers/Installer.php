@@ -103,6 +103,8 @@ class Installer
                     $admin->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $admin->setEmail(htmlspecialchars($_POST['email']));
                     $admin->setPassword(password_hash(htmlspecialchars($_POST['password']), PASSWORD_DEFAULT));
+                    $admin->setEmailConfirmed(true);
+                    $admin->setRole('admin');
                     $admin->setDefaultProfilePicture();
                     if($admin->save()) {
                         Helpers::redirect(Helpers::callRoute('configStep6'));
