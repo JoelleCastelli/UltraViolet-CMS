@@ -1,4 +1,5 @@
 SET NAMES UTF8;
+SET time_zone = "+00:00";
 
 -- -----------------------------------------------------
 -- Schema ultraviolet
