@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Core\FormBuilder;
 use App\Core\Helpers;
 
-class Install
+class Installer
 {
 
     public function __construct()

@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Core\View;
-use App\Models\Install;
+use App\Models\Installer as InstallerModel;
 use App\Models\Person;
 use Exception;
 
@@ -21,7 +21,7 @@ class Installer
     }
 
     public function step2Action() {
-        $settings = new Install();
+        $settings = new InstallerModel();
         $form = $settings->formBuilderInstallDB();
         $view = new View("config/step2");
         $view->assign("form", $form);
@@ -80,7 +80,7 @@ class Installer
     }
 
     public function step5Action() {
-        $settings = new Install();
+        $settings = new InstallerModel();
         $form = $settings->formBuilderCreateAdminUser();
         $view = new View("config/step5");
         $view->assign("form", $form);
