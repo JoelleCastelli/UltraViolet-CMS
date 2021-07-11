@@ -21,7 +21,7 @@
                 padding: 15px;
 
                 .articleInfos {
-                    flex-basis: 85%;
+                    flex-basis: 80%;
 
                     .articleTitle {
                         font-weight: bolder;
@@ -31,15 +31,24 @@
                 .articleActions {
                     display: flex;
                     flex-direction: row;
-                    justify-content: space-between;
+                    justify-content: space-around;
                     margin-left: 5px;
-                    width: 15%;
+                    width: 20%;
                     align-items: center;
 
-                    i {
-                        font-size: 20px;
-                        color: $purple;
+                    .comments {
+                        .commentsNb {
+                            position: relative;
+                            top: 5px;
+                            font-size: 12px;
+                        }
+
+                        i {
+                            font-size: 20px;
+                            color: $purple;
+                        }
                     }
+
                 }
 
             }

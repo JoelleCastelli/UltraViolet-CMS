@@ -22,7 +22,10 @@ if(isset($errors)) {
                                 <div class="articleDetails">Publié le <?= $article->getCleanPublicationDate() ?> par <?= $article->getPerson()->getPseudo() ?></div>
                             </div>
                             <div class="articleActions">
-                                <i class="fas fa-comment-dots"></i>
+                                <div class="comments">
+                                    <i class="fas fa-comment-dots"></i>
+                                    <span class="commentsNb">10</span>
+                                </div>
                                 <div class="bubble-actions"></div>
                             </div>
                         </div>
