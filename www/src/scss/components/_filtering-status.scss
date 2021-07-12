@@ -1,92 +1,92 @@
 .filtering-status {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  color: $purple2;
+  background-color: $pure-white;
+  font-family: $poppins;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: solid $white2 1px;
+
+  .filtering-btn {
+    display: flex;
     justify-content: center;
-    margin-bottom: 10px;
-    color: $purple2;
-    background-color: $pure-white;
-    font-family: $poppins;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    border: solid $white2 1px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 1rem 3rem;
+    transition: all 0.3s ease-out;
+    cursor: pointer;
 
-    .filtering-btn {
-        display: flex;
-        justify-content: center;
-        flex-grow: 1;
-        flex-shrink: 1;
-        padding: 1rem 3rem;
-        transition: all 0.3s ease-out;
-        cursor: pointer;
-
-        &.active {
-            background-color: $purple2;
-            color: white;
-        }
-
-        &:first-child {
-            border-radius: 8px 0px 0px 8px;
-        }
-
-        &:last-child {
-            border-radius: 0px 8px 8px 0px;
-        }
-
-        &:hover {
-            background-color: $purple2;
-            color: white;
-        }
-
-        &:first-child {
-            border-radius: 8px 0 0 8px;
-        }
-
-        &:last-child {
-            border-radius: 0 8px 8px 0;
-        }
+    &.active {
+      background-color: $purple2;
+      color: white;
     }
 
-    .filter-delete{
-        display: flex;
-        justify-content: center;
-        flex-grow: 1;
-        flex-shrink: 1;
-        padding: 1rem 3rem;
-        transition: all 0.3s ease-out;
-        cursor: pointer;
-
-        &.active {
-            background-color: $purple2;
-            color: white;
-        }
-
-        &:first-child {
-            border-radius: 8px 0px 0px 8px;
-        }
-
-        &:last-child {
-            border-radius: 0px 8px 8px 0px;
-        }
-
-        &:hover {
-            background-color: $purple2;
-            color: white;
-        }
-
-        &:first-child {
-            border-radius: 8px 0 0 8px;
-        }
-
-        &:last-child {
-            border-radius: 0 8px 8px 0;
-        }
+    &:first-child {
+      border-radius: 8px 0px 0px 8px;
     }
+
+    &:last-child {
+      border-radius: 0px 8px 8px 0px;
+    }
+
+    &:hover {
+      background-color: $purple2;
+      color: white;
+    }
+
+    &:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    &:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+  }
+
+  .filter-delete {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 1rem 3rem;
+    transition: all 0.3s ease-out;
+    cursor: pointer;
+
+    &.active {
+      background-color: $purple2;
+      color: white;
+    }
+
+    &:first-child {
+      border-radius: 8px 0px 0px 8px;
+    }
+
+    &:last-child {
+      border-radius: 0px 8px 8px 0px;
+    }
+
+    &:hover {
+      background-color: $purple2;
+      color: white;
+    }
+
+    &:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    &:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+  }
 }
 
 .row-between {
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
 }
