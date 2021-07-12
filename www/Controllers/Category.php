@@ -108,22 +108,26 @@ class Category
         }
     }
 
-    public function showCategoryArticlesAction($categorySlug = null) {
+    /***************** */
+    /* FRONT FUNCTIONS */
+    /***************** */
+
+    public function showCategoryArticlesAction($categorySlug) {
         
         $category = new CategoryModel;
-        $categories = $category->findAll();
+        $categories = $category->select()->where('position', 0, '>')->get();
 
         foreach ($categories as $category) {
 
             if(strcmp(Helpers::slugify($category->getName()), $categorySlug) == 0) {
                
-                // Helpers::cleanDumpArray($category->getArticles());
                 $view = new View('articles/list', 'front');
-                $view->assign('articles',  $category->getArticles()); 
+                $view->assign('articles',  $category->getArticlesPublished());
                 return;
             }
         }
 
+        Helpers::redirect404();
     }
 
 }

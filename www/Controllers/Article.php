@@ -157,9 +157,7 @@ class Article {
         }
     }
 
-
     // API methods
-
     public function getArticlesAction() {
         if (empty($_POST["state"])) return;
         $state = $_POST["state"];
@@ -204,6 +202,23 @@ class Article {
         } else {
             $article->delete();
         }
+    }
+
+    /***************** */
+    /* FRONT FUNCTIONS */
+    /***************** */
+
+    public function showArticleAction($articleSlug)
+    {
+        $articleModel = new ArticleModel;
+        //get article published and correct slug
+        $article = $articleModel->select()->where('slug', $articleSlug)->andWhere('deletedAt', "NULL")->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->first(); 
+
+        if(empty($article))
+            Helpers::redirect404();
+        
+        $view = new View('articles/article', 'front');
+        $view->assign('article', $article);
     }
 
 }

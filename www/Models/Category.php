@@ -111,16 +111,15 @@ class Category extends Database
     /**
      * @param array[]|null $actions
      */
-    public function getArticles() 
+    public function getArticlesPublished() 
     {
-        
         $categoryArticle = new CategoryArticle;
         $article = new Article;
 
-        $articlesId = $categoryArticle->select('articleId')->where('categoryId', $this->id)->first(false);
+        $articlesId = $categoryArticle->select('articleId')->where('categoryId', $this->id)->get(false);
 
         if(!empty($articlesId))
-            $this->articles = $article->select()->whereIn('id', $articlesId)->get();
+            $this->articles = $article->select()->whereIn('id', $articlesId)->andWhere('deletedAt', "NULL")->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->get();
         else
             $this->articles = [];
 
@@ -165,6 +164,16 @@ class Category extends Database
                 ]
             ],
         ];
+    }
+
+    public static function getMenuCategories()
+    {
+        $category = new Category;
+        $categories = $category->select()->where('position', 0, ">")->orderBy('position')->orderBy('name')->get();
+
+        $mainCategories = array_splice($categories, 0, 5);
+
+        return ['main' => $mainCategories, 'other' => $categories];
     }
 
     /**
