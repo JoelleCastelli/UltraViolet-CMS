@@ -51,7 +51,27 @@ if(isset($errors)) {
             <?php if($comments) { ?>
                 <div id='commentsList'>
                     <?php foreach ($comments as $comment) { ?>
+                        <div class='commentCard'>
+                            <div class="userPicture">
+                                <img src="<?= $comment->getPerson()->getMedia()->getPath() ?>" alt="Photo de profil">
+                            </div>
+                            <div class="commentDetails">
+                                <div class="commentHeader">
+                                    <span class="username">
+                                        <?= $comment->getPerson()->getPseudo() ?>
+                                    </span>
+                                    <span class="articleTitle">
+                                        <?= $comment->getArticle()->getTitle() ?>
+                                    </span>
+                                </div>
+                                <div class="commentPreview">
+                                    <?= $comment->getContent() ?>
+                                </div>
+                            </div>
 
+                            <div class="bubble-actions"></div>
+
+                        </div>
                     <?php } ?>
                 </div>
             <?php } else { ?>

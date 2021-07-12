@@ -34,7 +34,7 @@ class Article extends Database implements JsonSerializable
 
     public Media $media;
     public Person $person;
-    private array $comments;
+    private array $comments = [];
 
     private array $actions;
 

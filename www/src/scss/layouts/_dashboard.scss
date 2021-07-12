@@ -6,7 +6,6 @@
     #articles {
 
         #articlesList {
-
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -25,10 +24,16 @@
                 padding: 15px;
 
                 .articleInfos {
-                    flex-basis: 80%;
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                    overflow: hidden;
 
                     .articleTitle {
                         font-weight: bolder;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
                     }
                 }
 
@@ -37,22 +42,93 @@
                     flex-direction: row;
                     justify-content: space-around;
                     margin-left: 5px;
-                    width: 20%;
                     align-items: center;
 
                     .comments {
-                        .commentsNb {
-                            position: relative;
-                            top: 5px;
-                            font-size: 12px;
-                        }
+                        display: flex;
+                        flex-wrap: nowrap;
 
                         i {
                             font-size: 20px;
                             color: $purple;
+                            margin-right: 5px;
+                        }
+
+                        .commentsNb {
+                            position: relative;
+                            top: 10px;
+                            font-size: 12px;
                         }
                     }
 
+                    .bubble-actions {
+                        margin-left: 10px;
+                    }
+
+                }
+
+            }
+        }
+    }
+
+
+    #comments {
+
+        #commentsList {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .commentCard {
+                display: flex;
+
+                border: solid $grey4 1px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                box-shadow: 2px 2px 5px $grey4;
+                line-height: 1.5;
+                align-items: center;
+                height: 60px;
+                padding: 15px;
+
+                .userPicture img {
+                    border-radius: 50%;
+                    width: 40px;
+                    border-color: #DFE0EB;
+                    border-style: solid;
+                    border-width: 2px;
+                    padding: 1px;
+                    cursor: pointer;
+                }
+
+                .commentDetails {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    margin-left: 10px;
+                    flex-wrap: nowrap;
+                    overflow: hidden;
+
+                    & > * {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .username {
+                        font-weight: bolder;
+                        margin-right: 20px;
+                    }
+
+                    .articleTitle {
+                        font-size: smaller;
+                        color: $grey7;
+                    }
+                }
+
+                .bubble-actions {
+                    margin-left: auto;
+                    padding-left: 10px;
                 }
 
             }
@@ -79,7 +155,7 @@
 
                 .productionName {
                     text-align: center;
-                    padding-bottom: 5px;
+                    padding: 5px;
                     overflow-wrap: anywhere;
                     height: 100%;
                     display: flex;

@@ -21,7 +21,7 @@ class Main
         $view->assign('articles', $articles);
 
         // Get last 3 comments
-        $comments = $this->getLatestComments(3);
+        $comments = $this->getLatestComments(4);
         $view->assign('comments', $comments);
 
 
