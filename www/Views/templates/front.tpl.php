@@ -4,7 +4,7 @@ use App\Core\Helpers;
 
 $noTemplateUrl = [
     Helpers::callRoute('login'),
-    Helpers::callRoute('subscription'),
+    Helpers::callRoute('register'),
     Helpers::callRoute('forget_password')
 ];
 

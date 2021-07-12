@@ -406,7 +406,7 @@ class Person extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "form_register",
                 "submit" => "Valider",
-                "referer" => Helpers::callRoute('subscription')
+                "referer" => Helpers::callRoute('register')
             ],
             "fields" => [
                 "csrfToken" => [
