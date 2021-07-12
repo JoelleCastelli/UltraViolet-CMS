@@ -24,8 +24,3 @@
     <tbody></tbody>
 </table>
 
-
-<div class="filtering-status">
-    <div class="filter-delete active" id="user">Utilisateurs supprimer</div>
-</div>    
-</br>
