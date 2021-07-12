@@ -127,6 +127,7 @@ class Comment extends Database {
         return $this->personId;
     }
 
+
     /**
      * @param int $personId
      */
