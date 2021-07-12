@@ -12,8 +12,9 @@ class Comment extends Database {
 
     private ?int $id = null;
     protected string $content;
-    protected bool $visible = true;
+    private string $createdAt;
     protected ?string $updatedAt;
+    protected ?string $deletedAt = null;
 
     // Foreign keys
     protected int $articleId;
@@ -36,8 +37,6 @@ class Comment extends Database {
         ];
         
     }
-
-    
 
     /**
      * @return null
@@ -64,19 +63,11 @@ class Comment extends Database {
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isVisible(): bool
+    public function getCreatedAt(): string
     {
-        return $this->visible;
-    }
-
-    /**
-     * @param bool $visible
-     */
-    public function setVisible(bool $visible): void
-    {
-        $this->visible = $visible;
+        return $this->createdAt;
     }
 
     /**
@@ -95,12 +86,20 @@ class Comment extends Database {
         $this->updatedAt = $updatedAt;
     }
 
-      /**
-     * @return mixed
+    /**
+     * @return string|null
      */
-    public function getCreatedAt()
+    public function getDeletedAt(): ?string
     {
-        return $this->createdAt;
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param string|null $deletedAt
+     */
+    public function setDeletedAt(?string $deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
     }
 
     /**
@@ -127,11 +126,10 @@ class Comment extends Database {
         return $this->personId;
     }
 
-
     /**
      * @param int $personId
      */
-    public function setpersonId(int $personId): void
+    public function setPersonId(int $personId): void
     {
         $this->personId = $personId;
     }
@@ -178,6 +176,14 @@ class Comment extends Database {
     public function setPerson(Person $person): void
     {
         $this->person = $person;
+    }
+
+    public function getCleanCreationDate() {
+        if (!is_null($this->getCreatedAt())) {
+            return date("d/m/Y à H:i", strtotime($this->getCreatedAt()));
+        } else {
+            return "";
+        }
     }
 
 }

@@ -197,9 +197,9 @@ comments_update:
     id: (\d+)
 
 comments_data:
-  path: /admin/commentaires-data
+  path: /admin/comments-data
   controller: Comment
-  action: getComment
+  action: getComments
 
 # TEMPLATES
 templates_lists:

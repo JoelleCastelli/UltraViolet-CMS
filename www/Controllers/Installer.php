@@ -192,7 +192,6 @@ class Installer
         $comment = new Comment();
         $comment->setContent("Voici le premier commentaire de cet article. Vous pouvez agir
                             dessus via la page dédiée dans l'interface d'administration");
-        $comment->setVisible(true);
         $comment->setpersonId($authorId);
         $comment->setArticleId($articleId);
         $comment->save();

@@ -3,21 +3,20 @@
 namespace App\Controller;
 
 use App\Core\Helpers;
-use App\Core\FormValidator;
 use App\Core\View;
 use App\Models\Comment as CommentModel;
+
 class Comment
 {
-    protected $columnsTable;
+    protected array $columnsTable;
 
     public function __construct()
     {
         $this->columnsTable = [
             "author" => "Auteur",
-            "updateAt" => "Créer le",
-            "article" => "Liée à",
+            "article" => "Article",
             "content" => "Contenu",
-            "visible" => "Visibilité",
+            "createdAt" => "Créé le",
             "actions" => "Actions"
         ];
     }
@@ -33,20 +32,47 @@ class Comment
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/comments/comments.js']);
     }
 
-    public function defaultAction() {
-		echo "Comment default";
-	}
+    /**
+     * Called by AJAX script to display productions filtered by type
+     */
+    public function getCommentsAction() {
+        if(!empty($_POST['commentState'])) {
+            $comments = new CommentModel();
+            if($_POST['commentState'] == 'visible') {
+                $comments = $comments->select()->where('deletedAt', "NULL")->orderBy('createdAt', 'DESC')->get();
+            } else {
+                $comments = $comments->select()->where('deletedAt', "NOT NULL")->orderBy('createdAt', 'DESC')->get();
+            }
+
+            if(!$comments) $comments = [];
+
+            $commentsArray = [];
+            foreach ($comments as $comment) {
+                $commentsArray[] = [
+                    $this->columnsTable['author'] => $comment->getPerson()->getPseudo(),
+                    $this->columnsTable['article'] => $comment->getArticle()->getTitle(),
+                    $this->columnsTable['content'] => $comment->getContent(),
+                    $this->columnsTable['createdAt'] => $comment->getCleanCreationDate(),
+                    $this->columnsTable['actions'] => $comment->generateActionsMenu(),
+                ];
+            }
+            echo json_encode($commentsArray);
+        }
+    }
 
     public function deleteCommentAction() {
-        if (!empty($_POST['id'])){ 
+        if (!empty($_POST['id'])) {
+            $response = [];
             $comment = new CommentModel();
-            $id = $_POST['id'];
-            $comment->setId($id);
-            $comment->delete();
-            
-            Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
-        }else{
-            Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
+            $comment->setId($_POST['id']);
+            if($comment->delete()) {
+                $response['success'] = true;
+                $response['message'] = 'Le commentaire a bien été supprimé';
+            } else {
+                $response['success'] = false;
+                $response['message'] = 'Le commentaire n\'a pas pu être supprimé';
+            }
+            echo json_encode($response);
         }
     }
     
