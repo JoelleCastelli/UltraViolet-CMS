@@ -22,6 +22,7 @@ class Article {
 
     public function createArticleAction() {
         $article = new ArticleModel();
+        $media = new MediaModel();
         $form = $article->formBuilderCreateArticle();
 
         $view = new View("articles/createArticle");
@@ -29,13 +30,16 @@ class Article {
         $view->assign("form", $form);
         $view->assign('bodyScripts', [
             "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
-            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js',
+            "media-modal" => PATH_TO_SCRIPTS.'bodyScripts/articles/media-pop-up.js',
         ]);
     
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
             if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
+            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+            if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
             if (empty($errors)) {
 
@@ -48,7 +52,7 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setMediaId($mediaId);
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {
@@ -80,6 +84,7 @@ class Article {
 
     public function updateArticleAction($id) {
         $article = new ArticleModel();
+        $media = new MediaModel();
 
         $articleExist = $article->setId($id);
         if (!$articleExist) Helpers::redirect404();
@@ -92,13 +97,16 @@ class Article {
         $view->assign("title", "Modifier un article");
         $view->assign('bodyScripts', [
             "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
-            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js',
+            "media-modal" => PATH_TO_SCRIPTS.'bodyScripts/articles/media-pop-up.js',
         ]);
 
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
             if ($article->hasDuplicateSlug($_POST["title"], $id)) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
+            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+            if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
             if (empty($errors)) {
 
@@ -109,9 +117,8 @@ class Article {
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
-                
                 $article->setContent($_POST["content"]);
-                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setMediaId($mediaId);
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {

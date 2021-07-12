@@ -482,21 +482,9 @@ class Article extends Database implements JsonSerializable
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
 
-        $media = new MediaModel();
-        $category = new CategoryModel();
+        $category = new CategoryModel();     
 
-        $medias = $media->findAll();
         $categories = $category->findAll();
-
-        $mediaOptions = [];
-
-        foreach ($medias as $media) {
-           array_push($mediaOptions, [
-                "value" => $media->getId(),
-                "text" => $media->getTitle()
-           ]);
-        }
-
         $categoryOptions = [];
 
         foreach ($categories as $category) {
@@ -574,11 +562,10 @@ class Article extends Database implements JsonSerializable
                     "readonly" => true,
                 ],
                 "media" => [
-                    "type" => "select",
-                    "label" => "Image de cover *",
+                    "type" => "text",
+                    "label" => "Media utilisé pour la cover de l'article",
                     "class" => "search-bar",
-                    "options" => $mediaOptions,
-                    "required" => true,
+                    "readonly" => true
                 ],
                 "categories" => [
                     "type" => "checkbox",
@@ -612,22 +599,8 @@ class Article extends Database implements JsonSerializable
         $categoryArticle = new CategoryArticleModel();
         $this->setId($articleId);
         
-        $medias = $media->findAll();
-        $mediaOptions = [];
-
-        // Get all media and select one of them is the article is using it
-        foreach ($medias as $media) {
-            $mediaIsAlreadySelected = false;
-            if ($this->getMediaId() == $media->getId()) {
-                $mediaIsAlreadySelected = true;
-            }
-            $options = [
-                "value" => $media->getId(),
-                "text" => $media->getTitle(),
-                "selected" => $mediaIsAlreadySelected,
-            ];
-           array_push($mediaOptions, $options);
-        }
+        $mediaId = $this->select("MediaId")->where("id", $articleId)->first(0);
+        $mediaTitle = $media->select("title")->where("id", $mediaId)->first(0);
 
         $categories = $category->findAll();
         $categoriesByArticle = $categoryArticle->select()->where("articleId", $articleId, "=")->get();
@@ -733,12 +706,11 @@ class Article extends Database implements JsonSerializable
                     "readonly" => $state !== "scheduled"
                 ],
                 "media" => [
-                    "type" => "select",
-                    "label" => "Image de cover *",
+                    "type" => "text",
+                    "label" => "Media utilisé pour la cover de l'article",
                     "class" => "search-bar",
-                    "options" => $mediaOptions,
-                    "required" => true,
-                    "error" => "Vous devez sélectionner un media."
+                    "readonly" => true,
+                    "value" => $mediaTitle,
                 ],
                 "categories" => [
                     "type" => "checkbox",

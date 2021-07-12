@@ -1,0 +1,56 @@
+.background-modal {
+  z-index: 100;
+  display: none;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.759);
+  position: fixed;
+}
+
+.visible {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-media {
+  background: white;
+  z-index: 120;
+  position: relative;
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+
+  border-radius: 15px;
+  padding: 2rem;
+
+  h1 {
+    align-self: center;
+  }
+}
+
+.clickable-bg {
+  z-index: 110;
+  background: transparent;
+  position: inherit;
+  top: inherit;
+  right: inherit;
+  bottom: inherit;
+  left: inherit;
+}
+
+.media-name-cta {
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-radius: 100px;
+    background-color: $purple2;
+    color: white;
+    cursor: pointer;
+    transform: scale(0.9);
+  }
+}
