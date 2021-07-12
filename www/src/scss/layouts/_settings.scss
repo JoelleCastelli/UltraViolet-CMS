@@ -1,0 +1,25 @@
+#settings {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    line-height: 1.5;
+
+    & > * {
+        flex-grow: 1;
+        flex-shrink: 1;
+        width: 49%;
+        margin: 5px;
+    }
+
+    #dbSettings {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        h2, strong {
+            font-weight: bold;
+        }
+        h2 {
+            text-align: center;
+        }
+    }
+}

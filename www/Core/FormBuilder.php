@@ -21,13 +21,14 @@ class FormBuilder
 
             $required = isset($field["required"]) && $field["required"] == true ? "required" : '';
             $disabled = isset($field["disabled"]) && $field["disabled"] == true ? "disabled" : '';
+            $readonly = isset($field["readonly"]) && $field["readonly"] == true ? "readonly" : '';
             $multiple = isset($field["multiple"]) && $field["multiple"] == true ? "multiple" : '';
 
             $html .= "<label class='".($field["classLabel"] ?? "")."' for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
 
             // SELECT
 		    if ($field["type"] == "select") {
-                $html .= "<select name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
+                $html .= "<select $multiple name='$fieldName' id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
                     $html .= "<option value='".$option["value"]."' $selected $disabled>".$option["text"]."</option>";
@@ -43,11 +44,13 @@ class FormBuilder
                     
                     if (!empty($_POST[$fieldName]) && $_POST[$fieldName] == $option["value"]) {
                         $checked = "checked";
-                    }else if (!empty($data[$fieldName]) && $data[$fieldName] == $option["value"]){
+                    } else if (!empty($data[$fieldName]) && $data[$fieldName] == $option["value"]){
+                        $checked = "checked";
+                    } else if (isset($option["checked"]) && $option["checked"] == true){
                         $checked = "checked";
                     }
-                    
-                    $html .= "<input type='radio' class='".($option["class"] ?? "")."' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
+                                        
+                    $html .= "<input id='" . ($option["id"] ?? ""). "' type='radio' class='".($option["class"] ?? "")."' name='".$fieldName."' value='".$option["value"]."' $checked $disabledOption>";
                     $html .= "<label for='".$option['value']."' $disabledOption>".$option['text']."</label>";
                 }
                 $html .= "</fieldset>";
@@ -57,8 +60,8 @@ class FormBuilder
                 $html .= "<fieldset id='".($field["id"] ?? $fieldName)."'>";
                 foreach($field["options"] as $option) {
                     $disabledOption = isset($option["disabled"]) &&  $option["disabled"] == true ? "disabled" : '';
-                    $selected = isset($option["selected"]) &&  $option["selected"] == true ? "selected" : '';
-                    
+                    $selected = isset($option["checked"]) &&  $option["checked"] == true ? "checked" : '';
+
                     if (!empty($_POST[$fieldName]) && in_array($option['value'], $_POST[$fieldName])) {
                         $selected = "checked";
                     }else if (!empty($data[$fieldName]) && in_array($option['value'], $data[$fieldName])){
@@ -83,7 +86,7 @@ class FormBuilder
                                    placeholder='".($field["placeholder"] ?? "")."'
                                    class='".($field["class"] ?? "")."'
                                    id='".($field["id"] ?? $fieldName)."'
-                                   $required $disabled>$value</textarea>";
+                                   $required $disabled $readonly>$value</textarea>";
 
             // OTHER INPUTS
             } else {
@@ -96,16 +99,18 @@ class FormBuilder
                     $value = ($field['type'] === 'password') ? '' : htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
+
                 $html .="<input
                     type='".($field["type"] ?? "text")."'
                     name='".$fieldName."'
-                    value='".$value."'
-                    placeholder='".($field["placeholder"] ?? "")."'
+                    value=\"".$value."\"
+                    placeholder=\"".($field["placeholder"] ?? "")."\"
                     class='".($field["class"] ?? "")."'
                     min='".($field["min"] ?? "")."'
                     max='".($field["max"] ?? "")."'
                     id='".($field["id"] ?? $fieldName)."'
-                    $required $disabled $multiple
+                    accept='".($field["accept"] ?? "")."'
+                    $required $disabled $readonly $multiple
                 >";
             }
 		}

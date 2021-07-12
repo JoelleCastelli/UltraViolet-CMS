@@ -44,4 +44,7 @@ input[type=date], input[type=time] {
     font-size: 16px;
 }
 
-input[type="number"]:disabled { background: $light-grey; }
+input[type]:disabled, input[type]:read-only,  {
+    color: $grey6;
+    background: $light-grey;
+}

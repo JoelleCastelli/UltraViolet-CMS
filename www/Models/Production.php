@@ -10,7 +10,7 @@ use App\Core\View;
 class Production extends Database
 {
     private ?int $id = null;
-    protected ?int $tmdbId;
+    protected ?int $tmdbId = null;
     protected string $title;
     protected ?string $originalTitle;
     protected ?string $releaseDate;
@@ -188,20 +188,17 @@ class Production extends Database
         }
     }
 
-    public function translateType() {
+    public function getTranslatedType(): string
+    {
         switch ($this->getType()) {
             case 'movie':
-                $this->setType('Film');
-                break;
+                return 'Film';
             case 'season':
-                $this->setType('Saison');
-                break;
+                return 'Saison';
             case 'series':
-                $this->setType('Série');
-                break;
+                return 'Série';
             case 'episode':
-                $this->setType('Episode');
-                break;
+                return 'Episode';
         }
     }
 
@@ -221,7 +218,8 @@ class Production extends Database
         }
     }
 
-    public function getCleanRuntime() {
+    public function getCleanRuntime(): string
+    {
         if($this->getRuntime() != '') {
             return $this->getRuntime()." minutes";
         } else {
@@ -273,12 +271,15 @@ class Production extends Database
         return $this->poster;
     }
 
-    public function setPoster($tmdbId, $productionType): void
+    public function setPoster(?string $tmdbPoster): void
     {
         $media = new Media();
-        $imgPath = PATH_TO_IMG_POSTERS ."/$productionType/poster_$tmdbId.png";
+        if($tmdbPoster != '')
+            $media->setTmdbPosterPath(TMDB_IMG_PATH.$tmdbPoster);
+        $imgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getId().".png";
         $media->setPath($imgPath);
-        $media->setTitle("poster_$tmdbId");
+        $media->setTitle("poster_".$this->getTmdbId());
+        $this->poster = $media;
     }
 
     public function savePoster() {
@@ -289,7 +290,7 @@ class Production extends Database
 
     public function saveMedia() {
         // Save poster file
-        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getTmdbId().'_'.Helpers::slugify($this->getTitle()).".png";
+        $productionImgPath = PATH_TO_IMG_POSTERS.$this->getType().'/'.$this->getLastInsertId().".png";
         if(!empty($this->poster->getTmdbPosterPath()) && $this->poster->getTmdbPosterPath() != TMDB_IMG_PATH)
             file_put_contents(getcwd().$productionImgPath, file_get_contents($this->poster->getTmdbPosterPath()));
 
@@ -378,6 +379,8 @@ class Production extends Database
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
                 $person->setTmdbId($crew->id);
+                if($crew->profile_path != '')
+                    $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$crew->profile_path);
                 $directors[] = $person;
             }
         }
@@ -398,6 +401,8 @@ class Production extends Database
                 $person->setRole('vip');
                 $person->setFullName($crew->name);
                 $person->setTmdbId($crew->id);
+                if($crew->profile_path != '')
+                    $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$crew->profile_path);
                 $writers[] = $person;
             }
         }
@@ -417,6 +422,8 @@ class Production extends Database
             $person->setRole('vip');
             $person->setFullName($creator->name);
             $person->setTmdbId($creator->id);
+            if($creator->profile_path != '')
+                $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$creator->profile_path);
             $creators[] = $person;
         }
         $this->creators = $creators;
@@ -457,14 +464,18 @@ class Production extends Database
         return '';
     }
 
-    public function formBuilderAddProduction() {
-
+    public function formBuilderAddProduction(): array
+    {
         $series = new Production();
         $series = $series->selectWhere('type', 'series');
-        if(empty($series)) $series[0] = "Aucune série disponible";
-        $string = '';
-        foreach ($series as $seriesID => $seriesName) {
-            $string .= '[ "value" => '.$seriesID.', "text" => '.$seriesName.']';
+        if(empty($series)) $series['empty'] = "Aucune série disponible";
+        $seriesOptions = [];
+        $i = 0;
+        if(!isset($series['empty'])) {
+            foreach ($series as $serie) {
+                $seriesOptions[$i]["value"] = $serie->getId();
+                $seriesOptions[$i++]["text"] = $serie->getTitle();
+            }
         }
 
         return [
@@ -474,7 +485,8 @@ class Production extends Database
                 "class" => "form_control card",
                 "id" => "formAddProduction",
                 "submit" => "Valider",
-                "referer" => '/admin/productions/creation'
+                "enctype" => "multipart/form-data",
+                "referer" => Helpers::callRoute('productions_creation')
             ],
             "fields" => [
                 "type" => [
@@ -491,6 +503,14 @@ class Production extends Database
                         [
                             "value"=>"series",
                             "text"=>"Série",
+                        ],
+                        [
+                            "value"=>"season",
+                            "text"=>"Saison",
+                        ],
+                        [
+                            "value"=>"episode",
+                            "text"=>"Episode",
                         ]
                     ],
                 ],
@@ -520,14 +540,6 @@ class Production extends Database
                     "maxLength" => 10,
                     "error" => "Le format de la date est incorrect"
                 ],
-                "overview" => [
-                    "type" => "text",
-                    "placeholder" => "",
-                    "label" => "Résumé",
-                    "class" => "search-bar",
-                    "maxLength" => 1000,
-                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
-                ],
                 "runtime" => [
                     "type" => "number",
                     "placeholder" => "",
@@ -535,11 +547,56 @@ class Production extends Database
                     "class" => "search-bar",
                     "error" => "Le résumé ne peut pas dépasser 1000 caractères"
                 ],
+                "series" => [
+                    "type" => "select",
+                    "placeholder" => "",
+                    "label" => "Nom de la série",
+                    "class" => "search-bar",
+                    "options" => $seriesOptions
+                ],
+                "season" => [
+                    "type" => "select",
+                    "placeholder" => "",
+                    "label" => "Numéro de la saison",
+                    "class" => "search-bar",
+                    "options" => [
+                        [
+                            "value"=>"movie",
+                            "text"=>"Film",
+                        ],
+                        [
+                            "value"=>"series",
+                            "text"=>"Série",
+                        ],
+                        [
+                            "value"=>"season",
+                            "text"=>"Saison",
+                        ],
+                        [
+                            "value"=>"episode",
+                            "text"=>"Episode",
+                        ]
+                    ],
+                ],
                 "number" => [
                     "type" => "number",
                     "placeholder" => "",
                     "label" => "Numéro",
                     "class" => "search-bar",
+                ],
+                "poster" => [
+                    "type" => "file",
+                    "accept" => ".jpg, .jpeg, .png",
+                    "label" => "Poster (uniquement des fichiers JPG, JPEG ou PNG)",
+                    "class" => "search-bar",
+                ],
+                "overview" => [
+                    "type" => "textarea",
+                    "placeholder" => "",
+                    "label" => "Résumé",
+                    "class" => "search-bar",
+                    "maxLength" => 1000,
+                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
                 ],
                 "csrfToken" => [
                     "type"=>"hidden",
@@ -550,7 +607,8 @@ class Production extends Database
         ];
     }
 
-    public function formBuilderAddProductionTmdb(){
+    public function formBuilderAddProductionTmdb(): array
+    {
         return [
             "config" => [
                 "method" => "POST",
@@ -614,6 +672,78 @@ class Production extends Database
         ];
     }
 
+    public function formBuilderUpdateProduction($id): array
+    {
+        $production = new Production();
+        $production = $production->findOneBy('id', $id);
+        if($production) {
+            return [
+                "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "class" => "form_control card",
+                    "id" => "formUpdateProductionTmdb",
+                    "submit" => "Valider",
+                    "referer" => Helpers::callRoute('production_update', ['id' => $id])
+                ],
+                "fields" => [
+                    "id" => [
+                        "type" => "hidden",
+                        "value" => $production->getId()
+                    ],
+                    "type" => [
+                        "type" => "hidden",
+                        "value" => $production->getType()
+                    ],
+                    "tmdbID" => [
+                        "type" => "number",
+                        "class" => "search-bar",
+                        "value" => $production->getTmdbId(),
+                        "label" => "ID TMDB :",
+                        "readonly" => true
+                    ],
+                    "title" => [
+                        "type" => "text",
+                        "class" => "search-bar",
+                        "value" => $production->getTitle(),
+                        "label" => "Titre :"
+                    ],
+                    "originalTitle" => [
+                        "type" => "text",
+                        "class" => "search-bar",
+                        "value" => $production->getOriginalTitle(),
+                        "label" => "Titre original :"
+                    ],
+                    "runtime" => [
+                        "type" => "number",
+                        "class" => "search-bar",
+                        "label" => "Durée (en minutes) :",
+                        "value" => $production->getRuntime(),
+                    ],
+                    "releaseDate" => [
+                        "type" => "date",
+                        "class" => "search-bar",
+                        "label" => "Date de sortie :",
+                        "value" => $production->getReleaseDate(),
+                    ],
+                    "overview" => [
+                        "type" => "textarea",
+                        "class" => "search-bar",
+                        "value" => $production->getOverview(),
+                        "label" => "Résumé :",
+                        "maxLength" => 1000,
+                        "error" => "Le résumé ne peut pas dépasser 1000 caractères"
+                    ],
+                    "csrfToken" => [
+                        "type" => "hidden",
+                        "value" => FormBuilder::generateCSRFToken(),
+                    ]
+                ],
+            ];
+        }
+        return [];
+    }
+
     public function populateFromTmdb($post, $jsonResponseArray): bool
     {
         // index 0: movie or series
@@ -630,15 +760,14 @@ class Production extends Database
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
         $this->setActors($item->credits->cast);
-        if($item->poster_path != '')
-            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->poster_path);
+        $this->setPoster($item->poster_path);
+
         //$production0['genres'] = $item->genres; TODO
 
         switch ($post['productionType']) {
             case 'movie':
                 $this->setDirectors($item->credits->crew);
                 $this->setWriters($item->credits->crew);
-                $this->setPoster($item->id, 'movie');
                 break;
             case 'series':
                 $this->setCreators($item->created_by);
@@ -646,7 +775,6 @@ class Production extends Database
                 $nbEpisodes = 0;
                 foreach ($item->seasons as $season) { $nbEpisodes += $season->episode_count; }
                 $this->setTotalEpisodes($nbEpisodes);
-                $this->setPoster($item->id, 'series');
 
                 // Season
                 if(!empty($_POST['seasonNb'])) {
@@ -660,9 +788,7 @@ class Production extends Database
                         $this->setTotalEpisodes($item->seasons[$post['seasonNb']]->episode_count);
                         $this->setNumber($post['seasonNb']);
                         $this->setOverview($item->seasons[$post['seasonNb']]->overview);
-                        $this->setPoster($item->id, 'season');
-                        if($item->seasons[$post['seasonNb']]->poster_path != '')
-                            $this->poster->setTmdbPosterPath(TMDB_IMG_PATH.$item->seasons[$post['seasonNb']]->poster_path);
+                        $this->setPoster($item->seasons[$post['seasonNb']]->poster_path);
 
                         // Episode
                         if(!empty($episode)) {
@@ -676,9 +802,7 @@ class Production extends Database
                             $this->setTotalEpisodes(null);
                             $this->setTotalSeasons(null);
                             $this->setReleaseDate($episode->air_date);
-                            $this->setPoster($item->id, 'episode');
-                            if($item->seasons[$post['seasonNb']]->poster_path != '')
-                                $this->poster->setTmdbPosterPath(TMDB_IMG_PATH . $episode->still_path);
+                            $this->setPoster($episode->still_path);
                         }
                     } else {
                         echo '<p class="error-message-form">La série "'.$this->getTitle().'" ne contient pas de saison n°'.$_POST['seasonNb']."</p>";
@@ -707,7 +831,9 @@ class Production extends Database
         } else {
             // Movie or Series
             $this->dbSave();
-            $this->savePoster();
+            if($this->getPoster()->getPath() != null) {
+                $this->savePoster();
+            }
             $this->saveCrew('actors');
             if($this->getType() == 'movie') {
                 $this->saveCrew('writers');

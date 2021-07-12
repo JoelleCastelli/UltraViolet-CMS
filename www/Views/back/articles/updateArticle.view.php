@@ -1,13 +1,28 @@
 <div>
 
-    <h2>Test : Modifier un article par id</h2>
+    <?php if (isset($errors)) {
+            echo "<div class='error-message-form'>";
+            foreach ($errors as $error) {
+                if (count($errors) == 1)
+                    echo "$error";
+                else
+                    echo "<li>$error</li>";
+            }
+            echo "</div>";
+        }
+    ?>
 
-    <div>
-        <h3>Valeur de l'id :</h3>
-        <?php
-            if (isset($articleId)) echo $articleId;
-            else echo "Article id non définie ou vide";
-        ?>
-    </div>
+    <section class="grid-create-article">
+
+        <section class="card">
+
+            <article>
+                <article class="container-form">
+                    <?php App\Core\FormBuilder::render($form, $data); ?>
+                </article><br>
+            </article>
+        </section>
+
+    </section>
 
 </div>

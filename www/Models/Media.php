@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\FormBuilder;
+use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
 
 class Media extends Database
@@ -10,17 +12,22 @@ class Media extends Database
     use ModelsTrait;
 
     private ?int $id = null;
-    protected string $title;
-    protected string $path;
+    protected ?string $title;
+    // protected ?string $title = null;
+    protected ?string $path = null;
     private ?string $tmdbPosterPath = null;
     protected bool $video = false;
     private string $createdAt;
     private ?string $updatedAt;
     protected ?string $deletedAt = null;
+    private ?array $actions;
 
     public function __construct()
     {
         parent::__construct();
+        $this->actions = [
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute(''), 'role' => 'admin'],
+        ];
     }
 
     public function getId(): ?int
@@ -38,12 +45,12 @@ class Media extends Database
         $this->title = $title;
     }
 
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
-    public function setPath($path): void
+    public function setPath(?string $path): void
     {
         $this->path = $path;
     }
@@ -66,6 +73,16 @@ class Media extends Database
     public function setVideo(int $video): void
     {
         $this->video = $video;
+    }
+
+    public function getActions(): ?array
+    {
+        return $this->actions;
+    }
+
+    public function setActions(?array $actions): void
+    {
+        $this->actions = $actions;
     }
 
     public function getCreatedAt(): string
@@ -93,27 +110,34 @@ class Media extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "medias/chargement",
-                "referer" => 'admin/medias',
+                "action" => '',
+                "referer" => Helpers::callRoute('media_list'),
                 "enctype" => "multipart/form-data"
             ],
             "fields" => [
-
                 "media[]" => [
+                    "id" => "mediaSelector",
                     "type" => "file",
                     "classLabel" => "btn",
                     "class" => "hiddenInputFile",
-                    "label" => "Cliquez pour ajouter un document",
+                    "accept" => ".jpg, .jpeg, .png",
+                    "label" => "Ajouter un fichier",
                     "required" => true,
                     "multiple" => true,
                 ],
-
-              /*  "test" => [
-                    "type" => "hidden",
-                    "value" => "here",
-                    "required" => true,
-                ],*/
+                "csrfToken" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
             ]
         ];
+    }
+
+    public function getCleanCreatedAtDate() {
+        if ($this->getCreatedAt() != '') {
+            return date("d/m/Y", strtotime($this->getCreatedAt()));
+        } else {
+            return "-";
+        }
     }
 }

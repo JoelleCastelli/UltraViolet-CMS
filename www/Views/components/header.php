@@ -1,10 +1,9 @@
 <header class="header">
-    <h1><?= $title ?? 'Titre de la page'?></h1>
+    <h1><?= $title ?? ''?></h1>
     <div class=left-controls>
-        <i class="fas fa-bell"></i>
         <div class="user-label">
             <span><?= \App\Core\Request::getUser()->getPseudo() ?></span>
-            <img src="<?= PATH_TO_IMG. \App\Core\Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
+            <img src="<?= \App\Core\Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
         </div>
     </div>
 </header>

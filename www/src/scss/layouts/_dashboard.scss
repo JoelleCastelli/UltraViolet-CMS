@@ -1,0 +1,209 @@
+#dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    #articles {
+
+        #articlesList {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .articleCard {
+                display: flex;
+                justify-content: space-between;
+                border: solid $grey4 1px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                box-shadow: 2px 2px 5px $grey4;
+                line-height: 1.5;
+
+                align-items: center;
+                height: 60px;
+                padding: 15px;
+
+                .articleInfos {
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                    overflow: hidden;
+
+                    .articleTitle {
+                        font-weight: bolder;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                    }
+                }
+
+                .articleActions {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                    margin-left: 5px;
+                    align-items: center;
+
+                    .comments {
+                        display: flex;
+                        flex-wrap: nowrap;
+
+                        i {
+                            font-size: 20px;
+                            color: $purple;
+                            margin-right: 5px;
+                        }
+
+                        .commentsNb {
+                            position: relative;
+                            top: 10px;
+                            font-size: 12px;
+                        }
+                    }
+
+                    .bubble-actions {
+                        margin-left: 10px;
+                    }
+
+                }
+
+            }
+        }
+    }
+
+
+    #comments {
+
+        #commentsList {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .commentCard {
+                display: flex;
+
+                border: solid $grey4 1px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                box-shadow: 2px 2px 5px $grey4;
+                line-height: 1.5;
+                align-items: center;
+                height: 60px;
+                padding: 15px;
+
+                .userPicture img {
+                    border-radius: 50%;
+                    width: 40px;
+                    border-color: #DFE0EB;
+                    border-style: solid;
+                    border-width: 2px;
+                    padding: 1px;
+                    cursor: pointer;
+                }
+
+                .commentDetails {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    margin-left: 10px;
+                    flex-wrap: nowrap;
+                    overflow: hidden;
+
+                    & > * {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .username {
+                        font-weight: bolder;
+                        margin-right: 20px;
+                    }
+
+                    .articleTitle {
+                        font-size: smaller;
+                        color: $grey7;
+                    }
+                }
+
+                .bubble-actions {
+                    margin-left: auto;
+                    padding-left: 10px;
+                }
+
+            }
+        }
+    }
+
+    #productions {
+
+        #productionsList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+            .productionCard {
+                border: solid $grey4 1px;
+                border-radius: 8px;
+                margin-bottom: 5px;
+                box-shadow: 2px 2px 5px $grey4;
+                display: flex;
+                flex-direction: column;
+                width: 130px;
+                align-items: center;
+                justify-content: center;
+
+                .productionName {
+                    text-align: center;
+                    padding: 5px;
+                    overflow-wrap: anywhere;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 35px;
+                }
+                .productionImg {
+                    border-radius: 8px 8px 0 0;
+                    width: 130px;
+                    min-height: 195px;
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center center;
+
+                    img {
+                        width: 100%;
+                        border-radius: 8px 8px 0 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .card {
+        flex-grow: 1;
+        min-width: 400px;
+        width: 40%;
+        min-height: 400px;
+        margin: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .cardTitle {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        .linkButton {
+            text-align: right;
+        }
+    }
+}

@@ -1,0 +1,40 @@
+#installation {
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+    width: 600px;
+    line-height: 1.5;
+
+    .logo {
+        text-align: center;
+        img {
+            width: 100px;
+        }
+    }
+
+    .details {
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        p {
+            margin-bottom: 10px;
+            margin-top: 10px;
+            text-align: justify;
+        }
+
+        ul {
+            list-style: inside;
+        }
+    }
+
+    form {
+        .btn {
+            margin-top: 10px;
+        }
+    }
+
+    a {
+        color: $white5;
+    }
+}
