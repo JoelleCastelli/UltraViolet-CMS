@@ -19,12 +19,9 @@
     </section>
 
     <div class="background-modal">
-
         <div class="clickable-bg"></div>
-
         <div class="modal-media">
             <h1>Selectionnez l'image de votre article</h1>
-
             <table id="datatable" class="display">
                 <thead>
                 <tr>
