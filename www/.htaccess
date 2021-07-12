@@ -18,6 +18,7 @@ ErrorDocument 404 /Views/front/404.view.php
 
 RedirectMatch 404 /.env
 RedirectMatch 404 .yml*$
+RedirectMatch 404 .sql*$
 
 
 
