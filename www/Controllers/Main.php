@@ -28,6 +28,8 @@ class Main
         // Get last 4 productions
         $productions = $this->getLatestProductions(4);
         $view->assign('productions', $productions);
+
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
 	}
 
 	public function getLatestArticles($limit): array

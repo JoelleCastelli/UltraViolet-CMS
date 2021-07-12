@@ -1,5 +1,6 @@
 <?php
 use App\Core\Helpers;
+use App\Core\Request;
 if(isset($errors)) {
     foreach ($errors as $error) {
         echo "<li>$error</li>";
@@ -16,7 +17,7 @@ if(isset($errors)) {
             <?php if($articles) { ?>
                 <div id='articlesList'>
                     <?php foreach ($articles as $article) { ?>
-                        <div class='articleCard'>
+                        <div id="article-<?=$article->getId()?>" class='articleCard'>
                             <div class="articleInfos">
                                 <div class="articleTitle"><?= $article->getTitle() ?></div>
                                 <div class="articleDetails">Publié le <?= $article->getCleanPublicationDate() ?> par <?= $article->getPerson()->getPseudo() ?></div>
@@ -26,7 +27,9 @@ if(isset($errors)) {
                                     <i class="fas fa-comment-dots"></i>
                                     <span class="commentsNb"><?= count($article->getComments()) ?></span>
                                 </div>
-                                <div class="bubble-actions"></div>
+                                <?php if(!Request::getUser()->isModerator()) {
+                                    echo $article->generateActionsMenu();
+                                } ?>
                             </div>
                         </div>
                     <?php } ?>
@@ -69,7 +72,7 @@ if(isset($errors)) {
                                 </div>
                             </div>
 
-                            <div class="bubble-actions"></div>
+                            <?= $comment->generateActionsMenu() ?>
 
                         </div>
                     <?php } ?>

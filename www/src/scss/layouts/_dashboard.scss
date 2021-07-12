@@ -16,9 +16,8 @@
                 border: solid $grey4 1px;
                 border-radius: 8px;
                 margin-bottom: 10px;
-                box-shadow: 2px 2px 5px $grey4;
+                box-shadow: 1px 1px 2px $grey4;
                 line-height: 1.5;
-
                 align-items: center;
                 height: 60px;
                 padding: 15px;
@@ -47,6 +46,7 @@
                     .comments {
                         display: flex;
                         flex-wrap: nowrap;
+                        margin-right: 15px;
 
                         i {
                             font-size: 20px;
@@ -60,11 +60,6 @@
                             font-size: 12px;
                         }
                     }
-
-                    .bubble-actions {
-                        margin-left: 10px;
-                    }
-
                 }
 
             }
@@ -85,7 +80,7 @@
                 border: solid $grey4 1px;
                 border-radius: 8px;
                 margin-bottom: 10px;
-                box-shadow: 2px 2px 5px $grey4;
+                box-shadow: 1px 1px 2px $grey4;
                 line-height: 1.5;
                 align-items: center;
                 height: 60px;
@@ -126,7 +121,7 @@
                     }
                 }
 
-                .bubble-actions {
+                .actionsMenu {
                     margin-left: auto;
                     padding-left: 10px;
                 }
@@ -146,7 +141,7 @@
                 border: solid $grey4 1px;
                 border-radius: 8px;
                 margin-bottom: 5px;
-                box-shadow: 2px 2px 5px $grey4;
+                box-shadow: 1px 1px 2px $grey4;
                 display: flex;
                 flex-direction: column;
                 width: 130px;

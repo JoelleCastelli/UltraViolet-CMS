@@ -308,7 +308,7 @@ class Database {
         $classPath = explode('\\', get_class($this));
         $class = mb_strtolower(end($classPath));
 
-        $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
+        $actions = "<div class='actionsMenu'><div class='bubble-actions'></div><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
                 $tag = in_array($action['action'], ['delete', 'update-state']) ? "span" : "a";
