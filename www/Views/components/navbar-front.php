@@ -30,8 +30,8 @@ $categoriesNavbar = Category::getMenuCategories();
     if ($user && $user->isLogged()) : ?>
 
         <div class="dropdown">
-            <button class="dropdown-button"><img class="img-profile" src="<?= Request::getUser()->getMedia()->getPath() ?>"></button>
-            <div class="dropdown-content">
+            <img class="img-profile dropdown-button" src="<?= Request::getUser()->getMedia()->getPath() ?>">
+            <div class="dropdown-content dropdown-user">
                 <a href="#">Paramètres</a>
                 <?php if ($user->canAccessBackOffice()) : ?>
                     <a href="<?= Helpers::callRoute('admin') ?>">Administration</a>
