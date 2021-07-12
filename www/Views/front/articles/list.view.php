@@ -13,7 +13,7 @@ use App\Core\Helpers; ?>
 
                 Image : <img style="height: 6rem; width: 10rem" src="<?= $article->getMedia()->getPath(); ?>"><br>
                 Dernière MAJ : <?= $article->getContentUpdatedAt(); ?><br>
-                Titre : <?= $article->getTitle(); ?><br>
+                Titre : <a href="<?= Helpers::callRoute('display_article', ['article' => $article->getSlug()])  ?>"><?= $article->getTitle(); ?></a><br>
                 Description : <?= $article->getDescription(); ?><br>
                 Contenu : <?= $article->getContent(); ?><br>
 
