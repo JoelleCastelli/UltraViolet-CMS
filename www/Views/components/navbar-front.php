@@ -4,7 +4,7 @@ use App\Models\Category;
 use App\Core\Helpers;
 use App\Core\Request;
 
-$categories = Category::getMenuCategories();
+$categoriesNavbar = Category::getMenuCategories();
 ?>
 
 <nav id="navbar-front">
@@ -12,14 +12,14 @@ $categories = Category::getMenuCategories();
         <img src='<?= PATH_TO_IMG ?>logo_uv.png' alt='ultraviolet logo'>
     </a>
 
-    <?php foreach ($categories['main'] as $mainCategory) : ?>
+    <?php foreach ($categoriesNavbar['main'] as $mainCategory) : ?>
         <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
     <?php endforeach; ?>
 
     <div class="dropdown">
         <span class="dropdown-button">Toutes les catégories</span>
         <div class="dropdown-content">
-            <?php foreach ($categories['other']  as $otherCategory) : ?>
+            <?php foreach ($categoriesNavbar['other']  as $otherCategory) : ?>
                 <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($otherCategory->getName())]) ?>"><?= $otherCategory->getName() ?></a>
             <?php endforeach; ?>
         </div>
