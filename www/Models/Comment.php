@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Core\Helpers;
 use App\Core\Database;
 use App\Core\Traits\ModelsTrait;
 
@@ -27,7 +28,14 @@ class Comment extends Database {
         parent::__construct();
         $this->article = new Article();
         $this->person = new Person();
+        $this->actions = [
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('comments_update', ['id' => $this->id]), 'role' => 'moderator'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('comments_delete', ['id' => $this->id]), 'role' => 'moderator'],
+        ];
+        
     }
+
+    
 
     /**
      * @return null
@@ -85,6 +93,14 @@ class Comment extends Database {
         $this->updatedAt = $updatedAt;
     }
 
+      /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
     /**
      * @return int
      */
@@ -115,6 +131,14 @@ class Comment extends Database {
     public function setpersonId(int $personId): void
     {
         $this->personId = $personId;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getActions(): ?array {
+        return $this->actions;
     }
 
     /**

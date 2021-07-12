@@ -11,23 +11,14 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php
 
 
-#<Files ~ "\.yml">
-#Order Allow,Deny
-#Deny from All
-#</Files>
-#
-#<Files ~ "\.json">
-#Order Allow,Deny
-#Deny from All
-#</Files>
-##
-#
-#
-##404
+##  404  ##
 
-#
-#RedirectMatch 404 /\..*$
-#RedirectMatch 404 /\
+#Transfert 404 to view
+ErrorDocument 404 /Views/front/404.view.php
+
+RedirectMatch 404 /.env
+RedirectMatch 404 .yml*$
+
 
 
 

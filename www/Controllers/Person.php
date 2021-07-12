@@ -116,24 +116,35 @@ class Person
 	}
 
     public function getUsersAction() {
-        if(!empty($_POST['role'])) {
-            $users = new PersonModel();
-            $users = $users->selectWhere('role', htmlspecialchars($_POST['role']));
-            
-            if(!$users) $users = [];
-            
-            $usersArray = [];
-            foreach ($users as $user) {
-                $usersArray[] = [
-                    $this->columnsTable['name'] => $user->getFullName(),
-                    $this->columnsTable['pseudo'] => $user->getPseudo(),
-                    $this->columnsTable['mail'] => $user->getEmail(),
-                    $this->columnsTable['checkMail'] => $user->isEmailConfirmed(),
-                    $this->columnsTable['actions'] => $user->generateActionsMenu(),
-                ];
-            }
-            echo json_encode(["users" => $usersArray]);
+        if(empty($_POST)) return;
+
+        $users = new PersonModel();
+
+        if(!empty($_POST['deletedAt'])) {
+            $users = $users->select()->where('deletedAt', 'NOT NULL')->get();
         }
+
+        if (!empty($_POST['role'])) {        
+            $users = $users->select()->where('role', htmlspecialchars($_POST['role']))->andWhere('deletedAt', 'NULL')->get();
+
+        }
+
+        if(!$users) $users = [];
+        
+        $usersArray = [];
+        foreach ($users as $user) {
+            $emailConfirmed = $user->isEmailConfirmed();
+            if ( $emailConfirmed == true ) $emailConfirmed = 'oui';
+            else $emailConfirmed = 'non';
+            $usersArray[] = [
+                $this->columnsTable['name'] => $user->getFullName(),
+                $this->columnsTable['pseudo'] => $user->getPseudo(),
+                $this->columnsTable['mail'] => $user->getEmail(),
+                $this->columnsTable['checkMail'] => $emailConfirmed,
+                $this->columnsTable['actions'] => $user->generateActionsMenu(),
+            ];
+        }
+            echo json_encode(["users" => $usersArray]);
     }
 
 	public function logoutAction() {
@@ -174,13 +185,15 @@ class Person
     }
 
     public function deletePersonAction() {
-            if (!empty($_POST['id'])){ 
+        if (!empty($_POST['id'])){ 
             $user = new PersonModel();
             $id = $_POST['id'];
             $user->setId($id);
+            $user->setPseudo('Anonyme');
+            $user->setEmail('deleted'.$id.'@mail.com');
             $user->delete();
+            $user->save();
             Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
-            
         }else{
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }

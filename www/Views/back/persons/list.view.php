@@ -4,6 +4,7 @@
         <div class="filtering-btn" id="moderator">Modérateurs</div>
         <div class="filtering-btn" id="editor">Rédacteurs</div>
         <div class="filtering-btn" id="admin">Administrateurs</div>
+        <div class="filtering-btn" id="removed">Supprimés</div>
     </div>
 </div>
 
@@ -22,3 +23,9 @@
     </thead>
     <tbody></tbody>
 </table>
+
+
+<div class="filtering-status">
+    <div class="filter-delete active" id="user">Utilisateurs supprimer</div>
+</div>    
+</br>

@@ -39,39 +39,32 @@
                     <span>Oeuvre 3 avec un nom vachement plus long</span>
                     <i class="fas fa-times"></i>
                 </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="filter-tag">
-                    <span>Oeuvre 3 avec un nom vachement plus long</span>
-                    <i class="fas fa-times"></i>
-                </button>
             </article>
-
-        </div>
-    </section>
-
-    <!-- COMMENTS -->
-    <section class="card">
-        <div class="grid-display-list-comments">
-
         </div>
     </section>
 </div>
+
+
+<table id="datatable" class="display">
+    <thead>
+        <tr>
+            <?php if (isset($columnsTable)) {
+                foreach ($columnsTable as $key => $value) {
+                    echo "<th>$value</th>";
+                }
+            } ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($comments as $comment) { ?>
+            <tr>
+                <td><?= $comment->getPerson()->getPseudo()  ?></td>
+                <td><?= $comment->getCreatedAt()            ?></td>
+                <td><?= $comment->getArticle()->getTitle()  ?></td>
+                <td><?= $comment->getContent()              ?></td>
+                <td><?= $comment->getVisible()              ?></td>
+                <td><?= $comment->generateActionsMenu()     ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

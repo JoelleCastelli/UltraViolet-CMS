@@ -182,6 +182,25 @@ comments_list:
   controller: Comment
   action: showAll
 
+comments_delete:
+  path: /admin/commentaires/supprimer
+  controller: Comment
+  action: deleteComment
+  middleware: Moderator
+
+comments_update:
+  path: /admin/commentaires/modification/{id}
+  controller: Comment
+  action: updateComment
+  middleware: Moderator
+  requirements:
+    id: (\d+)
+
+comments_data:
+  path: /admin/commentaires-data
+  controller: Comment
+  action: getComment
+
 # TEMPLATES
 templates_lists:
   path: /admin/templates
