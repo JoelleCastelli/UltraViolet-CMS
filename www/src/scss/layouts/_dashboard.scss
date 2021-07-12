@@ -7,17 +7,21 @@
 
         #articlesList {
 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
             .articleCard {
                 display: flex;
                 justify-content: space-between;
                 border: solid $grey4 1px;
                 border-radius: 8px;
-                margin-bottom: 5px;
+                margin-bottom: 10px;
                 box-shadow: 2px 2px 5px $grey4;
                 line-height: 1.5;
 
                 align-items: center;
-                height: 70px;
+                height: 60px;
                 padding: 15px;
 
                 .articleInfos {

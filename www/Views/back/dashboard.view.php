@@ -18,13 +18,13 @@ if(isset($errors)) {
                     <?php foreach ($articles as $article) { ?>
                         <div class='articleCard'>
                             <div class="articleInfos">
-                                <div class="articleTitle"><?= $article['content']->getTitle() ?></div>
-                                <div class="articleDetails">Publié le <?= $article['content']->getCleanPublicationDate() ?> par <?= $article['content']->getPerson()->getPseudo() ?></div>
+                                <div class="articleTitle"><?= $article->getTitle() ?></div>
+                                <div class="articleDetails">Publié le <?= $article->getCleanPublicationDate() ?> par <?= $article->getPerson()->getPseudo() ?></div>
                             </div>
                             <div class="articleActions">
                                 <div class="comments">
                                     <i class="fas fa-comment-dots"></i>
-                                    <span class="commentsNb"><?= $article['comments'] ?></span>
+                                    <span class="commentsNb"><?= count($article->getComments()) ?></span>
                                 </div>
                                 <div class="bubble-actions"></div>
                             </div>

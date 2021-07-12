@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Controller\Category;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
@@ -33,10 +32,11 @@ class Article extends Database implements JsonSerializable
     private $updatedAt;
     protected $deletedAt;
 
-    public $media;
-    public $person;
+    public Media $media;
+    public Person $person;
+    private array $comments;
 
-    private $actions;
+    private array $actions;
 
     public function __construct() {
         parent::__construct();
@@ -268,6 +268,24 @@ class Article extends Database implements JsonSerializable
     }
 
     /**
+     * @return array
+     */
+    public function getComments(): array
+    {
+        $comments = new Comment();
+        $this->comments = $comments->select()->where('articleId', $this->id)->get();
+        return $this->comments;
+    }
+
+    /**
+     * @param array $comments
+     */
+    public function setComments(array $comments): void
+    {
+        $this->comments = $comments;
+    }
+
+    /**
      * @return mixed
      */
     public function getMediaId()
@@ -334,7 +352,7 @@ class Article extends Database implements JsonSerializable
     /**
      * @return array
      */
-    public function getActions()
+    public function getActions(): array
     {
         return $this->actions;
     }
@@ -386,7 +404,7 @@ class Article extends Database implements JsonSerializable
         if (empty($this->getDeletedAt()) && (strtotime($this->getPublicationDate()) > strtotime("now")))
             return "scheduled";
 
-        return NULL;        
+        return false;
     }
 
     public function getCleanPublicationDate() {
@@ -421,12 +439,6 @@ class Article extends Database implements JsonSerializable
         }
     }
 
-    public function getComments(): array
-    {
-        $comments = new Comment();
-        return $comments->select()->where('articleId', $this->id)->get();
-    }
-
     // JSON FORMAT
     public function jsonSerialize(): array
     {
@@ -450,7 +462,8 @@ class Article extends Database implements JsonSerializable
 
     // FORMS
 
-    public function formBuilderCreateArticle() {
+    public function formBuilderCreateArticle(): array
+    {
 
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
@@ -574,7 +587,8 @@ class Article extends Database implements JsonSerializable
         ];
     }
 
-    public function formBuilderUpdateArticle($articleId) {
+    public function formBuilderUpdateArticle($articleId): array
+    {
 
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
@@ -605,7 +619,7 @@ class Article extends Database implements JsonSerializable
         $categoriesByArticle = $categoryArticle->select()->where("articleId", $articleId, "=")->get();
         $categoryOptions = [];
 
-        // Get all categories and check its checboxes if necessary
+        // Get all categories and check its checkboxes if necessary
         foreach ($categories as $category) {
             $categoryIsAlreadySelected = false;
             foreach ($categoriesByArticle as $categoryArticle) {
@@ -681,7 +695,7 @@ class Article extends Database implements JsonSerializable
                             "value" => "draft",
                             "class" => "stateDraft",
                             "text" => "Brouillon",
-                            "checked" => $state === "draft" ? true : false
+                            "checked" => $state === "draft"
                         ],
                         [
                             "value" => "removed",
@@ -690,7 +704,7 @@ class Article extends Database implements JsonSerializable
                         [
                             "value" => "nothing",
                             "text" => "Ne rien changer",
-                            "checked" => $state !== "draft" ? true : false
+                            "checked" => $state !== "draft"
 
                         ]
                     ],
@@ -702,7 +716,7 @@ class Article extends Database implements JsonSerializable
                     "error" => "Votre date de publication doit être au minimum " . $todayText ,
                     "min" => $today,
                     "value" => $this->getPublicationDate(),
-                    "readonly" => $state !== "scheduled" ? true : false
+                    "readonly" => $state !== "scheduled"
                 ],
                 "media" => [
                     "type" => "select",

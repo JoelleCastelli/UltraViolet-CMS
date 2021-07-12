@@ -17,24 +17,36 @@ class Main
         $view->assignFlash();
 
         // Get last 3 articles
-        $articles = new Article();
-        $articles = $articles->select()->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
-            ->orderBy('publicationDate', 'DESC')->limit(3)->get();
-        $latestArticles = [];
-        foreach ($articles as $article) {
-            $latestArticles[] = ['content' => $article, 'comments' => count($article->getComments())];
-        }
-        $view->assign('articles', $latestArticles);
+        $articles = $this->getLatestArticles(4);
+        $view->assign('articles', $articles);
 
         // Get last 3 comments
-        $comments = new Comment();
-        //$comments = $comments->select()->orderBy('createdAt', 'DESC')->limit(3)->get();
-        $comments = [];
+        $comments = $this->getLatestComments(3);
         $view->assign('comments', $comments);
 
-        // Get last 3 productions
+
+        // Get last 4 productions
+        $productions = $this->getLatestProductions(4);
+        $view->assign('productions', $productions);
+	}
+
+	public function getLatestArticles($limit): array
+    {
+        $articles = new Article();
+        return $articles->select()->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
+            ->orderBy('publicationDate', 'DESC')->limit($limit)->get();
+    }
+
+    public function getLatestComments($limit): array
+    {
+        $comments = new Comment();
+        return $comments->select()->orderBy('createdAt', 'DESC')->limit($limit)->get();
+    }
+
+    public function getLatestProductions($limit): array
+    {
         $productions = new Production();
-        $productions = $productions->select()->orderBy('createdAt', 'DESC')->limit(4)->get();
+        $productions = $productions->select()->orderBy('createdAt', 'DESC')->limit($limit)->get();
         foreach ($productions as $production) {
             if($production->getParentProductionId() != null) {
                 $parentProduction = new Production();
@@ -48,8 +60,8 @@ class Main
             }
             $production->setPoster(null);
         }
-        $view->assign('productions', $productions);
-	}
+        return $productions;
+    }
 
 	public function getRouteAction()
 	{
