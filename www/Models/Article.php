@@ -442,6 +442,17 @@ class Article extends Database implements JsonSerializable
         }
     }
 
+    public function getCategoriesRelated()
+    {
+        $categoryArticleModel = new CategoryArticleModel;
+        $categoryModel = new CategoryModel;
+
+        $categoriesId = $categoryArticleModel->select('categoryId')->where('articleId', $this->id)->get(false);
+        $categories = $categoryModel->select()->whereIn('id', $categoriesId)->get();
+      
+        return $categories;
+    }
+
     // JSON FORMAT
     public function jsonSerialize(): array
     {
