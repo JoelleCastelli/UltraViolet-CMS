@@ -15,6 +15,14 @@ use Exception;
 
 class Installer
 {
+
+    public function __construct()
+    {
+        if (UV_INSTALLED)
+            Helpers::redirect404();
+    } 
+
+
     public function install($route) {
         $action = $route->getAction();
         $this->$action();
