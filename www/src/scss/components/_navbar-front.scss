@@ -14,7 +14,13 @@
     align-items: center;
     padding-right: 50px;
 
+    .img-profile {
+        height: 3rem;
+        width: 3rem;
+    }
+
      a {
+
         &.brandLogo {
             height: $navbarFrontHeight;
 
