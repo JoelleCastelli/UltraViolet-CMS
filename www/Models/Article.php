@@ -485,18 +485,19 @@ class Article extends Database implements JsonSerializable
         $media = new MediaModel();
         $category = new CategoryModel();
 
-        $medias = $media->findAll();
+        
+        // $medias = $media->findAll();
+        // $mediaOptions = [];
+        
+        // foreach ($medias as $media) {
+            //    array_push($mediaOptions, [
+                //         "value" => $media->getId(),
+                //         "text" => $media->getTitle()
+                //    ]);
+                // }
+                
+
         $categories = $category->findAll();
-
-        $mediaOptions = [];
-
-        foreach ($medias as $media) {
-           array_push($mediaOptions, [
-                "value" => $media->getId(),
-                "text" => $media->getTitle()
-           ]);
-        }
-
         $categoryOptions = [];
 
         foreach ($categories as $category) {
@@ -573,12 +574,18 @@ class Article extends Database implements JsonSerializable
                     "min" => $today,
                     "readonly" => true,
                 ],
+                // "media" => [
+                //     "type" => "select",
+                //     "label" => "Image de cover *",
+                //     "class" => "search-bar",
+                //     "options" => $mediaOptions,
+                //     "required" => true,
+                // ],
                 "media" => [
-                    "type" => "select",
-                    "label" => "Image de cover *",
+                    "type" => "text",
+                    "label" => "Media utilisé pour la cover de l'article",
                     "class" => "search-bar",
-                    "options" => $mediaOptions,
-                    "required" => true,
+                    "readonly" => true
                 ],
                 "categories" => [
                     "type" => "checkbox",

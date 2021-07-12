@@ -11,15 +11,3 @@ stateRadios.forEach((state) => {
     }
   });
 });
-
-const mediaCta = document.querySelector("#media-cta");
-const modalMedia = document.querySelector(".background-modal");
-const removeBG = document.querySelector(".clickable-bg");
-
-mediaCta.addEventListener("click", (e) => {
-  modalMedia.classList.toggle("visible");
-});
-
-removeBG.addEventListener("click", (e) => {
-  modalMedia.classList.toggle("visible");
-});

@@ -31,8 +31,6 @@
             <table id="datatable" class="display">
                 <thead>
                 <tr>
-
-                <tr>
                     <th>Miniature</th>
                     <th>Nom</th>
                     <th>Date d'ajout</th>

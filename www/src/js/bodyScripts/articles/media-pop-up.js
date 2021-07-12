@@ -6,6 +6,8 @@ $(document).ready(function () {
     responsive: true,
     columns: [{ data: "Miniature" }, { data: "Nom" }, { data: "Date d'ajout" }],
 
+    columnDefs: [{ className: "media-name-cta", targets: [1] }],
+
     language: {
       sEmptyTable: "Aucune donnée disponible dans le tableau",
       sInfo: "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
@@ -58,16 +60,28 @@ $(document).ready(function () {
   getMediasByType("other");
 });
 
-function listenRowEvents() {
-  const tableRows = document.getElementsByTagName("tr");
-  console.log("tableRows");
-  console.log(tableRows);
+const mediaCta = document.querySelector("#media-cta");
+const modalMedia = document.querySelector(".background-modal");
+const removeBG = document.querySelector(".clickable-bg");
 
-  for (const row of tableRows) {
-    console.log(row);
-    row.addEventListener("click", (e) => {
-      console.log("clickouille");
-      console.log(e.target);
+mediaCta.addEventListener("click", (e) => {
+  modalMedia.classList.toggle("visible");
+});
+
+removeBG.addEventListener("click", (e) => {
+  modalMedia.classList.toggle("visible");
+});
+
+function listenRowEvents() {
+  const mediaCTAs = document.querySelectorAll(".media-name-cta");
+  mediaCTAs.forEach((cta) => {
+    cta.addEventListener("click", (e) => {
+      const media = e.target.innerHTML;
+      console.log("nom du media get : " + media);
+      const input = document.querySelector("#media");
+      input.value = media;
+      console.log(input.value);
+      modalMedia.classList.toggle("visible");
     });
-  }
+  });
 }
