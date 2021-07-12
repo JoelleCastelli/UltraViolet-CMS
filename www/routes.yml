@@ -8,7 +8,7 @@ login:
   controller: Person
   action:     login
 
-subscription:
+register:
   path:       /inscription
   controller: Person
   action:     register
@@ -35,7 +35,7 @@ reset_password:
     key:    (\d+)
 
 forget_password:
-  path:       /forget_password
+  path:       /mot-de-passe-oublie
   controller: Person
   action:     forgetPasswordMail
 
@@ -58,13 +58,16 @@ display_category:
   controller: Category
   action:     showCategoryArticles
   requirements:
-    category: ([a-z0-9]*(?:-[a-z0-9]+)*) # slug format
+    category: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
+
+# PAs google friendly de pouvoir accéder à plusieurs artcile via plusieurs url
+#
+#
 
 # ARTICLE
 display_article:
-  path:       /{category}/{article}
-  controller: Articles
-  action:     showArticles
+  path:       /article/{article}
+  controller: Article
+  action:     showArticle
   requirements:
-    category: ([a-z0-9]*(?:-[a-z0-9]+)*) # slug format
-    article: ([a-z0-9]*(?:-[a-z0-9]+)*) 
+    article: ([a-z0-9]+(?:-[a-z0-9]+)*) 
