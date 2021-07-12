@@ -1,6 +1,4 @@
 $(document).ready(function () {
-  getMediasByType("poster");
-
   /* BUILD DATATABLES */
   let table = $("#datatable").DataTable({
     order: [],
@@ -46,10 +44,10 @@ $(document).ready(function () {
       data: { mediaType },
       dataType: "json",
       success: function (response) {
-        console.log("success media others modal");
         console.log(response);
         table.clear();
         table.rows.add(response).draw();
+        listenRowEvents();
       },
       error: function () {
         console.log("Erreur dans la récupération des médias de type " + mediaType);
@@ -59,3 +57,17 @@ $(document).ready(function () {
 
   getMediasByType("other");
 });
+
+function listenRowEvents() {
+  const tableRows = document.getElementsByTagName("tr");
+  console.log("tableRows");
+  console.log(tableRows);
+
+  for (const row of tableRows) {
+    console.log(row);
+    row.addEventListener("click", (e) => {
+      console.log("clickouille");
+      console.log(e.target);
+    });
+  }
+}

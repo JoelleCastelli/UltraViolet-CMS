@@ -70,7 +70,7 @@ html body .debug {
 }
 
 .background-modal {
-  z-index: 10000;
+  z-index: 100;
   display: none;
   top: 0;
   right: 0;
@@ -78,7 +78,6 @@ html body .debug {
   left: 0;
   background-color: rgba(0, 0, 0, 0.759);
   position: fixed;
-  cursor: pointer;
 }
 
 .visible {
@@ -89,6 +88,7 @@ html body .debug {
 
 .modal-media {
   background: white;
+  z-index: 120;
   position: relative;
   width: 80%;
   height: 80%;
@@ -99,4 +99,14 @@ html body .debug {
   h1 {
     align-self: center;
   }
+}
+
+.clickable-bg {
+  z-index: 110;
+  background: transparent;
+  position: inherit;
+  top: inherit;
+  right: inherit;
+  bottom: inherit;
+  left: inherit;
 }

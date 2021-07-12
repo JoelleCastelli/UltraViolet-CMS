@@ -23,19 +23,19 @@
 
     <div class="background-modal">
 
+        <div class="clickable-bg"></div>
+
         <div class="modal-media">
             <h1>Selectionnez l'image de votre article</h1>
 
             <table id="datatable" class="display">
                 <thead>
                 <tr>
-                    <?php
-                        if (isset($columnsTable)) {
-                            foreach ($columnsTable as $key => $value) {
-                                echo "<th>$value</th>";
-                            }
-                        }
-                    ?>
+
+                <tr>
+                    <th>Miniature</th>
+                    <th>Nom</th>
+                    <th>Date d'ajout</th>
                 </tr>
                 </thead>
                 <tbody></tbody>

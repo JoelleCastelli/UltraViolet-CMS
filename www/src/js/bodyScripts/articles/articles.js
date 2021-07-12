@@ -14,11 +14,12 @@ stateRadios.forEach((state) => {
 
 const mediaCta = document.querySelector("#media-cta");
 const modalMedia = document.querySelector(".background-modal");
+const removeBG = document.querySelector(".clickable-bg");
 
 mediaCta.addEventListener("click", (e) => {
   modalMedia.classList.toggle("visible");
 });
 
-modalMedia.addEventListener("click", (e) => {
+removeBG.addEventListener("click", (e) => {
   modalMedia.classList.toggle("visible");
 });
