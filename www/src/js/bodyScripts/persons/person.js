@@ -63,7 +63,7 @@ $(document).ready(function () {
     $(".filtering-btn").removeClass("active");
     $(this).addClass("active");
     table.columns([0]).visible(true);
-    if (this.id === "user") {
+    if (this.id === "user" || this.id === "removed") {
       table.columns([0]).visible(false);
     }
     if (this.id == "removed") getRemovedUser(this.id);
