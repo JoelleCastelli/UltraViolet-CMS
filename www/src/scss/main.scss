@@ -94,5 +94,9 @@ html body .debug {
   height: 80%;
   display: flex;
   flex-flow: column;
-  align-items: center;
+  align-items: stretch;
+
+  h1 {
+    align-self: center;
+  }
 }

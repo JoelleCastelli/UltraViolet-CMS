@@ -29,7 +29,8 @@ class Article {
         $view->assign("form", $form);
         $view->assign('bodyScripts', [
             "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
-            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js',
+            "media-modal" => PATH_TO_SCRIPTS.'bodyScripts/articles/media-pop-up.js',
         ]);
     
         if (!empty($_POST)) {
