@@ -10,7 +10,6 @@ db_data
 
 # Node modules
 *node_modules
-www/package.json
 
 # builds from the dist directory
 www/dist/

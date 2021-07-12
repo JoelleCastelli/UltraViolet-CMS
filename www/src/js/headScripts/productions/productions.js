@@ -6,6 +6,7 @@ $(document).ready( function () {
         "autoWidth": false,
         responsive: true,
         columns: [
+            { data: 'Miniature' },
             { data: 'Titre' },
             { data: 'Titre original' },
             { data: 'Saison' },
@@ -18,19 +19,20 @@ $(document).ready( function () {
 
         columnDefs: [
             {
-                targets: 7,
+                targets: 8, // Actions column
                 data: "name",
                 searchable: false,
                 orderable: false
             },
-            { width: "16%", targets: 0 },
-            { width: "16%", targets: 1 },
-            { width: "16%", targets: 2 },
-            { width: "16%", targets: 3 },
-            { width: "16%", targets: 4 },
-            { width: "16%", targets: 5 },
-            { width: "16%", targets: 6 },
-            { width: "5%", targets: 7 },
+            { width: "12%", targets: 0 },
+            { width: "12%", targets: 1 },
+            { width: "12%", targets: 2 },
+            { width: "12%", targets: 3 },
+            { width: "12%", targets: 4 },
+            { width: "12%", targets: 5 },
+            { width: "12%", targets: 6 },
+            { width: "12%", targets: 7 },
+            { width: "5%", targets: 8 },
         ],
 
 
@@ -69,8 +71,8 @@ $(document).ready( function () {
     // On start, display movies
     getProductionsByType('movie');
 
-    table.columns([2]).visible(false); // season
-    table.columns([3]).visible(false); // series
+    table.columns([3]).visible(false); // season
+    table.columns([4]).visible(false); // series
     // Display different types on filtering button click
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
@@ -79,25 +81,25 @@ $(document).ready( function () {
 
         switch (this.id) {
             case 'season':
-                table.columns([1]).visible(false); //original title
-                table.columns([2]).visible(false); // season
-                table.columns([3]).visible(true); // series
+                table.columns([2]).visible(false); //original title
+                table.columns([3]).visible(false); // season
+                table.columns([4]).visible(true); // series
                 break
             case 'episode':
-                table.columns([2]).visible(true); // season
-                table.columns([3]).visible(true); // series
+                table.columns([3]).visible(true); // season
+                table.columns([4]).visible(true); // series
                 break;
             default:
-                table.columns([2]).visible(false); // season
-                table.columns([3]).visible(false); // series
-                table.columns([1]).visible(true); //original title
+                table.columns([3]).visible(false); // season
+                table.columns([4]).visible(false); // series
+                table.columns([2]).visible(true); //original title
         }
     });
 
     function getProductionsByType(productionType) {
         $.ajax({
             type: 'POST',
-            url: '/admin/productions/productions-data', //TODO changer l'URL en dur
+            url: callRoute('productions_data'),
             data: { productionType },
             dataType: 'json',
             success: function(response) {
@@ -116,8 +118,8 @@ $(document).ready( function () {
             let row = table.row($(this).parents('tr'));
             $.ajax({
                 type: 'POST',
-                url: '/admin/productions/supprimer',
-                data: { productionId },
+                url: callRoute('production_delete'),
+                data: { productionId: productionId },
                 dataType: 'json',
                 success: function(response) {
                     if (response['success'])

@@ -10,6 +10,7 @@ $(document).ready( function () {
         columns: [
             { data: 'Miniature' },
             { data: 'Nom' },
+            { data: "Date d'ajout" },
             { data: 'Actions' }
         ],
 
@@ -44,16 +45,23 @@ $(document).ready( function () {
         },
     });
 
+    table.columns([3]).visible(false); //actions
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
         $(this).addClass('active');
+
         getMediasByType(this.id);
+
+        if(this.id === 'other')
+            table.columns([3]).visible(true);
+        else
+            table.columns([3]).visible(false);
     });
 
     function getMediasByType(mediaType) {
         $.ajax({
             type: 'POST',
-            url: '/admin/medias/medias-data', //TODO changer l'URL en dur
+            url: callRoute('medias-data'),
             data: { mediaType },
             dataType: 'json',
             success: function(response) {
@@ -83,14 +91,14 @@ $(document).ready( function () {
         });
     });
 
-    /*table.on('click', '.delete', function () {
-        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette production ?')) {
-            let productionId = this.id.substring(this.id.lastIndexOf('-') + 1);
+    table.on('click', '.delete', function () {
+        if (confirm('Êtes-vous sûr.e de vouloir supprimer ce média ?')) {
+            let mediaId = this.id.substring(this.id.lastIndexOf('-') + 1);
             let row = table.row($(this).parents('tr'));
             $.ajax({
                 type: 'POST',
-                url: '/admin/productions/supprimer',
-                data: { productionId },
+                url: callRoute('media_delete'),
+                data: { mediaId: mediaId },
                 dataType: 'json',
                 success: function(response) {
                     if (response['success'])
@@ -99,10 +107,10 @@ $(document).ready( function () {
                         alert(response['message']);
                 },
                 error: function() {
-                    console.log("Erreur dans la suppression de la production ID " + productionId);
+                    console.log("Erreur dans la suppression du média ID " + mediaId);
                 }
             });
         }
-    });*/
+    });
 
 });

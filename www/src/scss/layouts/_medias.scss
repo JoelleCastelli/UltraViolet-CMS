@@ -1,6 +1,6 @@
 .uploadBanner {
 
-    margin-bottom: 10px;
+    margin-top: 10px;
 
     form {
         display: flex;
@@ -29,6 +29,7 @@
 
 #datatable {
     .thumbnail {
-        width: 90px;
+        max-width: 100px;
+        max-height: 100px;
     }
 }

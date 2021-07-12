@@ -19,12 +19,54 @@ class Helpers{
         echo "</pre>";
     }
 
+    public static function cleanDump($data, $title = null) {
+        echo "<div class='debug'>";
+
+        if ($title) {
+            echo "<br>";
+            echo "### ".$title." ###";
+        }
+        echo "<br>";
+        echo "<pre>";
+        var_dump($data);
+        echo "</pre>";
+        echo "<br>";
+
+        echo "</div>";
+    }
+
+    public static function cleanDumpArray($data, $title = null) {
+        echo "<div class='debug'>";
+
+        if ($title) {
+            echo "<br>";
+            echo "### ".$title." ###";
+        }
+        echo "<br>";
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+        echo "<br>";
+
+        echo "</div>";
+    }
+
     public static function sanitizeString($url) {
         return htmlspecialchars(strip_tags($url));
     }
 
     public static function redirect($url, $statusCode = 0) {
         header('Location: ' . $url, true, $statusCode);
+        exit;
+    }
+
+    public static function namedRedirect($routeName, $statusCode = 0) {
+        Helpers::redirect(Helpers::callRoute($routeName), $statusCode);
+    }
+
+    public static function redirect404()
+    {
+        header('HTTP/1.0 404 Not Found');
         exit;
     }
 
@@ -94,6 +136,39 @@ class Helpers{
                 lcfirst($match);
         }
         return implode('_', $ret);
+    }
+
+    /**
+     * Read config file and store data into array
+     * Example: $settings['APP_NAME'] = 'MyApp'
+     */
+    public static function readConfigFile(): array
+    {
+        $settings = [];
+        $config = file('.env.dev', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($config as $setting) {
+            if(substr($setting, 0, 1) !== '#') {
+                $pieces = explode("=", $setting);
+                $settings[$pieces[0]] = htmlspecialchars($pieces[1]);
+            }
+        }
+        return $settings;
+    }
+
+    /**
+     * Update a specific field in config file
+     */
+    public static function updateConfigField($field, $newValue) {
+        $settings = Helpers::readConfigFile();
+        foreach ($settings as $name => $value) {
+            if($name == $field) {
+                $currentSetting = "$name=$settings[$name]";
+                $newSetting = "$name=$newValue";
+                $str = file_get_contents('.env.dev');
+                $str = str_replace($currentSetting, $newSetting, $str);
+                file_put_contents('.env.dev', $str);
+            }
+        }
     }
 
 }

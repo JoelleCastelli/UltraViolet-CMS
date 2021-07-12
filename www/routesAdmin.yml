@@ -1,52 +1,112 @@
+#CONFIG
+configStep1:
+  path:       /installation/introduction
+  controller: Installer
+  action:     step1
+
+configStep2:
+  path:       /installation/database
+  controller: Installer
+  action:     step2
+
+configStep3:
+  path:       /installation/lancement
+  controller: Installer
+  action:     step3
+
+configStep4:
+  path:       /installation/populate-database
+  controller: Installer
+  action:     step4
+
+configStep5:
+  path:       /installation/nouvel-utilisateur
+  controller: Installer
+  action:     step5
+
+configStep6:
+  path:       /installation/conclusion
+  controller: Installer
+  action:     step6
+
 # GLOBAL
 admin:
-  path:       /admin
+  path: /admin
   controller: Main
-  action:     default
+  action: default
 
-routes: 
-  path:       /admin/routes
+routes:
+  path: /admin/routes
   controller: Main
-  action:     getRoute
-  
+  action: getRoute
+
 # PAGES
 pages_list:
-  path:       /admin/pages
+  path: /admin/pages
   controller: Page
-  action:     showAll
-  
+  action: showAll
+
 page_creation:
-  path:       /admin/pages/creation
+  path: /admin/pages/creation
   controller: Page
-  action:     createPage
+  action: createPage
 
 page_delete:
-  path:       /admin/pages/delete
+  path: /admin/pages/delete
   controller: Page
-  action:     deletePage
+  action: deletePage
 
 page_update:
-  path:       /admin/pages/update/{id}
+  path: /admin/pages/update/{id}
   controller: Page
-  action:     updatePage
+  action: updatePage
   requirements:
-    id:       (\d+)
+    id: (\d+)
+
+page_update_state:
+  path: /admin/pages/update-state
+  controller: Page
+  action: updatePageState
 
 page_update_visibility:
-  path:       /admin/pages/update-visibility
+  path: /admin/pages/update-visibility
   controller: Page
-  action:     updateVisibility
+  action: updateVisibility
 
 pages_data:
-  path:       /admin/pages-data
+  path: /admin/pages-data
   controller: Page
-  action:     getPages
+  action: getPages
+
+# CATEGORIES
+categories_list:
+  path: /admin/categories
+  controller: Category
+  action: showAll
+
+category_creation:
+  path: /admin/categories/creation
+  controller: Category
+  action: addCategory
+
+category_update:
+  path: /admin/categories/modifier/{id}
+  controller: Category
+  action: updateCategory
+  requirements:
+    id: (\d+)
+
+category_delete:
+  path: /admin/categories/supprimer
+  controller: Category
+  action: deleteCategory
+  middleware: Admin
 
 # ARTICLES
 articles_list:
-  path:       /admin/articles
+  path: /admin/articles
   controller: Article
-  action:     showAll
+  action: showAll
 
 article_creation:
   path: /admin/articles/creation
@@ -72,126 +132,133 @@ article_data:
   action: getArticles
 
 article_tab_change:
-  path:       /admin/tab-change
+  path: /admin/tab-change
   controller: Article
-  action:     tabChange
+  action: tabChange
 
 # PRODUCTIONS
 productions_list:
-  path:       /admin/productions
+  path: /admin/productions
   controller: Production
-  action:     showAll
+  action: showAll
 
 productions_creation:
-  path:       /admin/productions/creation-manuelle
+  path: /admin/productions/creation-manuelle
   controller: Production
-  action:     addProduction
+  action: addProduction
 
 productions_creation_tmdb:
-  path:       /admin/productions/creation
+  path: /admin/productions/creation
   controller: Production
-  action:     addProductionTmdb
+  action: addProductionTmdb
 
 productions_show_preview:
-  path:       /admin/productions/tmdb-request
+  path: /admin/productions/tmdb-request
   controller: Production
-  action:     ajaxShowPreview
+  action: ajaxShowPreview
 
 productions_data:
-  path:       /admin/productions/productions-data
+  path: /admin/productions/productions-data
   controller: Production
-  action:     getProductions
+  action: getProductions
 
 production_update:
-  path:       /admin/productions/modification/{id}
+  path: /admin/productions/modification/{id}
   controller: Production
-  action:     updateProduction
+  action: updateProduction
   middleware: Editor
   requirements:
-    id:       (\d+)
+    id: (\d+)
 
 production_delete:
-  path:       /admin/productions/supprimer
+  path: /admin/productions/supprimer
   controller: Production
-  action:     deleteProduction
+  action: deleteProduction
   middleware: Editor
-  requirements:
-    id:       (\d+)
 
 # COMMENTS
 comments_list:
-  path:       /admin/commentaires
+  path: /admin/commentaires
   controller: Comment
-  action:     showAll
+  action: showAll
 
 # TEMPLATES
 templates_lists:
-  path:       /admin/templates
+  path: /admin/templates
   controller: Template
-  action:     showAll
+  action: showAll
 
 # STATS
 stats:
-  path:       /admin/statistiques
+  path: /admin/statistiques
   controller: Stats
-  action:     showAll
+  action: showAll
 
 # USERS
 users_list:
-  path:       /admin/utilisateurs
+  path: /admin/utilisateurs
   controller: Person
-  action:     showAll
+  action: showAll
 
 users_data:
-  path:       /admin/utilisateurs/utilisateurs-data
+  path: /admin/utilisateurs/utilisateurs-data
   controller: Person
-  action:     getUsers
+  action: getUsers
 
 users_update:
-  path:       /admin/utilisateurs/modification/{id}
+  path: /admin/utilisateurs/modification/{id}
   controller: Person
-  action:     updatePerson
-  middleware: Editor
+  action: updatePerson
+  middleware: Admin
   requirements:
-    id:       (\d+)
+    id: (\d+)
 
 users_delete:
-  path:       /admin/utilisateurs/supprimer/{id}
+  path: /admin/utilisateurs/supprimer
   controller: Person
-  action:     deletePerson
-  middleware: Editor
-  requirements:
-    id:       (\d+)
+  action: deletePerson
+  middleware: Admin
 
 user_show:
-  path:       /admin/utilisateur
+  path: /admin/utilisateur
   controller: Person
-  action:     show
+  action: show
 
 user_creation:
-  path:       /admin/utilisateurs/creation
+  path: /admin/utilisateurs/creation
   controller: Person
-  action:     add
+  action: add
 
 # MEDIAS
 media_list:
-  path:       /admin/medias
+  path: /admin/medias
   controller: Media
-  action:     showAll
+  action: showAll
 
 media_upload:
-  path:       /admin/medias/chargement
+  path: /admin/medias/chargement
   controller: Media
-  action:     upload
+  action: upload
 
 medias-data:
-  path:       /admin/medias/medias-data
+  path: /admin/medias/medias-data
   controller: Media
-  action:     getMedias
+  action: getMedias
+
+media_delete:
+  path: /admin/medias/supprimer
+  controller: Media
+  action: deleteMedia
+  middleware: Editor
+
+medias_user_data:
+  path: /admin/medias/user
+  controller: Media
+  action: getMediasUser
 
 # SETTINGS
 settings:
-  path:       /admin/parametres
+  path: /admin/parametres
   controller: Settings
   action:     showAll
-  middleware: Admin, Editor, Moderator
+  middleware: Admin

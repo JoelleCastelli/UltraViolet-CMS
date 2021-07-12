@@ -464,14 +464,18 @@ class Production extends Database
         return '';
     }
 
-    public function formBuilderAddProduction() {
-
+    public function formBuilderAddProduction(): array
+    {
         $series = new Production();
         $series = $series->selectWhere('type', 'series');
-        if(empty($series)) $series[0] = "Aucune série disponible";
-        $string = '';
-        foreach ($series as $seriesID => $seriesName) {
-            $string .= '[ "value" => '.$seriesID.', "text" => '.$seriesName.']';
+        if(empty($series)) $series['empty'] = "Aucune série disponible";
+        $seriesOptions = [];
+        $i = 0;
+        if(!isset($series['empty'])) {
+            foreach ($series as $serie) {
+                $seriesOptions[$i]["value"] = $serie->getId();
+                $seriesOptions[$i++]["text"] = $serie->getTitle();
+            }
         }
 
         return [
@@ -481,6 +485,7 @@ class Production extends Database
                 "class" => "form_control card",
                 "id" => "formAddProduction",
                 "submit" => "Valider",
+                "enctype" => "multipart/form-data",
                 "referer" => Helpers::callRoute('productions_creation')
             ],
             "fields" => [
@@ -498,6 +503,14 @@ class Production extends Database
                         [
                             "value"=>"series",
                             "text"=>"Série",
+                        ],
+                        [
+                            "value"=>"season",
+                            "text"=>"Saison",
+                        ],
+                        [
+                            "value"=>"episode",
+                            "text"=>"Episode",
                         ]
                     ],
                 ],
@@ -527,14 +540,6 @@ class Production extends Database
                     "maxLength" => 10,
                     "error" => "Le format de la date est incorrect"
                 ],
-                "overview" => [
-                    "type" => "text",
-                    "placeholder" => "",
-                    "label" => "Résumé",
-                    "class" => "search-bar",
-                    "maxLength" => 1000,
-                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
-                ],
                 "runtime" => [
                     "type" => "number",
                     "placeholder" => "",
@@ -542,11 +547,56 @@ class Production extends Database
                     "class" => "search-bar",
                     "error" => "Le résumé ne peut pas dépasser 1000 caractères"
                 ],
+                "series" => [
+                    "type" => "select",
+                    "placeholder" => "",
+                    "label" => "Nom de la série",
+                    "class" => "search-bar",
+                    "options" => $seriesOptions
+                ],
+                "season" => [
+                    "type" => "select",
+                    "placeholder" => "",
+                    "label" => "Numéro de la saison",
+                    "class" => "search-bar",
+                    "options" => [
+                        [
+                            "value"=>"movie",
+                            "text"=>"Film",
+                        ],
+                        [
+                            "value"=>"series",
+                            "text"=>"Série",
+                        ],
+                        [
+                            "value"=>"season",
+                            "text"=>"Saison",
+                        ],
+                        [
+                            "value"=>"episode",
+                            "text"=>"Episode",
+                        ]
+                    ],
+                ],
                 "number" => [
                     "type" => "number",
                     "placeholder" => "",
                     "label" => "Numéro",
                     "class" => "search-bar",
+                ],
+                "poster" => [
+                    "type" => "file",
+                    "accept" => ".jpg, .jpeg, .png",
+                    "label" => "Poster (uniquement des fichiers JPG, JPEG ou PNG)",
+                    "class" => "search-bar",
+                ],
+                "overview" => [
+                    "type" => "textarea",
+                    "placeholder" => "",
+                    "label" => "Résumé",
+                    "class" => "search-bar",
+                    "maxLength" => 1000,
+                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
                 ],
                 "csrfToken" => [
                     "type"=>"hidden",
@@ -781,8 +831,9 @@ class Production extends Database
         } else {
             // Movie or Series
             $this->dbSave();
-            if($this->getPoster()->getPath() != null)
+            if($this->getPoster()->getPath() != null) {
                 $this->savePoster();
+            }
             $this->saveCrew('actors');
             if($this->getType() == 'movie') {
                 $this->saveCrew('writers');

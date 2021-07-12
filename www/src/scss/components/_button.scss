@@ -11,8 +11,6 @@
 }
 
 .btn {
-    // display: flex;
-    // align-items: center;
     border-radius: 5px;
     background-color: $button-bg;
     color: $button-font-color;
@@ -26,7 +24,6 @@
     box-shadow: 1px 6px 20px -4px $button-shadow-color;
     transition: all 0.3s ease-out;
     padding: 0.5rem 2rem;
-    // min-width: 10rem;
     cursor: pointer;
 
     &:hover {
@@ -42,42 +39,6 @@
         margin-top: 15px;
         margin-bottom: 20px;
     }
-
-    // IDEA, but not the priority
-
-    /*
-    <button class="btn btn-remove">
-        <i class="fas fa-chevron-right"></i>
-            Supprimer
-        <i class="fas fa-chevron-left"></i>
-    </button>
-    */
-
-    // & i:nth-of-type(1) {
-    //     // transform: translateX(-200%);
-    //     left: -150%;
-    //     // color: $transparent;
-    //     color: yellow;
-    // }
-
-    // & i:nth-of-type(2) {
-    //     // transform: translateX(200%);
-    //     right: 150%;
-    //     // color: $transparent;
-    //     color: yellow;
-    // }
-
-    // &:hover {
-    //     & i:nth-of-type(1) {
-    //         transform: translateX(100%);
-    //         color: $white;
-    //     }
-
-    //     & i:nth-of-type(2) {
-    //         transform: translateX(-100%);
-    //         color: $white;
-    //     }
-    // }
 
     // Others alternatives
     &.btn--remove {

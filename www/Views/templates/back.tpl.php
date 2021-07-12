@@ -1,6 +1,5 @@
 <?php
-
-use App\Core\Helpers;
+    use App\Core\Request;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -10,9 +9,11 @@ use App\Core\Helpers;
     <title>UltraViolet - <?= $title ?? ' Back office'?></title>
     <meta name="description" content="UltraViolet - Back office">
     <meta name="robots" content="noindex">
+    <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>favicon.ico"/>
 
     <!--JS-->
     <script src="<?=PATH_TO_DIST.'main.js'?>"></script>
+    <script src="https://cdn.tiny.cloud/1/itne6ytngfhi89x71prh233w7ahp2mgfmc8vwnjxhvue2m6h/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js">
     </script>
     <?php if(isset($headScripts) && !empty($headScripts)) {
@@ -30,10 +31,14 @@ use App\Core\Helpers;
 </head>
 
 <body class="preload">
-    <?php include 'Views/components/sidebar.php' ?>
+    <?php
+        if(UV_INSTALLED === "true")
+            include 'Views/components/sidebar.php'
+    ?>
     <main id="main">
         <?php
-            include 'Views/components/header.php';
+            if(UV_INSTALLED === "true")
+                include 'Views/components/header.php';
             if(isset($flash)) $this->displayFlash($flash);
             include $this->view;
 

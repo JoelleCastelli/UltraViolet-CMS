@@ -10,9 +10,11 @@
 @import "layouts/grid_modify_article";
 @import "layouts/grid-create-article";
 @import "layouts/productions";
+@import "layouts/install";
 @import "layouts/login_subscription";
 @import "layouts/dashboard";
 @import "layouts/medias";
+@import "layouts/settings";
 
 // Components
 @import "components/button";
@@ -37,22 +39,30 @@
 @import "components/modal";
 @import "components/request-response";
 
-
 .preload * {
-    -webkit-transition: none !important;
-    -moz-transition: none !important;
-    -ms-transition: none !important;
-    -o-transition: none !important;
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
 }
 
 #main {
-    height: 100%;
-    margin-left: $sidebarFullWidth;
-    padding-left: 30px;
-    padding-right: 30px;
-    transition: margin 0.4s;
+  height: 100%;
+  margin-left: $sidebarFullWidth;
+  padding-left: 30px;
+  padding-right: 30px;
+  transition: margin 0.4s;
 
-    &.sidebarWrapped {
-        margin-left: $sidebarWrappedWidth;
-    }
+  &.sidebarWrapped {
+    margin-left: $sidebarWrappedWidth;
+  }
+}
+
+html body .debug {
+  z-index: 1000;
+  background: white;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
 }

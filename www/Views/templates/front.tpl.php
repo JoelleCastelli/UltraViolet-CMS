@@ -8,7 +8,9 @@
         <script src="https://cdn.tiny.cloud/1/itne6ytngfhi89x71prh233w7ahp2mgfmc8vwnjxhvue2m6h/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
         <link rel="stylesheet" href="../../dist/main.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
-        <?php if(isset($headScript) && !empty($headScript)) {
+        <?php use App\Core\Helpers;
+
+        if(isset($headScript) && !empty($headScript)) {
             echo "<script src='$headScript'></script>";
         }?>
     </head>
@@ -19,13 +21,13 @@
                 <div class="main-content">
                     <?php
                         if(\App\Core\Request::getUser()->isLogged()) {
-                            echo "<a href='/deconnexion'>Déconnexion</a>";
+                            echo "<a href='".Helpers::callRoute('logout')."'>Déconnexion</a>";
                             if(\App\Core\Request::getUser()->canAccessBackOffice()) {
-                                echo "<a href='/admin'>Administration</a>";
+                                echo "<a href='".Helpers::callRoute('admin')."'>Administration</a>";
                             }
                         } else {
-                            echo "<a href='/connexion'>Connexion</a><br>";
-                            echo "<a href='/inscription'>Inscription</a><br><br>";
+                            echo "<a href='".Helpers::callRoute('login')."'>Connexion</a>";
+                            echo "<a href='".Helpers::callRoute('subscription')."'>Inscription</a>";
                         }
                         if(isset($flash)) $this->displayFlash($flash);
                         include $this->view;

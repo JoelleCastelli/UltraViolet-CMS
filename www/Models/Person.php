@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Controller\Person as ControllerPerson;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\FormBuilder;
 use App\Core\Traits\ModelsTrait;
 use JsonSerializable;
+use App\Core\View;
+use App\Models\Person as PersonModel;
+
 
 
 class Person extends Database implements JsonSerializable
@@ -27,7 +31,7 @@ class Person extends Database implements JsonSerializable
     protected ?string $emailKey;
     protected ?string $password;
     protected bool $emailConfirmed = false;
-    protected bool $option = true;
+    protected bool $optin = true;
 
     // VIP-related
     protected ?int $tmdbId = null;
@@ -41,8 +45,14 @@ class Person extends Database implements JsonSerializable
         parent::__construct();
         $this->media = new Media();
         $this->actions = [
-            ['name' => 'Modifier','action'=> 'modify', 'url' => '/admin/utilisateurs/modification'],
-            ['name' => 'Supprimer', 'action'=> 'delete', 'url' => '/admin/utilisateurs/supprimer']
+
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])] ,
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'admin']
+
+            //['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' =>$this->id])] ,
+            //['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute
+            //('users_delete', ['id' => $this->id]), 'role' => 'admin']
+
         ];
     }
 
@@ -51,7 +61,7 @@ class Person extends Database implements JsonSerializable
     }
 
     public function getTmdbId(): ?int
-    {
+    { 
         return $this->tmdbId;
     }
 
@@ -272,16 +282,16 @@ class Person extends Database implements JsonSerializable
     }
 
     public function setDefaultProfilePicture() {
-        if(file_exists(getcwd().PATH_TO_IMG.'default.jpg')) {
+        if(file_exists(getcwd().PATH_TO_IMG.'default_user.jpg')) {
             $media = new Media();
-            if($media->findOneBy('path', 'default.jpg')) {
-                $defaultImage = $media->findOneBy('path', 'default.jpg');
+            $defaultImage = $media->findOneBy('path', PATH_TO_IMG.'default_user.jpg');
+            if($defaultImage) {
                 $this->setMediaId($defaultImage->getId());
             } else {
                 die("Default image is not in database");
             }
         } else {
-            die('Default image '.getcwd().PATH_TO_IMG.'default.jpg does not exist');
+            die('Default image '.getcwd().PATH_TO_IMG.'default_user.jpg does not exist');
         }
     }
 
@@ -366,7 +376,7 @@ class Person extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "form_register",
                 "submit" => "Se connecter",
-                "referer" => '/connexion'
+                "referer" => Helpers::callRoute('login')
             ],
             "fields" => [
                 "email" => [
@@ -403,7 +413,7 @@ class Person extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "form_register",
                 "submit" => "Valider",
-                "referer" => '/inscription'
+                "referer" => Helpers::callRoute('subscription')
             ],
             "fields" => [
                 "csrfToken" => [
@@ -449,6 +459,79 @@ class Person extends Database implements JsonSerializable
                 ],
             ]
         ];
+    }
+
+    public function formBuilderUpdatePerson($id): array {
+        
+        $user = new Person();
+        
+        $user = $user->findOneBy('id', $id);
+
+        $roles = array("user","moderator","editor","vip","admin");
+        $rolesoptions= [];
+
+        foreach ($roles as $role) {
+            $options = [
+                "value" => $role,
+                "text" => $role
+            ];
+            array_push($rolesoptions, $options);
+         }
+
+        if($user) {
+            return [
+                "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "class" => "form_control card",
+                    "id" => "formUpdateUser",
+                    "submit" => "Valider",
+                    "referer" => Helpers::callRoute('users_update', ['id' => $id])
+
+                ],
+                
+                "fields" => [
+                    "email" => [
+                        "type" => "email",
+                        "label" => "Email *",
+                        "placeholder" => "Email",
+                        "class" => "input",
+                        "id" => "email",
+                        "error" => "Le format du champ e-mail est incorrect",
+                        "required" => true,
+                        "value" => $user->getEmail()
+    
+                    ],
+
+                    "pseudo" => [
+                        "type" => "pseudo",
+                        "label" => "Pseudonyme *",
+                        "placeholder" => "Pseudonyme",
+                        "class" => "input",
+                        "id" => "pseudo",
+                        "error" => "Le format du champs pseudo est incorrect",
+                        "required" => true,
+                        "value" => $user->getPseudo()
+
+                    ],
+
+                    "role" => [
+                        "type" => "select",
+                        "label" => "Role de l'utilisateur",
+                        "class" => "search-bar",
+                        "options" => $rolesoptions,
+                        "required" => true,
+                        "error" => "Vous devez sélectionner un role.",
+                        
+                    ],
+
+                    "csrfToken" => [
+                        "type" => "hidden",
+                        "value" => FormBuilder::generateCSRFToken()
+                    ],
+                ]       
+            ];
+        }
     }
 
     public function formBuilderForgetPassword(): array {

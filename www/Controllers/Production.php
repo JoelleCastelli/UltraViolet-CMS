@@ -4,21 +4,21 @@ namespace App\Controller;
 
 use App\Core\FormValidator;
 use App\Core\Helpers;
+use App\Core\MediaManager;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
-use App\Models\Media;
 use App\Models\ProductionArticle;
 use App\Models\ProductionPerson;
 use App\Models\ProductionMedia;
-use App\Models\Person;
 
 class Production
 {
 
-    protected $columnsTable;
+    protected array $columnsTable;
 
     public function __construct() {
         $this->columnsTable = [
+            "thumbnail" => 'Miniature',
             "title" => 'Titre',
             "originalTitle" => 'Titre original',
             "season" => 'Saison',
@@ -37,6 +37,9 @@ class Production
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/productions.js']);
     }
 
+    /**
+     * Called by AJAX script to display productions filtered by type
+     */
     public function getProductionsAction() {
         if(!empty($_POST['productionType'])) {
             $productions = new ProductionModel();
@@ -48,8 +51,24 @@ class Production
 
             $productionArray = [];
             foreach ($productions as $production) {
+                // Find production key art media and populate poster object
+                $productionMedia = new ProductionMedia();
+                $productionMedia = $productionMedia->select()->where('productionId', $production->getId())->andWhere('keyArt', 1)->first();
+                if($productionMedia) {
+                    $production->getPoster()->setId($productionMedia->getMediaId());
+                    // Display default image if file is not found
+                    if(file_exists(getcwd().$production->getPoster()->getPath()))
+                        $path = $production->getPoster()->getPath();
+                    else
+                        $path = PATH_TO_IMG.'default_poster.jpg';
+                } else {
+                    // Display default image if no key art is associated
+                    $path = PATH_TO_IMG.'default_poster.jpg';
+                }
+
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
+                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$path."'/>",
                     $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
                     $this->columnsTable['season'] => $production->getParentSeasonName(),
                     $this->columnsTable['series'] => $production->getParentSeriesName(),
@@ -63,7 +82,11 @@ class Production
         }
     }
 
+    /**
+     * Manually add a production in the database
+     */
     public function addProductionAction() {
+        // Generate form
         $production = new ProductionModel();
         $form = $production->formBuilderAddProduction();
         $view = new View("productions/add-production");
@@ -71,23 +94,34 @@ class Production
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/addProductionManual.js']);
         $view->assign("form", $form);
 
+        // If form is submitted, check the data and save production
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
-
             if(empty($errors)) {
+                // Set object values
                 $production->setType(htmlspecialchars($_POST['type']));
                 $production->setTitle(htmlspecialchars($_POST['title']));
                 $production->setOriginalTitle(htmlspecialchars($_POST['originalTitle']));
                 $production->setReleaseDate(htmlspecialchars($_POST['releaseDate']));
                 $production->setOverview(htmlspecialchars($_POST['overview']));
-                if($_POST['runtime'] != '')
+                if($_POST['runtime'] != '')     // runtime only accepts integer, no empty string
                     $production->setRuntime(htmlspecialchars($_POST['runtime']));
+                if($_FILES['poster']) {
+                    // If an image is submitted, upload file and update production poster object
+                    $mediaManager = new MediaManager();
+                    $check = $mediaManager->check($_FILES["poster"], $production->getType());
+                    if(empty($check)) {
+                        $mediaManager->uploadFile($mediaManager->getFiles());
+                        $production->getPoster()->setPath(getcwd().PATH_TO_IMG_POSTERS.$production->getType().'/'.htmlspecialchars($mediaManager->getFiles()[0]['path']));
+                    } else {
+                        $errors[] = "Le fichier n'a pas pu être téléchargé, la production n'est pas sauvegardée";
+                    }
+                }
                 $production->save();
                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
                 Helpers::redirect(Helpers::callRoute('productions_list'));
-            } else {
-                $view->assign("errors", $errors);
             }
+            $view->assign("errors", $errors);
         }
     }
 

@@ -14,7 +14,6 @@ if(isset($errors)) {
     <div class="filtering-status">
         <div class="filtering-btn active" id="poster">Poster</div>
         <div class="filtering-btn" id="vip">Portraits</div>
-        <div class="filtering-btn" id="video">Vidéos</div>
         <div class="filtering-btn" id="other">Autres</div>
     </div>
 </div>

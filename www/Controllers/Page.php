@@ -6,12 +6,11 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Models\Page as PageModel;
-use App\Models\PageArticle;
 
 class Page
 {
 
-    protected $columnsTable;
+    protected array $columnsTable;
 
     public function __construct()
     {
@@ -19,7 +18,6 @@ class Page
             "title" => 'Nom de la page',
             "slug" => 'URL de la page',
             "position" => 'Ordre',
-            "articles" => 'Nombre d\'articles',
             "state" => 'Visibilité',
             "actions" => 'Actions'
         ];
@@ -28,39 +26,52 @@ class Page
     public function showAllAction()
     {
         $page = new PageModel();
-        $formCreatePage = $page->formBuilderRegister();
-        $formUpdatePage = $page->formBuilderUpdate();
-        $pages = $page->findAll();
-
-        if (!$pages) $pages = [];
-
+        $view = new View("pages/list");
+        
+        $now = Helpers::getCurrentTimestamp();
+        $pages = $page->select()->where('publicationDate', $now, '<=')->andWhere('state', 'scheduled')->get();
         foreach ($pages as $page) {
-            $page->cleanPublicationDate();
+            $page->setState("published");
+            $page->save();
         }
 
-        $view = new View("pages/list");
-
         $view->assign('title', 'Pages');
-        $view->assign('pages', $pages);
-        $view->assign('formCreatePage', $formCreatePage);
-        $view->assign('formUpdatePage', $formUpdatePage);
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
 
+    public function showStaticPageAction($slug)
+    {
+        $page = new PageModel();
+        $page = $page->select()->where('slug', $slug)->andWhere('state', 'published')->first();
+
+        if(!empty($page)){
+            $view = new View('staticPage', 'front');
+            $view->assign('content', $page->getContent());
+        }else {
+            Helpers::redirect404();
+        }
+
+    }
+
     public function getPagesAction()
     {
-
         if (!empty($_POST['pageType'])) {
             $pageModel = new PageModel();
-            $pageArticle = new PageArticle();
 
             // get pages
             if ($_POST['pageType'] === 'published') {
-                $pages = $pageModel->selectWhere('state', htmlspecialchars($_POST['pageType']));
-                $pages = array_merge($pages, $pageModel->selectWhere('state', 'hidden'));
+                $pages = $pageModel->select()
+                                    ->where('state', htmlspecialchars($_POST['pageType']))
+                                    ->orWhere('state', 'hidden')
+                                    ->orderBy('position')
+                                    ->get();
+
             } else {
-                $pages = $pageModel->selectWhere('state', htmlspecialchars($_POST['pageType']));
+                $pages = $pageModel->select()
+                                    ->where('state', htmlspecialchars($_POST['pageType']))
+                                    ->orderBy('position')
+                                    ->get();
             }
 
             if (!$pages) $pages = [];
@@ -68,15 +79,22 @@ class Page
             $pageArray = [];
             foreach ($pages as $page) {
 
+                if($page->getState() != "deleted"){
+                    $actions = $page->generateActionsMenu();
+                }
+                else{
+                    $page->setActions($page->getActionsDeletedPages());
+                    $actions = $page->generateActionsMenu();
+                }
+
                 $pageArray[] = [
                     $this->columnsTable['title'] => $page->getTitle(),
                     $this->columnsTable['slug'] => $page->getSlug(),
                     $this->columnsTable['position'] => $page->getPosition(),
-                    $this->columnsTable['articles'] => $pageArticle->count("pageId")->where("pageId", $page->getId())->first()->total,
                     $this->columnsTable['state'] => $page->getState() == "hidden" ?
                         '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switch-visibily-page" onclick="toggleSwitch(this)"></div>'
                         : '<div id="page-visibilty-' . $page->getId() . '" class="state-switch switched-on switch-visibily-page" onclick="toggleSwitch(this)"></div>',
-                    $this->columnsTable['actions'] => $page->generateActionsMenu()
+                    $this->columnsTable['actions'] => $actions
                 ];
             }
 
@@ -87,192 +105,174 @@ class Page
         }
     }
 
-    public function createcPageAction()
+    public function createPageAction()
     {
         $page = new PageModel();
-        $view = new View("pages/createPage");
-        $view->assign('title', 'Création d\'une page');
-
         $form = $page->formBuilderRegister();
+
+        $view = new View('pages/create');
+        $view->assign('title', 'Créer une page');
+        $view->assign('form', $form);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/tinymce.js']);
 
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
 
             if (empty($errors)) {
-                $page->setTitle($_POST["title"]);
-                $page->setSlug($_POST["slug"]);
-                $page->setPosition($_POST["position"]);
-                $page->setTitleSeo($_POST["titleSEO"]);
-                $page->setDescriptionSeo($_POST["descriptionSEO"]);
-                $page->setPublicationDate($_POST["publictionDate"]);
-                $page->setState($_POST["state"]);
 
-                $page->save();
-            } else {
-                $view = new View("pages/createPage");
-                $view->assign("errors", $errors);
-            }
-        }
-
-        $view->assign("form", $form);
-    }
-
-    public function createPageAction()
-    {
-
-        $page = new PageModel();
-        $form = $page->formBuilderRegister();
-
-        if (!empty($_POST)) {
-
-            $response = [];
-
-            //$errors = FormValidator::check($form, $_POST);
-            $errors = '';
-
-            if (empty($errors)) {
-
-                if(empty($_POST['slug'])) {
-                    $slug = Helpers::slugify($_POST['title']);
-                } else {
-                    $slug = htmlspecialchars($_POST['slug']);
-                }
-
+                $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
+                $publicationDate  = empty($_POST["publicationDate"]) ? null : $_POST["publicationDate"];
                 $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
+                
+                if (!empty($isNotUniqueSlug)) {
+                    $errors[] = 'Ce slug est déjà existant';
+                }
 
-                if (empty($isNotUniqueSlug)) {
+                if(empty($errors)){
 
+                    $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
                     $page->setSlug($slug);
+                    $page->setTitle($_POST["title"]);
+                    $page->setPosition($_POST["position"]);
+                    $page->setTitleSeo($_POST["titleSeo"]);
+                    $page->setContent($_POST["content"]);
+                    $page->setDescriptionSeo($_POST["descriptionSeo"]);
+                    $page->setCreatedAt(Helpers::getCurrentTimestamp());
+                    $save = $page->save();
 
-                    $stateAndPublicationPage = $this->stateValidator($_POST['publicationDate'], $_POST['state'] ?? null);
-                    $page->setState($stateAndPublicationPage['state']);
-                    $page->setPublicationDate($stateAndPublicationPage['publicationDate']);
+                    if (!$save) 
+                        $errors[] = 'Oops ! Un soucis lors de la sauvegarde est survenu, veuillez recommencer svp';
+                    
+                    if(empty($errors)) {
 
-                    if (!empty($page->getState())) {
+                        Helpers::setFlashMessage('success', 'La page s\'est bien créée');
+                        Helpers::redirect(Helpers::callRoute('pages_list'));
 
-                        $page->setTitle($_POST["title"]);
-                        $page->setPosition(empty($_POST["position"]) ? "2" : $_POST["position"]);
-                        $page->setTitleSeo(empty($_POST["titleSEO"]) ? "mon tire seo deuxième" : $_POST["titleSEO"]);
-                        $page->setDescriptionSeo(empty($_POST["descriptionSEO"]) ? "ma description seo" : $_POST["descriptionSEO"]);
-                        $page->setCreatedAt(Helpers::getCurrentTimestamp());
-                        $save = $page->save();
-
-                        if ($save) {
-                            $response['message'] = 'La page a été créée !';
-                            $response['success'] = true;
-                        } else {
-                            $response['message'] = 'Oulah Oops problème serveur sorry';
-                            $response['success'] = false;
-                        }
-                    } else {
-                        $response['message'] = 'Le statut choisi est incorrect';
-                        $response['success'] = false;
                     }
-                } else {
-                    $response['message'] = 'Ce slug existe déjà AHAH';
-                    $response['success'] = false;
-                }
-            } else {
-                $response['message'] = $errors;
-                $response['success'] = false;
-            }
-            $response['post'] = $_POST;
-
-            echo json_encode($response);
-        }
-    }
-
-    public function updateVisibilityAction()
-    {
-        if (isset($_POST['form'])) {
-
-            if ($_POST['form'] == "changeVisibility") {
-
-                if (isset($_POST['id']) && !empty($_POST['id'])) {
-                    $page = new PageModel();
-                    $page->setId($_POST['id']);
-
-                    if ($page->getState() === "published") {
-                        $page->setState('hidden');
-                    } else if ($page->getState() === "hidden") {
-                        $page->setState('published');
-                    }
-
-                    $page->save();
                 }
             }
+            
+            $view->assign('errors', $errors);
         }
     }
 
     public function updatePageAction($id)
     {
-        $view = new View('pages/createPage');
-
         $page = new PageModel();
-        $form = $page->formBuilderUpdate();
+
+         // if page not exist
+        if (empty($page->findOneBy("id", $id))) {
+            Helpers::redirect(Helpers::callRoute("articles_list"));
+        }
+
+        $form = $page->formBuilderUpdate($id);
+
+        //get page
         $page->setId($id);
+        if($page->getPublicationDate() != null)
+            $page->cleanPublicationDate();
+        $arrayPage = $page->jsonSerialize();
+
+        if (isset($_POST['state']) && ($_POST['state'] !== 'scheduled'))
+            if(isset($_POST['publicationDate']))
+                $_POST['publicationDate'] = '';
+
+        $view = new View('pages/update');
+        $view->assign('form', $form);
+        $view->assign('data', $arrayPage);
+        $view->assign('title', 'Modifier la page n° ' . $page->getId());
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/tinymce.js']);
 
         if (!empty($_POST)) {
 
-            //$errors = FormValidator::check($form, $_POST);
-            $errors = [];
+            $errors = FormValidator::check($form, $_POST);
 
-            if (empty($errors)) {
+                if(empty($errors)) {
 
-                if (empty($_POST['slug'])) {
-                    $slug = Helpers::slugify($_POST['title']);
-                } else {
-                    $slug = htmlspecialchars($_POST['slug']);
-                }
+                $slug = empty($_POST['slug']) ? Helpers::slugify($_POST['title']) : $_POST['slug'];
+                $publicationDate  = empty($_POST["publicationDate"]) ? null : $_POST["publicationDate"];
+                $isNotUniqueSlug = $page->select()->where('slug', $slug)->andWhere('id', $id, "!=")->get(); // check unicity of slug
 
-                $isNotUniqueSlug = $page->selectWhere('slug', $slug); // check unicity of slug
-                if (count($isNotUniqueSlug) < 2) {
+                if (count($isNotUniqueSlug) !== 0)
+                    $errors[] = 'Ce slug est déjà existant';
 
+                if (empty($errors)) {
+
+                    $this->stateValidator($page, $publicationDate, $_POST['state'] ?? null);
                     $page->setSlug($slug);
+                    $page->setTitle($_POST["title"]);
+                    $page->setPosition($_POST["position"]);
+                    $page->setTitleSeo($_POST["titleSeo"]);
+                    $page->setDescriptionSeo($_POST["descriptionSeo"]);
+                    $page->setContent($_POST["content"]);
 
-                    $stateAndPublicationPage = $this->stateValidator($_POST['publicationDate'], $_POST['state']??null);
-                    $page->setState($stateAndPublicationPage['state']);
-                    $page->setPublicationDate($stateAndPublicationPage['publicationDate']);
+                    $save = $page->save();
 
-                    if (!empty($page->getState())) {
+                    if (!$save)
+                        $errors[] = 'Oops, un problème serveur est survenu, veuillez recommencer s\'il vous plaît';
 
-                        $page->setTitle($_POST["title"]);
-                        $page->setPosition(empty($_POST["position"]) ? "2" : $_POST["position"]);
-                        $page->setTitleSeo(empty($_POST["titleSEO"]) ? "mon tire seo deuxième" : $_POST["titleSEO"]);
-                        $page->setDescriptionSeo(empty($_POST["descriptionSEO"]) ? "ma description seo" : $_POST["descriptionSEO"]);
-                        $page->setCreatedAt(Helpers::getCurrentTimestamp());
-                        $save = $page->save();
-
-                        if ($save) {
-                            $response['message'] = 'Votre page a bien été sauvegardée !';
-                            $response['success'] = true;
-                        } else {
-                            $response['message'] = 'Oops, un problème serveur est survenu';
-                            $response['success'] = false;
-                        }
-                    } else {
-                        $response['message'] = 'Erreur : Le statut choisi est incorrect';
-                        $response['success'] = false;
+                    if(empty($errors)){
+                        Helpers::setFlashMessage('success', 'Votre page a bien été modifiée !');
+                        Helpers::redirect(Helpers::callRoute('page_update', ['id' => $id]));
                     }
-                } else {
-                    $response['message'] = 'Erreur : Ce slug est déjà existant';
-                    $response['success'] = false;
-                }
-
-                $view->assign('response', $response);
-
+                } 
             }
+            $view->assign('errors', $errors);
+        }
+    }
+
+    public function updateVisibilityAction()
+    {
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+            $page = new PageModel();
+            $page->setId($_POST['id']);
+
+            if ($page->getState() === "published") {
+                $page->setState('hidden');
+
+            } else if ($page->getState() === "hidden") {
+                $page->setState('published');
+            }
+            $page->save();
+        }
+    }
+
+    public function updatePageStateAction(){
+
+        $page = new PageModel;
+        $response = [];
+
+        // Id validator : set and number
+        // state validator : set and correct
+        // page validator : if exist
+        if(!((isset($_POST['id']) && isset($_POST['state']) && is_numeric($_POST['id']) && 
+            ($_POST['state'] === "hidden" || $_POST['state'] === "draft" ) && 
+            !empty($page->findOneBy('id', $_POST['id']))))){
+
+            $response['message'] = "Une erreur est survenu";
+            $response['success'] = false;
         }
 
-        //get page
-        $arrayPage = $page->jsonSerialize();
-        $arrayPage['publicationDate'] = date("Y-m-d\TH:i:s", strtotime($arrayPage['publicationDate'])); // format date
+        if (empty($response)) { 
 
-        // return view
-        $view->assign('form', $form);
-        $view->assign('data', $arrayPage);
-        $view->assign('title', 'Modifier une page');
+            $page->setId($_POST['id']);
+            $state = $_POST['state'];
+
+            if ($state === "hidden") {
+                $page->setStateToPublishedHidden();
+                $response['message'] = "La page a bien été modifiée";
+                $response['success'] = true;
+            } else if ($state === "draft") {
+                $page->setStateToDraft();
+                $response['message'] = "La page a bien été modifiée";
+                $response['success'] = true;
+            }
+
+            $page->save();
+
+        }  
+        echo json_encode($response);
     }
 
     public function deletePageAction()
@@ -284,43 +284,31 @@ class Page
 
             if($page->getState() == "deleted")
             {
-                $pageArticle = new PageArticle();
-                $check = $pageArticle->hardDelete()->where('pageId', $id)->execute(); // delete foreing keys
-              
-                if($check){
-                    $check = $page->delete();
-                }
+                $check = $page->delete();
             }
             else {
                 $page->setState("deleted");
-                $page->delete();
-                $page->save();
+                $check = $page->delete();
             }
         }
     }
 
-    private function stateValidator($publicationDate, $state)
+    private function stateValidator(&$page, $publicationDate, $state)
     {
 
         /* Set State */
-        if (empty($publicationDate) && $_POST['state'] == 'draft') { // draft
+        if ($state == 'draft') { // draft
+            $page->setStateToDraft();
 
-            $state = 'draft';
-            $publicationDate = null;
-        } else if (!empty($_POST['publicationDate'])) { // scheduled
+        } else if ($state == "scheduled") { // scheduled
+            $page->setStateToScheduled($publicationDate);
 
-            $state = 'scheduled';
-            $publicationDate = htmlspecialchars($_POST['publicationDate']);
+        } else if ($state == 'published' ) { // published
+            $page->setStateToPublished();
 
-        } else if ($_POST['state'] == 'published' && empty($_POST['publicationDate'])) { // published
-
-            $state = 'published';
-            $publicationDate = Helpers::getCurrentTimestamp();
+        } else if ($state == "hidden") {
+            $page->setStateToPublishedHidden();
         }
-
-        return [
-            'publicationDate' => $publicationDate,
-            'state' => $state
-        ];
     }
+
 }

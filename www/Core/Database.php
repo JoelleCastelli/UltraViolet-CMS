@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use Exception;
+
 class Database {
 
     protected ?\PDO $pdo = null;
@@ -15,16 +17,16 @@ class Database {
         if ($this->pdo === null) {
             if (ENV === "dev") {
                 try {
-                    $this->pdo = new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
+                    $this->pdo = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
                     $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
                 } catch (Exception $e) {
-                    die("Erreur SQL : " . $e->getMessage());
+                    die("Erreur SQL (dev mode) : " . $e->getMessage());
                 }
             } else if (ENV === "prod") {
                 try {
-                    $this->pdo = new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
+                    $this->pdo = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
                 } catch (Exception $e) {
-                    die("Erreur connexion bdd côté production");
+                    die("La connexion à la base de données n'a pas pu être effectuée");
                 }
             }
         }
@@ -64,6 +66,7 @@ class Database {
             foreach ($columns as $key => $value) {
                 if(gettype($value) === "boolean" && $value === false) { $columns[$key] = 0; }
             }
+            
             return $query->execute($columns);
         } catch (\Exception $e) {
             echo "EXCEPTION : Incorrect query<br>" . $e->getMessage();
@@ -90,7 +93,7 @@ class Database {
     }
 
     public function findOneBy($column, $value)  {
-        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'.$value.'"');
+        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'.htmlspecialchars($value).'"');
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetch();
     }
@@ -104,7 +107,7 @@ class Database {
 
     public function selectWhere($column, $value): array
     {
-        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'.$value.'"');
+        $query = $this->pdo->query('SELECT * FROM '.$this->table.' WHERE `'.$column.'` = "'. htmlspecialchars($value).'"');
         $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
         return $query->fetchAll();
     }
@@ -131,11 +134,12 @@ class Database {
         } else {
             // soft
             $this->setDeletedAt(Helpers::getCurrentTimestamp());
-            $this->save();
+            return $this->save();
         }
     }
 
-    public function hardDelete() {
+    public function hardDelete(): Database
+    {
         $this->query = 'DELETE FROM ' . $this->table . ' ';
         return $this;
     }
@@ -185,7 +189,7 @@ class Database {
 
     public function whereIn($column, $value): Database
     {
-        $this->query .= 'WHERE `' . $column . '` IN ' . $value . ' ';
+        $this->query .= 'WHERE `' . $column . '` IN ' . htmlspecialchars($value, ENT_QUOTES) . ' ';
         return $this;
     }
 
@@ -250,13 +254,20 @@ class Database {
         return $this;
     }
 
-    public function get(): array
+    public function get($setFetchMode = true): array
     {
         $query = $this->pdo->query($this->query);
-        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
+        if ($setFetchMode)
+            $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
         try {
-            return $query->fetchAll();
-        }catch (\Exception $e) {
+            if ($setFetchMode)
+                return $query->fetchAll();
+            else
+                return $query->fetchAll(\PDO::FETCH_COLUMN);
+
+        } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
         }
@@ -273,11 +284,20 @@ class Database {
         }
     }
 
-    public function first(){
+    public function first($setFetchMode = true)
+    {
         $query = $this->pdo->query($this->query);
-        $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
+        if ($setFetchMode)
+            $query->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
         try {
-            return $query->fetch();
+
+            if ($setFetchMode)
+                return $query->fetch();
+            else
+                return $query->fetch(\PDO::FETCH_COLUMN);
+
         } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
             die();
@@ -291,8 +311,12 @@ class Database {
         $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
-                $tag = $action['action'] == "delete" ? "span" : "a";
-                $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$action['action']."' href='".$action['url']."'>".$action['name']."</$tag>";
+                $tag = in_array($action['action'], ['delete', 'update-state']) ? "span" : "a";
+                $class = $action['class'] ?? $action['action'];
+                if($tag === 'a')
+                    $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</$tag>";
+                else
+                    $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . "' >" . $action['name'] . "</$tag>";
             }
         }
         $actions .= "</div></div>";

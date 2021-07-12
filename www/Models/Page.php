@@ -21,17 +21,25 @@ class Page extends Database implements JsonSerializable
 	protected $titleSeo;
 	protected $descriptionSeo;
 	protected $publicationDate;
+    protected $content;
 	protected $createdAt;
 	protected $updatedAt;
 	protected $deletedAt;
 
     private $actions;
+    private $actionsDeletedPages;
 
 	public function __construct(){
 		parent::__construct();
-          $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
+		$this->actions = [
+		    ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
+        ];
+
+        $this->actionsDeletedPages = [
+            ['name' => 'Supprimer définitivement', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Restaurer en tant que brouillon', 'action' => 'update-state', 'class' => 'state-draft', 'url' => Helpers::callRoute('page_update_state'), 'role' => 'admin'],
+            ['name' =>'Restaurer en tant que publiée', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('page_update_state'), 'role' => 'admin'],
         ];
 	}
 
@@ -158,6 +166,22 @@ class Page extends Database implements JsonSerializable
     /**
      * @return mixed
      */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content): void
+    {
+        $this->content = $content;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -203,16 +227,59 @@ class Page extends Database implements JsonSerializable
         $this->deletedAt = $deletedAt;
     }
 
-     /**
+    /**
+     * @param array
+     */
+    public function setActions($actions): void
+    {
+        $this->actions = $actions;
+    }
+    /**
      * @return array
      */
+    public function getActionsDeletedPages()
+    {
+        return $this->actionsDeletedPages;
+    }
+
+    /**
+    * @return array
+    */
     public function getActions()
     {
         return $this->actions;
     }
 
     public function cleanPublicationDate() {
-        $this->setPublicationDate(date("d/m/Y", strtotime($this->getPublicationDate())));
+        $this->setPublicationDate(date("Y-m-d\TH:i", strtotime($this->getPublicationDate())));
+    }
+
+    public function setStateToPublished()
+    {
+        $this->setState("published");
+        $this->setPublicationDate(Helpers::getCurrentTimestamp());
+        $this->setDeletedAt(null);
+    }
+
+    public function setStateToPublishedHidden()
+    {
+        $this->setState("hidden");
+        $this->setPublicationDate(null);
+        $this->setDeletedAt(null);
+    }
+
+    public function setStateToScheduled($publicationDate)
+    {
+        $this->setState("scheduled");
+        $this->setPublicationDate($publicationDate);
+        $this->setDeletedAt(null);
+    }
+
+    public function setStateToDraft()
+    {
+        $this->setState("draft");
+        $this->setDeletedAt(null);
+        $this->setPublicationDate(null);
     }
 
     public function jsonSerialize(): array
@@ -226,6 +293,7 @@ class Page extends Database implements JsonSerializable
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),
+            "content" => $this->getContent(),
             "createdAt" => $this->getCreatedAt(),
             "updatedAt" => $this->getUpdatedAt(),
             "deletedAt" => $this->getDeletedAt()
@@ -245,10 +313,11 @@ class Page extends Database implements JsonSerializable
             return true;
     }
 
-    /* public function formBuilderRegister() 
+    public function formBuilderRegister() 
 	{
 
-        $today = date("Y-m-d");
+        $today = date("Y-m-d\TH:i");
+        $todayText = date("Y-m-d H:i");
 
 		return [
 			"config"=>[
@@ -257,84 +326,86 @@ class Page extends Database implements JsonSerializable
 				"class"=>"form_control form-add-page",
 				"id"=>"form_register",
 				"submit"=>"Ajout d'une page",
-                "required_inputs"=>5
+                "referer" => Helpers::callRoute('page_creation')
 			],
 			"fields"=>[
 				"title" => [
-				    "type"=>"text",
-                    "placeholder"=>"Animées",
-                    "label"=>"Votre Titre :",
-                    "class"=>"search-bar",
-                    "minLength"=>2,
-                    "maxLength"=>25,
-                    "error"=>"Votre titre doit faire entre 2 et 25 caractères",
-                    "required" => true
+                    "type" => "text",
+                    "placeholder" => "Animées",
+                    "label" => "Titre *",
+                    "class" => "search-bar",
+                    "error" => "Votre titre doit faire entre 1 et 100 caractères",
+                    "required" => true,
+                    "minLength" => 1,
+                    "maxLength" => 100
                 ],
 				"slug"=>[
-                    "type"=>"text",
-                    "placeholder"=>"meilleure-serie",
-                    "label"=>"Votre slug :",
-                    "class"=>"search-bar",
-                    "minLength"=>2,
-                    "maxLength"=>15,
-                    "error"=>"Votre slug doit faire entre 2 et 15 caractères",
-                    "required" => true
+                    "type" => "text",
+                    "placeholder" => "meilleures-animees",
+                    "label" => "Slug",
+                    "class" => "search-bar",
+                    "error" => "Votre slug est incorrect et doit faire entre 1 et 100 caractères",
+                    "minLength" => 1,
+                    "maxLength" => 100,
+                    "regex" => "/^[a-z0-9]+(?:-[a-z0-9]+)*$/", // correct slug
                 ],
 				"position"=>[
-                    "type"=>"text",
-                    "placeholder"=>"3",
-                    "label"=>"Position :",
-                    "class"=>"search-bar",
-                    "minLength"=>1,
-                    "maxLength"=>1,
-                    "error"=>"Votre position doit étre entre 1 et 4",
-                    "required"=>true,
-                ],
-				"titleSEO"=>[
-                    "type"=>"text",
-                    "placeholder"=>"Titre pour le référencement",
-                    "label"=>"titleSEO :",
-                    "class"=>"search-bar",
-                    "minLength"=>2,
-                    "maxLength"=>50,
-                    "error"=>"Votre titleSEO doit étre entre 2 et 50"
-                ],
-				"descriptionSEO"=>[
-                    "type"=>"text",
-                    "placeholder"=>"META description",
-                    "label"=>"META description :",
-                    "class"=>"search-bar",
-                    "minLength"=>2,
-                    "maxLength"=>255,
-                    "error"=>"Votre descriptionSEO doit étre entre 2 et 255"
-                ],
-                "publicationDate"=>[
-                    "type"=>"date",
-                    "placeholder"=>"publication",
-                    "label"=>"Date de publication :",
-                    "class"=>"search-bar",
-                    "min"=>$today,
-                    "max"=>"2030-12-31",
-                    "error"=>"Votre date de publication doit être entre".$today." et 31-12-2030",
-                    "required" => true
-
-                ],
-                "state"=>[
-                    "type"=>"radio",
-                    "label"=>"État :",
-                    "class"=>"",
-                    "error"=>"Erreur test",
+                    "type" => "number",
+                    "placeholder" => "3",
+                    "label" => "Position * ",
+                    "class" => "search-bar",
+                    "error" => "Le champs position est vide et doit être supérieur à 0",
+                    "min" => 1,
+                    "max" => 127,
                     "required" => true,
+                ],
+				"titleSeo"=>[
+                    "type"=>"text",
+                    "placeholder" => "Titre pour le référencement",
+                    "label" => "Titre SEO",
+                    "class" => "search-bar",
+                ],
+				"descriptionSeo"=>[
+                    "type"=>"text",
+                    "label" => "Description SEO",
+                    "placeholder" => "Description de la page",
+                    "class"=>"search-bar",
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "placeholder" => "Contenu de la page",
+                    "class" => "input",
+                ],
+                "state" => [
+                    "type" => "radio",
+                    "label" => "État *",
+                    "class" => "state",
+                    "required" => true,
+                    "error" => "Le champs état est vide",
                     "options" => [
                         [
-                            "value"=>"draft",
-                            "text"=>"Brouillon",
+                            "value" => "draft",
+                            "class" => "stateDraft",
+                            "text" => "Brouillon"
                         ],
                         [
-                            "value"=>"published",
-                            "text"=>"Publier",
-                        ]
+                            "value" => "published",
+                            "class" => "statePublished",
+                            "text" => "Publier maintenant"
+                        ],
+                        [
+                            "value" => "scheduled",
+                            "class" => "stateScheduled",
+                            "text" => "Planifier"
+                        ],
                     ],
+                ],
+                "publicationDate" => [
+                    "type" => "datetime-local",
+                    "label" => "Date de la planification",
+                    "class" => "search-bar publicationDateInput",
+                    "error" => "Votre date de publication doit être au minimum " . $todayText ,
+                    "min" => $today,
                 ],
                 "csrfToken" => [
                     "type"=>"hidden",
@@ -343,163 +414,109 @@ class Page extends Database implements JsonSerializable
 			]
 		];
 	}
-    */
 
-    public function formBuilderRegister()
+    public function formBuilderUpdate($id)
     {
-
-        $today = date("Y-m-d");
+        $today = date("Y-m-d\TH:i");
+        $todayText = date("Y-m-d H:i");
 
         return [
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control form-add-page",
-                "id" => "form_register",
-                "submit" => "Valider",
-                "required_inputs" => 5
+                "class" => "form_control",
+                "id" => "",
+                "submit" => "Modifier la page",
+                "referer" => Helpers::callRoute('page_update', ['id' => $id])
             ],
+
             "fields" => [
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Critiques de séries",
-                    "label" => "Titre* :",
+                    "placeholder" => "Animées",
+                    "label" => "Titre *",
                     "class" => "search-bar",
-                    "error" => "Le titre doit contenir entre 2 et 25 caractères",
+                    "error" => "Votre titre doit faire entre 1 et 100 caractères",
+                    "required" => true,
+                    "minLength" => 1,
+                    "maxLength" => 100
                 ],
                 "slug" => [
                     "type" => "text",
-                    "placeholder" => "critiques-de-series",
-                    "label" => "Slug :",
+                    "placeholder" => "meilleures-animees",
+                    "label" => "Slug",
                     "class" => "search-bar",
-                    "error" => "Le slug doit contenir entre 2 et 15 caractères",
+                    "error" => "Votre slug est incorrect et doit faire entre 1 et 100 caractères",
+                    "minLength" => 1,
+                    "maxLength" => 100,
+                    "regex" => "/^[a-z0-9]+(?:-[a-z0-9]+)*$/", // correct slug
                 ],
                 "position" => [
-                    "type" => "text",
+                    "type" => "number",
                     "placeholder" => "3",
-                    "label" => "Position* :",
+                    "label" => "Position * ",
                     "class" => "search-bar",
-                    "error" => "La position doit être comprise entre 1 et 4",
-                ],
-                "titleSEO" => [
-                    "type" => "text",
-                    "placeholder" => "Nos critiques des meilleures séries TV",
-                    "label" => "Meta-title :",
-                    "class" => "search-bar",
-                    "error" => "Le meta-title contenir entre 2 et 50 caractères"
-                ],
-                "descriptionSEO" => [
-                    "type" => "text",
-                    "placeholder" => "Retrouvez nos dernières critiques sur les meilleures séries du moment !",
-                    "label" => "Meta-description :",
-                    "class" => "search-bar",
-                    "error" => "La meta-description doit contenir entre 2 et 255 caractères"
-                ],
-                "state" => [
-                    "type" => "radio",
-                    "label" => "État * :",
-                    "class" => "",
-                    "error" => "Erreur test",
-                    "options" => [
-                        [
-                            "value" => "draft",
-                            "text" => "Brouillon",
-                        ],
-                        [
-                            "value" => "published",
-                            "text" => "Publier maintenant",
-                        ]
-                    ],
-                ],
-                "publicationDate" => [
-                    "type" => "datetime-local",
-                    "placeholder" => "publication",
-                    "label" => "Ou plus tard : ",
-                    "class" => "search-bar",
-                    "error" => "Votre date de publication doit être entre " . $today . " et 31-12-2030",
-
-                ],
-                "csrfToken" => [
-                    "type" => "hidden",
-                    "value" => FormBuilder::generateCSRFToken(),
-                ]
-            ]
-        ];
-    }
-
-    public function formBuilderUpdate()
-    {
-
-        $today = date("Y-m-d");
-
-        return [
-            "config" => [
-                "method" => "POST",
-                "action" => "",
-                "class" => "form_control form-add-page",
-                "id" => "form_update",
-                "submit" => "Modifier une page",
-                "required_inputs" => 5
-            ],
-            "fields" => [
-                "title" => [
-                    "type" => "text",
-                    "placeholder" => "Critiques de séries",
-                    "label" => "Titre * :",
-                    "class" => "search-bar",
-                    "error" => "Le titre doit contenir entre 2 et 25 caractères",
-                ],
-                "slug" => [
-                    "type" => "text",
-                    "placeholder" => "critiques-de-series",
-                    "label" => "Slug :",
-                    "class" => "search-bar",
-                    "error" => "Le slug doit contenir entre 2 et 15 caractères",
-                ],
-                "position" => [
-                    "type" => "text",
-                    "placeholder" => "3",
-                    "label" => "Position dans le menu* :",
-                    "class" => "search-bar",
-                    "error" => "La position doit être comprise entre 1 et 4",
+                    "error" => "Le champs position est vide et doit être supérieur à 0",
+                    "min" => 1,
+                    "max" => 127,
+                    "required" => true,
                 ],
                 "titleSeo" => [
                     "type" => "text",
-                    "placeholder" => "Nos critiques des meilleures séries TV",
-                    "label" => "Meta-title :",
+                    "placeholder" => "Titre pour le référencement",
+                    "label" => "Titre SEO",
                     "class" => "search-bar",
-                    "error" => "Le meta-title contenir entre 2 et 50 caractères"
                 ],
                 "descriptionSeo" => [
                     "type" => "text",
-                    "placeholder" => "Retrouvez nos dernières critiques sur les meilleures séries du moment !",
-                    "label" => "Meta-description :",
+                    "label" => "Description SEO",
+                    "placeholder" => "Description de la page",
                     "class" => "search-bar",
-                    "error" => "La meta-description doit contenir entre 2 et 255 caractères"
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "placeholder" => "Contenu de la page",
+                    "class" => "input",
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État * :",
+                    "label" => "État *",
                     "class" => "",
-                    "error" => "Erreur test",
+                    "required" => true,
+                    "error" => "Le champs état est vide",
                     "options" => [
                         [
+                            "id" => "draft",
                             "value" => "draft",
-                            "text" => "Brouillon",
+                            "class" => "stateDraft",
+                            "text" => "Brouillon"
                         ],
                         [
+                            "id" => "published",
                             "value" => "published",
-                            "text" => "Publier maintenant",
+                            "class" => "statePublished",
+                            "text" => "Publier maintenant"
+                        ],
+                        [
+                            "id" => "scheduled",
+                            "value" => "scheduled",
+                            "class" => "stateScheduled",
+                            "text" => "Planifier"
+                        ],
+                        [
+                            "id" => "hidden",
+                            "value" => "hidden",
+                            "class" => "statePublishedHidden",
+                            "text" => "Publier mais cacher"
                         ]
                     ],
                 ],
                 "publicationDate" => [
                     "type" => "datetime-local",
-                    "placeholder" => "publication",
-                    "label" => "Ou plus tard : ",
-                    "class" => "search-bar",
-                    "error" => "Votre date de publication doit être entre " . $today . " et 31-12-2030",
-
+                    "label" => "Date de la planification",
+                    "class" => "search-bar publicationDateInput",
+                    "error" => "Votre date de publication doit être au minimum " . $todayText,
+                    "min" => $today,
                 ],
                 "csrfToken" => [
                     "type" => "hidden",

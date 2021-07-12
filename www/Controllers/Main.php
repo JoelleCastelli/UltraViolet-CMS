@@ -16,15 +16,19 @@ class Main
 		$view->assign('title', 'Back office');
         $view->assignFlash();
 
+        // Get last 3 articles
         $articles = new Article();
-        $articles = $articles->select()->where('deletedAt', null)->andWhere('publicationDate', date('Y-m-d H:i:s'), '<=')
+        $articles = $articles->select()->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
             ->orderBy('publicationDate', 'DESC')->limit(3)->get();
         $view->assign('articles', $articles);
 
+        // Get last 3 comments
         $comments = new Comment();
+        //$comments = $comments->select()->orderBy('createdAt', 'DESC')->limit(3)->get();
         $comments = [];
         $view->assign('comments', $comments);
 
+        // Get last 3 productions
         $productions = new Production();
         $productions = $productions->select()->orderBy('createdAt', 'DESC')->limit(4)->get();
         foreach ($productions as $production) {
@@ -41,7 +45,6 @@ class Main
             $production->setPoster(null);
         }
         $view->assign('productions', $productions);
-
 	}
 
 	public function getRouteAction()

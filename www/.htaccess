@@ -1,9 +1,34 @@
 
 RewriteEngine On 
 
+#Transfert 404 to view
+ErrorDocument 404 /Views/front/404.view.php
+
 RewriteCond %{REQUEST_FILENAME} !-f 
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule . /index.php [L]
+#RewriteRule .env [B,PT]
+RewriteRule . /index.php
+
+
+#<Files ~ "\.yml">
+#Order Allow,Deny
+#Deny from All
+#</Files>
+#
+#<Files ~ "\.json">
+#Order Allow,Deny
+#Deny from All
+#</Files>
+##
+#
+#
+##404
+
+#
+#RedirectMatch 404 /\..*$
+#RedirectMatch 404 /\
+
+
 
 

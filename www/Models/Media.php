@@ -12,7 +12,8 @@ class Media extends Database
     use ModelsTrait;
 
     private ?int $id = null;
-    protected string $title;
+    protected ?string $title;
+    // protected ?string $title = null;
     protected ?string $path = null;
     private ?string $tmdbPosterPath = null;
     protected bool $video = false;
@@ -25,7 +26,6 @@ class Media extends Database
     {
         parent::__construct();
         $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('')],
             ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute(''), 'role' => 'admin'],
         ];
     }
@@ -131,5 +131,13 @@ class Media extends Database
                 ]
             ]
         ];
+    }
+
+    public function getCleanCreatedAtDate() {
+        if ($this->getCreatedAt() != '') {
+            return date("d/m/Y", strtotime($this->getCreatedAt()));
+        } else {
+            return "-";
+        }
     }
 }

@@ -6,6 +6,7 @@ use App\Core\Helpers;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Core\Mail;
+use App\Core\Request;
 use App\Models\Person as PersonModel;
 
 class Person
@@ -24,29 +25,20 @@ class Person
     }
 
     public function showAllAction() {
-        $persons = new PersonModel();
-        $persons = $persons->selectWhere('role', 'admin');
-        if(!$persons) $persons = [];
-
-
         $view = new View("persons/list");
         $view->assign('title', 'Utilisateurs');
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/person.js']);
     }
-
+    
 	public function defaultAction() {
 		echo "User default";
 	}
 
-	public function deleteAction() {
-	    $user = new PersonModel();
-	    $user->getId();
-	    $user->setDeletedAt(Helpers::getCurrentTimestamp());
-	    $user->save();
-    }
-
     public function loginAction() {
+
+        $this->redirectHomeIfLogged();
+
         $user = new PersonModel();
         $view = new View("login", "front");
         $form = $user->formBuilderLogin();
@@ -78,6 +70,9 @@ class Person
     }
 
 	public function registerAction() {
+
+        $this->redirectHomeIfLogged();
+
 		$user = new PersonModel();
         $view = new View('register', 'front');
         $form = $user->formBuilderRegister();
@@ -86,30 +81,31 @@ class Person
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)) {
-                if($user->findOneBy("pseudo", $_POST['pseudo'])) {
+                // Check if pseudo is available
+                if($user->findOneBy("pseudo", $_POST['pseudo']))
                     $errors[] = 'Ce pseudonyme est indisponible';
-                }
-                if($user->findOneBy("email", $_POST['email'])) {
+                // Check if email is not already in database
+                if($user->findOneBy("email", $_POST['email']))
                     $errors[] = 'Cette adresse e-mail est déjà utilisée';
-                }
+
+                // If no error in form, populate Person object and save in the database
                 if(empty($errors)) {
                     $user->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $user->setEmail(htmlspecialchars($_POST['email']));
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
-                    //$user->setDefaultProfilePicture();
-                    $user->setMediaId(1);
                     $user->generateEmailKey();
+                    $user->setDefaultProfilePicture();
+                    $user->save();
 
+                    // Send confirmation email
                     $to   = $_POST['email'];
                     $from = 'ultravioletcms@gmail.com';
-                    $name = 'Ultaviolet';
-                    $subj = 'Confirmation mail';
+                    $name = 'UltraViolet';
+                    $subj = 'UltraViolet - Confirmez votre email';
                     $msg = $user->verificationMail($_POST['pseudo'], $user->getEmailKey());
-                    
                     $mail = new Mail();
                     $mail->sendMail($to, $from, $name, $subj, $msg);
-                    $user->save();
-                
+
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
                     vous a été envoyé sur " .$_POST['email'].". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
                     Helpers::redirect('/connexion');
@@ -145,51 +141,53 @@ class Person
         Helpers::redirect('/');
     }
 
-    public function updateAction()
-    {
-        $user = new UserModel();
-        $user->setId(3);
-        $user->setFirstname("NON");
-        $user->setCountry("pr");
-        $user->setRole("6");
-        $user->save();
-    }
-
-	//Method : Action
-	public function addAction(){
-		
-		//Récupérer le formulaire
-		//Récupérer les valeurs de l'internaute si il y a validation du formulaire
-		//Vérification des champs (uncitié de l'email, complexité du pwd, ...)
-		//Affichage du résultat
-
-	}
-
     public function updatePersonAction($id) {
-        if(!empty($id)){
-            echo 'salut';
-        }
+        if (!empty($id)){ 
+            // Helpers::cleanDumpArray($id,'id post');
+            $user = new PersonModel();
+            $form = $user->formBuilderUpdatePerson($id);
 
+            $view = new View("persons/update");
+            $view->assign('title', 'Modifier un utilisateur');
+            $view->assign("form", $form);
+            
+            $user->setId($id);
+
+            // If form is submitted, check the data and save the category
+            if(!empty($_POST)) {
+                $errors = FormValidator::check($form, $_POST);
+                if(empty($errors)) {
+                    $user->setEmail(htmlspecialchars($_POST["email"]));
+                    $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
+                    $user->setRole(htmlspecialchars($_POST["role"]));
+                    
+                    $user->save();
+                    
+                    Helpers::setFlashMessage('success', "L'utilisateur a bien été mise à jour");
+                    Helpers::redirect(Helpers::callRoute('users_list'));
+                    
+                } else {
+                    $view->assign("errors", $errors);
+                }
+            }
+        }
     }
 
-    public function deletePersonAction($id) {
-        if(!empty($id)){
-            $persons->setId($id);
-            $persons->delete();
-            $response['success'] = true;
-            $response['message'] = "Cette personne à bien été supprier";
+    public function deletePersonAction() {
+            if (!empty($_POST['id'])){ 
+            $user = new PersonModel();
+            $id = $_POST['id'];
+            $user->setId($id);
+            $user->delete();
+            Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
+            
         }else{
-            $response['success'] = false;
-            $response['message'] = "Cette personne ne peut pas être supprimée : l'id n'existe pas";
+            Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }
-        echo json_encode($response);
-
     }
 
     
-
 	public function showAction(){
-		
 		//Affiche la vue user intégrée dans le template du front
 		$view = new View("user"); 
 	}
@@ -207,11 +205,11 @@ class Person
                 $user->setEmailConfirmed(1);
 
                 $user->save();
-                Helpers::setFlashMessage('success', "Votre compte à bien était activée.");
+                Helpers::setFlashMessage('success', "Votre compte a bien était activé");
                 Helpers::redirect('/connexion');
             }else
             {
-                Helpers::setFlashMessage('error', "Votre compte est déja activée");
+                Helpers::setFlashMessage('error', "Votre compte est déjà activé");
             }
 
         }else 
@@ -277,4 +275,12 @@ class Person
             $view->assign("errors", $errors);
         }
 	}
+
+    public function redirectHomeIfLogged()
+    {
+        $user = Request::getUser();
+        if ($user && $user->isLogged()) {
+            Helpers::namedRedirect('front_home');
+        }
+    }
 }

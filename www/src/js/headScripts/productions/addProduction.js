@@ -28,7 +28,7 @@ $(document).ready(function() {
     $("#productionPreviewRequest").click(function() {
         $.ajax({
             type: 'POST',
-            url: '/admin/productions/tmdb-request',
+            url: callRoute('productions_show_preview'),
             data: $('#formAddProductionTmdb').serialize(),
             success: function(response) {
                 $("#production-preview").html(response);
