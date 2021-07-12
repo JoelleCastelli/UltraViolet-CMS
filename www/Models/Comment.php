@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Core\Helpers;
 use App\Core\Database;
-use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
 
 class Comment extends Database {
@@ -178,14 +177,6 @@ class Comment extends Database {
     public function setPerson(Person $person): void
     {
         $this->person = $person;
-    }
-
-    /**
-     * @return array[]
-     */
-    public function getActions(): array
-    {
-        return $this->actions;
     }
 
 }
