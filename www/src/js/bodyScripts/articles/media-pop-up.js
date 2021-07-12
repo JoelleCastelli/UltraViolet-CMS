@@ -60,11 +60,11 @@ $(document).ready(function () {
   getMediasByType("other");
 });
 
-const mediaCta = document.querySelector("#media-cta");
+const input = document.querySelector("#media");
 const modalMedia = document.querySelector(".background-modal");
 const removeBG = document.querySelector(".clickable-bg");
 
-mediaCta.addEventListener("click", (e) => {
+input.addEventListener("click", (e) => {
   modalMedia.classList.toggle("visible");
 });
 
@@ -78,7 +78,7 @@ function listenRowEvents() {
     cta.addEventListener("click", (e) => {
       const media = e.target.innerHTML;
       console.log("nom du media get : " + media);
-      const input = document.querySelector("#media");
+
       input.value = media;
       console.log(input.value);
       modalMedia.classList.toggle("visible");

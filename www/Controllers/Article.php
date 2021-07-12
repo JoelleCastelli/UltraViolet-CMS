@@ -22,6 +22,7 @@ class Article {
 
     public function createArticleAction() {
         $article = new ArticleModel();
+        $media = new MediaModel();
         $form = $article->formBuilderCreateArticle();
 
         $view = new View("articles/createArticle");
@@ -37,6 +38,8 @@ class Article {
 
             $errors = FormValidator::check($form, $_POST);
             if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
+            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+            if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
             if (empty($errors)) {
 
@@ -49,7 +52,7 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setMediaId($mediaId);
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {

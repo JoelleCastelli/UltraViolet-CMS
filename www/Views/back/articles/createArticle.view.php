@@ -12,9 +12,6 @@
     }
     ?>
 
-
-    <button class="btn" id="media-cta">POP Media modal</button> 
-
     <section>
 
         <?php App\Core\FormBuilder::render($form, true); ?>

@@ -140,4 +140,9 @@ class Media extends Database
             return "-";
         }
     }
+
+    public function getMediaByTitle($title) {
+        $media = $this->select("id")->where("title", $title)->first(0);
+        return !empty($media) ? $media : -1;
+    }
 }
