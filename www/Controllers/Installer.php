@@ -18,8 +18,8 @@ class Installer
 
     public function __construct()
     {
-        if (UV_INSTALLED)
-            Helpers::redirect404();
+        if (UV_INSTALLED == 'true') Helpers::redirect404();
+            
     } 
 
 
