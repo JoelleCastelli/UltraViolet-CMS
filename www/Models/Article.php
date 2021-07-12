@@ -421,6 +421,12 @@ class Article extends Database implements JsonSerializable
         }
     }
 
+    public function getComments(): array
+    {
+        $comments = new Comment();
+        return $comments->select()->where('articleId', $this->id)->get();
+    }
+
     // JSON FORMAT
     public function jsonSerialize(): array
     {

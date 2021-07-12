@@ -20,7 +20,11 @@ class Main
         $articles = new Article();
         $articles = $articles->select()->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
             ->orderBy('publicationDate', 'DESC')->limit(3)->get();
-        $view->assign('articles', $articles);
+        $latestArticles = [];
+        foreach ($articles as $article) {
+            $latestArticles[] = ['content' => $article, 'comments' => count($article->getComments())];
+        }
+        $view->assign('articles', $latestArticles);
 
         // Get last 3 comments
         $comments = new Comment();

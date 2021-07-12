@@ -9,10 +9,10 @@ class Comment extends Database {
 
     use ModelsTrait;
 
-    private $id = null;
+    private ?int $id = null;
     protected string $content;
-    protected bool $visible;
-    protected string $updatedAt;
+    protected bool $visible = true;
+    protected ?string $updatedAt;
 
     // Foreign keys
     protected int $articleId;
@@ -32,7 +32,7 @@ class Comment extends Database {
     /**
      * @return null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -70,17 +70,17 @@ class Comment extends Database {
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): ?string
     {
         return $this->updatedAt;
     }
 
     /**
-     * @param string $updatedAt
+     * @param string|null $updatedAt
      */
-    public function setUpdatedAt(string $updatedAt): void
+    public function setUpdatedAt(?string $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
