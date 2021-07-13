@@ -197,6 +197,15 @@ b {
     cursor: pointer;
 }
 
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+input, textarea {
+  font-size: 16px;
+}
+
 @-webkit-keyframes fadeOut {
   from {
     opacity: 1;

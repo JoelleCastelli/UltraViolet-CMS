@@ -13,8 +13,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?= APP_NAME ?> - <?= $title ?? ''?></title>
-    <meta name="description" content="Description du front">
+    <title><?= isset($title) && $title  != "" ? APP_NAME.' - '.$title : META_TITLE ?></title>
+    <meta name="description" content="<?= META_DESC ?>">
     <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>favicon.ico"/>
 
     <!--JS-->
