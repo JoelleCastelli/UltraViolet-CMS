@@ -127,7 +127,8 @@ class Helpers{
         return $text;
     }
 
-    public static function convertToSnakeCase($input) {
+    public static function convertToSnakeCase($input): string
+    {
         $pattern = '!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!';
         preg_match_all($pattern, $input, $matches);
         $ret = $matches[0];
@@ -146,7 +147,8 @@ class Helpers{
     public static function readConfigFile(): array
     {
         $settings = [];
-        $config = file('.env.dev', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $envFile = Helpers::getEnv() == 'dev' ? '.env.dev' : '.env';
+        $config = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($config as $setting) {
             if(substr($setting, 0, 1) !== '#') {
                 $pieces = explode("=", $setting);
@@ -163,11 +165,25 @@ class Helpers{
         $settings = Helpers::readConfigFile();
         foreach ($settings as $name => $value) {
             if($name == $field) {
-                $currentSetting = "$name=$settings[$name]";
+                $envFile = Helpers::getEnv() == 'dev' ? '.env.dev' : '.env';
+                $currentSetting = "$name=$value";
                 $newSetting = "$name=$newValue";
-                $str = file_get_contents('.env.dev');
+                $str = file_get_contents($envFile);
                 $str = str_replace($currentSetting, $newSetting, $str);
-                file_put_contents('.env.dev', $str);
+                file_put_contents($envFile, $str);
+            }
+        }
+    }
+
+    /**
+     * Get the ENV value in .env file
+     */
+    public static function getEnv() {
+        $config = file('.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($config as $setting) {
+            if(substr($setting, 0, 1) !== '#') {
+                $pieces = explode("=", $setting);
+                if($pieces[0] == "ENV") return $pieces[1];
             }
         }
     }

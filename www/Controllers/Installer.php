@@ -18,8 +18,8 @@ class Installer
 
     public function __construct()
     {
+        // Prevent access ton installer if already installed
         if (UV_INSTALLED == 'true') Helpers::redirect404();
-            
     } 
 
 
@@ -57,7 +57,7 @@ class Installer
 
                 // Check if connection is successful
                 try {
-                    new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
+                    new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT, DBUSER, DBPWD);
                 } catch (Exception $e) {
                     $errors[] = "Nous n'avons pas pu nous connecter à votre base de données. Veuillez vérifier vos informations";
                 }
