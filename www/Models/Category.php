@@ -13,7 +13,7 @@ class Category extends Database
     private ?int $id = null;
     protected string $name;
     protected int $position;
-    protected string $createdAt;
+    private string $createdAt;
     private ?string $updatedAt;
     private ?array $actions;
 

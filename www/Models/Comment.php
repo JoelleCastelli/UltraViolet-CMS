@@ -13,7 +13,7 @@ class Comment extends Database {
     private ?int $id = null;
     protected string $content;
     private string $createdAt;
-    protected ?string $updatedAt;
+    private ?string $updatedAt;
     protected ?string $deletedAt = null;
 
     // Foreign keys
