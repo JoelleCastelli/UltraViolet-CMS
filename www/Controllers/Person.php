@@ -215,10 +215,6 @@ class Person
             }else{
                 //SOFT DELETE USER
 
-                //Rename pseudo & mail
-                $user->setPseudo('Anonyme'.$id);
-                $user->setEmail('deleted'.$id.'@mail.com');
-
                 //Articles SOFT delete
                 $articles = new ArticleModel();
                 $articles = $articles->select()->where( "personId" , $id)->get();
