@@ -6,6 +6,7 @@ use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Models\Category as CategoryModel;
 use App\Core\View;
+use App\Models\CategoryArticle;
 
 class Category
 {
@@ -94,12 +95,20 @@ class Category
      * Delete a category in the database
      */
     public function deleteCategoryAction() {
-        if(!empty($_POST['categoryId'])) {
+        if(!empty($_POST['categoryId']) && is_numeric($_POST['categoryId'])) {
             $response = [];
             $category = new CategoryModel();
-            if($category->hardDelete()->where('id', $_POST['categoryId'])->execute()) {
-                $response['success'] = true;
-                $response['message'] = 'La catégorie a bien été supprimée';
+            $categoryArticle = new CategoryArticle();
+            
+            if($categoryArticle->hardDelete()->where('categoryId', $_POST['categoryId'])->execute())
+            {
+                if ($category->hardDelete()->where('id', $_POST['categoryId'])->execute()) {
+                    $response['success'] = true;
+                    $response['message'] = 'La catégorie a bien été supprimée';
+                } else {
+                    $response['success'] = false;
+                    $response['message'] = 'La catégorie n\'a pas pu être supprimée';
+                }
             } else {
                 $response['success'] = false;
                 $response['message'] = 'La catégorie n\'a pas pu être supprimée';
