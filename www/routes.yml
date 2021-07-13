@@ -60,9 +60,6 @@ display_category:
   requirements:
     category: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
 
-# PAs google friendly de pouvoir accéder à plusieurs artcile via plusieurs url
-#
-#
 
 # ARTICLE
 display_article:
@@ -70,4 +67,9 @@ display_article:
   controller: Article
   action:     showArticle
   requirements:
-    article: ([a-z0-9]+(?:-[a-z0-9]+)*) 
+    article: ([a-z0-9]+(?:-[a-z0-9]+)*)
+
+sitemap:
+  path:       /sitemap.xml
+  controller: Main
+  action:     generateSitemap
