@@ -17,6 +17,11 @@
     <div class="article">
         <h1><?= $article->getTitle() ?></h1>
         <small>Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getPublicationDate() ?></small>
+        <div>
+            <?php foreach($article->getCategories() as $category) : ?>
+                <p><?= $category->getName() ?></p>
+            <?php endforeach; ?>
+        </div>
     </div>
 
     <div class="production"></div>

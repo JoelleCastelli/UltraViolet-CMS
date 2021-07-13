@@ -196,21 +196,23 @@ class Article {
     /* FRONT FUNCTIONS */
     /***************** */
 
-    public function showArticleAction($articleSlug)
-    {
-        // Get article from slug
-        $article = new ArticleModel;
-        $article = $article->select()->where('slug', $articleSlug)->andWhere('deletedAt', "NULL")->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->first();
-        if(empty($article))
-            Helpers::redirect404();
+    public function showArticleAction($articleSlug) {
+        $articleModel = new ArticleModel;
+        
+        //get article published and correct slug
+        $article = $articleModel->select()
+        ->where('slug', $articleSlug)
+        ->andWhere('deletedAt', "NULL")
+        ->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->first(); 
 
-        $categories = $article->getCategoriesRelated();
+        if(empty($article))
+        Helpers::redirect404();
+        
+        $article->getCategoriesRelated();
 
         $view = new View('articles/article', 'front');
         $view->assign('title', $article->getTitle());
         $view->assign('description', $article->getDescription());
         $view->assign('article', $article);
-        $view->assign('categories', $categories);
     }
-
 }

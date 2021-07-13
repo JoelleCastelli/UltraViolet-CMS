@@ -294,6 +294,10 @@ class Article extends Database implements JsonSerializable
         return $this->actions;
     }
 
+    public function getCategories() : array {
+        return $this->categories;
+    }
+
     // MODEL-BASED FUNCTIONS
 
     public function getArticlesBySate($state) : array {
@@ -392,6 +396,7 @@ class Article extends Database implements JsonSerializable
         $categoriesId = $categoryArticleModel->select('categoryId')->where('articleId', $this->id)->get(false);
         $categories = $categoryModel->select()->whereIn('id', $categoriesId)->get();
       
+        $this->categories = $categories;
         return $categories;
     }
 
