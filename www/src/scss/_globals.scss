@@ -193,6 +193,10 @@ b {
   -moz-animation: 3s fadeOut 7s forwards;
 }
 
+.clickable-tag {
+    cursor: pointer;
+}
+
 @-webkit-keyframes fadeOut {
   from {
     opacity: 1;

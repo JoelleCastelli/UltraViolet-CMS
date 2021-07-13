@@ -329,7 +329,7 @@ class Database {
                 if($tag === 'a')
                     $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</$tag>";
                 else
-                    $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . "' >" . $action['name'] . "</$tag>";
+                    $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . " clickable-tag' >" . $action['name'] . "</$tag>";
             }
         }
         $actions .= "</div></div>";
