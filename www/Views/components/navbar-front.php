@@ -4,6 +4,7 @@ use App\Models\Category;
 use App\Core\Helpers;
 use App\Core\Request;
 
+$user = Request::getUser();
 $categoriesNavbar = Category::getMenuCategories();
 ?>
 
@@ -16,32 +17,33 @@ $categoriesNavbar = Category::getMenuCategories();
         <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
     <?php endforeach; ?>
 
-    <div class="dropdown">
-        <span class="dropdown-button">Toutes les catégories</span>
+    <?php if(!empty($categoriesNavbar['other'])) { ?>
+    <div id='otherCategories' class="dropdown dropdown-button">
+        <span>Toutes les catégories</span>
         <div class="dropdown-content">
             <?php foreach ($categoriesNavbar['other']  as $otherCategory) : ?>
                 <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($otherCategory->getName())]) ?>"><?= $otherCategory->getName() ?></a>
             <?php endforeach; ?>
         </div>
     </div>
+    <?php } ?>
 
     <?php
-    $user = Request::getUser();
-    if ($user && $user->isLogged()) : ?>
 
-        <div class="dropdown">
-            <img class="img-profile dropdown-button" src="<?= Request::getUser()->getMedia()->getPath() ?>">
+    if ($user && $user->isLogged()) : ?>
+        <div id='userImage' class="dropdown dropdown-button">
+            <img src="<?= Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
             <div class="dropdown-content dropdown-user">
                 <a href="#">Paramètres</a>
                 <?php if ($user->canAccessBackOffice()) : ?>
                     <a href="<?= Helpers::callRoute('admin') ?>">Administration</a>
                 <?php endif; ?>
-                <a href="<?= Helpers::callRoute('logout') ?>">Deconnexion</a>
+                <a href="<?= Helpers::callRoute('logout') ?>">Déconnexion</a>
             </div>
         </div>
 
     <?php else : ?>
-        <a href="<?= Helpers::callRoute('register') ?>"><button class="btn btn-register">S'inscrire</button></a>
+        <a href="<?= Helpers::callRoute('register') ?>"><button class="btn btn-register">Inscription</button></a>
         <a href="<?= Helpers::callRoute('login') ?>"><button class="btn btn-login">Connexion</button></a>
     <?php endif; ?>
 
