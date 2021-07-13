@@ -67,11 +67,12 @@ class FormValidator
     }
 
     public static function numberInputValidator($numberInput, $fieldConfig, &$errors){
+    
         if($fieldConfig["type"] == "number") {
-            if (!empty($fieldConfig["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
+            if (isset($fieldConfig["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
                 $errors[] = $fieldConfig["error"];
             }
-            if (!empty($fieldConfig["max"]) && is_numeric($fieldConfig["max"]) && $numberInput > $fieldConfig["max"]) {
+            if (isset($fieldConfig["max"]) && is_numeric($fieldConfig["max"]) && $numberInput > $fieldConfig["max"]) {
                 $errors[] = $fieldConfig["error"];
             }
         }
