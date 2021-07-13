@@ -6,6 +6,8 @@
     </div>
 </div>
 
+<p class="error-message-form">Une position 0 équivaut à ne pas afficher la catégorie sur le site !</p>
+
 <table id="datatable" class="display">
     <thead>
         <tr>
@@ -17,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach($categories as $category) { ?>
+        <?php foreach ($categories as $category) { ?>
             <tr>
                 <td><?= $category->getName() ?></td>
                 <td><?= $category->getPosition() ?></td>
