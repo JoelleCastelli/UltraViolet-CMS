@@ -179,7 +179,7 @@ class Article {
                 "Slug" => $article->getSlug(),
                 "Auteur" => $article->getPerson()->getPseudo(),
                 "Vues" => $article->getTotalViews(),
-                "Commentaire" => "[NOMBRE COMMENTAIRE]",
+                "Commentaire" => count($article->getComments()),
                 "Date creation" => $article->getCreatedAt(),
                 "Date publication" => $article->getPublicationDate(),
                 "Actions" => $article->generateActionsMenu()
