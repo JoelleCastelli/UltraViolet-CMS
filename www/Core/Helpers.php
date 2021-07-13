@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Core\PhpMailer\SMTP;
 use App\Models\Category;
 class Helpers{
 
@@ -12,6 +13,14 @@ class Helpers{
 	public static function getCurrentTimestamp(){
         $dateNow = new \DateTime('now');
         return $dateNow->format("Y-m-d H:i:s");
+    }
+
+    public static function isStrictlyEmpty(&$var) : bool
+    {
+        if (isset($var) && empty($var)) {
+            return (is_numeric($var) || is_string($var)) && $var != "0";
+        } else
+            return false;
     }
 
     public static function dd($data) {
