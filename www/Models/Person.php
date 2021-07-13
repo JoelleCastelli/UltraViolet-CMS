@@ -53,7 +53,7 @@ class Person extends Database implements JsonSerializable
 
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])] ,
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' =>'Restaurer l\'utilisateur', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('users_update_state'), 'role' => 'admin'],
+            ['name' =>'Restaurer', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('users_update_state'), 'role' => 'admin'],
         ];
     }
 

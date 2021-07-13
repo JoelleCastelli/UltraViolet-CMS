@@ -136,6 +136,16 @@ class Person
         
         $usersArray = [];
         foreach ($users as $user) {
+
+            if($user->getDeletedAt()){
+                $user->setActions($user->getActionsDeletedPerson());
+                $actions = $user->generateActionsMenu();
+                
+            }
+            else{
+                $actions = $user->generateActionsMenu();
+            }
+
             $emailConfirmed = $user->isEmailConfirmed();
             if ( $emailConfirmed == true ) $emailConfirmed = 'oui';
             else $emailConfirmed = 'non';
@@ -144,7 +154,7 @@ class Person
                 $this->columnsTable['pseudo'] => $user->getPseudo(),
                 $this->columnsTable['mail'] => $user->getEmail(),
                 $this->columnsTable['checkMail'] => $emailConfirmed,
-                $this->columnsTable['actions'] => $user->generateActionsMenu(),
+                $this->columnsTable['actions'] => $actions,
             ];
         }
             echo json_encode(["users" => $usersArray]);
