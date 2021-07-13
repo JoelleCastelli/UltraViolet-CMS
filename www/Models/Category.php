@@ -13,7 +13,7 @@ class Category extends Database
     private ?int $id = null;
     protected string $name;
     protected int $position;
-    protected string $createdAt;
+    private string $createdAt;
     private ?string $updatedAt;
     private ?array $actions;
 
@@ -169,7 +169,7 @@ class Category extends Database
     public static function getMenuCategories()
     {
         $category = new Category;
-        $categories = $category->select()->where('position', 0, ">")->orderBy('position')->orderBy('name')->get();
+        $categories = $category->select()->where('position', 1, ">")->orderBy('position')->orderBy('name')->get();
 
         $mainCategories = array_splice($categories, 0, 5);
 
