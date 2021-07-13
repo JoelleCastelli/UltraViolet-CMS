@@ -159,9 +159,10 @@ class Database {
     // WHERE
     public function where($column, $value, $equal = "=" ): Database
     {
-        if($value == 'NOT NULL') {
+
+        if($value === 'NOT NULL') {
             $this->query .= 'WHERE `' . $column . '` IS NOT NULL ';
-        } else if ($value == 'NULL') {
+        } else if ($value === 'NULL') {
             $this->query .= 'WHERE `' . $column . '` IS NULL ';
         } else {
             $this->query .= 'WHERE `' . $column . '` ' . $equal . ' "' . htmlspecialchars($value, ENT_QUOTES) . '" ';
