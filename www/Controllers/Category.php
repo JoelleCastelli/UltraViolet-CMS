@@ -76,7 +76,7 @@ class Category
                 // Dynamic setters
                 foreach ($_POST as $key => $value) {
                     if ($key !== 'csrfToken' && $value !== '') {
-                        if(!empty($value)) {
+                        if(!Helpers::isStrictlyEmpty($value)) {
                             $functionName = "set".ucfirst($key);
                             $category->$functionName(htmlspecialchars($value));
                         }
