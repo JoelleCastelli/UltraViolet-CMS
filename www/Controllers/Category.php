@@ -124,7 +124,7 @@ class Category
     public function showCategoryArticlesAction($categorySlug) {
         
         $category = new CategoryModel;
-        $categories = $category->select()->where('position', 0, '>')->get();
+        $categories = $category->select()->where('position', 1, '>')->get();
 
         foreach ($categories as $category) {
 
