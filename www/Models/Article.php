@@ -446,7 +446,7 @@ class Article extends Database implements JsonSerializable
             "content" => $this->getContent(),
             "rating" => $this->getRating(),
             "slug" => $this->getSlug(),
-            "totalViews" => $this->getTotalViews(),
+            // "totalViews" => $this->getTotalViews(),
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),
