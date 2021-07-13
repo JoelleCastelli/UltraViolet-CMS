@@ -89,7 +89,6 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uv_article` (
   `content` LONGTEXT NOT NULL,
   `rating` INT NULL DEFAULT NULL,
   `slug` VARCHAR(100) NOT NULL,
-  `totalViews` INT NULL DEFAULT '0',
   `titleSeo` VARCHAR(60) NULL DEFAULT NULL,
   `descriptionSeo` VARCHAR(160) NULL DEFAULT NULL,
   `publicationDate` DATETIME NULL DEFAULT NULL,
@@ -110,6 +109,25 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uv_article` (
   CONSTRAINT `fk_uv_article_uv_person1`
     FOREIGN KEY (`personId`)
     REFERENCES `ultraviolet`.`uv_person` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `ultraviolet`.`uv_article_history`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uv_article_history` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `views` INT NULL DEFAULT '0',
+    `date` DATE NOT NULL,
+    `articleId` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_uv_article_history_uv_article_idx` (`articleId` ASC),
+    CONSTRAINT `fk_uv_article_history_uv_article`
+    FOREIGN KEY (`articleId`)
+    REFERENCES `ultraviolet`.`uv_article` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

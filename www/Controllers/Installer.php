@@ -95,8 +95,8 @@ class Installer
                 $db = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
                 $sql = file_get_contents(getcwd().'/_scripts/custom_db_script.sql');
                 $db->exec($sql);
-                // Check that the tables have correctly been created in the database (12 tables expected)
-                if(count($db->query("SHOW TABLES")->fetchAll()) == 12) {
+                // Check that the tables have correctly been created in the database (13 tables expected)
+                if(count($db->query("SHOW TABLES")->fetchAll()) == 13) {
                     $db = null;
                     Helpers::redirect(Helpers::callRoute('configStep5'));
                 } else {
