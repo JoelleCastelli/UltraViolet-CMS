@@ -21,7 +21,6 @@ class Article extends Database implements JsonSerializable
     protected $content;
     protected $rating;
     protected $slug;
-    protected $totalViews = 0;
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
@@ -136,22 +135,6 @@ class Article extends Database implements JsonSerializable
         $this->slug = $slug;
     }
 
-
-    /**
-     * @return mixed
-     */
-    public function getTotalViews()
-    {
-        return $this->totalViews;
-    }
-
-    /**
-     * @param mixed $totalViews
-     */
-    public function setTotalViews($totalViews): void
-    {
-        $this->totalViews = $totalViews;
-    }
 
     /**
      * @return mixed
