@@ -93,7 +93,7 @@ class Main
             $sitemap .= '
             <url>
                 <loc>'.$loc.'</loc>
-                <lastmod>'.$lastUpdate.'</lastmod>
+                <lastmod>'.date("Y-m-d", strtotime($lastUpdate)).'</lastmod>
             </url>';
         }
 
@@ -106,7 +106,7 @@ class Main
             $sitemap .= '
             <url>
                 <loc>'.$loc.'</loc>
-                <lastmod>'.$lastUpdate.'</lastmod>
+                <lastmod>'.date("Y-m-d", strtotime($lastUpdate)).'</lastmod>
             </url>';
         }
 
@@ -120,7 +120,7 @@ class Main
             $sitemap .= '
             <url>
                 <loc>'.$loc.'</loc>
-                <lastmod>'.$lastUpdate.'</lastmod>
+                <lastmod>'.date("Y-m-d", strtotime($lastUpdate)).'</lastmod>
             </url>';
         }
 
