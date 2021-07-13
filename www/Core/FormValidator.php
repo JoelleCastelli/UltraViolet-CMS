@@ -24,21 +24,15 @@ class FormValidator
         } else {
             foreach ($config["fields"] as $fieldName => $fieldConfig) {
 
-                // check if config field has a matching $_POST field
-                // echo $fieldName;
-                // echo '<br>';
-
                 $fieldName = str_replace("[]", "", $fieldName);
 
-                // echo $fieldName;
-                // echo '<br>';
                 if(!isset($data[$fieldName])) {
                     echo "Tentative de hack !";
                     exit;
                 }
 
                 // check if required field is not empty
-                if (isset($fieldConfig['required']) && empty($data[$fieldName])) {
+                if (isset($fieldConfig['required']) && empty($data[$fieldName]) && $data[$fieldName] != 0) {
                     echo "Tentative de hack : le champ $fieldName est obligatoire !";
                     exit;
                 }
