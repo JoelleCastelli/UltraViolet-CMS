@@ -436,6 +436,31 @@ class Article extends Database implements JsonSerializable
         return $categories;
     }
 
+    public function articleSoftDelete() {
+        $comments = $this->getComments();
+        foreach ($comments as $comment) {
+            $comment->delete();
+        }
+        $this->delete();
+    }
+
+    public function articleHardDelete() {
+        $categoryArticle = new CategoryArticleModel();
+        $articleId = $this->getId();
+
+        $entries = $categoryArticle->select()->where("articleId", $articleId)->get();
+        foreach ($entries as $entry) {
+            $entry->hardDelete()->execute();
+        }
+
+        $comments = $this->getComments();
+        foreach ($comments as $comment) {
+            $comment->hardDelete()->execute();
+        }
+
+        $this->hardDelete()->where("id", $articleId)->execute();
+    }
+
     // JSON FORMAT
     public function jsonSerialize(): array
     {

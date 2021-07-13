@@ -194,34 +194,12 @@ class Article {
     }
 
     public function deleteArticleAction() {
-
         if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
-        $id = $_POST["id"];
-        $article->setId($id);
+        $article->setId($_POST["id"]);
 
-        $comments = $article->getComments();
-
-        if ($article->getDeletedAt()) {
-            $categoryArticle = new CategoryArticleModel();
-            $entries = $categoryArticle->select()->where("articleId", $id)->get();
-            foreach ($entries as $entry) {
-                $entry->hardDelete()->execute();
-            }
-
-            foreach ($comments as $comment) {
-                $comment->hardDelete()->execute();
-            }
-            
-            $article->hardDelete()->where("id", $id)->execute();
-        } else {
-            $article->delete();
-            foreach ($comments as $comment) {
-                $comment->delete();
-            }
-            
-        }
+        $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
     }
 
     /***************** */
