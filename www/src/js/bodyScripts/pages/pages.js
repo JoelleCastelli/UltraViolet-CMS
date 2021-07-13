@@ -88,10 +88,9 @@ $(document).ready(function() {
   }
   /* UPDATE STATE FOR DELETED PAGE */
   $("#datatable tbody").on('click', '.state-draft, .state-hidden', function(event) {
-
     const pageId = this.id.substring(this.id.lastIndexOf('-') + 1);
     const row = table.row($(this).parents('tr'));
-    const state = $(this).attr("class").substring($(this).attr("class").lastIndexOf('-') + 1);
+    const state = a.classList[0].substring(a.classList[0].lastIndexOf('-') + 1);
 
     $.ajax({
       type: 'POST',
