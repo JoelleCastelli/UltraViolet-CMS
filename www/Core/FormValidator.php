@@ -37,7 +37,7 @@ class FormValidator
                     exit;
                 }
 
-                if(!empty($data[$fieldName])) {
+                if(!Helpers::isStrictlyEmpty($data[$fieldName])) {
         
                     self::textInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::numberInputValidator($data[$fieldName], $fieldConfig, $errors);
@@ -66,8 +66,7 @@ class FormValidator
         }
     }
 
-    public static function numberInputValidator($numberInput, $fieldConfig, &$errors){
-    
+    public static function numberInputValidator($numberInput, $fieldConfig, &$errors) {
         if($fieldConfig["type"] == "number") {
             if (isset($fieldConfig["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
                 $errors[] = $fieldConfig["error"];
