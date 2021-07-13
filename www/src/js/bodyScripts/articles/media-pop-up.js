@@ -27,7 +27,8 @@ $(document).ready(function () {
       },
       oAria: {
         sSortAscending: ": activer pour trier la colonne par ordre croissant",
-        sSortDescending: ": activer pour trier la colonne par ordre décroissant",
+        sSortDescending:
+          ": activer pour trier la colonne par ordre décroissant",
       },
       select: {
         rows: {
@@ -52,7 +53,9 @@ $(document).ready(function () {
         listenRowEvents();
       },
       error: function () {
-        console.log("Erreur dans la récupération des médias de type " + mediaType);
+        console.log(
+          "Erreur dans la récupération des médias de type " + mediaType
+        );
       },
     });
   }

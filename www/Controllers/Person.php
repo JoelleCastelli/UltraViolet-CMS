@@ -8,6 +8,8 @@ use App\Core\FormValidator;
 use App\Core\Mail;
 use App\Core\Request;
 use App\Models\Person as PersonModel;
+use App\Models\Comment as CommentModel;
+
 
 class Person
 {
@@ -185,14 +187,30 @@ class Person
     }
 
     public function deletePersonAction() {
+
         if (!empty($_POST['id'])){ 
             $user = new PersonModel();
             $id = $_POST['id'];
             $user->setId($id);
-            $user->setPseudo('Anonyme');
-            $user->setEmail('deleted'.$id.'@mail.com');
-            $user->delete();
-            $user->save();
+                        
+            if ($user->getDeletedAt()) {
+                //HARD DELETE USER
+                $comments = new CommentModel();
+                $comments = $comments->select()->where("personId", $id)->get();
+                
+                foreach ($comments as $comment) {
+
+                    $comment->hardDelete()->where( 'id' , $comment->getId() )->execute();
+                }
+                $user->delete();
+
+            }else{
+                //SOFT DELETE
+                $user->setPseudo('Anonyme'.$id);
+                $user->setEmail('deleted'.$id.'@mail.com');
+                $user->delete();
+            }
+            
             Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
         }else{
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");

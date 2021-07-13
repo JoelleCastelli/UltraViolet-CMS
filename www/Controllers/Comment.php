@@ -65,6 +65,7 @@ class Comment
             $response = [];
             $comment = new CommentModel();
             $comment->setId($_POST['id']);
+        
             if($comment->delete()) {
                 $response['success'] = true;
                 $response['message'] = 'Le commentaire a bien été supprimé';
