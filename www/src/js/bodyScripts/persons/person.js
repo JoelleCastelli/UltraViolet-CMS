@@ -134,4 +134,26 @@ $(document).ready(function () {
       });
     }
   });
+
+  /* UPDATE STATE FOR DELETED PAGE */
+  table.on("click", ".state-hidden", function (event) {
+    event.preventDefault();
+    if (confirm("Êtes-vous sûr de vouloir restaurer cette utilisateur ?")) {
+      let personId = this.id.substring(this.id.lastIndexOf("-") + 1);
+      let row = table.row($(this).parents("tr"));
+      $.ajax({
+        type: "POST",
+        url: callRoute("users_update_state"),
+        data: { id: personId },
+        success: function () {
+          row.remove().draw();
+        },
+        error: function () {
+          $(".header").after(
+            "Erreur dans la suppression de l'utilisateur ID " + personId
+          );
+        },
+      });
+    }
+  });
 });

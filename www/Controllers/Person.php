@@ -197,6 +197,26 @@ class Person
         }
     }
 
+    public function updatePersonStateAction(){
+
+        if (!empty($_POST['id'])){
+
+            $user = new PersonModel;
+            $id = $_POST['id'];
+            $user->setId($id);
+
+            if ($user->getDeletedAt()){
+                $user->setDeletedAt(null);
+                $user->save();
+                Helpers::setFlashMessage('succes', "Votre utilisateur a été restaurer");
+            }   
+            else
+            {
+                Helpers::setFlashMessage('error', "Votre utilisateur n'est pas trouvable ");
+            } 
+        }
+    }
+
     public function deletePersonAction() {
 
         if (!empty($_POST['id'])){ 

@@ -260,7 +260,7 @@ users_delete:
 users_update_state:
   path: /admin/utilisateurs/update-state
   controller: Person
-  action: updateUsersState
+  action: updatePersonState
   middleware: Admin
 
 user_show:
