@@ -436,6 +436,31 @@ class Article extends Database implements JsonSerializable
         return $categories;
     }
 
+    public function articleSoftDelete() {
+        $comments = $this->getComments();
+        foreach ($comments as $comment) {
+            $comment->delete();
+        }
+        $this->delete();
+    }
+
+    public function articleHardDelete() {
+        $categoryArticle = new CategoryArticleModel();
+        $articleId = $this->getId();
+
+        $entries = $categoryArticle->select()->where("articleId", $articleId)->get();
+        foreach ($entries as $entry) {
+            $entry->hardDelete()->execute();
+        }
+
+        $comments = $this->getComments();
+        foreach ($comments as $comment) {
+            $comment->hardDelete()->execute();
+        }
+
+        $this->hardDelete()->where("id", $articleId)->execute();
+    }
+
     // JSON FORMAT
     public function jsonSerialize(): array
     {
@@ -446,7 +471,7 @@ class Article extends Database implements JsonSerializable
             "content" => $this->getContent(),
             "rating" => $this->getRating(),
             "slug" => $this->getSlug(),
-            "totalViews" => $this->getTotalViews(),
+            // "totalViews" => $this->getTotalViews(),
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),

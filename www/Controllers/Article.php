@@ -10,6 +10,7 @@ use App\Core\Request;
 use App\Models\Article as ArticleModel;
 use App\Models\Media as MediaModel;
 use App\Models\Category as CategoryModel;
+use App\Models\Comment as CommentModel;
 use App\Models\CategoryArticle as CategoryArticleModel;
 
 class Article {
@@ -178,8 +179,9 @@ class Article {
                 "Titre" => $article->getTitle(),
                 "Slug" => $article->getSlug(),
                 "Auteur" => $article->getPerson()->getPseudo(),
-                "Vues" => $article->getTotalViews(),
-                "Commentaire" => "[NOMBRE COMMENTAIRE]",
+                // "Vues" => $article->getTotalViews(),
+                "Vues" => "0",
+                "Commentaire" => count($article->getComments()),
                 "Date creation" => $article->getCreatedAt(),
                 "Date publication" => $article->getPublicationDate(),
                 "Actions" => $article->generateActionsMenu()
@@ -192,23 +194,12 @@ class Article {
     }
 
     public function deleteArticleAction() {
-
         if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
-        $id = $_POST["id"];
-        $article->setId($id);
+        $article->setId($_POST["id"]);
 
-        if ($article->getDeletedAt()) {
-            $categoryArticle = new CategoryArticleModel();
-            $entries = $categoryArticle->select()->where("articleId", $id)->get();
-            foreach ($entries as $entry) {
-                $entry->hardDelete()->execute();
-            }
-            $article->hardDelete()->where("id", $id)->execute();
-        } else {
-            $article->delete();
-        }
+        $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
     }
 
     /***************** */
