@@ -13,7 +13,7 @@ class Category
     protected array $columnsTable;
     public function __construct() {
         $this->columnsTable = [
-            'name' => 'Nome',
+            'name' => 'Nom',
             'position' => 'Position',
             'actions' => 'Actions'
         ];
@@ -31,6 +31,48 @@ class Category
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('categories', $categories);
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/categories/categories.js']);
+    }
+
+
+    /**
+     * Return all the categories
+     */
+    public function getCategoriesAction()
+    {
+        if (!empty($_POST['categoryType'])) {
+
+            // get categories
+            if ($_POST['categoryType'] === 'visible') {
+                $categories = CategoryModel::getVisibleCategories();
+            } else if ($_POST['categoryType'] === 'hidden') {
+                $categories = CategoryModel::getHiddenCategories();
+            }
+
+            if (!$categories) $categories = [];
+
+            $categoryArray = [];
+
+            foreach ($categories as $category) {
+
+                if ($category->getPosition() > 0) {
+                    $actions = $category->generateActionsMenu();
+                } else {
+                    $category->setActions($category->getActionsDeletedCategories());
+                    $actions = $category->generateActionsMenu();
+                }
+
+                $categoryArray[] = [
+                    $this->columnsTable['name'] => $category->getName(),
+                    $this->columnsTable['position'] => $category->getPosition(),
+                    $this->columnsTable['actions'] => $actions
+                ];
+            }
+
+            echo json_encode([
+                "categories" => $categoryArray,
+                "columns" => $this->columnsTable,
+            ]);
+        }
     }
 
     /**
@@ -53,7 +95,7 @@ class Category
                 $category->setPosition(htmlspecialchars($_POST['position']));
                 $category->save();
                 Helpers::setFlashMessage('success', "La catégorie ".$_POST["title"]." a bien été ajoutée à la base de données.");
-                Helpers::redirect(Helpers::callRoute('categories_list'));
+                Helpers::namedRedirect('categories_list');
             }
             $view->assign("errors", $errors);
         }
@@ -76,7 +118,7 @@ class Category
                 // Dynamic setters
                 foreach ($_POST as $key => $value) {
                     if ($key !== 'csrfToken' && $value !== '') {
-                        if(!Helpers::isStrictlyEmpty($value)) {
+                        if(!empty($value)) {
                             $functionName = "set".ucfirst($key);
                             $category->$functionName(htmlspecialchars($value));
                         }
@@ -84,7 +126,7 @@ class Category
                 }
                 $category->save();
                 Helpers::setFlashMessage('success', "La catégorie a bien été mise à jour");
-                Helpers::redirect(Helpers::callRoute('categories_list'));
+                Helpers::namedRedirect('categories_list');
             } else {
                 $view->assign("errors", $errors);
             }
@@ -114,6 +156,39 @@ class Category
                 $response['message'] = 'La catégorie n\'a pas pu être supprimée';
             }
             echo json_encode($response);
+        }
+    }
+
+    /*
+    * For hidding categories
+    */
+    public function hideCategoryAction($id){
+
+        $category = new CategoryModel();
+        $category->setId($id);
+
+        if (!empty($category)) {
+            $category->setPosition(0);
+            $category->save();
+            Helpers::setFlashMessage('success', "La catégorie a bien été cachée");
+            Helpers::namedRedirect('categories_list');
+        }
+    }
+
+    /*
+    * Make Category visible again 
+    */
+    public function restoreCategoryAction($id)
+    {
+
+        $category = new CategoryModel();
+        $category->setId($id);
+
+        if (!empty($category)) {
+            $category->setPosition(10);
+            $category->save();
+            Helpers::setFlashMessage('success', "La catégorie est de nouveau visible");
+            Helpers::namedRedirect('categories_list');
         }
     }
 

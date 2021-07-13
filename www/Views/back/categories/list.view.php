@@ -1,12 +1,16 @@
 <div id="tableActions">
+    <div class="filtering-status">
+        <div class="filtering-btn" id="visible">Visible</div>
+        <div class="filtering-btn" id="hidden">Cachée</div>
+    </div>
+
     <div class="buttons">
         <a href="<?= \App\Core\Helpers::callRoute('category_creation') ?>">
             <button class="btn">Ajouter une catégorie</button>
         </a>
     </div>
-</div>
 
-<p class="error-message-form">Une position 0 équivaut à ne pas afficher la catégorie sur le site !</p>
+</div>
 
 <table id="datatable" class="display">
     <thead>

@@ -79,6 +79,11 @@ pages_data:
   action: getPages
 
 # CATEGORIES
+categories_data:
+  path: /admin/categories-data
+  controller: Category
+  action: getCategories
+
 categories_list:
   path: /admin/categories
   controller: Category
@@ -101,6 +106,20 @@ category_delete:
   controller: Category
   action: deleteCategory
   middleware: Admin
+
+category_hide:
+  path: /admin/categories/cacher/{id}
+  controller: Category
+  action: hideCategory
+  requirements:
+    id: (\d+)
+
+category_restore:
+  path: /admin/categories/restaurer/{id}
+  controller: Category
+  action: restoreCategory
+  requirements:
+    id: (\d+)
 
 # ARTICLES
 articles_list:

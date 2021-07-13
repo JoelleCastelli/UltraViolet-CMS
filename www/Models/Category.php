@@ -7,17 +7,22 @@ namespace App\Models;
 use App\Core\Database;
 use App\Core\FormBuilder;
 use App\Core\Helpers;
+use App\Core\Traits\ModelsTrait;
 
 class Category extends Database
 {
+
+    use ModelsTrait;
+
     private ?int $id = null;
     protected string $name;
     protected int $position;
     private string $createdAt;
-    private ?string $updatedAt;
-    private ?array $actions;
+    private ?string $updatedAt = null;
+    private ?array $actions = null;
+    private ?array $actionsDeletedCategories = null;
 
-    private ?array $articles;
+    private ?array $articles = null;
 
     public function __construct()
     {
@@ -25,15 +30,13 @@ class Category extends Database
         $this->actions = [
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('category_update', ['id' => $this->id]), 'role' => 'admin'],
             ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('category_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Cacher', 'action' => 'hide-category', 'url' => Helpers::callRoute('category_hide', ['id' => $this->id]), 'role' => 'admin'],
         ];
-    }
 
-    /**
-     * @param int|null $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
+        $this->actionsDeletedCategories = [
+            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('category_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Rendre visible', 'action' => 'restore', 'class' => '', 'url' => Helpers::callRoute('category_restore', ['id' => $this->id]), 'role' => 'admin'],
+        ];
     }
 
     /**
@@ -109,6 +112,14 @@ class Category extends Database
     }
 
     /**
+     * @return array
+     */
+    public function getActionsDeletedCategories()
+    {
+        return $this->actionsDeletedCategories;
+    }
+
+    /**
      * @param array[]|null $actions
      */
     public function getArticlesPublished() 
@@ -124,6 +135,27 @@ class Category extends Database
             $this->articles = [];
 
         return $this->articles;
+    }
+
+    public static function getMenuCategories()
+    {
+        $categories = self::getVisibleCategories();
+        $mainCategories = array_splice($categories, 0, 5);
+        return ['main' => $mainCategories, 'other' => $categories];
+    }
+
+    public static function getVisibleCategories()
+    {
+        $category = new Category;
+        $categories = $category->select()->where('position', 0, ">")->orderBy('position')->orderBy('name')->get();
+        return $categories;
+    }
+
+    public static function getHiddenCategories()
+    {
+        $category = new Category;
+        $categories = $category->select()->where('position', 0)->orderBy('name')->get();
+        return $categories;
     }
 
     /**
@@ -152,10 +184,10 @@ class Category extends Database
                 ],
                 "position" => [
                     "type" => "number",
-                    "min" => 0,
+                    "min" => 1,
                     "label" => "Position dans le menu",
                     "class" => "search-bar",
-                    "error" => "La position doit être supérieure ou égale à 0",
+                    "error" => "La position doit être supérieure ou égale à 1",
                     "required" => true,
                 ],
                 "csrfToken" => [
@@ -164,16 +196,6 @@ class Category extends Database
                 ]
             ],
         ];
-    }
-
-    public static function getMenuCategories()
-    {
-        $category = new Category;
-        $categories = $category->select()->where('position', 1, ">")->orderBy('position')->orderBy('name')->get();
-
-        $mainCategories = array_splice($categories, 0, 5);
-
-        return ['main' => $mainCategories, 'other' => $categories];
     }
 
     /**
@@ -210,11 +232,11 @@ class Category extends Database
                     ],
                     "position" => [
                         "type" => "number",
-                        "min" => 0,
+                        "min" => 1,
                         "label" => "Position dans le menu",
                         "class" => "search-bar",
                         "value" => $category->getPosition(),
-                        "error" => "La position doit être supérieure ou égale à 0",
+                        "error" => "La position doit être supérieure ou égale à 1",
                         "required" => true,
                     ],
                     "csrfToken" => [
