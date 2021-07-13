@@ -9,6 +9,7 @@ use App\Core\Mail;
 use App\Core\Request;
 use App\Models\Person as PersonModel;
 use App\Models\Comment as CommentModel;
+use App\Models\Article as ArticleModel;
 
 
 class Person
@@ -195,19 +196,35 @@ class Person
                         
             if ($user->getDeletedAt()) {
                 //HARD DELETE USER
+
+                //Comments HARD delete
                 $comments = new CommentModel();
                 $comments = $comments->select()->where("personId", $id)->get();
-                
                 foreach ($comments as $comment) {
-
                     $comment->hardDelete()->where( 'id' , $comment->getId() )->execute();
+                }
+
+                //Articles HARD delete
+                $articles = new ArticleModel();
+                $articles = $articles->select()->where( "personId" , $id)->get();
+                foreach ($articles as $article) {
+                    $article->articleHardDelete();
                 }
                 $user->delete();
 
             }else{
-                //SOFT DELETE
+                //SOFT DELETE USER
+
+                //Rename pseudo & mail
                 $user->setPseudo('Anonyme'.$id);
                 $user->setEmail('deleted'.$id.'@mail.com');
+
+                //Articles SOFT delete
+                $articles = new ArticleModel();
+                $articles = $articles->select()->where( "personId" , $id)->get();
+                foreach ($articles as $article) {
+                    $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
+                }
                 $user->delete();
             }
             
