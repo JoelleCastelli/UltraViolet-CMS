@@ -3,6 +3,8 @@ let b = 0;
 $(document).ready(function () {
   /* BUILD DATATABLES */
   let table = $("#datatable").DataTable({
+    "order": [],
+    "autoWidth": false,
     responsive: true,
     // All columns
     columns: [
