@@ -357,7 +357,7 @@ class Article extends Database implements JsonSerializable
         
         if ($state == "scheduled") {
             return $this->select()
-            ->where("publicationDate", $now, ">=")
+            ->where("publicationDate", $now, ">")
             ->andWhere("deletedAt", "NULL")
             ->get();
         } 
@@ -436,12 +436,53 @@ class Article extends Database implements JsonSerializable
         return $categories;
     }
 
+    public function setToPublished() {
+        $today = date("Y-m-d\TH:i");
+
+        $this->setPublicationDate($today);
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
+    public function setToScheduled($publicationDate) {
+        $this->setPublicationDate(htmlspecialchars($publicationDate));
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
+    public function setToDraft() {
+        $this->setPublicationDate(null);
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
     public function articleSoftDelete() {
+        $this->toggleComments("hide");
+        $this->delete();
+    }
+
+    // state == display / hide
+    public function toggleComments($state = "display") {
+        if (!($state == "display" || $state == "hide")) return;
+
         $comments = $this->getComments();
         foreach ($comments as $comment) {
-            $comment->delete();
+            if ($state == "hide") {
+                $comment->delete();
+            } else {
+                $comment->setDeletedAt(null);
+                $comment->save();
+            }
         }
-        $this->delete();
     }
 
     public function articleHardDelete() {
