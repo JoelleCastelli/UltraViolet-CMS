@@ -92,20 +92,14 @@ class Helpers{
 
     /* URL Helpers */
 
-    public static function urlBase()
+    public static function getBaseUrl(): string
     {
-        return  $_SERVER['REQUEST_SCHEME'] .'://'. $_SERVER['HTTP_HOST'] . '/';
-    }
-
-    public static function urlJS(string $url) {
-        return self::urlBase() . "src/js/" . $url . ".js";
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ?
+                "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
     }
 
     public static function callRoute(string $name, array $params = [], bool $fullPath = false): string {
         if($name === '') return '#';
-
-        $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ?
-            "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
 
         foreach (Router::$routes as $office => $routes) {
             foreach ($routes as $routeName => $routeData) {
@@ -115,7 +109,7 @@ class Helpers{
                             $routeData['path'] = str_replace('{' . $paramName . '}', $params[$paramName], $routeData['path']);
                         }
                         if($fullPath == true) {
-                            return $link.$routeData['path'];
+                            return self::getBaseUrl().$routeData['path'];
                         }
                     }
                     return $routeData['path'];

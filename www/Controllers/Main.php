@@ -80,56 +80,55 @@ class Main
     }
 
     public function generateSitemapAction() {
-        header('Content-Type: text/xml; charset=UTF-8');
+	    // Create Sitemap string
         $sitemap = "<?xml version='1.0' encoding='UTF-8'?>";
         $sitemap .= "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>";
 
-        // Static pages
+        // Add homepage
+        $sitemap .= "<url>
+                <loc>".Helpers::getBaseUrl()."</loc>
+                <lastmod></lastmod>
+            </url>";
+
+        // Add static pages URL
         $pages = new Page();
-        $pages = $pages->select()->where('deletedAt', 'NULL')->get();
-        foreach ($pages as $page) {
-            $loc = 'http://test/'.$page->getSlug();
-            $lastUpdate = $page->getUpdatedAt() ?? $page->getCreatedAt();
-            $sitemap .= '
-            <url>
-                <loc>'.$loc.'</loc>
-                <lastmod>'.date("Y-m-d", strtotime($lastUpdate)).'</lastmod>
-            </url>';
-        }
-
-        // Categories
+        $sitemap = $this->addItemsToSitemap($pages, $sitemap);
+        // Add categories URL
         $categories = new Category();
-        $categories = $categories->select()->where('position', 0, '=>')->get();
-        foreach ($categories as $category) {
-            $loc = 'http://test/categorie/'.Helpers::slugify($category->getName());
-            $lastUpdate = $category->getUpdatedAt() ?? $category->getCreatedAt();
-            $sitemap .= '
-            <url>
-                <loc>'.$loc.'</loc>
-                <lastmod>'.date("Y-m-d", strtotime($lastUpdate)).'</lastmod>
-            </url>';
-        }
-
-
-        // Articles
+        $sitemap = $this->addItemsToSitemap($categories, $sitemap);
+        // Add articles URL
         $articles = new Article();
-        $articles = $articles->select()->where('deletedAt', 'NULL')->get();
-        foreach ($articles as $article) {
-            $loc = 'http://test/article/'.$article->getSlug();
-            $lastUpdate = $article->getUpdatedAt() ?? $article->getCreatedAt();
-            $sitemap .= '
-            <url>
-                <loc>'.$loc.'</loc>
-                <lastmod>'.date("Y-m-d", strtotime($lastUpdate)).'</lastmod>
-            </url>';
-        }
+        $sitemap = $this->addItemsToSitemap($articles, $sitemap);
 
         $sitemap .= "</urlset>";
 
-        // Send to view
         $view = new View("sitemap", null);
         $view->assign('sitemap', $sitemap);
+    }
 
+    public function addItemsToSitemap(Object $objects, $sitemap) {
+        $classPath = explode('\\', get_class($objects));
+        $class = mb_strtolower(end($classPath));
+        if($class == 'category')
+            $objects = $objects->select()->where('position', 0, '=>')->get();
+        else
+            $objects = $objects->select()->where('deletedAt', 'NULL')->get();
+
+        foreach ($objects as $object) {
+            if($class == 'category')
+                $loc = Helpers::getBaseUrl().Helpers::slugify($object->getName());
+            else
+                $loc = Helpers::getBaseUrl().$object->getSlug();
+
+            $lastUpdate = $object->getUpdatedAt() ?? $object->getCreatedAt();
+            $sitemap .= '
+            <url>
+                <loc>'.$loc.'</loc>
+                <lastmod>'.date("Y-m-d", strtotime($lastUpdate)).'</lastmod>
+            </url>';
+        }
+
+        return $sitemap;
     }
 
 }
