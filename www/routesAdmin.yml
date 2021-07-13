@@ -1,33 +1,33 @@
 #CONFIG
 configStep1:
-  path:       /installation/introduction
+  path: /installation/introduction
   controller: Installer
-  action:     step1
+  action: step1
 
 configStep2:
-  path:       /installation/database
+  path: /installation/database
   controller: Installer
-  action:     step2
+  action: step2
 
 configStep3:
-  path:       /installation/lancement
+  path: /installation/lancement
   controller: Installer
-  action:     step3
+  action: step3
 
 configStep4:
-  path:       /installation/populate-database
+  path: /installation/populate-database
   controller: Installer
-  action:     step4
+  action: step4
 
 configStep5:
-  path:       /installation/nouvel-utilisateur
+  path: /installation/nouvel-utilisateur
   controller: Installer
-  action:     step5
+  action: step5
 
 configStep6:
-  path:       /installation/conclusion
+  path: /installation/conclusion
   controller: Installer
-  action:     step6
+  action: step6
 
 # GLOBAL
 admin:
@@ -257,6 +257,12 @@ users_delete:
   action: deletePerson
   middleware: Admin
 
+users_update_state:
+  path: /admin/utilisateurs/update-state
+  controller: Person
+  action: updateUsersState
+  middleware: Admin
+
 user_show:
   path: /admin/utilisateur
   controller: Person
@@ -298,5 +304,5 @@ medias_user_data:
 settings:
   path: /admin/parametres
   controller: Settings
-  action:     showAll
+  action: showAll
   middleware: Admin

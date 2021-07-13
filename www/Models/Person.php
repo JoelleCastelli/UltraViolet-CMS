@@ -20,6 +20,7 @@ class Person extends Database implements JsonSerializable
     protected ?string $pseudo;
     protected string $role = 'user';
     private ?array $actions = [];
+    private ?array $actionsDeletedPerson = [];
     private string $createdAt;
     private ?string $updatedAt;
     protected ?string $deletedAt;
@@ -46,6 +47,13 @@ class Person extends Database implements JsonSerializable
 
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])] ,
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'admin']
+        ];
+
+        $this->actionsDeletedPerson = [
+
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])] ,
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' =>'Restaurer l\'utilisateur', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('users_update_state'), 'role' => 'admin'],
         ];
     }
 
@@ -150,6 +158,9 @@ class Person extends Database implements JsonSerializable
 
     public function getActions(): ?array {
         return $this->actions;
+    }
+    public function getActionsDeletedPerson(): ?array {
+        return $this->actionsDeletedPerson;
     }
 
     public function setActions(?array $actions): void {
