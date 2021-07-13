@@ -90,12 +90,19 @@ class Category
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)) {
-                // Set object values
-                $category->setName(htmlspecialchars($_POST['name']));
-                $category->setPosition(htmlspecialchars($_POST['position']));
-                $category->save();
-                Helpers::setFlashMessage('success', "La catégorie ".$_POST["title"]." a bien été ajoutée à la base de données.");
-                Helpers::namedRedirect('categories_list');
+
+                if(!$this->isSlugUnique(Helpers::slugify($_POST['name'])))
+                    $errors = ['Ce nom est déjà existant'];
+
+                if(empty($errors))
+                {
+                    // Set object values
+                    $category->setName(htmlspecialchars($_POST['name']));
+                    $category->setPosition(htmlspecialchars($_POST['position']));
+                    $category->save();
+                    Helpers::setFlashMessage('success', "La catégorie " . $_POST["title"] . " a bien été ajoutée à la base de données.");
+                    Helpers::namedRedirect('categories_list');
+                }
             }
             $view->assign("errors", $errors);
         }
@@ -115,18 +122,29 @@ class Category
         if(!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)) {
-                // Dynamic setters
-                foreach ($_POST as $key => $value) {
-                    if ($key !== 'csrfToken' && $value !== '') {
-                        if(!empty($value)) {
-                            $functionName = "set".ucfirst($key);
-                            $category->$functionName(htmlspecialchars($value));
+
+                if (!$this->isSlugUnique(Helpers::slugify($_POST['name']), $id))
+                    $errors = ['Ce nom est déjà existant'];
+                
+                if (empty($errors)) {
+
+                    // Dynamic setters
+                    foreach ($_POST as $key => $value) {
+                        if ($key !== 'csrfToken' && $value !== '') {
+                            if(!empty($value)) {
+                                $functionName = "set".ucfirst($key);
+                                $category->$functionName(htmlspecialchars($value));
+                            }
                         }
                     }
+
+                    $category->save();
+                    Helpers::setFlashMessage('success', "La catégorie a bien été mise à jour");
+                    Helpers::namedRedirect('categories_list');
+
+                }else {
+                    $view->assign("errors", $errors);
                 }
-                $category->save();
-                Helpers::setFlashMessage('success', "La catégorie a bien été mise à jour");
-                Helpers::namedRedirect('categories_list');
             } else {
                 $view->assign("errors", $errors);
             }
@@ -192,6 +210,19 @@ class Category
         }
     }
 
+    private function isSlugUnique($slug, $id = 0) {
+        $category = new CategoryModel;
+        $categories = $category->findAll();
+        foreach($categories as $category)
+        {
+            if (strcmp(Helpers::slugify($category->getName()), $slug) == 0 && $category->getId() != $id) {
+
+                return false;
+            }
+        }
+        return true;
+    }
+
     /***************** */
     /* FRONT FUNCTIONS */
     /***************** */
@@ -199,16 +230,12 @@ class Category
     public function showCategoryArticlesAction($categorySlug) {
         
         $category = new CategoryModel;
-        $categories = $category->select()->where('position', 1, '>')->get();
 
-        foreach ($categories as $category) {
-
-            if(strcmp(Helpers::slugify($category->getName()), $categorySlug) == 0) {
-               
-                $view = new View('articles/list', 'front');
-                $view->assign('articles',  $category->getArticlesPublished());
-                return;
-            }
+        if($this->isSlugUnique($categorySlug)) {
+            
+            $view = new View('articles/list', 'front');
+            $view->assign('articles',  $category->getArticlesPublished());
+            return;
         }
 
         Helpers::redirect404();
