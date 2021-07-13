@@ -18,6 +18,8 @@
     & > * {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+        height: 100%;
+        @extend %flex-center;
     }
 
     #userImage {
@@ -27,7 +29,7 @@
             border-radius: 50%;
         }
         .dropdown-user {
-            transform: translate(-50%, 0);
+            transform: translate(-20%, 0);
         }
     }
    
