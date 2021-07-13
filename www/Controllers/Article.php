@@ -47,7 +47,6 @@ class Article {
                 $title = htmlspecialchars($_POST["title"]);
                 $state = $_POST["state"];
                 $user = Request::getUser();
-                $today = date("Y-m-d\TH:i");
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
@@ -57,12 +56,9 @@ class Article {
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {
-                    $article->setPublicationDate($today);
-                    $article->setDeletedAt(null);
+                    $article->setToPublished();
                 } else if ($state == "scheduled" && !empty($_POST["publicationDate"])) {
-                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
-                } else {
-                    // nothing, will be draft by default
+                    $article->setToScheduled($_POST["publicationDate"]);
                 }
 
                 $article->save();
@@ -114,7 +110,6 @@ class Article {
                 $title = htmlspecialchars($_POST["title"]);
                 $state = $_POST["state"];
                 $user = Request::getUser();
-                $today = date("Y-m-d\TH:i");
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
@@ -123,18 +118,13 @@ class Article {
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {
-                    $article->setPublicationDate($today);
-                    $article->setDeletedAt(null);
+                    $article->setToPublished();
                 } else if ($state == "scheduled" && !empty($_POST["publicationDate"])) {
-                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
-                    $article->setDeletedAt(null);
+                    $article->setToScheduled($_POST["publicationDate"]);
                 } else if ($state == "draft") {
-                    $article->setPublicationDate(null);
-                    $article->setDeletedAt(null);
+                    $article->setToDraft();
                 } else if ($state == "removed") {
-                    $article->setDeletedAt(Helpers::getCurrentTimestamp());
-                } else {
-                    // Nothing to change
+                    $article->articleSoftDelete();
                 }
 
                 $article->save();

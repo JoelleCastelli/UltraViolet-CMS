@@ -357,7 +357,7 @@ class Article extends Database implements JsonSerializable
         
         if ($state == "scheduled") {
             return $this->select()
-            ->where("publicationDate", $now, ">=")
+            ->where("publicationDate", $now, ">")
             ->andWhere("deletedAt", "NULL")
             ->get();
         } 
@@ -434,6 +434,23 @@ class Article extends Database implements JsonSerializable
         $categories = $categoryModel->select()->whereIn('id', $categoriesId)->get();
       
         return $categories;
+    }
+
+    public function setToPublished() {
+        $today = date("Y-m-d\TH:i");
+
+        $this->setPublicationDate($today);
+        $this->setDeletedAt(null);
+    }
+
+    public function setToScheduled($publicationDate) {
+        $this->setPublicationDate(htmlspecialchars($publicationDate));
+        $this->setDeletedAt(null);
+    }
+
+    public function setToDraft() {
+        $this->setPublicationDate(null);
+        $this->setDeletedAt(null);
     }
 
     public function articleSoftDelete() {
