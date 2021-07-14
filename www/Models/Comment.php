@@ -202,8 +202,7 @@ class Comment extends Database {
         }
     }
 
-    public function createCommentForm() {
-        $userId = Request::getUser()->getId();
+    public function createCommentForm($articleSlug) {
         
         return [
             "config" => [
@@ -212,14 +211,14 @@ class Comment extends Database {
                 "class" => "form_control",
                 "id" => "form_create_comment",
                 "submit" => "Poster un commentaire",
-                "referer" => Helpers::callRoute('article_creation'),
+                "referer" => Helpers::callRoute('display_article', ["article" => $articleSlug]),
             ],
             "fields" => [
                 "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],
-                "content" => [
+                "comment" => [
                     "type" => "textarea",
                     "label" => "Contenu de votre commentaire",
                     "placeholder" => "Contenu de votre commentaire...",

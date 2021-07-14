@@ -518,7 +518,7 @@ class Article extends Database implements JsonSerializable
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
                 ],
-                "title" => [
+                "comment" => [
                     "type" => "text",
                     "label" => "Titre de l'article *",
                     "minLength" => 2,

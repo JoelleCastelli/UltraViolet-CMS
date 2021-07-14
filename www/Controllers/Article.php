@@ -200,21 +200,31 @@ class Article {
         $articleModel = new ArticleModel;
         $userId = Request::getUser()->getId();
 
-        if (!empty($userId)) {
-            $comment = new CommentModel;
-            $form = $comment->createCommentForm();
-        }
-        
-        
-        //get article published and correct slug
         $article = $articleModel->select()
         ->where('slug', $articleSlug)
         ->andWhere('deletedAt', "NULL")
         ->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->first(); 
 
-        if(empty($article))
+        if(empty($article)) {
             Helpers::redirect404();
-        
+        }
+
+        if (!empty($userId)) {
+            $comment = new CommentModel;
+            $form = $comment->createCommentForm($article->getSlug());
+
+            if (!empty($_POST["comment"])) {
+                $errors = FormValidator::check($form, $_POST);
+                
+                if (empty($errors)) {
+                    $comment->setArticleId($article->getId());
+                    $comment->setPersonId($userId);
+                    $comment->setContent(htmlspecialchars($_POST["comment"]));
+                    $comment->save();
+                }
+            }
+        }
+
         $article->getCategoriesRelated();
 
         $view = new View('articles/article', 'front');
