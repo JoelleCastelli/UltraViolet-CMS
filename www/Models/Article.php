@@ -501,7 +501,7 @@ class Article extends Database implements JsonSerializable
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control",
+                "class" => "form_control card",
                 "id" => "form_create_article",
                 "submit" => "Créer un article",
                 "referer" => Helpers::callRoute('article_creation'),
@@ -514,21 +514,19 @@ class Article extends Database implements JsonSerializable
                 "title" => [
                     "type" => "text",
                     "label" => "Titre de l'article *",
-                    "placeholder" => "Titre de l'article",
                     "minLength" => 2,
                     "maxLength" => 100,
-                    "class" => "input",
-                    "error" => "Le longueur du titre doit être comprise entre 2 et 100 caractères",
-                    // "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "class" => "input search-bar",
+                    "error" => "La longueur du titre doit être comprise entre 2 et 100 caractères",
                     "required" => true,
                 ],
                 "description" => [
-                    "type" => "text",
+                    "type" => "textarea",
                     "label" => "Description de l'article *",
-                    "placeholder" => "Description de l'article",
                     "minLength" => 2,
-                    "class" => "input",
-                    "error" => "La longeur doit être de plus de 2 caracrtères",
+                    "maxLength" => 255,
+                    "class" => "input search-bar",
+                    "error" => "La longueur de la description doit être comprise entre 2 et 100 caractères",
                     "required" => true,
                 ],
                 "state" => [
@@ -536,7 +534,7 @@ class Article extends Database implements JsonSerializable
                     "label" => "État *",
                     "class" => "state",
                     "required" => true,
-                    "error" => "Le champs état est vide",
+                    "error" => "Le champs Etat est vide",
                     "options" => [
                         [
                             "value" => "published",
@@ -566,25 +564,25 @@ class Article extends Database implements JsonSerializable
                 ],
                 "media" => [
                     "type" => "text",
-                    "label" => "Media utilisé pour la cover de l'article",
+                    "label" => "Illustration de l'article",
                     "class" => "search-bar",
                     "readonly" => true
                 ],
                 "categories" => [
                     "type" => "checkbox",
-                    "label" => "Categorie de l'article *",
+                    "label" => "Catégorie de l'article *",
                     "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
-                    "error" => "Vous devez selectionner au moins une catégories."
+                    "error" => "Vous devez sélectionner au moins une catégorie"
                 ],
                  "content" => [
+                     "id" => "articleContent",
                      "type" => "textarea",
                      "label" => "Contenu de l'article",
-                     "placeholder" => "Contenu de l article",
                      "minLength" => 2,
                      "class" => "input",
-                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
+                     "error" => "Le contenu de l'article doit comprendre au minimum 2 caractères",
                      "required" => false,
                  ],
             ]
@@ -635,7 +633,7 @@ class Article extends Database implements JsonSerializable
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control",
+                "class" => "form_control card",
                 "id" => "form_create_article",
                 "submit" => "Valider les modifications",
                 "referer" => Helpers::callRoute('article_update', ['id' => $articleId]),
@@ -651,25 +649,25 @@ class Article extends Database implements JsonSerializable
                     "label" => "Titre de l'article *",
                     "minLength" => 2,
                     "maxLength" => 100,
-                    "class" => "input",
-                    "error" => "Le longueur du titre doit être comprise entre 2 et 100 caractères",
-                    // "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "class" => "input search-bar",
+                    "error" => "La longueur du titre doit être comprise entre 2 et 100 caractères",
                     "required" => true,
                 ],
                 "description" => [
-                    "type" => "text",
+                    "type" => "textarea",
                     "placeholder" => "Description de l'article",
                     "label" => "Description de l'article *",
                     "minLength" => 2,
-                    "class" => "input",
-                    "error" => "La longeur doit être de plus de 2 caracrtères",
+                    "maxLength" => 255,
+                    "class" => "input search-bar",
+                    "error" => "La longueur de la description doit être comprise entre 2 et 100 caractères",
                     "required" => true,
                 ],
                 "state" => [
                     "type" => "radio",
                     "label" => "État *",
                     "class" => "state",
-                    "error" => "Le champs état est vide",
+                    "error" => "Le champs Etat est vide",
                     "options" => [
                         [
                             "value" => "published",
@@ -679,7 +677,7 @@ class Article extends Database implements JsonSerializable
                         [
                             "value" => "scheduled",
                             "class" => "stateScheduled",
-                            "text" => "Re planifier à plus tard"
+                            "text" => "Planifier"
                         ],
                         [
                             "value" => "draft",
@@ -710,27 +708,27 @@ class Article extends Database implements JsonSerializable
                 ],
                 "media" => [
                     "type" => "text",
-                    "label" => "Media utilisé pour la cover de l'article",
+                    "label" => "Illustration de l'article",
                     "class" => "search-bar",
                     "readonly" => true,
                     "value" => $mediaTitle,
                 ],
                 "categories" => [
                     "type" => "checkbox",
-                    "label" => "Categorie de l'article *",
+                    "label" => "Catégorie de l'article *",
                     "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
-                    "error" => "Vous devez selectionner au moins une catégories."
+                    "error" => "Vous devez sélectionner au moins une catégorie"
                 ],
                 "content" => [
+                    "id" => "articleContent",
                     "type" => "textarea",
                     "placeholder" => "Contenu de l article",
                     "label" => "Contenu de l'article",
                     "minLength" => 2,
                     "class" => "input",
-                    "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
-                    "required" => false,
+                    "error" => "Le contenu de l'article doit comprendre au minimum 2 caractères",
                 ],
             ]
         ];
