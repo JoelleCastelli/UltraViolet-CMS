@@ -235,9 +235,8 @@ class Category
         foreach ($categories as $category) {
             if (strcmp(Helpers::slugify($category->getName()), $categorySlug) == 0) {
                 $view = new View('articles/list', 'front');
-                $view->assign('articles', $category->getArticlesPublished());
-                $view->assign('title', $category->getName());
-                $view->assign('description', $category->getDescriptionSeo());
+                $view->assign('articles',  $category->getArticlesPublished());
+                $view->assign("category", $category->getName());
                 return;
             }
         }

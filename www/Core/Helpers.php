@@ -70,8 +70,12 @@ class Helpers{
         exit;
     }
 
-    public static function namedRedirect($routeName, $statusCode = 0) {
-        Helpers::redirect(Helpers::callRoute($routeName), $statusCode);
+    public static function namedRedirect($routeName, $params = null, $statusCode = 0) {
+        if (empty($params)) {
+            Helpers::redirect(Helpers::callRoute($routeName), $statusCode);
+        } else {
+            Helpers::redirect(Helpers::callRoute($routeName, $params), $statusCode);
+        }
     }
 
     public static function redirect404()

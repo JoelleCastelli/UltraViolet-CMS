@@ -196,21 +196,47 @@ class Article {
     /* FRONT FUNCTIONS */
     /***************** */
 
-    public function showArticleAction($articleSlug)
-    {
-        // Get article from slug
-        $article = new ArticleModel;
-        $article = $article->select()->where('slug', $articleSlug)->andWhere('deletedAt', "NULL")->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->first();
-        if(empty($article))
-            Helpers::redirect404();
+    public function showArticleAction($articleSlug) {
+        $articleModel = new ArticleModel;
+        $userId = Request::getUser()->getId();
 
-        $categories = $article->getCategoriesRelated();
+        $article = $articleModel->select()
+        ->where('slug', $articleSlug)
+        ->andWhere('deletedAt', "NULL")
+        ->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->first(); 
+
+        if(empty($article)) {
+            Helpers::redirect404();
+        }
+
+        if (!empty($userId)) {
+            $comment = new CommentModel;
+            $form = $comment->createCommentForm($article->getSlug());
+
+            if (!empty($_POST["comment"])) {
+                $errors = FormValidator::check($form, $_POST);
+                
+                if (empty($errors)) {
+                    $comment->setArticleId($article->getId());
+                    $comment->setPersonId($userId);
+                    $comment->setContent(htmlspecialchars($_POST["comment"]));
+                    $comment->save();
+                    Helpers::namedRedirect("display_article", ["article" => $articleSlug]);
+                }
+            }
+        }
+
+        $article->getCategoriesRelated();
 
         $view = new View('articles/article', 'front');
         $view->assign('title', $article->getTitle());
         $view->assign('description', $article->getDescription());
         $view->assign('article', $article);
-        $view->assign('categories', $categories);
-    }
+        $view->assign('comments', $article->getComments());
+        $view->assign('bodyScripts', [
+            "new-comment" => PATH_TO_SCRIPTS.'bodyScripts/comments/newComments.js',
+        ]);
+        if (isset($form)) $view->assign("form", $form);
 
+    }
 }
