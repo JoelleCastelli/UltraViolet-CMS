@@ -27,11 +27,17 @@ class Person
         ];
     }
 
-    public function showAllAction() {
+    public function showAllAction()
+    {
         $view = new View("persons/list");
         $view->assign('title', 'Utilisateurs');
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/person.js']);
+    }
+
+    public function defaultAction()
+    {
+        echo "User default";
     }
 
     public function loginAction()
@@ -71,6 +77,7 @@ class Person
 
     public function registerAction()
     {
+
         $this->redirectHomeIfLogged();
 
         $user = new PersonModel();
@@ -134,14 +141,14 @@ class Person
         $usersArray = [];
         foreach ($users as $user) {
             $actions = $user->generateActionsMenu();
-            
+
             $emailConfirmed = $user->isEmailConfirmed();
             if ($emailConfirmed == true) $emailConfirmed = 'oui';
             else $emailConfirmed = 'non';
             $usersArray[] = [
-                $this->columnsTable['name'] => $user->getFullName(),
-                $this->columnsTable['pseudo'] => $user->getPseudo(),
-                $this->columnsTable['mail'] => $user->getEmail(),
+                $this->columnsTable['name'] => $user->getFullName()??'/',
+                $this->columnsTable['pseudo'] => $user->getPseudo()??'/',
+                $this->columnsTable['mail'] => $user->getEmail()??'/',
                 $this->columnsTable['checkMail'] => $emailConfirmed,
                 $this->columnsTable['actions'] => $actions,
             ];
@@ -158,7 +165,7 @@ class Person
     public function updatePersonAction($id)
     {
         if (!empty($id)) {
-
+            // Helpers::cleanDumpArray($id,'id post');
             $user = new PersonModel();
             $form = $user->formBuilderUpdatePerson($id);
 
@@ -187,28 +194,27 @@ class Person
         }
     }
 
-    public function updatePersonStateAction(){
+    public function updatePersonStateAction()
+    {
 
-        if (!empty($_POST['id'])){
+        if (!empty($_POST['id'])) {
 
             $user = new PersonModel;
             $id = $_POST['id'];
             $user->setId($id);
 
-            if ($user->getDeletedAt()){
+            if ($user->getDeletedAt()) {
                 $user->setDeletedAt(null);
                 $user->save();
                 Helpers::setFlashMessage('succes', "Votre utilisateur a été restaurer");
-            }   
-            else
-            {
+            } else {
                 Helpers::setFlashMessage('error', "Votre utilisateur n'est pas trouvable ");
-            } 
+            }
         }
     }
 
-    public function deletePersonAction() {
-
+    public function updateUserAction()
+    {
         $user = Request::getUser();
 
         if ($user && $user->isLogged()) {
@@ -232,11 +238,10 @@ class Person
                     if ($user->count('pseudo')->where('pseudo', htmlspecialchars($_POST['pseudo']))->andWhere('id', $user->getId(), '!=')->first(false))
                         $errors = ['Ce pseudonyme est indisponible'];
 
-                    if(!empty($_POST['pwd'])) // if actual password mention
+                    if (!empty($_POST['pwd'])) // if actual password mention
                     {
 
-                        if(empty($errors))
-                        {
+                        if (empty($errors)) {
                             if (!password_verify($_POST['oldPwd'], $user->getPassword())) // check old password 
                                 $errors = ['Ancien mot de passe non correct'];
 
@@ -254,10 +259,8 @@ class Person
                         $user->setEmail(htmlspecialchars($_POST["email"]));
                         $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
                         $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
-                        if($user->save())
-                        {
-                            if(isset($emailChanged))
-                            {
+                        if ($user->save()) {
+                            if (isset($emailChanged)) {
                                 $user->setEmailConfirmed(false);
 
                                 /* Send mail confirmation */
@@ -270,18 +273,16 @@ class Person
                                 $mail->sendMail($to, $from, $name, $subj, $msg);
 
                                 $user->save();
-
                             }
                             Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
                             Helpers::namedRedirect('user_update');
                         }
                         $errors = ['Oops ! Un soucis lors de la sauvegarde est survenu'];
-                    }  
-                } 
+                    }
+                }
                 $view->assign("errors", $errors);
-            } 
-            
-        } else{
+            }
+        } else {
             Helpers::namedRedirect('front_home');
         }
     }
@@ -300,20 +301,19 @@ class Person
                 $comments = new CommentModel();
                 $comments = $comments->select()->where("personId", $id)->get();
                 foreach ($comments as $comment) {
-                    $comment->hardDelete()->where( 'id' , $comment->getId() )->execute();
+                    $comment->hardDelete()->where('id', $comment->getId())->execute();
                 }
                 //Articles HARD delete
                 $articles = new ArticleModel();
-                $articles = $articles->select()->where( "personId" , $id)->get();
+                $articles = $articles->select()->where("personId", $id)->get();
                 foreach ($articles as $article) {
                     $article->articleHardDelete();
                 }
                 $user->delete();
-
-            }else{
+            } else {
                 //SOFT DELETE USER
-                $user->setPseudo('Anonyme'.$id);
-                $user->setEmail('anonyme'.$id.'mail.com');
+                $user->setPseudo('Anonyme' . $id);
+                $user->setEmail('anonyme' . $id . 'mail.com');
                 $user->delete();
                 $user->save();
             }
@@ -323,13 +323,12 @@ class Person
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }
     }
-
     public function deleteUserAction()
     {
         $user = Request::getUser();
-        if($user && $user->isLogged()) {
+        if ($user && $user->isLogged()) {
 
-            if( !$user->isAdmin() || ($user->isAdmin() && $user->count('email')->where('role', 'admin')->first(false) > 1)){
+            if (!$user->isAdmin() || ($user->isAdmin() && $user->count('email')->where('role', 'admin')->first(false) > 1)) {
 
                 //SOFT DELETE
                 $user->setPseudo(null);
@@ -339,22 +338,19 @@ class Person
                 $user->setEmailConfirmed(false);
                 $user->setDefaultProfilePicture();
 
-                if($user->delete())
-                {
+                if ($user->delete()) {
                     Helpers::setFlashMessage("success", "Votre compte a bien été supprimé");
                     Helpers::namedRedirect("logout");
-
-                }else {
+                } else {
                     Helpers::setFlashMessage("error", "Oops ! Une erreur est survenu lors de la suppression de votre compte.");
                     Helpers::namedRedirect("user_update");
                 }
-
-            }else {
+            } else {
                 Helpers::setFlashMessage("error", "Vous êtes le seul administrateur, par conséquent vous ne pouvez pas supprimer ce compte.");
                 Helpers::namedRedirect("user_update");
             }
-        } 
-    
+        }
+
         Helpers::redirect404();
     }
 
