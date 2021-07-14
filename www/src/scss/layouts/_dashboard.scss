@@ -131,7 +131,7 @@
     #productionsList {
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-start;
+      justify-content: space-evenly;
       padding-bottom: 1rem;
 
       .productionCard {

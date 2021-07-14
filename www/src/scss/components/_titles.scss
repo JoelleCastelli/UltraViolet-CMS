@@ -1,61 +1,60 @@
 .label-card-1 {
-    font-family: $mulish;
-    display: inline;
-    font-size: 18px;
-    font-weight: bold;
-    color: $title-card-color;
+  font-family: $mulish;
+  display: inline;
+  font-size: 18px;
+  font-weight: bold;
+  color: $title-card-color;
 }
 
 .label-card-2 {
-    font-family: $mulish;
-    display: inline;
-    font-size: 16px;
-    font-weight: bold;
-    color: $title-card-2-color;
+  font-family: $mulish;
+  display: inline;
+  font-size: 16px;
+  font-weight: bold;
+  color: $title-card-2-color;
 }
 
 .label-item-collection {
-    display: inline-block;
-    font-family: $mulish;
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: $title-item-collection-color;
-
+  display: inline-block;
+  font-family: $mulish;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: $title-item-collection-color;
 }
 
 .label-date {
-    display: inline-block;
-    font-family: $poppins;
-    font-size: 12px;
-    font-weight: regular;
-    color: $title-date-color;
+  display: inline-block;
+  font-family: $poppins;
+  font-size: 12px;
+  font-weight: regular;
+  color: $title-date-color;
 }
 
 .title-form {
-    font-family: $mulish;
-    font-style: normal;
-    font-size: 30px;
-    font-weight: normal;
+  font-family: $mulish;
+  font-style: normal;
+  font-size: 30px;
+  font-weight: normal;
 
-    letter-spacing: 0.3px;
-    color: $purple2;
-    text-align: center;
-    margin-bottom: 30px;
-    text-transform: none;
-    line-height: 20px;
+  letter-spacing: 0.3px;
+  color: $purple2;
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: none;
+  line-height: 20px;
 }
 
 h1 {
-    font-size: 30px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  font-size: 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .title-section {
-    font-weight: bold;
-    color: $grey;
-    font-size: 2rem;
-  }
-  
+  font-weight: bold;
+  color: $grey;
+  font-size: 2rem;
+  padding-bottom: 1.5rem;
+}
