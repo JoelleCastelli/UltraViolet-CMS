@@ -17,6 +17,7 @@ class Category extends Database
     private ?int $id = null;
     protected string $name;
     protected int $position;
+    protected ?string $descriptionSeo;
     private string $createdAt;
     private ?string $updatedAt = null;
     private ?array $actions = null;
@@ -80,6 +81,22 @@ class Category extends Database
     }
 
     /**
+     * @return string|null
+     */
+    public function getDescriptionSeo(): ?string
+    {
+        return $this->descriptionSeo;
+    }
+
+    /**
+     * @param string|null $descriptionSeo
+     */
+    public function setDescriptionSeo(?string $descriptionSeo): void
+    {
+        $this->descriptionSeo = $descriptionSeo;
+    }
+
+    /**
      * @return string
      */
     public function getCreatedAt(): string
@@ -122,7 +139,7 @@ class Category extends Database
     /**
      * @param array[]|null $actions
      */
-    public function getArticlesPublished() 
+    public function getArticlesPublished(): ?array
     {
         $categoryArticle = new CategoryArticle;
         $article = new Article;
@@ -137,21 +154,21 @@ class Category extends Database
         return $this->articles;
     }
 
-    public static function getMenuCategories()
+    public static function getMenuCategories(): array
     {
         $categories = self::getVisibleCategories();
         $mainCategories = array_splice($categories, 0, 5);
         return ['main' => $mainCategories, 'other' => $categories];
     }
 
-    public static function getVisibleCategories()
+    public static function getVisibleCategories(): array
     {
         $category = new Category;
         $categories = $category->select()->where('position', 0, ">")->orderBy('position')->orderBy('name')->get();
         return $categories;
     }
 
-    public static function getHiddenCategories()
+    public static function getHiddenCategories(): array
     {
         $category = new Category;
         $categories = $category->select()->where('position', 0)->orderBy('name')->get();
@@ -188,6 +205,15 @@ class Category extends Database
                     "label" => "Position dans le menu",
                     "class" => "search-bar",
                     "error" => "La position doit être supérieure ou égale à 1",
+                    "required" => true,
+                ],
+                "descriptionSeo" => [
+                    "type" => "textarea",
+                    "maxLength" => 160,
+                    "label" => "Description SEO",
+                    "placeholder" => "Description de la page vue par les moteurs de recherche",
+                    "class" => "search-bar",
+                    "error" => "La description ne peut pas contenir plus de 160 caractères",
                     "required" => true,
                 ],
                 "csrfToken" => [
@@ -237,6 +263,16 @@ class Category extends Database
                         "class" => "search-bar",
                         "value" => $category->getPosition(),
                         "error" => "La position doit être supérieure ou égale à 1",
+                        "required" => true,
+                    ],
+                    "descriptionSeo" => [
+                        "type" => "textarea",
+                        "maxLength" => 160,
+                        "label" => "Description SEO",
+                        "placeholder" => "Description de la page vue par les moteurs de recherche",
+                        "class" => "search-bar",
+                        "value" => $category->getDescriptionSeo(),
+                        "error" => "La description ne peut pas contenir plus de 160 caractères",
                         "required" => true,
                     ],
                     "csrfToken" => [

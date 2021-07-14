@@ -7,12 +7,13 @@ $(document).ready( function () {
         columns: [
             { data: 'Nom' },
             { data: 'Position' },
+            { data: 'Description' },
             { data: 'Actions' }
         ],
 
         columnDefs: [
             {
-                targets: 2, // Actions column
+                targets: 3, // Actions column
                 data: "name",
                 searchable: false,
                 orderable: false,
@@ -55,11 +56,24 @@ $(document).ready( function () {
     getCategoriesByType('visible');
     $("#visible").addClass('active');
 
+    table.columns([1]).visible(true); // Position
+
     // Display different types on filtering button click
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');
         $(this).addClass('active');
         getCategoriesByType(this.id);
+
+        // Hide Position column for hidden categories
+        switch (this.id) {
+            case 'visible':
+                table.columns([1]).visible(true);
+                break
+            case 'hidden':
+                table.columns([1]).visible(false);
+                break;
+        }
+
     });
 
     function getCategoriesByType(categoryType) {
@@ -96,7 +110,7 @@ $(document).ready( function () {
                         alert(response['message']);
                 },
                 error: function() {
-                    console.log("Erreur dans la suppression de la production ID " + categoryId);
+                    console.log("Erreur dans la suppression de la catégorie ID " + categoryId);
                 }
             });
         }

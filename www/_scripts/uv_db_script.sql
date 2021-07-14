@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uv_category` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL,
   `position` INT NOT NULL,
+  `descriptionSeo` VARCHAR(160) NULL DEFAULT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
@@ -316,13 +317,13 @@ INSERT INTO `ultraviolet`.`uv_media` (`title`, `path`) VALUES ("Article - Image 
 -- -----------------------------------------------------
 -- Insert example categories
 -- -----------------------------------------------------
-INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`) VALUES ("Films", 1);
-INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`) VALUES ("Séries", 2);
-INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`) VALUES ("Actualités", 3);
-INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`) VALUES ("Critiques", 4);
+INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`, `descriptionSeo`) VALUES ("Films", 1, "Découvrez nos dernières news et critiques sur les meilleures films du moment !");
+INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`, `descriptionSeo`) VALUES ("Séries", 2, "Découvrez nos dernières news et critiques sur les meilleures séries du moment !");
+INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`, `descriptionSeo`) VALUES ("Actualités", 3, "Retrouvez nos dernières actualités sur les meilleurs films et séries");
+INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`, `descriptionSeo`) VALUES ("Critiques", 4, "Retrouvez nos dernières critiques des meilleurs films et séries");
 
 -- -----------------------------------------------------
 -- Insert example page
 -- -----------------------------------------------------
-INSERT INTO `ultraviolet`.`uv_page` (`title`, `slug`, `position`, `state`, `titleSeo`, `descriptionSeo`, `content`)
+INSERT INTO `ultraviolet`.`uv_page` (`title`, `slug`, `position`, `state`, `descriptionSeo`, `content`)
 VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Bienvenue chez moi", "Bienvenue sur la première page de mon site", "Ceci est une page d'exemple");

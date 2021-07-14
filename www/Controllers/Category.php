@@ -15,6 +15,7 @@ class Category
         $this->columnsTable = [
             'name' => 'Nom',
             'position' => 'Position',
+            'description' => 'Description',
             'actions' => 'Actions'
         ];
     }
@@ -24,12 +25,9 @@ class Category
      */
     public function showAllAction()
     {
-        $categories = new CategoryModel();
-        $categories = $categories->select()->orderBy('position')->orderBy('name')->get();
         $view = new View("categories/list");
         $view->assign('title', 'Catégories');
         $view->assign('columnsTable', $this->columnsTable);
-        $view->assign('categories', $categories);
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/categories/categories.js']);
     }
 
@@ -64,6 +62,7 @@ class Category
                 $categoryArray[] = [
                     $this->columnsTable['name'] => $category->getName(),
                     $this->columnsTable['position'] => $category->getPosition(),
+                    $this->columnsTable['description'] => $category->getDescriptionSeo(),
                     $this->columnsTable['actions'] => $actions
                 ];
             }
@@ -99,6 +98,7 @@ class Category
                     // Set object values
                     $category->setName(htmlspecialchars($_POST['name']));
                     $category->setPosition(htmlspecialchars($_POST['position']));
+                    $category->setDescriptionSeo(htmlspecialchars($_POST['descriptionSeo']));
                     $category->save();
                     Helpers::setFlashMessage('success', "La catégorie " . $_POST["title"] . " a bien été ajoutée à la base de données.");
                     Helpers::namedRedirect('categories_list');
@@ -232,11 +232,12 @@ class Category
     {
         $category = new CategoryModel;
         $categories = $category->select()->where('position', 1, '>=')->get();
-
         foreach ($categories as $category) {
             if (strcmp(Helpers::slugify($category->getName()), $categorySlug) == 0) {
                 $view = new View('articles/list', 'front');
-                $view->assign('articles',  $category->getArticlesPublished());
+                $view->assign('articles', $category->getArticlesPublished());
+                $view->assign('title', $category->getName());
+                $view->assign('description', $category->getDescriptionSeo());
                 return;
             }
         }
