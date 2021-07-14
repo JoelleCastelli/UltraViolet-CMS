@@ -130,7 +130,7 @@
     #productionsList {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-around;
+      justify-content: flex-start;
 
       .productionCard {
         border: solid $grey4 1px;

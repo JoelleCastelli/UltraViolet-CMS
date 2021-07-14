@@ -115,9 +115,9 @@ if(isset($errors)) {
                     <?php } ?>
                 </div>
             <?php } else { ?>
-                <p>
+                <div class="linkButton">
                     <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
-                </p>
+                </div>
             <?php } ?>
         </div>
 
