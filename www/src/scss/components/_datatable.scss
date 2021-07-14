@@ -2,6 +2,8 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  z-index: 2;
+  margin-top: 1rem;
 
   .buttons {
     display: flex;
@@ -16,7 +18,8 @@
   margin-bottom: 30px;
   border: 1px solid #dfe0eb;
   border-radius: 8px;
-  z-index: -1;
+  margin-top: 2rem;
+  z-index: 1;
 
   #tableHeader {
     display: flex;
