@@ -3,12 +3,13 @@
   display: grid;
   height: 80vh;
   grid-template-columns: 6fr 1fr;
-  grid-template-rows: 300px 3fr;
+  grid-template-rows: 300px 3fr min-content;
   column-gap: 10px;
   row-gap: 5px;
   grid-template-areas:
     "cover cover"
-    "article production";
+    "article production"
+    "comments comments";
 
   .cover {
     position: relative;
@@ -79,5 +80,46 @@
     }
   }
 
-  // overflow: hidden;
+  .comments {
+    grid-area: comments;
+    display: flex;
+    flex-flow: column;
+  }
+}
+
+.comment {
+  display: grid;
+  height: auto;
+  grid-template-columns: min-content 1fr;
+  grid-template-rows: min-content 1fr;
+  column-gap: 10px;
+  grid-template-areas:
+    "profile-picture title"
+    "profile-picture content";
+  padding: 1rem 2rem;
+  margin: 1rem 0;
+
+  &__profile-picture {
+    grid-area: profile-picture;
+    width: 100px;
+    height: 100px;
+    border-radius: 90px;
+    border: 2px $grey3 solid;
+  }
+
+  &__title {
+    grid-area: title;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: $grey6;
+  }
+
+  &__content {
+    grid-area: content;
+    border-radius: 12px;
+    padding: 0.5rem;
+    background: $grey3;
+    color: $light-grey;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  }
 }

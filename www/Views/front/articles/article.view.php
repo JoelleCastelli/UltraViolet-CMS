@@ -16,7 +16,6 @@
         <img alt="imge de couverture de l'article" src="<?= $article->getMedia()->getPath() ?>"></img>
     </div>
 
-
     <section class="article card">
         <h1 class="article__title"><?= $article->getTitle() ?></h1>
         <small class="article__author">Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getPublicationDate() ?></small>
@@ -42,11 +41,36 @@
 
     </section>
 
+    <section class="comments card">
+
+        <h2 class="title-section">Section commentaire</h2>
+
+        <!-- <?php if (isset($form)) App\Core\FormBuilder::render($form); ?> -->
+        <div class="comment">
+            <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
+            <h3 class="comment__title">Ecrit par RomainLePangolin le 01/01/2000</h3>
+            <p class="comment__content">Ceci est un super commentaire qui est uniquement là pour des test d'intégration</p>
+        </div>
+
+        <div class="comment">
+            <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
+            <h3 class="comment__title">Ecrit par RomainLePangolin le 01/01/2000</h3>
+            <p class="comment__content">Ceci est un super commentaire qui est uniquement là pour des test d'intégration</p>
+        </div>
+
+        <div class="comment">
+            <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
+            <h3 class="comment__title">Ecrit par RomainLePangolin le 01/01/2000</h3>
+            <p class="comment__content">Ceci est un super commentaire qui est uniquement là pour des test d'intégration</p>
+        </div>
+
+        <div class="comment">
+            <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
+            <h3 class="comment__title">Ecrit par RomainLePangolin le 01/01/2000</h3>
+            <p class="comment__content">Ceci est un super commentaire qui est uniquement là pour des test d'intégration</p>
+        </div>
+
+    </section>
+
 </div>
 
-<section class="grid-comments">
-
-    <button class="btn">Ecrire un commentaire</button>
-    <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
-
-</section>
