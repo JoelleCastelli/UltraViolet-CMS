@@ -84,10 +84,16 @@ class Main
         $sitemap = "<?xml version='1.0' encoding='UTF-8'?>";
         $sitemap .= "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>";
 
+        $lastPublishedArticle = new Article();
+        $lastPublishedArticle = $lastPublishedArticle->select()->where('deletedAt', 'NULL')
+                             ->andWhere('publicationDate', 'NOT NULL')
+                             ->andWhere("publicationDate", date('Y-m-d H:i:s'), "<=")
+                             ->orderBy('publicationDate', 'DESC')->first();
+
         // Add homepage
         $sitemap .= "<url>
                 <loc>".Helpers::getBaseUrl()."</loc>
-                <lastmod></lastmod>
+                <lastmod>".date("Y-m-d", strtotime($lastPublishedArticle->getCreatedAt()))."</lastmod>
             </url>";
 
         // Add static pages URL
@@ -112,13 +118,16 @@ class Main
         if($class == 'category')
             $objects = $objects->select()->where('position', 0, '=>')->get();
         else
-            $objects = $objects->select()->where('deletedAt', 'NULL')->get();
+            $objects = $objects->select()->where('deletedAt', 'NULL')
+                                         ->andWhere('publicationDate', 'NOT NULL')
+                                         ->andWhere("publicationDate", date('Y-m-d H:i:s'), "<=")
+                                         ->get();
 
         foreach ($objects as $object) {
             if($class == 'category')
-                $loc = Helpers::getBaseUrl().Helpers::slugify($object->getName());
+                $loc = Helpers::getBaseUrl().'/'.Helpers::slugify($object->getName());
             else
-                $loc = Helpers::getBaseUrl().$object->getSlug();
+                $loc = Helpers::getBaseUrl().'/'.$object->getSlug();
 
             $lastUpdate = $object->getUpdatedAt() ?? $object->getCreatedAt();
             $sitemap .= '
