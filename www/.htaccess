@@ -1,24 +1,17 @@
-
 RewriteEngine On 
-
-#Transfert 404 to view
-ErrorDocument 404 /Views/front/404.view.php
 
 RewriteCond %{REQUEST_FILENAME} !-f 
 RewriteCond %{REQUEST_FILENAME} !-d
 
-#RewriteRule .env [B,PT]
 RewriteRule . /index.php
 
-
 ##  404  ##
-
-#Transfert 404 to view
-ErrorDocument 404 /Views/front/404.view.php
-
 RedirectMatch 404 /.env
 RedirectMatch 404 .yml*$
 RedirectMatch 404 .sql*$
+
+#Transfert 404 to view
+ErrorDocument 404 /Views/front/404.view.php
 
 
 

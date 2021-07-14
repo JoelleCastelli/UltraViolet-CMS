@@ -18,7 +18,6 @@ class Page extends Database implements JsonSerializable
 	protected $slug;
 	protected $position;
 	protected $state;
-	protected $titleSeo;
 	protected $descriptionSeo;
 	protected $publicationDate;
     protected $content;
@@ -113,22 +112,6 @@ class Page extends Database implements JsonSerializable
     public function setState($state): void
     {
         $this->state = $state;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitleSeo()
-    {
-        return $this->titleSeo;
-    }
-
-    /**
-     * @param mixed $titleSeo
-     */
-    public function setTitleSeo($titleSeo): void
-    {
-        $this->titleSeo = $titleSeo;
     }
 
     /**
@@ -290,7 +273,6 @@ class Page extends Database implements JsonSerializable
             "slug" => $this->getSlug(),
             "position" => $this->getPosition(),
             "state" => $this->getState(),
-            "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),
             "content" => $this->getContent(),
@@ -331,7 +313,7 @@ class Page extends Database implements JsonSerializable
 			"fields"=>[
 				"title" => [
                     "type" => "text",
-                    "placeholder" => "Animées",
+                    "placeholder" => "Nous contacter",
                     "label" => "Titre *",
                     "class" => "search-bar",
                     "error" => "Votre titre doit faire entre 1 et 100 caractères",
@@ -341,7 +323,7 @@ class Page extends Database implements JsonSerializable
                 ],
 				"slug"=>[
                     "type" => "text",
-                    "placeholder" => "meilleures-animees",
+                    "placeholder" => "nous-contacter",
                     "label" => "Slug",
                     "class" => "search-bar",
                     "error" => "Votre slug est incorrect et doit faire entre 1 et 100 caractères",
@@ -359,21 +341,17 @@ class Page extends Database implements JsonSerializable
                     "max" => 127,
                     "required" => true,
                 ],
-				"titleSeo"=>[
-                    "type"=>"text",
-                    "placeholder" => "Titre pour le référencement",
-                    "label" => "Titre SEO",
-                    "class" => "search-bar",
-                ],
 				"descriptionSeo"=>[
-                    "type"=>"text",
+                    "type"=>"textarea",
                     "label" => "Description SEO",
-                    "placeholder" => "Description de la page",
+                    "maxLength" => 160,
+                    "error" => "La description ne peut pas contenir plus de 160 caractères",
+                    "placeholder" => "Description de la page vue par les moteurs de recherche",
                     "class"=>"search-bar",
                 ],
                 "content" => [
+                    "id" => "articleContent",
                     "type" => "textarea",
-                    "placeholder" => "Contenu de la page",
                     "class" => "input",
                 ],
                 "state" => [
@@ -381,7 +359,7 @@ class Page extends Database implements JsonSerializable
                     "label" => "État *",
                     "class" => "state",
                     "required" => true,
-                    "error" => "Le champs état est vide",
+                    "error" => "Le champs Etat est vide",
                     "options" => [
                         [
                             "value" => "draft",
@@ -415,7 +393,7 @@ class Page extends Database implements JsonSerializable
 		];
 	}
 
-    public function formBuilderUpdate($id)
+    public function formBuilderUpdate($id): array
     {
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
@@ -433,7 +411,7 @@ class Page extends Database implements JsonSerializable
             "fields" => [
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Animées",
+                    "placeholder" => "Nous contacter",
                     "label" => "Titre *",
                     "class" => "search-bar",
                     "error" => "Votre titre doit faire entre 1 et 100 caractères",
@@ -443,7 +421,7 @@ class Page extends Database implements JsonSerializable
                 ],
                 "slug" => [
                     "type" => "text",
-                    "placeholder" => "meilleures-animees",
+                    "placeholder" => "nous-contacter",
                     "label" => "Slug",
                     "class" => "search-bar",
                     "error" => "Votre slug est incorrect et doit faire entre 1 et 100 caractères",
@@ -461,21 +439,17 @@ class Page extends Database implements JsonSerializable
                     "max" => 127,
                     "required" => true,
                 ],
-                "titleSeo" => [
-                    "type" => "text",
-                    "placeholder" => "Titre pour le référencement",
-                    "label" => "Titre SEO",
-                    "class" => "search-bar",
-                ],
                 "descriptionSeo" => [
                     "type" => "text",
                     "label" => "Description SEO",
-                    "placeholder" => "Description de la page",
+                    "placeholder" => "Description de la page vue par les moteurs de recherche",
+                    "maxLength" => 160,
+                    "error" => "La description ne peut pas contenir plus de 160 caractères",
                     "class" => "search-bar",
                 ],
                 "content" => [
+                    "id" => "articleContent",
                     "type" => "textarea",
-                    "placeholder" => "Contenu de la page",
                     "class" => "input",
                 ],
                 "state" => [

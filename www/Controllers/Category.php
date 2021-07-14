@@ -210,7 +210,8 @@ class Category
         }
     }
 
-    private function isSlugUnique($slug, $id = 0) {
+    private function isSlugUnique($slug, $id = 0): bool
+    {
         $category = new CategoryModel;
         $categories = $category->findAll();
         foreach($categories as $category)
@@ -229,14 +230,11 @@ class Category
 
     public function showCategoryArticlesAction($categorySlug)
     {
-
         $category = new CategoryModel;
-        $categories = $category->select()->where('position', 1, '>')->get();
+        $categories = $category->select()->where('position', 1, '>=')->get();
 
         foreach ($categories as $category) {
-
             if (strcmp(Helpers::slugify($category->getName()), $categorySlug) == 0) {
-
                 $view = new View('articles/list', 'front');
                 $view->assign('articles',  $category->getArticlesPublished());
                 return;
