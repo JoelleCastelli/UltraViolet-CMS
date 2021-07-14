@@ -213,8 +213,10 @@ class Person
 
         if ($user && $user->isLogged()) {
 
+            $view = new View('userUpdate', 'front');
             $form = $user->formBuilderUpdatePersonalInfo();
             $view->assign("form", $form);
+            $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/settings.js']);
 
             if (!empty($_POST)) {
 
@@ -229,12 +231,22 @@ class Person
 
                     if(!empty($_POST['pwd'])) // if actual password mention
                     {
-                        if(!password_verify($_POST['oldPwd'], $user->getPassword())) // check old password 
-                            $errors = ['Ancien mot de passe non correct'];
+
+                        if(!$user->isEmailConfirmed())
+                            $errors = ['Veuillez confirmer tout d\'abord votre mail actuel merci'];
 
                         if(empty($errors))
-                            if( $_POST['pwdConfirm'] !== $_POST["pwd"]) // check password confirm
+                        {
+                            if (!password_verify($_POST['oldPwd'], $user->getPassword())) // check old password 
+                                $errors = ['Ancien mot de passe non correct'];
+
+                            if (empty($errors))
+                                if ($_POST['pwdConfirm'] !== $_POST["pwd"]) // check password confirm
                                 $errors = $form['fields']['pwdConfirm']['error'];
+                            
+                            if(empty($errors))
+                                $emailChanged = true;
+                        }
                     }
 
                     if (empty($errors)) {
@@ -243,6 +255,11 @@ class Person
                         $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                         if($user->save())
                         {
+                            if(isset($emailChanged))
+                            {
+                                $user->setEmailConfirmed(false);
+                                $user->setEmailKey(null);
+                            }
                             Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
                             Helpers::namedRedirect('user_update');
                         }
@@ -293,6 +310,39 @@ class Person
         } else {
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }
+    }
+
+    public function deleteUserAction()
+    {
+        $user = Request::getUser();
+        if($user && $user->isLogged()) {
+
+            if( $user->isAdmin() && $user->count('email')->where('role', 'admin')->first(false) > 1){
+
+                //SOFT DELETE
+                $user->setPseudo(null);
+                $user->setEmail(null);
+                $user->setPassword(null);
+                $user->setEmailKey(null);
+                $user->setEmailConfirmed(false);
+                if($user->delete())
+                {
+
+                    Helpers::setFlashMessage("success", "Votre compte a bien été supprimé");
+                    Helpers::namedRedirect("front_home");
+
+                }else {
+                    Helpers::setFlashMessage("error", "Oops ! Une erreur est survenu lors de la suppression de votre compte.");
+                    Helpers::namedRedirect("user_update");
+                }
+
+            }else {
+                Helpers::setFlashMessage("error", "Vous êtes le seul administrateur, par conséquent vous ne pouvez pas supprimer ce compte.");
+                Helpers::namedRedirect("user_update");
+            }
+        } 
+    
+        Helpers::redirect404();
     }
 
     public function showAction()

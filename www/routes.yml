@@ -44,10 +44,16 @@ forget_password:
   controller: Main
   action:     page404
 
+#SETTINGS
 user_update:
   path:       /parametre
   controller: Person
   action:     updateUser
+
+user_delete:
+  path:       /parametre/supprimer-mon-compte
+  controller: Person
+  action:     deleteUser
 
 # PAGE
 display_static_page:
