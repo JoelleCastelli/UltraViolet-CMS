@@ -194,7 +194,6 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uv_page` (
   `slug` VARCHAR(100) NOT NULL,
   `position` TINYINT NOT NULL,
   `state` ENUM('draft', 'scheduled', 'published', 'hidden', 'deleted') NOT NULL DEFAULT 'draft',
-  `titleSeo` VARCHAR(60) NULL DEFAULT NULL,
   `descriptionSeo` VARCHAR(160) NULL DEFAULT NULL,
   `publicationDate` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,

@@ -44,14 +44,13 @@ class Page
     {
         $page = new PageModel();
         $page = $page->select()->where('slug', $slug)->andWhere('state', 'published')->first();
-
-        if(!empty($page)){
-            $view = new View('staticPage', 'front');
-            $view->assign('content', $page->getContent());
-        }else {
+        if(empty($page))
             Helpers::redirect404();
-        }
 
+        $view = new View('staticPage', 'front');
+        $view->assign('content', $page->getContent());
+        $view->assign('title', $page->getTitle());
+        $view->assign('description', $page->getDescriptionSeo());
     }
 
     public function getPagesAction()
@@ -135,7 +134,6 @@ class Page
                     $page->setSlug($slug);
                     $page->setTitle($_POST["title"]);
                     $page->setPosition($_POST["position"]);
-                    $page->setTitleSeo($_POST["titleSeo"]);
                     $page->setContent($_POST["content"]);
                     $page->setDescriptionSeo($_POST["descriptionSeo"]);
                     $page->setCreatedAt(Helpers::getCurrentTimestamp());
@@ -146,7 +144,7 @@ class Page
                     
                     if(empty($errors)) {
 
-                        Helpers::setFlashMessage('success', 'La page s\'est bien créée');
+                        Helpers::setFlashMessage('success', 'La page a été correctement enregistrée !');
                         Helpers::redirect(Helpers::callRoute('pages_list'));
 
                     }
@@ -181,7 +179,7 @@ class Page
         $view = new View('pages/update');
         $view->assign('form', $form);
         $view->assign('data', $arrayPage);
-        $view->assign('title', 'Modifier la page n° ' . $page->getId());
+        $view->assign('title', 'Modifier une page');
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js', PATH_TO_SCRIPTS . 'bodyScripts/tinymce.js']);
 
         if (!empty($_POST)) {
@@ -203,7 +201,6 @@ class Page
                     $page->setSlug($slug);
                     $page->setTitle($_POST["title"]);
                     $page->setPosition($_POST["position"]);
-                    $page->setTitleSeo($_POST["titleSeo"]);
                     $page->setDescriptionSeo($_POST["descriptionSeo"]);
                     $page->setContent($_POST["content"]);
 
