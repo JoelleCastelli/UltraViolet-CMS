@@ -216,7 +216,7 @@ class Category
         $categories = $category->findAll();
         foreach($categories as $category)
         {
-            if (strcmp(Helpers::slugify($category->getName()), $slug) == 0 && $category->getId() != $id) {
+            if (Helpers::slugify($category->getName()) === $slug && $category->getId() != $id) {
 
                 return false;
             }
@@ -233,7 +233,9 @@ class Category
         $category = new CategoryModel;
         $categories = $category->select()->where('position', 1, '>=')->get();
         foreach ($categories as $category) {
-            if (strcmp(Helpers::slugify($category->getName()), $categorySlug) == 0) {
+
+            if (Helpers::slugify($category->getName()) === $categorySlug) {
+
                 $view = new View('articles/list', 'front');
                 $view->assign('articles',  $category->getArticlesPublished());
                 $view->assign("category", $category->getName());
