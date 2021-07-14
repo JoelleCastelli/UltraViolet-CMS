@@ -175,14 +175,9 @@ class Installer
         // Create and save article
         $article = new Article();
         $article->setTitle("Votre tout premier article");
-        $article->setTitleSeo(APP_NAME . " : découvrez le tout premier article");
         $article->setSlug(Helpers::slugify($article->getTitle()));
-        $article->setDescription("Découvrez le tout premier article de votre site, et voici le court descriptif
-        qui apparaît dans les listes d'articles !");
-        $article->setDescriptionSeo("Découvrez toute l'actualité des films disponibles en salle cette semaine !");
-        $article->setContent("Voici votre premier article ! Il parle des nouveaux films sortis en salle cette semaine :
-        il est d'ailleurs lié aux catégories 'Films' et 'Actualités' ! Vous pouvez le modifier ou le supprimer directement depuis la page dédiée
-        dans l'interface d'administration.");
+        $article->setDescription("Découvrez le tout premier article de votre site, et voici le court descriptif qui apparaît dans les listes d'articles !");
+        $article->setContent("Voici votre premier article ! Il parle des nouveaux films sortis en salle cette semaine : il est d'ailleurs lié aux catégories 'Films' et 'Actualités' ! Vous pouvez le modifier ou le supprimer directement depuis la page dédiée dans l'interface d'administration.");
         $article->setPersonId($authorId);
         $article->setDefaultPicture();
         $now = new DateTime('NOW');
@@ -198,8 +193,7 @@ class Installer
 
     public function insertExampleComment($authorId, $articleId) {
         $comment = new Comment();
-        $comment->setContent("Voici le premier commentaire de cet article. Vous pouvez agir
-                            dessus via la page dédiée dans l'interface d'administration");
+        $comment->setContent("Voici le premier commentaire de cet article. Vous pouvez agir dessus via la page dédiée dans l'interface d'administration");
         $comment->setpersonId($authorId);
         $comment->setArticleId($articleId);
         $comment->save();

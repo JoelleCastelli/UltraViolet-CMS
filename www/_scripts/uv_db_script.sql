@@ -326,4 +326,4 @@ INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`, `descriptionSeo`) V
 -- Insert example page
 -- -----------------------------------------------------
 INSERT INTO `ultraviolet`.`uv_page` (`title`, `slug`, `position`, `state`, `descriptionSeo`, `content`)
-VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Bienvenue chez moi", "Bienvenue sur la première page de mon site", "Ceci est une page d'exemple");
+VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Ceci est la description de votre page telle qu'elle sera vue par les moteurs de recherche", "<p>Voici la toute première page de votre site !</p>");
