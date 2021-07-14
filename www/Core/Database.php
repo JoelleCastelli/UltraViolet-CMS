@@ -159,9 +159,10 @@ class Database {
     // WHERE
     public function where($column, $value, $equal = "=" ): Database
     {
-        if($value == 'NOT NULL') {
+
+        if($value === 'NOT NULL') {
             $this->query .= 'WHERE `' . $column . '` IS NOT NULL ';
-        } else if ($value == 'NULL') {
+        } else if ($value === 'NULL') {
             $this->query .= 'WHERE `' . $column . '` IS NULL ';
         } else {
             $this->query .= 'WHERE `' . $column . '` ' . $equal . ' "' . htmlspecialchars($value, ENT_QUOTES) . '" ';
@@ -189,7 +190,14 @@ class Database {
 
     public function whereIn($column, $value): Database
     {
-        $this->query .= 'WHERE `' . $column . '` IN ' . htmlspecialchars($value, ENT_QUOTES) . ' ';
+
+        if (is_array($value)) {
+            $result = "('" . implode("','", $value) . "')";
+        } else {
+            $result = "('" . $value . "')";
+        }
+
+        $this->query .= 'WHERE `' . $column . '` IN ' . $result . ' ';
         return $this;
     }
 
@@ -250,12 +258,14 @@ class Database {
             $this->order++;
         }
         else
-            $this->query .= ', `' . $column . '` '. $order . '" ';
+            $this->query .= ', `' . $column . '` '. $order . ' ';
         return $this;
     }
 
     public function get($setFetchMode = true): array
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->query($this->query);
 
         if ($setFetchMode)
@@ -275,6 +285,8 @@ class Database {
 
     public function execute(): bool
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->prepare($this->query);
         try {
             return $query->execute();
@@ -286,6 +298,8 @@ class Database {
 
     public function first($setFetchMode = true)
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->query($this->query);
 
         if ($setFetchMode)
@@ -308,7 +322,7 @@ class Database {
         $classPath = explode('\\', get_class($this));
         $class = mb_strtolower(end($classPath));
 
-        $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
+        $actions = "<div class='actionsMenu'><div class='bubble-actions'></div><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
                 $tag = in_array($action['action'], ['delete', 'update-state']) ? "span" : "a";
@@ -316,7 +330,7 @@ class Database {
                 if($tag === 'a')
                     $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</$tag>";
                 else
-                    $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . "' >" . $action['name'] . "</$tag>";
+                    $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . " clickable-tag' >" . $action['name'] . "</$tag>";
             }
         }
         $actions .= "</div></div>";

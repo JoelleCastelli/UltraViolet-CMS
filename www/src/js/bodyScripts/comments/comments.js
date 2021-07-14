@@ -1,16 +1,26 @@
 $(document).ready(function () {
-  getMediasByType("poster");
-
   /* BUILD DATATABLES */
   let table = $("#datatable").DataTable({
     order: [],
     autoWidth: false,
     responsive: true,
+    // All columns
     columns: [
-      { data: "Miniature" },
-      { data: "Nom" },
-      { data: "Date d'ajout" },
+      { data: "Auteur" },
+      { data: "Article" },
+      { data: "Contenu" },
+      { data: "Créé le" },
       { data: "Actions" },
+    ],
+
+    // Column Actions
+    columnDefs: [
+      {
+        targets: 4,
+        data: "Actions",
+        searchable: false,
+        orderable: false,
+      },
     ],
 
     language: {
@@ -45,22 +55,15 @@ $(document).ready(function () {
     },
   });
 
-  table.columns([3]).visible(false); //actions
-  $(".filtering-btn").click(function () {
-    $(".filtering-btn").removeClass("active");
-    $(this).addClass("active");
+  /* FILTERS */
+  // On start, display movies
+  getCommentsByState("visible");
 
-    getMediasByType(this.id);
-
-    if (this.id === "other") table.columns([3]).visible(true);
-    else table.columns([3]).visible(false);
-  });
-
-  function getMediasByType(mediaType) {
+  function getCommentsByState(commentState) {
     $.ajax({
       type: "POST",
-      url: callRoute("medias-data"),
-      data: { mediaType },
+      url: callRoute("comments_data"),
+      data: { commentState },
       dataType: "json",
       success: function (response) {
         table.clear();
@@ -68,46 +71,35 @@ $(document).ready(function () {
       },
       error: function () {
         console.log(
-          "Erreur dans la récupération des médias de type " + mediaType
+          "Erreur dans la récupération des productions de type " + commentState
         );
       },
     });
   }
 
-  //hide form input
-  $(":submit").css("display", "none");
-  $("#filesList").css("display", "none");
-
-  // File list under input
-  const files = document.querySelector("#mediaSelector");
-  files.addEventListener("change", (e) => {
-    $(":submit").css("display", "inline");
-    $("#filesList").css("display", "block");
-    Array.from(e.target.files).forEach((file) => {
-      let node = document.createElement("div");
-      let fileInfo = document.createTextNode(
-        file.name + " - " + (file.size / 1000).toFixed(2) + "KB"
-      );
-      node.appendChild(fileInfo);
-      document.getElementById("filesList").appendChild(node);
-    });
+  $(".filtering-btn").click(function () {
+    $(".filtering-btn").removeClass("active");
+    $(this).addClass("active");
+    getCommentsByState(this.id);
   });
 
-  table.on("click", ".delete", function () {
-    if (confirm("Êtes-vous sûr.e de vouloir supprimer ce média ?")) {
-      let mediaId = this.id.substring(this.id.lastIndexOf("-") + 1);
+  /* Delete Comment*/
+  table.on("click", ".delete", function (event) {
+    event.preventDefault();
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce commentaire ?")) {
+      let commentId = this.id.substring(this.id.lastIndexOf("-") + 1);
       let row = table.row($(this).parents("tr"));
       $.ajax({
         type: "POST",
-        url: callRoute("media_delete"),
-        data: { mediaId: mediaId },
+        url: callRoute("comments_delete"),
+        data: { id: commentId },
         dataType: "json",
         success: function (response) {
           if (response["success"]) row.remove().draw();
           else alert(response["message"]);
         },
-        error: function () {
-          console.log("Erreur dans la suppression du média ID " + mediaId);
+        error: function (response) {
+          alert("Erreur dans la suppression du commentaire ID: " + commentId);
         },
       });
     }

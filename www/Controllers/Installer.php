@@ -15,6 +15,14 @@ use Exception;
 
 class Installer
 {
+
+    public function __construct()
+    {
+        // Prevent access ton installer if already installed
+        if (UV_INSTALLED == 'true') Helpers::redirect404();
+    } 
+
+
     public function install($route) {
         $action = $route->getAction();
         $this->$action();
@@ -49,7 +57,7 @@ class Installer
 
                 // Check if connection is successful
                 try {
-                    new \PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
+                    new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT, DBUSER, DBPWD);
                 } catch (Exception $e) {
                     $errors[] = "Nous n'avons pas pu nous connecter à votre base de données. Veuillez vérifier vos informations";
                 }
@@ -87,8 +95,8 @@ class Installer
                 $db = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
                 $sql = file_get_contents(getcwd().'/_scripts/custom_db_script.sql');
                 $db->exec($sql);
-                // Check that the tables have correctly been created in the database (12 tables expected)
-                if(count($db->query("SHOW TABLES")->fetchAll()) == 12) {
+                // Check that the tables have correctly been created in the database (13 tables expected)
+                if(count($db->query("SHOW TABLES")->fetchAll()) == 13) {
                     $db = null;
                     Helpers::redirect(Helpers::callRoute('configStep5'));
                 } else {
@@ -136,6 +144,7 @@ class Installer
                     $admin->setPassword(password_hash(htmlspecialchars($_POST['password']), PASSWORD_DEFAULT));
                     $admin->setEmailConfirmed(true);
                     $admin->setRole('admin');
+                    $admin->generateEmailKey();
                     $admin->setDefaultProfilePicture();
                     if($admin->save()) {
                         // Insert first article
@@ -192,7 +201,6 @@ class Installer
         $comment = new Comment();
         $comment->setContent("Voici le premier commentaire de cet article. Vous pouvez agir
                             dessus via la page dédiée dans l'interface d'administration");
-        $comment->setVisible(true);
         $comment->setpersonId($authorId);
         $comment->setArticleId($articleId);
         $comment->save();

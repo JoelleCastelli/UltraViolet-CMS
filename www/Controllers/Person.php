@@ -8,6 +8,8 @@ use App\Core\FormValidator;
 use App\Core\Mail;
 use App\Core\Request;
 use App\Models\Person as PersonModel;
+use App\Models\Comment as CommentModel;
+
 
 class Person
 {
@@ -54,7 +56,7 @@ class Person
                             $_SESSION['loggedIn'] = true;
                             $_SESSION['user_id'] = $user->getId();
                             Helpers::setFlashMessage('success', "Bienvenue ".$user->getPseudo());
-                            Helpers::redirect('/');
+                            Helpers::namedRedirect('front_home');
                         } else {
                             $errors[] = "Merci de confirmer votre adresse e-mail. Renvoyer l'email de confirmation";
                         }
@@ -108,7 +110,7 @@ class Person
 
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
                     vous a été envoyé sur " .$_POST['email'].". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
-                    Helpers::redirect('/connexion');
+                    Helpers::namedRedirect('login');
                 }
 			}
             $view->assign("errors", $errors);
@@ -116,29 +118,40 @@ class Person
 	}
 
     public function getUsersAction() {
-        if(!empty($_POST['role'])) {
-            $users = new PersonModel();
-            $users = $users->selectWhere('role', htmlspecialchars($_POST['role']));
-            
-            if(!$users) $users = [];
-            
-            $usersArray = [];
-            foreach ($users as $user) {
-                $usersArray[] = [
-                    $this->columnsTable['name'] => $user->getFullName(),
-                    $this->columnsTable['pseudo'] => $user->getPseudo(),
-                    $this->columnsTable['mail'] => $user->getEmail(),
-                    $this->columnsTable['checkMail'] => $user->isEmailConfirmed(),
-                    $this->columnsTable['actions'] => $user->generateActionsMenu(),
-                ];
-            }
-            echo json_encode(["users" => $usersArray]);
+        if(empty($_POST)) return;
+
+        $users = new PersonModel();
+
+        if(!empty($_POST['deletedAt'])) {
+            $users = $users->select()->where('deletedAt', 'NOT NULL')->get();
         }
+
+        if (!empty($_POST['role'])) {        
+            $users = $users->select()->where('role', htmlspecialchars($_POST['role']))->andWhere('deletedAt', 'NULL')->get();
+
+        }
+
+        if(!$users) $users = [];
+        
+        $usersArray = [];
+        foreach ($users as $user) {
+            $emailConfirmed = $user->isEmailConfirmed();
+            if ( $emailConfirmed == true ) $emailConfirmed = 'oui';
+            else $emailConfirmed = 'non';
+            $usersArray[] = [
+                $this->columnsTable['name'] => $user->getFullName(),
+                $this->columnsTable['pseudo'] => $user->getPseudo(),
+                $this->columnsTable['mail'] => $user->getEmail(),
+                $this->columnsTable['checkMail'] => $emailConfirmed,
+                $this->columnsTable['actions'] => $user->generateActionsMenu(),
+            ];
+        }
+            echo json_encode(["users" => $usersArray]);
     }
 
 	public function logoutAction() {
         session_destroy();
-        Helpers::redirect('/');
+        Helpers::namedRedirect('front_home');
     }
 
     public function updatePersonAction($id) {
@@ -174,13 +187,31 @@ class Person
     }
 
     public function deletePersonAction() {
-            if (!empty($_POST['id'])){ 
+
+        if (!empty($_POST['id'])){ 
             $user = new PersonModel();
             $id = $_POST['id'];
             $user->setId($id);
-            $user->delete();
-            Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
+                        
+            if ($user->getDeletedAt()) {
+                //HARD DELETE USER
+                $comments = new CommentModel();
+                $comments = $comments->select()->where("personId", $id)->get();
+                
+                foreach ($comments as $comment) {
+
+                    $comment->hardDelete()->where( 'id' , $comment->getId() )->execute();
+                }
+                $user->delete();
+
+            }else{
+                //SOFT DELETE
+                $user->setPseudo('Anonyme'.$id);
+                $user->setEmail('deleted'.$id.'@mail.com');
+                $user->delete();
+            }
             
+            Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
         }else{
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }
@@ -206,7 +237,7 @@ class Person
 
                 $user->save();
                 Helpers::setFlashMessage('success', "Votre compte a bien était activé");
-                Helpers::redirect('/connexion');
+                Helpers::namedRedirect('login');
             }else
             {
                 Helpers::setFlashMessage('error', "Votre compte est déjà activé");
@@ -240,7 +271,7 @@ class Person
                     $mail->sendMail($to, $from, $name, $subj, $msg);
                     Helpers::setFlashMessage('success', " Un e-mail
                     vous a été envoyé sur " .$_POST['email']);
-                    Helpers::redirect('/connexion');
+                    Helpers::namedRedirect('login');
                 } else {
                     $errors[] = "Aucun compte n'a été trouvé";
                 }
@@ -266,7 +297,7 @@ class Person
                         $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                         $user->save();
                         Helpers::setFlashMessage('success', "Votre mot de passe à bien était changée.");
-                        Helpers::redirect('/connexion');
+                        Helpers::namedRedirect('login');
                     }
                 } else {
                     $errors[] = "Les identifiants ne sont pas reconnus";

@@ -15,6 +15,6 @@
         Mot de passe perdu ? <a href="<?= \App\Core\Helpers::callRoute('forget_password')?>">Réinitialiser mon mot de passe</a>
     </div>
     <div>
-        Vous n'avez pas de compte ? <a href="<?= \App\Core\Helpers::callRoute('subscription')?>">Rejoignez-nous !</a>
+        Vous n'avez pas de compte ? <a href="<?= \App\Core\Helpers::callRoute('register')?>">Rejoignez-nous !</a>
     </div>
 </div>

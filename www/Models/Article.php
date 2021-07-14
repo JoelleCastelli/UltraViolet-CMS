@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Controller\Category;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
@@ -22,7 +21,6 @@ class Article extends Database implements JsonSerializable
     protected $content;
     protected $rating;
     protected $slug;
-    protected $totalViews = 0;
     protected $titleSeo;
     protected $descriptionSeo;
     protected $contentUpdatedAt;
@@ -33,10 +31,11 @@ class Article extends Database implements JsonSerializable
     private $updatedAt;
     protected $deletedAt;
 
-    public $media;
-    public $person;
+    public Media $media;
+    public Person $person;
+    private array $comments = [];
 
-    private $actions;
+    private array $actions;
 
     public function __construct() {
         parent::__construct();
@@ -140,22 +139,6 @@ class Article extends Database implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getTotalViews()
-    {
-        return $this->totalViews;
-    }
-
-    /**
-     * @param mixed $totalViews
-     */
-    public function setTotalViews($totalViews): void
-    {
-        $this->totalViews = $totalViews;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getTitleSeo()
     {
         return $this->titleSeo;
@@ -238,6 +221,9 @@ class Article extends Database implements JsonSerializable
      */
     public function getMedia(): Media
     {
+        if (!empty($this->mediaId) && is_numeric($this->mediaId))
+            $this->media->setId($this->mediaId);
+
         return $this->media;
     }
 
@@ -265,6 +251,24 @@ class Article extends Database implements JsonSerializable
     public function setPerson(Person $person): void
     {
         $this->person = $person;
+    }
+
+    /**
+     * @return array
+     */
+    public function getComments(): array
+    {
+        $comments = new Comment();
+        $this->comments = $comments->select()->where('articleId', $this->id)->get();
+        return $this->comments;
+    }
+
+    /**
+     * @param array $comments
+     */
+    public function setComments(array $comments): void
+    {
+        $this->comments = $comments;
     }
 
     /**
@@ -334,7 +338,7 @@ class Article extends Database implements JsonSerializable
     /**
      * @return array
      */
-    public function getActions()
+    public function getActions(): array
     {
         return $this->actions;
     }
@@ -353,7 +357,7 @@ class Article extends Database implements JsonSerializable
         
         if ($state == "scheduled") {
             return $this->select()
-            ->where("publicationDate", $now, ">=")
+            ->where("publicationDate", $now, ">")
             ->andWhere("deletedAt", "NULL")
             ->get();
         } 
@@ -386,7 +390,7 @@ class Article extends Database implements JsonSerializable
         if (empty($this->getDeletedAt()) && (strtotime($this->getPublicationDate()) > strtotime("now")))
             return "scheduled";
 
-        return NULL;        
+        return false;
     }
 
     public function getCleanPublicationDate() {
@@ -421,6 +425,83 @@ class Article extends Database implements JsonSerializable
         }
     }
 
+    public function getCategoriesRelated()
+    {
+        $categoryArticleModel = new CategoryArticleModel;
+        $categoryModel = new CategoryModel;
+
+        $categoriesId = $categoryArticleModel->select('categoryId')->where('articleId', $this->id)->get(false);
+        $categories = $categoryModel->select()->whereIn('id', $categoriesId)->get();
+      
+        return $categories;
+    }
+
+    public function setToPublished() {
+        $today = date("Y-m-d\TH:i");
+
+        $this->setPublicationDate($today);
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
+    public function setToScheduled($publicationDate) {
+        $this->setPublicationDate(htmlspecialchars($publicationDate));
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
+    public function setToDraft() {
+        $this->setPublicationDate(null);
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
+    public function articleSoftDelete() {
+        $this->toggleComments("hide");
+        $this->delete();
+    }
+
+    // state == display / hide
+    public function toggleComments($state = "display") {
+        if (!($state == "display" || $state == "hide")) return;
+
+        $comments = $this->getComments();
+        foreach ($comments as $comment) {
+            if ($state == "hide") {
+                $comment->delete();
+            } else {
+                $comment->setDeletedAt(null);
+                $comment->save();
+            }
+        }
+    }
+
+    public function articleHardDelete() {
+        $categoryArticle = new CategoryArticleModel();
+        $articleId = $this->getId();
+
+        $entries = $categoryArticle->select()->where("articleId", $articleId)->get();
+        foreach ($entries as $entry) {
+            $entry->hardDelete()->execute();
+        }
+
+        $comments = $this->getComments();
+        foreach ($comments as $comment) {
+            $comment->hardDelete()->execute();
+        }
+
+        $this->hardDelete()->where("id", $articleId)->execute();
+    }
+
     // JSON FORMAT
     public function jsonSerialize(): array
     {
@@ -431,7 +512,7 @@ class Article extends Database implements JsonSerializable
             "content" => $this->getContent(),
             "rating" => $this->getRating(),
             "slug" => $this->getSlug(),
-            "totalViews" => $this->getTotalViews(),
+            // "totalViews" => $this->getTotalViews(),
             "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),
@@ -444,26 +525,15 @@ class Article extends Database implements JsonSerializable
 
     // FORMS
 
-    public function formBuilderCreateArticle() {
+    public function formBuilderCreateArticle(): array
+    {
 
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
 
-        $media = new MediaModel();
-        $category = new CategoryModel();
+        $category = new CategoryModel();     
 
-        $medias = $media->findAll();
         $categories = $category->findAll();
-
-        $mediaOptions = [];
-
-        foreach ($medias as $media) {
-           array_push($mediaOptions, [
-                "value" => $media->getId(),
-                "text" => $media->getTitle()
-           ]);
-        }
-
         $categoryOptions = [];
 
         foreach ($categories as $category) {
@@ -541,11 +611,10 @@ class Article extends Database implements JsonSerializable
                     "readonly" => true,
                 ],
                 "media" => [
-                    "type" => "select",
-                    "label" => "Image de cover *",
+                    "type" => "text",
+                    "label" => "Media utilisé pour la cover de l'article",
                     "class" => "search-bar",
-                    "options" => $mediaOptions,
-                    "required" => true,
+                    "readonly" => true
                 ],
                 "categories" => [
                     "type" => "checkbox",
@@ -568,7 +637,8 @@ class Article extends Database implements JsonSerializable
         ];
     }
 
-    public function formBuilderUpdateArticle($articleId) {
+    public function formBuilderUpdateArticle($articleId): array
+    {
 
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
@@ -578,28 +648,14 @@ class Article extends Database implements JsonSerializable
         $categoryArticle = new CategoryArticleModel();
         $this->setId($articleId);
         
-        $medias = $media->findAll();
-        $mediaOptions = [];
-
-        // Get all media and select one of them is the article is using it
-        foreach ($medias as $media) {
-            $mediaIsAlreadySelected = false;
-            if ($this->getMediaId() == $media->getId()) {
-                $mediaIsAlreadySelected = true;
-            }
-            $options = [
-                "value" => $media->getId(),
-                "text" => $media->getTitle(),
-                "selected" => $mediaIsAlreadySelected,
-            ];
-           array_push($mediaOptions, $options);
-        }
+        $mediaId = $this->select("MediaId")->where("id", $articleId)->first(0);
+        $mediaTitle = $media->select("title")->where("id", $mediaId)->first(0);
 
         $categories = $category->findAll();
         $categoriesByArticle = $categoryArticle->select()->where("articleId", $articleId, "=")->get();
         $categoryOptions = [];
 
-        // Get all categories and check its checboxes if necessary
+        // Get all categories and check its checkboxes if necessary
         foreach ($categories as $category) {
             $categoryIsAlreadySelected = false;
             foreach ($categoriesByArticle as $categoryArticle) {
@@ -675,7 +731,7 @@ class Article extends Database implements JsonSerializable
                             "value" => "draft",
                             "class" => "stateDraft",
                             "text" => "Brouillon",
-                            "checked" => $state === "draft" ? true : false
+                            "checked" => $state === "draft"
                         ],
                         [
                             "value" => "removed",
@@ -684,7 +740,7 @@ class Article extends Database implements JsonSerializable
                         [
                             "value" => "nothing",
                             "text" => "Ne rien changer",
-                            "checked" => $state !== "draft" ? true : false
+                            "checked" => $state !== "draft"
 
                         ]
                     ],
@@ -696,15 +752,14 @@ class Article extends Database implements JsonSerializable
                     "error" => "Votre date de publication doit être au minimum " . $todayText ,
                     "min" => $today,
                     "value" => $this->getPublicationDate(),
-                    "readonly" => $state !== "scheduled" ? true : false
+                    "readonly" => $state !== "scheduled"
                 ],
                 "media" => [
-                    "type" => "select",
-                    "label" => "Image de cover *",
+                    "type" => "text",
+                    "label" => "Media utilisé pour la cover de l'article",
                     "class" => "search-bar",
-                    "options" => $mediaOptions,
-                    "required" => true,
-                    "error" => "Vous devez sélectionner un media."
+                    "readonly" => true,
+                    "value" => $mediaTitle,
                 ],
                 "categories" => [
                     "type" => "checkbox",

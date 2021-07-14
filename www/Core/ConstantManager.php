@@ -8,19 +8,21 @@ class ConstantManager {
 	private array $data = [];
 
 	public function __construct() {
+	    // Check if .env file exists
 		if(!file_exists($this->envFile))
 			die("File ".$this->envFile." doesn't exist");
 
-		$this->parsingEnv($this->envFile);
+		// Parse file to fill $this->data
+		$this->parseEnvFile($this->envFile);
 
-		if(!empty($this->data["ENV"])){
-			$newFile = $this->envFile.".".$this->data["ENV"];
-
-			if(!file_exists($newFile))
-				die("File ".$newFile." doesn't exist");
-
-			$this->parsingEnv($newFile);
+		// If ENV=dev, parse .env.dev file
+		if($this->data["ENV"] == "dev"){
+			$devEnvFile = $this->envFile.".".$this->data["ENV"];
+			if(!file_exists($devEnvFile))
+				die("File ".$devEnvFile." doesn't exist");
+			$this->parseEnvFile($devEnvFile);
 		}
+
 		$this->defineConstants();
 	}
 
@@ -38,7 +40,7 @@ class ConstantManager {
 		}
 	}
 
-	public function parsingEnv($file) {
+	public function parseEnvFile($file) {
 		$handle = fopen($file, "r");
 		$regex = "/([^=]*)=([^#]*)/";
 		if(!empty($handle)){

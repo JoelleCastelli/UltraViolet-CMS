@@ -1,5 +1,4 @@
 $(document).ready( function () {
-
     /* BUILD DATATABLES */
     let table = $('#datatable').DataTable( {
         "order": [],
@@ -52,6 +51,35 @@ $(document).ready( function () {
         },
     });
 
+    /* DISPLAY CATEGORIES */
+    getCategoriesByType('visible');
+    $("#visible").addClass('active');
+
+    // Display different types on filtering button click
+    $(".filtering-btn").click(function() {
+        $(".filtering-btn").removeClass('active');
+        $(this).addClass('active');
+        getCategoriesByType(this.id);
+    });
+
+    function getCategoriesByType(categoryType) {
+        $.ajax({
+            type: 'POST',
+            url: callRoute('categories_data'),
+            data: { categoryType },
+            dataType: 'json',
+            async: false,
+            success: function(response) {
+                table.clear();
+                table.rows.add(response.categories).draw();
+            },
+            error: function(response) {
+                $('.header').after(errorServerJS);
+            }
+        });
+    }
+
+    /* DELETING CATEGORY */
     table.on('click', '.delete', function () {
         if (confirm('Êtes-vous sûr.e de vouloir supprimer cette catégorie ?')) {
             let categoryId = this.id.substring(this.id.lastIndexOf('-') + 1);

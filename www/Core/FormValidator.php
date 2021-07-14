@@ -24,26 +24,20 @@ class FormValidator
         } else {
             foreach ($config["fields"] as $fieldName => $fieldConfig) {
 
-                // check if config field has a matching $_POST field
-                // echo $fieldName;
-                // echo '<br>';
-
                 $fieldName = str_replace("[]", "", $fieldName);
 
-                // echo $fieldName;
-                // echo '<br>';
                 if(!isset($data[$fieldName])) {
                     echo "Tentative de hack !";
                     exit;
                 }
 
                 // check if required field is not empty
-                if (isset($fieldConfig['required']) && empty($data[$fieldName])) {
+                if (isset($fieldConfig['required']) && empty($data[$fieldName]) && $data[$fieldName] != 0) {
                     echo "Tentative de hack : le champ $fieldName est obligatoire !";
                     exit;
                 }
 
-                if(!empty($data[$fieldName])) {
+                if(!Helpers::isStrictlyEmpty($data[$fieldName])) {
         
                     self::textInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::numberInputValidator($data[$fieldName], $fieldConfig, $errors);
@@ -72,12 +66,12 @@ class FormValidator
         }
     }
 
-    public static function numberInputValidator($numberInput, $fieldConfig, &$errors){
+    public static function numberInputValidator($numberInput, $fieldConfig, &$errors) {
         if($fieldConfig["type"] == "number") {
-            if (!empty($fieldConfig["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
+            if (isset($fieldConfig["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
                 $errors[] = $fieldConfig["error"];
             }
-            if (!empty($fieldConfig["max"]) && is_numeric($fieldConfig["max"]) && $numberInput > $fieldConfig["max"]) {
+            if (isset($fieldConfig["max"]) && is_numeric($fieldConfig["max"]) && $numberInput > $fieldConfig["max"]) {
                 $errors[] = $fieldConfig["error"];
             }
         }

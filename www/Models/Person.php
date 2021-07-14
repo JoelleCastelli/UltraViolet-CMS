@@ -11,8 +11,6 @@ use JsonSerializable;
 use App\Core\View;
 use App\Models\Person as PersonModel;
 
-
-
 class Person extends Database implements JsonSerializable
 {
     use ModelsTrait;
@@ -48,11 +46,6 @@ class Person extends Database implements JsonSerializable
 
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])] ,
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'admin']
-
-            //['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' =>$this->id])] ,
-            //['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute
-            //('users_delete', ['id' => $this->id]), 'role' => 'admin']
-
         ];
     }
 
@@ -413,7 +406,7 @@ class Person extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "form_register",
                 "submit" => "Valider",
-                "referer" => Helpers::callRoute('subscription')
+                "referer" => Helpers::callRoute('register')
             ],
             "fields" => [
                 "csrfToken" => [
@@ -464,20 +457,31 @@ class Person extends Database implements JsonSerializable
     public function formBuilderUpdatePerson($id): array {
         
         $user = new Person();
-        
+
         $user = $user->findOneBy('id', $id);
 
-        $roles = array("user","moderator","editor","vip","admin");
+        //Role option for select
+        $firstRoleOption = $user->getRole();
+        $roles = array($firstRoleOption,"user","moderator","editor","vip","admin");
         $rolesoptions= [];
 
         foreach ($roles as $role) {
-            $options = [
-                "value" => $role,
-                "text" => $role
-            ];
-            array_push($rolesoptions, $options);
+            if ($firstRoleOption !== $role){
+                $options = [
+                    "value" => $role,
+                    "text" => $role
+                ];
+                array_push($rolesoptions, $options);
+            }
          }
 
+         $options = [
+            "value" => $firstRoleOption,
+            "text" => $firstRoleOption
+        ];
+        array_unshift($rolesoptions, $options);
+        
+        //Fo
         if($user) {
             return [
                 "config" => [

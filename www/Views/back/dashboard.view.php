@@ -1,5 +1,6 @@
 <?php
 use App\Core\Helpers;
+use App\Core\Request;
 if(isset($errors)) {
     foreach ($errors as $error) {
         echo "<li>$error</li>";
@@ -16,7 +17,7 @@ if(isset($errors)) {
             <?php if($articles) { ?>
                 <div id='articlesList'>
                     <?php foreach ($articles as $article) { ?>
-                        <div class='articleCard'>
+                        <div id="article-<?=$article->getId()?>" class='articleCard'>
                             <div class="articleInfos">
                                 <div class="articleTitle"><?= $article->getTitle() ?></div>
                                 <div class="articleDetails">Publié le <?= $article->getCleanPublicationDate() ?> par <?= $article->getPerson()->getPseudo() ?></div>
@@ -24,9 +25,11 @@ if(isset($errors)) {
                             <div class="articleActions">
                                 <div class="comments">
                                     <i class="fas fa-comment-dots"></i>
-                                    <span class="commentsNb">10</span>
+                                    <span class="commentsNb"><?= count($article->getComments()) ?></span>
                                 </div>
-                                <div class="bubble-actions"></div>
+                                <?php if(!Request::getUser()->isModerator()) {
+                                    echo $article->generateActionsMenu();
+                                } ?>
                             </div>
                         </div>
                     <?php } ?>
@@ -51,7 +54,27 @@ if(isset($errors)) {
             <?php if($comments) { ?>
                 <div id='commentsList'>
                     <?php foreach ($comments as $comment) { ?>
+                        <div class='commentCard'>
+                            <div class="userPicture">
+                                <img src="<?= $comment->getPerson()->getMedia()->getPath() ?>" alt="Photo de profil">
+                            </div>
+                            <div class="commentDetails">
+                                <div class="commentHeader">
+                                    <span class="username">
+                                        <?= $comment->getPerson()->getPseudo() ?>
+                                    </span>
+                                    <span class="articleTitle">
+                                        <?= $comment->getArticle()->getTitle() ?>
+                                    </span>
+                                </div>
+                                <div class="commentPreview">
+                                    <?= $comment->getContent() ?>
+                                </div>
+                            </div>
 
+                            <?= $comment->generateActionsMenu() ?>
+
+                        </div>
                     <?php } ?>
                 </div>
             <?php } else { ?>

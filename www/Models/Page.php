@@ -22,8 +22,8 @@ class Page extends Database implements JsonSerializable
 	protected $descriptionSeo;
 	protected $publicationDate;
     protected $content;
-	protected $createdAt;
-	protected $updatedAt;
+	private $createdAt;
+	private $updatedAt;
 	protected $deletedAt;
 
     private $actions;

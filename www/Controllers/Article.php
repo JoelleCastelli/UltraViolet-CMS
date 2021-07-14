@@ -10,6 +10,7 @@ use App\Core\Request;
 use App\Models\Article as ArticleModel;
 use App\Models\Media as MediaModel;
 use App\Models\Category as CategoryModel;
+use App\Models\Comment as CommentModel;
 use App\Models\CategoryArticle as CategoryArticleModel;
 
 class Article {
@@ -22,6 +23,7 @@ class Article {
 
     public function createArticleAction() {
         $article = new ArticleModel();
+        $media = new MediaModel();
         $form = $article->formBuilderCreateArticle();
 
         $view = new View("articles/createArticle");
@@ -29,35 +31,34 @@ class Article {
         $view->assign("form", $form);
         $view->assign('bodyScripts', [
             "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
-            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js',
+            "media-modal" => PATH_TO_SCRIPTS.'bodyScripts/articles/media-pop-up.js',
         ]);
     
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
             if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
+            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+            if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
             if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
                 $state = $_POST["state"];
                 $user = Request::getUser();
-                $today = date("Y-m-d\TH:i");
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setMediaId($mediaId);
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {
-                    $article->setPublicationDate($today);
-                    $article->setDeletedAt(null);
+                    $article->setToPublished();
                 } else if ($state == "scheduled" && !empty($_POST["publicationDate"])) {
-                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
-                } else {
-                    // nothing, will be draft by default
+                    $article->setToScheduled($_POST["publicationDate"]);
                 }
 
                 $article->save();
@@ -80,6 +81,7 @@ class Article {
 
     public function updateArticleAction($id) {
         $article = new ArticleModel();
+        $media = new MediaModel();
 
         $articleExist = $article->setId($id);
         if (!$articleExist) Helpers::redirect404();
@@ -92,41 +94,37 @@ class Article {
         $view->assign("title", "Modifier un article");
         $view->assign('bodyScripts', [
             "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
-            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js'
+            "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js',
+            "media-modal" => PATH_TO_SCRIPTS.'bodyScripts/articles/media-pop-up.js',
         ]);
 
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
             if ($article->hasDuplicateSlug($_POST["title"], $id)) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
+            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+            if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
             if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
                 $state = $_POST["state"];
                 $user = Request::getUser();
-                $today = date("Y-m-d\TH:i");
 
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
-                
                 $article->setContent($_POST["content"]);
-                $article->setMediaId(htmlspecialchars($_POST["media"]));
+                $article->setMediaId($mediaId);
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {
-                    $article->setPublicationDate($today);
-                    $article->setDeletedAt(null);
+                    $article->setToPublished();
                 } else if ($state == "scheduled" && !empty($_POST["publicationDate"])) {
-                    $article->setPublicationDate(htmlspecialchars($_POST["publicationDate"]));
-                    $article->setDeletedAt(null);
+                    $article->setToScheduled($_POST["publicationDate"]);
                 } else if ($state == "draft") {
-                    $article->setPublicationDate(null);
-                    $article->setDeletedAt(null);
+                    $article->setToDraft();
                 } else if ($state == "removed") {
-                    $article->setDeletedAt(Helpers::getCurrentTimestamp());
-                } else {
-                    // Nothing to change
+                    $article->articleSoftDelete();
                 }
 
                 $article->save();
@@ -157,9 +155,7 @@ class Article {
         }
     }
 
-
     // API methods
-
     public function getArticlesAction() {
         if (empty($_POST["state"])) return;
         $state = $_POST["state"];
@@ -173,8 +169,9 @@ class Article {
                 "Titre" => $article->getTitle(),
                 "Slug" => $article->getSlug(),
                 "Auteur" => $article->getPerson()->getPseudo(),
-                "Vues" => $article->getTotalViews(),
-                "Commentaire" => "[NOMBRE COMMENTAIRE]",
+                // "Vues" => $article->getTotalViews(),
+                "Vues" => "0",
+                "Commentaire" => count($article->getComments()),
                 "Date creation" => $article->getCreatedAt(),
                 "Date publication" => $article->getPublicationDate(),
                 "Actions" => $article->generateActionsMenu()
@@ -187,23 +184,33 @@ class Article {
     }
 
     public function deleteArticleAction() {
-
         if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
-        $id = $_POST["id"];
-        $article->setId($id);
+        $article->setId($_POST["id"]);
 
-        if ($article->getDeletedAt()) {
-            $categoryArticle = new CategoryArticleModel();
-            $entries = $categoryArticle->select()->where("articleId", $id)->get();
-            foreach ($entries as $entry) {
-                $entry->hardDelete()->execute();
-            }
-            $article->hardDelete()->where("id", $id)->execute();
-        } else {
-            $article->delete();
-        }
+        $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
+    }
+
+    /***************** */
+    /* FRONT FUNCTIONS */
+    /***************** */
+
+    public function showArticleAction($articleSlug)
+    {
+        $articleModel = new ArticleModel;
+        
+        //get article published and correct slug
+        $article = $articleModel->select()->where('slug', $articleSlug)->andWhere('deletedAt', "NULL")->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->first(); 
+
+        $categories = $article->getCategoriesRelated();
+      
+        if(empty($article))
+            Helpers::redirect404();
+        
+        $view = new View('articles/article', 'front');
+        $view->assign('article', $article);
+        $view->assign('categories', $categories);
     }
 
 }

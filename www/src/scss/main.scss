@@ -15,12 +15,15 @@
 @import "layouts/dashboard";
 @import "layouts/medias";
 @import "layouts/settings";
+@import "layouts/404";
 
 // Components
 @import "components/button";
+@import "components/button-dropdown";
 @import "components/banner";
 @import "components/slider";
 @import "components/sidebar";
+@import "components/navbar-front";
 @import "components/header";
 @import "components/card";
 @import "components/filter-tag";
@@ -37,6 +40,7 @@
 @import "components/bubble-actions";
 @import "components/state-switch";
 @import "components/modal";
+@import "components/modal-media";
 @import "components/request-response";
 
 .preload * {
@@ -47,7 +51,6 @@
 }
 
 #main {
-  height: 100%;
   margin-left: $sidebarFullWidth;
   padding-left: 30px;
   padding-right: 30px;
