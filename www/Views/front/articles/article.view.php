@@ -30,13 +30,23 @@
         </article>
     </section>
 
-    <div class="production card"></div>
+    <section class="production card">
+
+        <div class="production__image"></div>
+        <h2 class="production__title">Le seigneur des anneaux</h2>
+        <ul class="production__actors">
+            <li class="production__actors__actor">Jean Michel</li>
+            <li class="production__actors__actor">Crapoto del mare</li>
+            <li class="production__actors__actor">Inspector Boudacheh</li>
+        </ul>
+
+    </section>
 
 </div>
 
-<div class="grid-comments">
+<section class="grid-comments">
 
     <button class="btn">Ecrire un commentaire</button>
     <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
 
-</div>
+</section>
