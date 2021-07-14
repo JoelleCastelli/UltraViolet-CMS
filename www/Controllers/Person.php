@@ -9,6 +9,7 @@ use App\Core\Mail;
 use App\Core\Request;
 use App\Models\Person as PersonModel;
 use App\Models\Comment as CommentModel;
+use App\Models\Article as ArticleModel;
 
 
 class Person
@@ -135,6 +136,8 @@ class Person
         
         $usersArray = [];
         foreach ($users as $user) {
+            $actions = $user->generateActionsMenu();
+            
             $emailConfirmed = $user->isEmailConfirmed();
             if ( $emailConfirmed == true ) $emailConfirmed = 'oui';
             else $emailConfirmed = 'non';
@@ -143,7 +146,7 @@ class Person
                 $this->columnsTable['pseudo'] => $user->getPseudo(),
                 $this->columnsTable['mail'] => $user->getEmail(),
                 $this->columnsTable['checkMail'] => $emailConfirmed,
-                $this->columnsTable['actions'] => $user->generateActionsMenu(),
+                $this->columnsTable['actions'] => $actions,
             ];
         }
             echo json_encode(["users" => $usersArray]);
@@ -186,6 +189,26 @@ class Person
         }
     }
 
+    public function updatePersonStateAction(){
+
+        if (!empty($_POST['id'])){
+
+            $user = new PersonModel;
+            $id = $_POST['id'];
+            $user->setId($id);
+
+            if ($user->getDeletedAt()){
+                $user->setDeletedAt(null);
+                $user->save();
+                Helpers::setFlashMessage('succes', "Votre utilisateur a été restaurer");
+            }   
+            else
+            {
+                Helpers::setFlashMessage('error', "Votre utilisateur n'est pas trouvable ");
+            } 
+        }
+    }
+
     public function deletePersonAction() {
 
         if (!empty($_POST['id'])){ 
@@ -195,20 +218,26 @@ class Person
                         
             if ($user->getDeletedAt()) {
                 //HARD DELETE USER
+                //Comments HARD delete
                 $comments = new CommentModel();
                 $comments = $comments->select()->where("personId", $id)->get();
-                
                 foreach ($comments as $comment) {
-
                     $comment->hardDelete()->where( 'id' , $comment->getId() )->execute();
+                }
+                //Articles HARD delete
+                $articles = new ArticleModel();
+                $articles = $articles->select()->where( "personId" , $id)->get();
+                foreach ($articles as $article) {
+                    $article->articleHardDelete();
                 }
                 $user->delete();
 
             }else{
-                //SOFT DELETE
+                //SOFT DELETE USER
                 $user->setPseudo('Anonyme'.$id);
-                $user->setEmail('deleted'.$id.'@mail.com');
+                $user->setEmail('anonyme'.$id.'mail.com');
                 $user->delete();
+                $user->save();
             }
             
             Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
