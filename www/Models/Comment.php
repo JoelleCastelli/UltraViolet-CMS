@@ -224,7 +224,7 @@ class Comment extends Database {
                     "placeholder" => "Contenu de votre commentaire...",
                     "minLength" => 3,
                     "maxLength" => 255,
-                    "class" => "comment-input",
+                    "class" => "new-comment",
                     "error" => "Le longueur du titre doit être comprise entre 3 et 255 caractères",
                     "required" => true
                 ]

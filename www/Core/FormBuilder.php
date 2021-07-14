@@ -82,7 +82,7 @@ class FormBuilder
                     $value = htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
-                $html .="<textarea name='".$fieldName."'
+                $html .="<textarea wrap='off' name='".$fieldName."'
                                    placeholder='".($field["placeholder"] ?? "")."'
                                    class='".($field["class"] ?? "")."'
                                    id='".($field["id"] ?? $fieldName)."'

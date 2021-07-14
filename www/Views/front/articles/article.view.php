@@ -44,8 +44,10 @@
     <section class="comments card">
 
         <h2 class="title-section">Section commentaire</h2>
-
-        <!-- <?php if (isset($form)) App\Core\FormBuilder::render($form); ?> -->
+        
+        <div class="">
+            <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
+        </div>
 
         <?php foreach($comments as $comment) : ?>
         <div class="comment">
