@@ -645,7 +645,6 @@ class Article extends Database implements JsonSerializable
                 ],
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Titre de l'article",
                     "label" => "Titre de l'article *",
                     "minLength" => 2,
                     "maxLength" => 100,
@@ -655,7 +654,6 @@ class Article extends Database implements JsonSerializable
                 ],
                 "description" => [
                     "type" => "textarea",
-                    "placeholder" => "Description de l'article",
                     "label" => "Description de l'article *",
                     "minLength" => 2,
                     "maxLength" => 255,
@@ -724,7 +722,6 @@ class Article extends Database implements JsonSerializable
                 "content" => [
                     "id" => "articleContent",
                     "type" => "textarea",
-                    "placeholder" => "Contenu de l article",
                     "label" => "Contenu de l'article",
                     "minLength" => 2,
                     "class" => "input",

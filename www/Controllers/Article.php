@@ -205,8 +205,10 @@ class Article {
             Helpers::redirect404();
 
         $categories = $article->getCategoriesRelated();
-        
+
         $view = new View('articles/article', 'front');
+        $view->assign('title', $article->getTitle());
+        $view->assign('description', $article->getDescription());
         $view->assign('article', $article);
         $view->assign('categories', $categories);
     }

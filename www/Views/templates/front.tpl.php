@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
     <title><?= isset($title) && $title  != "" ? APP_NAME.' - '.$title : META_TITLE ?></title>
-    <meta name="description" content="<?= META_DESC ?>">
+    <meta name="description" content="<?= isset($description) && $description  != "" ? $description : META_DESC ?>">
     <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>favicon.ico"/>
 
     <!--JS-->
