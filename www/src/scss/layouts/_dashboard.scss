@@ -177,46 +177,41 @@
   }
 
   #statistics {
+
     #statisticsList {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      padding-bottom: 3rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
 
-      .statisticsCard {
-        display: flex;
-        flex-direction: column;
-        width: 200px;
-        align-items: center;
-        justify-content: space-evenly;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+            .statisticsCard {
+                border: solid $grey4 1px;
+                border-radius: 8px;
+                margin-bottom: 5px;
+                box-shadow: 1px 1px 2px $grey4;
+                display: flex;
+                flex-direction: column;
+                width: 200px;
+                height: 150px;
+                align-items: center;
+                justify-content: center;
 
-        margin-right: 1rem;
-        border-radius: 10px;
-        margin-bottom: 5px;
-        border: 1px solid rgba(227, 227, 227, 0.5);
-        box-shadow: 1px 6px 20px -4px rgba(17, 17, 17, 0.1);
+                .title {
+                    text-overflow: ellipsis;
+                }
 
-        .title {
-          text-overflow: ellipsis;
-          padding: 0rem 1rem 0rem 1rem;
-          text-align: start;
-          font-size: 0.8rem;
+                .stat {
+                    font-weight: bolder;
+                    font-size: 24px;
+                }
+            }
         }
-
-        .stat {
-          font-weight: bolder;
-          font-size: 24px;
-        }
-      }
     }
-  }
+  
 
   .card {
     flex-grow: 1;
     min-width: 400px;
-    width: 3rem;
+    width: 40%;
     min-height: 400px;
     margin: 5px;
     display: flex;
@@ -226,7 +221,6 @@
     .cardTitle {
       font-weight: 700;
       margin-bottom: 10px;
-      padding-bottom: 1rem;
     }
 
     p {
