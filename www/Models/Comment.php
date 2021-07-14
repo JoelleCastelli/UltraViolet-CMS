@@ -20,14 +20,14 @@ class Comment extends Database {
     protected int $articleId;
     protected int $personId;
 
+    private ?array $actions = [];
+    private ?array $actionsdeletedcomment = [];
+
     //foreign properties
     public Article $article;
     public Person $person;
 
-    private array $actions;
-
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->article = new Article();
         $this->person = new Person();
@@ -35,7 +35,13 @@ class Comment extends Database {
             
             ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('comments_delete', ['id' => $this->id]), 'role' => 'moderator'],
         ];
-        
+
+        $this->actionsdeletedcomment = [
+
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])] ,
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' =>'Restaurer', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('users_update_state', ['id' => $this->id]), 'role' => 'admin'],
+        ];
     }
 
     /**
@@ -140,6 +146,14 @@ class Comment extends Database {
      */
     public function getActions(): ?array {
         return $this->actions;
+    }
+
+    public function getActionsDeletedComment(): ?array {
+        return $this->actionsdeletedcomment;
+    }
+
+    public function setActions(?array $actions): void {
+        $this->actions = $actions;
     }
 
     /**
