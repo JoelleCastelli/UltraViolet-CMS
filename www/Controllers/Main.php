@@ -25,10 +25,13 @@ class Main
         $comments = $this->getLatestComments(4);
         $view->assign('comments', $comments);
 
-
         // Get last 4 productions
         $productions = $this->getLatestProductions(4);
         $view->assign('productions', $productions);
+
+        $nbArticles = $this->getNbArticles(4);
+        Helpers::dd($nbArticles);
+        $view->assign('NbArticles', $nbArticles);
 
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
 	}
@@ -38,6 +41,13 @@ class Main
         $articles = new Article();
         return $articles->select()->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
             ->orderBy('publicationDate', 'DESC')->limit($limit)->get();
+    }
+
+    public function getNbArticles()
+    {
+        $articles = new Article();
+        return $articles->count('id')->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
+            ->orderBy('publicationDate', 'DESC')->first(false);
     }
 
     public function getLatestComments($limit): array
