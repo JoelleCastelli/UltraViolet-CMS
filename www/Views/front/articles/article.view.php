@@ -46,29 +46,15 @@
         <h2 class="title-section">Section commentaire</h2>
 
         <!-- <?php if (isset($form)) App\Core\FormBuilder::render($form); ?> -->
-        <div class="comment">
-            <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
-            <h3 class="comment__title">Ecrit par RomainLePangolin le 01/01/2000</h3>
-            <p class="comment__content">Ceci est un super commentaire qui est uniquement là pour des test d'intégration</p>
-        </div>
 
+        <?php foreach($comments as $comment) : ?>
         <div class="comment">
             <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
-            <h3 class="comment__title">Ecrit par RomainLePangolin le 01/01/2000</h3>
-            <p class="comment__content">Ceci est un super commentaire qui est uniquement là pour des test d'intégration</p>
+            <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?> le <?= $comment->getCreatedAt() ?></h3>
+            <p class="comment__content"><?= $comment->getContent() ?></p>
         </div>
+        <?php endforeach; ?>
 
-        <div class="comment">
-            <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
-            <h3 class="comment__title">Ecrit par RomainLePangolin le 01/01/2000</h3>
-            <p class="comment__content">Ceci est un super commentaire qui est uniquement là pour des test d'intégration</p>
-        </div>
-
-        <div class="comment">
-            <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
-            <h3 class="comment__title">Ecrit par RomainLePangolin le 01/01/2000</h3>
-            <p class="comment__content">Ceci est un super commentaire qui est uniquement là pour des test d'intégration</p>
-        </div>
 
     </section>
 

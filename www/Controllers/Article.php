@@ -221,6 +221,7 @@ class Article {
                     $comment->setPersonId($userId);
                     $comment->setContent(htmlspecialchars($_POST["comment"]));
                     $comment->save();
+                    Helpers::namedRedirect("display_article", ["article" => $articleSlug]);
                 }
             }
         }
@@ -231,8 +232,8 @@ class Article {
         $view->assign('title', $article->getTitle());
         $view->assign('description', $article->getDescription());
         $view->assign('article', $article);
-        if (isset($form)) {
-            $view->assign("form", $form);
-        }
+        $view->assign('comments', $article->getComments());
+        if (isset($form)) $view->assign("form", $form);
+        
     }
 }
