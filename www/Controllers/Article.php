@@ -198,6 +198,13 @@ class Article {
 
     public function showArticleAction($articleSlug) {
         $articleModel = new ArticleModel;
+        $userId = Request::getUser()->getId();
+
+        if (!empty($userId)) {
+            $comment = new CommentModel;
+            $form = $comment->createCommentForm();
+        }
+        
         
         //get article published and correct slug
         $article = $articleModel->select()
@@ -206,7 +213,7 @@ class Article {
         ->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->first(); 
 
         if(empty($article))
-        Helpers::redirect404();
+            Helpers::redirect404();
         
         $article->getCategoriesRelated();
 
@@ -214,5 +221,8 @@ class Article {
         $view->assign('title', $article->getTitle());
         $view->assign('description', $article->getDescription());
         $view->assign('article', $article);
+        if (isset($form)) {
+            $view->assign("form", $form);
+        }
     }
 }

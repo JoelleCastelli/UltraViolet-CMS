@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Core\Helpers;
 use App\Core\Database;
+use App\Core\FormBuilder;
+use App\Core\Request;
 use App\Core\Traits\ModelsTrait;
 
 class Comment extends Database {
@@ -198,6 +200,37 @@ class Comment extends Database {
         } else {
             return "";
         }
+    }
+
+    public function createCommentForm() {
+        $userId = Request::getUser()->getId();
+        
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "form_create_comment",
+                "submit" => "Poster un commentaire",
+                "referer" => Helpers::callRoute('article_creation'),
+            ],
+            "fields" => [
+                "csrfToken" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "label" => "Contenu de votre commentaire",
+                    "placeholder" => "Contenu de votre commentaire...",
+                    "minLength" => 3,
+                    "maxLength" => 255,
+                    "class" => "comment-input",
+                    "error" => "Le longueur du titre doit être comprise entre 3 et 255 caractères",
+                    "required" => true
+                ]
+            ]
+        ];
     }
 
 }

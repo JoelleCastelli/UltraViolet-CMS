@@ -33,3 +33,10 @@
     <div class="production card"></div>
 
 </div>
+
+<div class="grid-comments">
+
+    <button class="btn">Ecrire un commentaire</button>
+    <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
+
+</div>
