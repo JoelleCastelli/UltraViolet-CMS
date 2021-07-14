@@ -44,6 +44,11 @@ forget_password:
   controller: Main
   action:     page404
 
+user_update:
+  path:       /parametre
+  controller: Person
+  action:     updateUser
+
 # PAGE
 display_static_page:
   path:       /{slug}

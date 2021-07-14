@@ -17,16 +17,16 @@ $categoriesNavbar = Category::getMenuCategories();
         <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
     <?php endforeach; ?>
 
-    <?php if(!empty($categoriesNavbar['other'])) { ?>
-    <div id='otherCategories' class="dropdown dropdown-button">
-        <span>Toutes les catégories</span>
-        <div class="dropdown-content">
-            <?php foreach ($categoriesNavbar['other']  as $otherCategory) : ?>
-                <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($otherCategory->getName())]) ?>"><?= $otherCategory->getName() ?></a>
-            <?php endforeach; ?>
+    <?php if (!empty($categoriesNavbar['other'])) : ?>
+        <div id='otherCategories' class="dropdown dropdown-button">
+            <span>Toutes les catégories</span>
+            <div class="dropdown-content">
+                <?php foreach ($categoriesNavbar['other']  as $otherCategory) : ?>
+                    <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($otherCategory->getName())]) ?>"><?= $otherCategory->getName() ?></a>
+                <?php endforeach; ?>
+            </div>
         </div>
-    </div>
-    <?php } ?>
+    <?php endif; ?>
 
     <?php
 
@@ -34,7 +34,7 @@ $categoriesNavbar = Category::getMenuCategories();
         <div id='userImage' class="dropdown dropdown-button">
             <img src="<?= Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
             <div class="dropdown-content dropdown-user">
-                <a href="#">Paramètres</a>
+                <a href="<?= Helpers::callRoute('user_update') ?>">Paramètres</a>
                 <?php if ($user->canAccessBackOffice()) : ?>
                     <a href="<?= Helpers::callRoute('admin') ?>">Administration</a>
                 <?php endif; ?>

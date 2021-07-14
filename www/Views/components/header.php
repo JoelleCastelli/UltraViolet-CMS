@@ -11,7 +11,7 @@ use App\Core\Request;
             <span><?= Request::getUser()->getPseudo() ?></span>
             <img src="<?= Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
             <div class="dropdown-content dropdown-user">
-                <a href="#">Paramètres</a>
+                <a href="<?= Helpers::callRoute('user_update') ?>">Paramètres</a>
                 <a href="<?= Helpers::callRoute('front_home') ?>"><?= APP_NAME ?></a>
                 <a href="<?= Helpers::callRoute('logout') ?>">Déconnexion</a>
             </div>

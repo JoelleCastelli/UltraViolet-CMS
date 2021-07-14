@@ -6,6 +6,7 @@ use App\Controller\Person as ControllerPerson;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\FormBuilder;
+use App\Core\Request;
 use App\Core\Traits\ModelsTrait;
 use JsonSerializable;
 use App\Core\View;
@@ -547,6 +548,76 @@ class Person extends Database implements JsonSerializable
                 ]       
             ];
         }
+    }
+
+    public function formBuilderUpdatePersonalInfo(): array
+    {
+        $user = Request::getUser();
+
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control card",
+                "id" => "formUpdatePersonalInfo",
+                "submit" => "Valider",
+                "referer" => Helpers::callRoute('user_update')
+            ],
+
+            "fields" => [
+
+                "email" => [
+                    "type" => "email",
+                    "label" => "Email *",
+                    "placeholder" => "Email",
+                    "class" => "input",
+                    "id" => "email",
+                    "error" => "Le format du champ e-mail est incorrect",
+                    "required" => true,
+                    "value" => $user->getEmail()
+
+                ],
+
+                "pseudo" => [
+                    "type" => "pseudo",
+                    "label" => "Pseudonyme *",
+                    "placeholder" => "Pseudonyme",
+                    "class" => "input",
+                    "id" => "pseudo",
+                    "error" => "Le format du champ pseudo est incorrect",
+                    "required" => true,
+                    "value" => $user->getPseudo()
+                ],
+
+                "oldPwd" => [
+                    "type" => "password",
+                    "label" => "Ancien mot de passe",
+                    "class" => "input",
+                ],
+
+                "pwd" => [
+                    "type" => "password",
+                    "label" => "Nouveau mot de passe",
+                    "placeholder" => "Mot de passe",
+                    "minLength" => 8,
+                    "class" => "input",
+                    "regex" => "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
+                ],
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "class" => "input",
+                    "placeholder" => "Confirmation du mot de passe",
+                    "confirm" => "pwd",
+                    "error" => "Votre mot de passe de confirmation ne correspond pas",
+                ],
+
+                "csrfToken" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
+                ],
+            ]
+        ];
     }
 
     public function formBuilderForgetPassword(): array {

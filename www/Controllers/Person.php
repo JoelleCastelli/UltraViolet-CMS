@@ -33,12 +33,9 @@ class Person
         $view->assign('columnsTable', $this->columnsTable);
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/person.js']);
     }
-    
-	public function defaultAction() {
-		echo "User default";
-	}
 
-    public function loginAction() {
+    public function loginAction()
+    {
 
         $this->redirectHomeIfLogged();
 
@@ -47,16 +44,16 @@ class Person
         $form = $user->formBuilderLogin();
         $view->assign("form", $form);
 
-        if(!empty($_POST)) {
+        if (!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
-            if(empty($errors)) {
+            if (empty($errors)) {
                 $user = $user->findOneBy("email", $_POST['email']);
-                if(!empty($user)) {
-                    if(password_verify($_POST['password'], $user->getPassword())) {
-                        if($user->isEmailConfirmed()) {
+                if (!empty($user)) {
+                    if (password_verify($_POST['password'], $user->getPassword())) {
+                        if ($user->isEmailConfirmed()) {
                             $_SESSION['loggedIn'] = true;
                             $_SESSION['user_id'] = $user->getId();
-                            Helpers::setFlashMessage('success', "Bienvenue ".$user->getPseudo());
+                            Helpers::setFlashMessage('success', "Bienvenue " . $user->getPseudo());
                             Helpers::namedRedirect('front_home');
                         } else {
                             $errors[] = "Merci de confirmer votre adresse e-mail. Renvoyer l'email de confirmation";
@@ -72,27 +69,27 @@ class Person
         }
     }
 
-	public function registerAction() {
-
+    public function registerAction()
+    {
         $this->redirectHomeIfLogged();
 
-		$user = new PersonModel();
+        $user = new PersonModel();
         $view = new View('register', 'front');
         $form = $user->formBuilderRegister();
         $view->assign("form", $form);
 
-        if(!empty($_POST)) {
+        if (!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
-            if(empty($errors)) {
+            if (empty($errors)) {
                 // Check if pseudo is available
-                if($user->findOneBy("pseudo", $_POST['pseudo']))
+                if ($user->findOneBy("pseudo", $_POST['pseudo']))
                     $errors[] = 'Ce pseudonyme est indisponible';
                 // Check if email is not already in database
-                if($user->findOneBy("email", $_POST['email']))
+                if ($user->findOneBy("email", $_POST['email']))
                     $errors[] = 'Cette adresse e-mail est déjà utilisée';
 
                 // If no error in form, populate Person object and save in the database
-                if(empty($errors)) {
+                if (empty($errors)) {
                     $user->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $user->setEmail(htmlspecialchars($_POST['email']));
                     $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
@@ -110,36 +107,36 @@ class Person
                     $mail->sendMail($to, $from, $name, $subj, $msg);
 
                     Helpers::setFlashMessage('success', "Votre compte a bien été créé ! Un e-mail de confirmation
-                    vous a été envoyé sur " .$_POST['email'].". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
+                    vous a été envoyé sur " . $_POST['email'] . ". </br> Cliquez sur le lien dans ce mail avant de vous connecter.");
                     Helpers::namedRedirect('login');
                 }
-			}
+            }
             $view->assign("errors", $errors);
-		}
-	}
+        }
+    }
 
-    public function getUsersAction() {
-        if(empty($_POST)) return;
+    public function getUsersAction()
+    {
+        if (empty($_POST)) return;
 
         $users = new PersonModel();
 
-        if(!empty($_POST['deletedAt'])) {
+        if (!empty($_POST['deletedAt'])) {
             $users = $users->select()->where('deletedAt', 'NOT NULL')->get();
         }
 
-        if (!empty($_POST['role'])) {        
+        if (!empty($_POST['role'])) {
             $users = $users->select()->where('role', htmlspecialchars($_POST['role']))->andWhere('deletedAt', 'NULL')->get();
-
         }
 
-        if(!$users) $users = [];
-        
+        if (!$users) $users = [];
+
         $usersArray = [];
         foreach ($users as $user) {
             $actions = $user->generateActionsMenu();
             
             $emailConfirmed = $user->isEmailConfirmed();
-            if ( $emailConfirmed == true ) $emailConfirmed = 'oui';
+            if ($emailConfirmed == true) $emailConfirmed = 'oui';
             else $emailConfirmed = 'non';
             $usersArray[] = [
                 $this->columnsTable['name'] => $user->getFullName(),
@@ -149,39 +146,40 @@ class Person
                 $this->columnsTable['actions'] => $actions,
             ];
         }
-            echo json_encode(["users" => $usersArray]);
+        echo json_encode(["users" => $usersArray]);
     }
 
-	public function logoutAction() {
+    public function logoutAction()
+    {
         session_destroy();
         Helpers::namedRedirect('front_home');
     }
 
-    public function updatePersonAction($id) {
-        if (!empty($id)){ 
-            // Helpers::cleanDumpArray($id,'id post');
+    public function updatePersonAction($id)
+    {
+        if (!empty($id)) {
+
             $user = new PersonModel();
             $form = $user->formBuilderUpdatePerson($id);
 
             $view = new View("persons/update");
             $view->assign('title', 'Modifier un utilisateur');
             $view->assign("form", $form);
-            
+
             $user->setId($id);
 
             // If form is submitted, check the data and save the category
-            if(!empty($_POST)) {
+            if (!empty($_POST)) {
                 $errors = FormValidator::check($form, $_POST);
-                if(empty($errors)) {
+                if (empty($errors)) {
                     $user->setEmail(htmlspecialchars($_POST["email"]));
                     $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
                     $user->setRole(htmlspecialchars($_POST["role"]));
-                    
+
                     $user->save();
-                    
+
                     Helpers::setFlashMessage('success', "L'utilisateur a bien été mise à jour");
                     Helpers::redirect(Helpers::callRoute('users_list'));
-                    
                 } else {
                     $view->assign("errors", $errors);
                 }
@@ -211,11 +209,62 @@ class Person
 
     public function deletePersonAction() {
 
-        if (!empty($_POST['id'])){ 
+        $user = Request::getUser();
+
+        if ($user && $user->isLogged()) {
+
+            $form = $user->formBuilderUpdatePersonalInfo();
+            $view->assign("form", $form);
+
+            if (!empty($_POST)) {
+
+                $errors = FormValidator::check($form, $_POST);
+                if (empty($errors)) {
+
+                    if ($user->count('email')->where('email', htmlspecialchars($_POST['email']))->andWhere('id', $user->getId(), '!=')->first(false))
+                        $errors = ['Cet email est indisponible'];
+
+                    if ($user->count('pseudo')->where('pseudo', htmlspecialchars($_POST['pseudo']))->andWhere('id', $user->getId(), '!=')->first(false))
+                        $errors = ['Ce pseudonyme est indisponible'];
+
+                    if(!empty($_POST['pwd'])) // if actual password mention
+                    {
+                        if(!password_verify($_POST['oldPwd'], $user->getPassword())) // check old password 
+                            $errors = ['Ancien mot de passe non correct'];
+
+                        if(empty($errors))
+                            if( $_POST['pwdConfirm'] !== $_POST["pwd"]) // check password confirm
+                                $errors = $form['fields']['pwdConfirm']['error'];
+                    }
+
+                    if (empty($errors)) {
+                        $user->setEmail(htmlspecialchars($_POST["email"]));
+                        $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
+                        $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
+                        if($user->save())
+                        {
+                            Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
+                            Helpers::namedRedirect('user_update');
+                        }
+                        $errors = ['Oops ! Un soucis lors de la sauvegarde est survenu'];
+                    }  
+                } 
+                $view->assign("errors", $errors);
+            } 
+            
+        } else{
+            Helpers::namedRedirect('front_home');
+        }
+    }
+
+    public function deletePersonAction()
+    {
+
+        if (!empty($_POST['id'])) {
             $user = new PersonModel();
             $id = $_POST['id'];
             $user->setId($id);
-                        
+
             if ($user->getDeletedAt()) {
                 //HARD DELETE USER
                 //Comments HARD delete
@@ -239,67 +288,64 @@ class Person
                 $user->delete();
                 $user->save();
             }
-            
+
             Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
-        }else{
+        } else {
             Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
         }
     }
 
-    
-	public function showAction(){
-		//Affiche la vue user intégrée dans le template du front
-		$view = new View("user"); 
-	}
+    public function showAction()
+    {
+        //Affiche la vue user intégrée dans le template du front
+        $view = new View("user");
+    }
 
-    public function verificationAction($pseudo, $key){
+    public function verificationAction($pseudo, $key)
+    {
 
         $view = new View("userVerification", "front");
         $user = new PersonModel();
         $user = $user->select()->where("pseudo", $pseudo)->andWhere("emailkey", $key)->first();
-        
-        if(!empty($user))
-        {
-            if($user->isEmailConfirmed() != true)
-            {
+
+        if (!empty($user)) {
+            if ($user->isEmailConfirmed() != true) {
                 $user->setEmailConfirmed(1);
 
                 $user->save();
                 Helpers::setFlashMessage('success', "Votre compte a bien était activé");
                 Helpers::namedRedirect('login');
-            }else
-            {
+            } else {
                 Helpers::setFlashMessage('error', "Votre compte est déjà activé");
             }
-
-        }else 
-        {
+        } else {
             Helpers::setFlashMessage('error', "Aucun utilisateur trouvé");
         }
-	}	
+    }
 
-    public function forgetPasswordMailAction(){
-		
-		$user = new PersonModel();
+    public function forgetPasswordMailAction()
+    {
+
+        $user = new PersonModel();
         $view = new View("forgetPassword", "front");
         $form = $user->formBuilderForgetPassword();
         $view->assign("form", $form);
 
-        if(!empty($_POST)) {
+        if (!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
-            if(empty($errors)) {
+            if (empty($errors)) {
                 $user = $user->findOneBy("email", $_POST['email']);
-                if(!empty($user)) {
+                if (!empty($user)) {
                     $to   = $_POST['email'];
                     $from = 'ultravioletcms@gmail.com';
                     $name = 'Ultaviolet';
                     $subj = 'Changée de mot de passe';
                     $msg = $user->forgetPasswordMail($user->getId(), $user->getEmailKey());
-                    
+
                     $mail = new Mail();
                     $mail->sendMail($to, $from, $name, $subj, $msg);
                     Helpers::setFlashMessage('success', " Un e-mail
-                    vous a été envoyé sur " .$_POST['email']);
+                    vous a été envoyé sur " . $_POST['email']);
                     Helpers::namedRedirect('login');
                 } else {
                     $errors[] = "Aucun compte n'a été trouvé";
@@ -307,21 +353,22 @@ class Person
             }
             $view->assign("errors", $errors);
         }
-	}
+    }
 
-    public function resetPasswordAction($id, $key){
+    public function resetPasswordAction($id, $key)
+    {
 
         $user = new PersonModel();
         $view = new View("resetPassword", "front");
         $form = $user->formBuilderResetPassword($id, $key);
         $view->assign("form", $form);
-        if(!empty($_POST)) {
+        if (!empty($_POST)) {
             $errors = FormValidator::check($form, $_POST);
-            if(empty($errors)) {
+            if (empty($errors)) {
                 $user = $user->select()->where("id", $id)->andWhere("emailkey", $key)->first();
-                if(!empty($user)) {
-                    if(password_verify($_POST['password'], $user->getPassword())) {
-                        Helpers::setFlashMessage('error', "Le mot de passe corespond au mot de passe déjà enregistré."); 
+                if (!empty($user)) {
+                    if (password_verify($_POST['password'], $user->getPassword())) {
+                        Helpers::setFlashMessage('error', "Le mot de passe corespond au mot de passe déjà enregistré.");
                     } else {
                         $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                         $user->save();
@@ -334,7 +381,7 @@ class Person
             }
             $view->assign("errors", $errors);
         }
-	}
+    }
 
     public function redirectHomeIfLogged()
     {
