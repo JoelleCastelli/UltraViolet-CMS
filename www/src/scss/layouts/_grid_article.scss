@@ -210,3 +210,67 @@ textarea-comment {
   display: flex;
   align-items: center;
 }
+
+.article-list {
+  display: flex;
+  flex-flow: column;
+  margin-top: 2rem;
+}
+
+.grid-article-card {
+  display: grid;
+  height: 15rem;
+  grid-template-columns: 1.5fr 3fr;
+  grid-template-rows: min-content 1fr min-content;
+  column-gap: 10px;
+  grid-template-areas:
+    "cover title"
+    "cover description"
+    "cover author";
+}
+
+.article-card {
+  color: black;
+  background: $card-background-color;
+  border-radius: 8px;
+  border-width: 1px;
+  border-color: $card-border;
+  box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+
+  &__cover {
+    grid-area: cover;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    border-radius: 8px 0 0 8px;
+  }
+
+  &__title {
+    margin-top: 0.75rem;
+    grid-area: title;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  &__description {
+    grid-area: description;
+    margin-top: 1.25rem;
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: normal;
+  }
+
+  &__author {
+    grid-area: author;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    margin-right: 10px;
+  }
+
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.015);
+  }
+}
