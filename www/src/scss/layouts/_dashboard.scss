@@ -68,7 +68,7 @@
     #commentsList {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
 
       .commentCard {
         display: flex;
@@ -182,7 +182,7 @@
     margin: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
 
     .cardTitle {
       font-weight: 700;
@@ -194,6 +194,7 @@
     }
 
     .linkButton {
+      margin-top: auto;
       text-align: right;
     }
   }
