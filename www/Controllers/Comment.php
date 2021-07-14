@@ -36,27 +36,60 @@ class Comment
      * Called by AJAX script to display productions filtered by type
      */
     public function getCommentsAction() {
+
         if(!empty($_POST['commentState'])) {
+
             $comments = new CommentModel();
+
             if($_POST['commentState'] == 'visible') {
                 $comments = $comments->select()->where('deletedAt', "NULL")->orderBy('createdAt', 'DESC')->get();
             } else {
                 $comments = $comments->select()->where('deletedAt', "NOT NULL")->orderBy('createdAt', 'DESC')->get();
             }
+            
 
             if(!$comments) $comments = [];
 
             $commentsArray = [];
             foreach ($comments as $comment) {
+
+                if( $comment->getDeletedAt() ) {
+                    $comment->setActions($comment->getActionsDeletedComment());
+                    $actions = $comment->generateActionsMenu();
+                }else{
+                    $actions = $comment->generateActionsMenu();
+                }
+                
                 $commentsArray[] = [
                     $this->columnsTable['author'] => $comment->getPerson()->getPseudo(),
                     $this->columnsTable['article'] => $comment->getArticle()->getTitle(),
                     $this->columnsTable['content'] => $comment->getContent(),
                     $this->columnsTable['createdAt'] => $comment->getCleanCreationDate(),
-                    $this->columnsTable['actions'] => $comment->generateActionsMenu(),
+                    $this->columnsTable['actions'] => $actions,
                 ];
             }
             echo json_encode($commentsArray);
+        }
+    }
+
+
+    public function updateCommentStateAction(){
+
+        if (!empty($_POST['id'])){
+
+            $comment = new CommentModel;
+            $id = $_POST['id'];
+            $comment->setId($id);
+
+            if ($comment->getDeletedAt()){
+                $comment->setDeletedAt(null);
+                $comment->save();
+                Helpers::setFlashMessage('succes', "Votre commentaire a été restaurer");
+            }   
+            else
+            {
+                Helpers::setFlashMessage('error', "Votre commentaire n'est pas trouvable ");
+            } 
         }
     }
 
