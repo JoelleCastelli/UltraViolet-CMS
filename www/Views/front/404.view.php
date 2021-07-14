@@ -43,7 +43,7 @@
       <div class="box__description-text">Il semble que nous n'ayons pas trouvé la page que vous recherchiez</div>
     </div>
     
-    <a href="/"  class="box__button">Retour a l'acceuil</a>
+    <a href="/"  class="box__button">Retour a l'accueil</a>
     
   </div>
   
