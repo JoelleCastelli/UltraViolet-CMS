@@ -223,6 +223,9 @@ class Person
                 $errors = FormValidator::check($form, $_POST);
                 if (empty($errors)) {
 
+                    if (!$user->isEmailConfirmed())
+                        $errors = ['Veuillez confirmer tout d\'abord votre mail actuel merci'];
+
                     if ($user->count('email')->where('email', htmlspecialchars($_POST['email']))->andWhere('id', $user->getId(), '!=')->first(false))
                         $errors = ['Cet email est indisponible'];
 
@@ -232,9 +235,6 @@ class Person
                     if(!empty($_POST['pwd'])) // if actual password mention
                     {
 
-                        if(!$user->isEmailConfirmed())
-                            $errors = ['Veuillez confirmer tout d\'abord votre mail actuel merci'];
-
                         if(empty($errors))
                         {
                             if (!password_verify($_POST['oldPwd'], $user->getPassword())) // check old password 
@@ -242,14 +242,15 @@ class Person
 
                             if (empty($errors))
                                 if ($_POST['pwdConfirm'] !== $_POST["pwd"]) // check password confirm
-                                $errors = $form['fields']['pwdConfirm']['error'];
-                            
-                            if(empty($errors))
-                                $emailChanged = true;
+                                    $errors = $form['fields']['pwdConfirm']['error'];
                         }
                     }
 
                     if (empty($errors)) {
+
+                        if ($_POST["email"] !== $user->getEmail())
+                            $emailChanged = true;
+
                         $user->setEmail(htmlspecialchars($_POST["email"]));
                         $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
                         $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
@@ -258,7 +259,18 @@ class Person
                             if(isset($emailChanged))
                             {
                                 $user->setEmailConfirmed(false);
-                                $user->setEmailKey(null);
+
+                                /* Send mail confirmation */
+                                $to = $user->getEmail();
+                                $from = 'ultravioletcms@gmail.com';
+                                $name = 'UltraViolet';
+                                $subj = 'UltraViolet - Confirmez votre nouveau email';
+                                $msg = $user->updateMail($user->getPseudo(), $user->getEmailKey()); // mail content
+                                $mail = new Mail();
+                                $mail->sendMail($to, $from, $name, $subj, $msg);
+
+                                $user->save();
+
                             }
                             Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
                             Helpers::namedRedirect('user_update');
@@ -317,7 +329,7 @@ class Person
         $user = Request::getUser();
         if($user && $user->isLogged()) {
 
-            if( $user->isAdmin() && $user->count('email')->where('role', 'admin')->first(false) > 1){
+            if( !$user->isAdmin() || ($user->isAdmin() && $user->count('email')->where('role', 'admin')->first(false) > 1)){
 
                 //SOFT DELETE
                 $user->setPseudo(null);
@@ -325,11 +337,12 @@ class Person
                 $user->setPassword(null);
                 $user->setEmailKey(null);
                 $user->setEmailConfirmed(false);
+                $user->setDefaultProfilePicture();
+
                 if($user->delete())
                 {
-
                     Helpers::setFlashMessage("success", "Votre compte a bien été supprimé");
-                    Helpers::namedRedirect("front_home");
+                    Helpers::namedRedirect("logout");
 
                 }else {
                     Helpers::setFlashMessage("error", "Oops ! Une erreur est survenu lors de la suppression de votre compte.");
