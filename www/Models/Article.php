@@ -28,7 +28,7 @@ class Article extends Database implements JsonSerializable
     private $updatedAt;
     protected $deletedAt;
 
-    protected $categories = [];
+    private $categories = [];
 
     public Media $media;
     public Person $person;

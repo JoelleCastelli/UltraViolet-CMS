@@ -1,4 +1,5 @@
 .grid-article {
+  position: relative;
   display: grid;
   height: 80vh;
   grid-template-columns: 6fr 1fr;
@@ -8,22 +9,66 @@
     "article production";
 
   .cover {
+    position: relative;
     grid-area: cover;
-    background: red;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+    // background: red;
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      //   height: 100%; does not work on Chrome wtf
+      height: 300px;
+    }
   }
 
   .article {
     grid-area: article;
-    background: blue;
+    // background: blue;
+
+    &__title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    &__author {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    &__tags {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      &__category {
+        @extend %flex-center;
+        margin: 0.5rem 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        border: $white 2px solid;
+        color: $white;
+        font-weight: bold;
+
+        &:nth-child(1) {
+          margin-left: 0;
+        }
+
+        &:nth-child(2n) {
+          background-color: $orange;
+        }
+
+        &:nth-child(2n + 1) {
+          background-color: $purple4;
+        }
+      }
+    }
   }
 
   .production {
     grid-area: production;
-    background: green;
+    // background: green;
   }
 
-  overflow: hidden;
+  // overflow: hidden;
 }
