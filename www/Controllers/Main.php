@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Article;
+use App\Models\ArticleHistory;
 use App\Models\Comment;
 use App\Models\Production;
 use App\Models\Person;
@@ -37,8 +38,11 @@ class Main
         $view->assign('nbComments', $nbComments);
 
         $nbUsers = $this->getNbUsers();
-        Helpers::dd($nbUsers);
         $view->assign('nbUsers', $nbUsers);
+
+        $nbViews = $this->getNbViews();
+        $view->assign('nbViews', $nbViews);
+
 
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
 	}
@@ -67,6 +71,12 @@ class Main
     {
         $persons = new Person();
         return $persons->count('id')->where('deletedAt', "NULL")->first(false);
+    }
+
+    public function getNbViews()
+    {
+        $articleHistory = new ArticleHistory();
+        return $articleHistory->sum('views')->first(false);
     }
 
     public function getLatestComments($limit): array
