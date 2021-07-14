@@ -150,6 +150,12 @@ class Database {
         return $this;
     }
 
+    public function sum($column = "*"): Database
+    {
+        $this->query = 'SELECT SUM(`' . $column . '`) as total FROM ' . $this->table . ' ';
+        return $this;
+    }
+
     public function customQuery($string): Database
     {
         $this->query .= $string . ' ';

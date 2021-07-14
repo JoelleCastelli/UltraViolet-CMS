@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Article;
+use App\Models\ArticleHistory;
 use App\Models\Comment;
 use App\Models\Production;
+use App\Models\Person;
 use App\Models\Page;
 use App\Models\Category;
 
@@ -25,10 +27,22 @@ class Main
         $comments = $this->getLatestComments(4);
         $view->assign('comments', $comments);
 
-
         // Get last 4 productions
         $productions = $this->getLatestProductions(4);
         $view->assign('productions', $productions);
+
+        $nbArticles = $this->getNbArticles();
+        $view->assign('nbArticles', $nbArticles);
+
+        $nbComments = $this->getNbComments();
+        $view->assign('nbComments', $nbComments);
+
+        $nbUsers = $this->getNbUsers();
+        $view->assign('nbUsers', $nbUsers);
+
+        $nbViews = $this->getNbViews();
+        $view->assign('nbViews', $nbViews);
+
 
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
 	}
@@ -38,6 +52,31 @@ class Main
         $articles = new Article();
         return $articles->select()->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
             ->orderBy('publicationDate', 'DESC')->limit($limit)->get();
+    }
+
+    public function getNbArticles()
+    {
+        $articles = new Article();
+        return $articles->count('id')->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
+            ->orderBy('publicationDate', 'DESC')->first(false);
+    }
+
+    public function getNbComments()
+    {
+        $comments = new Comment();
+        return $comments->count('id')->where('deletedAt', "NULL")->first(false);
+    }
+
+    public function getNbUsers()
+    {
+        $persons = new Person();
+        return $persons->count('id')->where('deletedAt', "NULL")->first(false);
+    }
+
+    public function getNbViews()
+    {
+        $articleHistory = new ArticleHistory();
+        return $articleHistory->sum('views')->first(false);
     }
 
     public function getLatestComments($limit): array

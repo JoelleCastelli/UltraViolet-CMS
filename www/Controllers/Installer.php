@@ -144,6 +144,7 @@ class Installer
                     $admin->setPassword(password_hash(htmlspecialchars($_POST['password']), PASSWORD_DEFAULT));
                     $admin->setEmailConfirmed(true);
                     $admin->setRole('admin');
+                    $admin->generateEmailKey();
                     $admin->setDefaultProfilePicture();
                     if($admin->save()) {
                         // Insert first article
