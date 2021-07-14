@@ -133,7 +133,40 @@ if(isset($errors)) {
     <div class="card">
         <div class="cardTitle">Statistiques</div>
         <div id="statistics">
-        </div>
+            <div id='statisticsList'>
+                <div class='statisticsCard'>
+                    <span class="title">
+                        Nombres d'articles total
+                    </span>
+                    <span class="stat">
+                        <?= $nbArticles ?>
+                    </span>
+                </div>
+                <div class='statisticsCard'>
+                    <span class="title">
+                        Nombres de commentaire total
+                    </span>
+                    <span class="stat">
+                        <?= $nbComments ?>
+                    </span>
+                </div>
+                <div class='statisticsCard'>
+                    <span class="title">
+                        Nombres d'utilisateur total
+                    </span>
+                    <span class="stat">
+                        <?= $nbUsers ?>
+                    </span>
+                </div>
+                <div class='statisticsCard'>
+                    <span class="title">
+                        Nombres de vues total
+                    </span>
+                    <span class="stat">
+                        <?= $nbViews ?>
+                    </span>
+                </div>
+            </div>
         <div class="linkButton">
             <a href='<?= Helpers::callRoute('stats') ?>'><button class='btn'>Voir toutes les statistiques</button></a>
         </div>
