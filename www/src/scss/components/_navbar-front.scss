@@ -19,7 +19,19 @@
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     height: 100%;
+    text-decoration: none;
+    color: whitesmoke;
     @extend %flex-center;
+
+    &:hover {
+      color: $purple-light;
+      -webkit-transform: scale(1.1);
+      -ms-transform: scale(1.1);
+      transform: scale(1.1);
+
+      transition: 0.2s ease-out;
+      opacity: 1;
+    }
   }
 
   #userImage {
