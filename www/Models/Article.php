@@ -19,10 +19,7 @@ class Article extends Database implements JsonSerializable
     protected $title;
     protected $description;
     protected $content;
-    protected $rating;
     protected $slug;
-    protected $titleSeo;
-    protected $descriptionSeo;
     protected $contentUpdatedAt;
     protected $publicationDate;
     protected $mediaId;
@@ -106,22 +103,6 @@ class Article extends Database implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getRating()
-    {
-        return $this->rating;
-    }
-
-    /**
-     * @param mixed $rating
-     */
-    public function setRating($rating): void
-    {
-        $this->rating = $rating;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getSlug()
     {
         return $this->slug;
@@ -139,22 +120,6 @@ class Article extends Database implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getTitleSeo()
-    {
-        return $this->titleSeo;
-    }
-
-    /**
-     * @param mixed $titleSeo
-     */
-    public function setTitleSeo($titleSeo): void
-    {
-        $this->titleSeo = $titleSeo;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getPersonId()
     {
         return $this->personId;
@@ -166,22 +131,6 @@ class Article extends Database implements JsonSerializable
     public function setPersonId($personId): void
     {
         $this->personId = $personId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescriptionSeo()
-    {
-        return $this->descriptionSeo;
-    }
-
-    /**
-     * @param mixed $descriptionSeo
-     */
-    public function setDescriptionSeo($descriptionSeo): void
-    {
-        $this->descriptionSeo = $descriptionSeo;
     }
 
     /**
@@ -393,6 +342,14 @@ class Article extends Database implements JsonSerializable
         return false;
     }
 
+    public function getCleanCreatedAt() {
+        if (!is_null($this->getCreatedAt())) {
+            return date("d/m/Y à H:i", strtotime($this->getCreatedAt()));
+        } else {
+            return "";
+        }
+    }
+
     public function getCleanPublicationDate() {
         if (!is_null($this->getPublicationDate())) {
             return date("d/m/Y à H:i", strtotime($this->getPublicationDate()));
@@ -510,11 +467,8 @@ class Article extends Database implements JsonSerializable
             "title" => $this->getTitle(),
             "description" => $this->getDescription(),
             "content" => $this->getContent(),
-            "rating" => $this->getRating(),
             "slug" => $this->getSlug(),
             // "totalViews" => $this->getTotalViews(),
-            "titleSeo" => $this->getTitleSeo(),
-            "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),
             "contentUpdatedAt" => $this->getContentUpdatedAt(),
             "createdAt" => $this->getCreatedAt(),
