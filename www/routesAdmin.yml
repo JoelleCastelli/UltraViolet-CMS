@@ -215,6 +215,12 @@ comments_update:
   requirements:
     id: (\d+)
 
+comments_update_state:
+  path: /admin/commentaires/update-state
+  controller: Comment
+  action: updateCommentState
+  middleware: Moderator
+
 comments_data:
   path: /admin/comments-data
   controller: Comment

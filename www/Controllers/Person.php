@@ -136,16 +136,8 @@ class Person
         
         $usersArray = [];
         foreach ($users as $user) {
-
-            if($user->getDeletedAt()){
-                $user->setActions($user->getActionsDeletedPerson());
-                $actions = $user->generateActionsMenu();
-                
-            }
-            else{
-                $actions = $user->generateActionsMenu();
-            }
-
+            $actions = $user->generateActionsMenu();
+            
             $emailConfirmed = $user->isEmailConfirmed();
             if ( $emailConfirmed == true ) $emailConfirmed = 'oui';
             else $emailConfirmed = 'non';
@@ -226,14 +218,12 @@ class Person
                         
             if ($user->getDeletedAt()) {
                 //HARD DELETE USER
-
                 //Comments HARD delete
                 $comments = new CommentModel();
                 $comments = $comments->select()->where("personId", $id)->get();
                 foreach ($comments as $comment) {
                     $comment->hardDelete()->where( 'id' , $comment->getId() )->execute();
                 }
-
                 //Articles HARD delete
                 $articles = new ArticleModel();
                 $articles = $articles->select()->where( "personId" , $id)->get();
@@ -244,14 +234,10 @@ class Person
 
             }else{
                 //SOFT DELETE USER
-
-                //Articles SOFT delete
-                $articles = new ArticleModel();
-                $articles = $articles->select()->where( "personId" , $id)->get();
-                foreach ($articles as $article) {
-                    $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
-                }
+                $user->setPseudo('Anonyme'.$id);
+                $user->setEmail('anonyme'.$id.'mail.com');
                 $user->delete();
+                $user->save();
             }
             
             Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
