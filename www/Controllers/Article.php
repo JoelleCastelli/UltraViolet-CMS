@@ -233,7 +233,10 @@ class Article {
         $view->assign('description', $article->getDescription());
         $view->assign('article', $article);
         $view->assign('comments', $article->getComments());
+        $view->assign('bodyScripts', [
+            "new-comment" => PATH_TO_SCRIPTS.'bodyScripts/comments/newComments.js',
+        ]);
         if (isset($form)) $view->assign("form", $form);
-        
+
     }
 }

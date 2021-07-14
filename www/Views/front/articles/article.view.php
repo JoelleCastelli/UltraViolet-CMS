@@ -44,8 +44,15 @@
     <section class="comments card">
 
         <h2 class="title-section">Section commentaire</h2>
+
+        <div id="add-btn" class="title-btn">
+            <button class="btn title-btn">Commenter
+                <div class="add-btn"></div>
+            </button>
+        </div>
         
-        <div class="">
+
+        <div id="test-comment" class="test-comment">
             <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
         </div>
 

@@ -128,10 +128,85 @@
   border-radius: 12px;
   border: none;
   padding: 0.5rem;
+  margin-top: 1rem;
   background: $grey3;
   color: $light-grey;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
 
   resize: none;
   overflow: auto;
+  font-style: $mulish;
+}
+
+.sized-btn {
+  width: min-content;
+}
+
+.test-comment,
+textarea-comment {
+  transition: all 0.3s ease;
+
+  opacity: 0;
+  height: 0px;
+}
+
+.test-comment {
+  margin-bottom: 2rem;
+}
+
+.toggled {
+  opacity: 1;
+  height: 200px;
+}
+
+.add-btn {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100px;
+  background: $white;
+  color: $purple2;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 100%;
+  margin-left: 1rem;
+
+  &::before {
+    @extend %absolute-preset;
+    @extend %absolute-center;
+    height: 60%;
+    width: 3px;
+    background: $purple2;
+    transform: translateY(-50%) rotate(0deg);
+    transition: all 0.4s ease;
+  }
+
+  &::after {
+    @extend %absolute-preset;
+    @extend %absolute-center;
+    height: 3px;
+    width: 60%;
+    background: $purple2;
+    transform: translateX(-50%) rotate(0deg);
+    transition: all 0.4s ease;
+  }
+
+  &:hover {
+    &::before {
+      transform: translateY(-50%) rotate(360deg);
+    }
+
+    &::after {
+      transform: translateX(-50%) rotate(-360deg);
+    }
+  }
+}
+
+#add-btn {
+  cursor: pointer;
+}
+
+.title-btn {
+  display: flex;
+  align-items: center;
 }

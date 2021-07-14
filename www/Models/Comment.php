@@ -210,7 +210,7 @@ class Comment extends Database {
                 "action" => "",
                 "class" => "form_control",
                 "id" => "form_create_comment",
-                "submit" => "Poster un commentaire",
+                "submit" => "Publier",
                 "referer" => Helpers::callRoute('display_article', ["article" => $articleSlug]),
             ],
             "fields" => [
@@ -220,11 +220,10 @@ class Comment extends Database {
                 ],
                 "comment" => [
                     "type" => "textarea",
-                    "label" => "Contenu de votre commentaire",
                     "placeholder" => "Contenu de votre commentaire...",
                     "minLength" => 3,
                     "maxLength" => 255,
-                    "class" => "new-comment",
+                    "class" => "new-comment textarea-comment",
                     "error" => "Le longueur du titre doit être comprise entre 3 et 255 caractères",
                     "required" => true
                 ]
