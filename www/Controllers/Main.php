@@ -7,6 +7,7 @@ use App\Core\View;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Production;
+use App\Models\Person;
 use App\Models\Page;
 use App\Models\Category;
 
@@ -30,12 +31,14 @@ class Main
         $view->assign('productions', $productions);
 
         $nbArticles = $this->getNbArticles();
-        Helpers::dd($nbArticles);
         $view->assign('nbArticles', $nbArticles);
 
         $nbComments = $this->getNbComments();
-        Helpers::dd($nbComments);
         $view->assign('nbComments', $nbComments);
+
+        $nbUsers = $this->getNbUsers();
+        Helpers::dd($nbUsers);
+        $view->assign('nbUsers', $nbUsers);
 
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
 	}
@@ -58,6 +61,12 @@ class Main
     {
         $comments = new Comment();
         return $comments->count('id')->where('deletedAt', "NULL")->first(false);
+    }
+
+    public function getNbUsers()
+    {
+        $persons = new Person();
+        return $persons->count('id')->where('deletedAt', "NULL")->first(false);
     }
 
     public function getLatestComments($limit): array
