@@ -35,7 +35,6 @@ class Settings
                 }
                 // Save logo
                 if(!empty($_FILES['APP_LOGO'])) {
-                    // Rename file
                     $_FILES['APP_LOGO']["name"] = "logo.png";
                     $mediaManager = new MediaManager();
                     $errors = $mediaManager->check($_FILES['APP_LOGO'], 'logo');
@@ -43,8 +42,8 @@ class Settings
                         $mediaManager->uploadFile($mediaManager->getFiles());
                     }
                 }
+                // Save favicon
                 if(!empty($_FILES['APP_FAVICON'])) {
-                    // Rename file
                     $_FILES['APP_FAVICON']["name"] = "favicon.ico";
                     $mediaManager = new MediaManager();
                     $errors = $mediaManager->check($_FILES['APP_FAVICON'], 'logo');
