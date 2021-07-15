@@ -155,7 +155,7 @@ class Main
         $classPath = explode('\\', get_class($objects));
         $class = mb_strtolower(end($classPath));
         if($class == 'category')
-            $objects = $objects->select()->where('position', 0, '=>')->get();
+            $objects = $objects->select()->where('position', 0, '>')->get();
         else
             $objects = $objects->select()->where('deletedAt', 'NULL')
                                          ->andWhere('publicationDate', 'NOT NULL')
