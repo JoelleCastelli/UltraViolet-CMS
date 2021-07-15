@@ -339,6 +339,6 @@ INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultV
 INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("titleColor", "#000d28", "#000d28");
 INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("tagsBackground", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("tagsColor", "#ffffff", "#ffffff");
-INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("customFont", "mulish", "mulish");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("fontFamily", "mulish", "mulish");
 INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("customHeight", "1.5", "1.5");
 INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("customSize", "14", "14");
