@@ -18,7 +18,7 @@ class Article {
     public function showAllAction() {        
         $view = new View("articles/list");
         $view->assign('title', 'Articles');
-        $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/articles/articles.js']);
+        $view->assign('headScripts', [PATH_TO_SCRIPTS.'bodyScripts/articles/list.js']);
     }
 
     public function createArticleAction() {
