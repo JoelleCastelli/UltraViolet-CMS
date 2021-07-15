@@ -49,6 +49,13 @@ class Installer
                 $settingsList = $_POST;
                 // Remove csrfToken from settings list before save loop
                 unset($settingsList['csrfToken']);
+
+                // Prefix: force underscores if missing and remove duplicated ones
+                if(!strpos($settingsList['DBPREFIXE'], '_'))
+                    $settingsList['DBPREFIXE'] .= '_';
+                // Prefix: remove duplicated underscores
+                $settingsList['DBPREFIXE'] = preg_replace('~_+~', '_', $settingsList['DBPREFIXE']);
+
                 // Update .env file with new values from user
                 foreach ($settingsList as $name => $value) {
                     Helpers::updateConfigField($name, $value);
