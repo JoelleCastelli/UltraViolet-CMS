@@ -1,9 +1,23 @@
 .card {
-    background: $card-background-color;
-    border-radius: 8px;
-    border-width: 1px;
-    border-color: $card-border;
-    box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
-    padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: $card-background-color;
+  border-radius: 8px;
+  border-width: 1px;
+  border-color: $card-border;
+  box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  margin-bottom: 20px;
+
+  min-width: 265px;
+  max-width: 500px;
+  width: 40%;
+  margin: auto;
+  line-height: 1.5;
+  list-style: none;
+
+  input {
     margin-bottom: 20px;
+  }
 }
