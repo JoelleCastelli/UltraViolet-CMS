@@ -13,7 +13,8 @@
 
     <section class="grid-form-forget-password-user">
         <h1 class="title-form">UltraViolet</h1>
-        <section class="card">
+        <section class="card-forget">
+            <h3> Entrer l'email de votre compte pour récupérer votre mot de passe</h3>
             <?php if (empty($send)) {
                 echo "<section class=\"container-form\">";
                 echo App\Core\FormBuilder::render($form, true);

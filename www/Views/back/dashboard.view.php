@@ -74,7 +74,8 @@ if(isset($errors)) {
                                             <?= $comment->getContent() ?>
                                         </div>
                                     </div>
-                                    <?= $comment->generateActionsMenu() ?>
+                                    <?php $comment->setActions($comment->getActions());
+                                    echo $comment->generateActionsMenu(); ?>
                                 </div>
                                 <?php  } ?>
                     <?php } ?>
@@ -127,11 +128,6 @@ if(isset($errors)) {
                 </div>
             <?php } ?>
         </div>
-
-        
-        
-        
-
     </div>
 
     <!--STATISTICS-->

@@ -47,7 +47,6 @@ class Comment
                 $comments = $comments->select()->where('deletedAt', "NOT NULL")->orderBy('createdAt', 'DESC')->get();
             }
             
-
             if(!$comments) $comments = [];
 
             $commentsArray = [];
