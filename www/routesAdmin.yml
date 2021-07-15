@@ -241,8 +241,8 @@ restore_templates:
 # STATS
 stats:
   path: /admin/statistiques
-  controller: Stats
-  action: showAll
+  controller: Statistics
+  action: default
 
 # USERS
 users_list:
