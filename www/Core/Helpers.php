@@ -6,11 +6,13 @@ use App\Core\PhpMailer\SMTP;
 use App\Models\Category;
 class Helpers{
 
-	public static function cleanFirstname($firstname){
+	public static function cleanFirstname($firstname): string
+    {
 		return ucwords(mb_strtolower(trim($firstname)));
 	}
 
-	public static function getCurrentTimestamp(){
+	public static function getCurrentTimestamp(): string
+    {
         $dateNow = new \DateTime('now');
         return $dateNow->format("Y-m-d H:i:s");
     }
@@ -25,8 +27,9 @@ class Helpers{
 
     public static function dd($data) {
         echo "<pre>";
-        var_dump($data);die;
+        var_dump($data);
         echo "</pre>";
+        die;
     }
 
     public static function cleanDump($data, $title = null) {
@@ -61,7 +64,8 @@ class Helpers{
         echo "</div>";
     }
 
-    public static function sanitizeString($url) {
+    public static function sanitizeString($url): string
+    {
         return htmlspecialchars(strip_tags($url));
     }
 
