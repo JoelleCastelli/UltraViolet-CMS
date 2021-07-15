@@ -34,23 +34,26 @@ class Settings
                     Helpers::updateConfigField($name, $value);
                 }
                 // Save logo
-                if(!empty($_FILES['APP_LOGO'])) {
-                    $_FILES['APP_LOGO']["name"] = "logo.png";
+                if(!empty($_FILES['logo'])) {
+                    $_FILES['logo']["name"] = "logo.png";
                     $mediaManager = new MediaManager();
-                    $errors = $mediaManager->check($_FILES['APP_LOGO'], 'logo');
+                    $errors = $mediaManager->check($_FILES['logo'], 'logo');
                     if(empty($errors)) {
                         $mediaManager->uploadFile($mediaManager->getFiles());
                     }
+                    unset($_FILES['logo']);
                 }
                 // Save favicon
-                if(!empty($_FILES['APP_FAVICON'])) {
-                    $_FILES['APP_FAVICON']["name"] = "favicon.ico";
+                if(!empty($_FILES['favicon'])) {
+                    $_FILES['favicon']["name"] = "favicon.ico";
                     $mediaManager = new MediaManager();
-                    $errors = $mediaManager->check($_FILES['APP_FAVICON'], 'logo');
+                    $errors = $mediaManager->check($_FILES['favicon'], 'logo');
                     if(empty($errors)) {
                         $mediaManager->uploadFile($mediaManager->getFiles());
                     }
+                    unset($_FILES['favicon']);
                 }
+                Helpers::dd($_FILES);
                 // Success message
                 Helpers::setFlashMessage('success', "Les paramètres ont été mis à jour");
             }
@@ -100,12 +103,12 @@ class Settings
                         "value" => $settings['META_DESC'],
                         "error" => "La meta description ne peut pas dépasser 160 caractères",
                     ],
-                    "APP_LOGO" => [
+                    "logo" => [
                         "type" => "file",
                         "accept" => ".jpg, .jpeg, .png",
                         "label" => "Logo de l'application",
                     ],
-                    "APP_FAVICON" => [
+                    "favicon" => [
                         "type" => "file",
                         "accept" => ".ico",
                         "label" => "Favicon de l'application",
