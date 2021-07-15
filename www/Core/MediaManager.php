@@ -32,7 +32,10 @@ class MediaManager
         // verifications files
         foreach ($this->getFiles() as $file) {
 
-            if($file['error'] != UPLOAD_ERR_OK) return "Erreur dans le chargement du fichier";
+            if($file['error'] != UPLOAD_ERR_OK) {
+                $this->result['errors'][] = "Erreur dans le chargement du fichier";
+                return $this->result['errors'];
+            }
 
             //init
             $fileSize = $file['size'];
