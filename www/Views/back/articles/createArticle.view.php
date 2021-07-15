@@ -22,6 +22,16 @@
         <div class="clickable-bg"></div>
         <div class="modal-media">
             <h1>Selectionnez l'image de votre article</h1>
+
+
+            <div id="tableActions">
+                <div class="filtering-status">
+                    <div class="filtering-btn active" id="poster">Poster</div>
+                    <div class="filtering-btn" id="vip">Portraits</div>
+                    <div class="filtering-btn" id="other">Autres</div>
+                </div>
+            </div>
+
             <table id="datatable" class="display">
                 <thead>
                 <tr>

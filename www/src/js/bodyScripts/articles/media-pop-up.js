@@ -39,6 +39,24 @@ $(document).ready(function () {
     },
   });
 
+  // function getMediasByType(mediaType) {
+  //   $.ajax({
+  //     type: "POST",
+  //     url: callRoute("medias-data"),
+  //     data: { mediaType },
+  //     dataType: "json",
+  //     success: function (response) {
+  //       console.log(response);
+  //       table.clear();
+  //       table.rows.add(response).draw();
+  //       listenRowEvents();
+  //     },
+  //     error: function () {
+  //       console.log("Erreur dans la récupération des médias de type " + mediaType);
+  //     },
+  //   });
+  // }
+
   function getMediasByType(mediaType) {
     $.ajax({
       type: "POST",
@@ -46,7 +64,6 @@ $(document).ready(function () {
       data: { mediaType },
       dataType: "json",
       success: function (response) {
-        console.log(response);
         table.clear();
         table.rows.add(response).draw();
         listenRowEvents();
@@ -56,6 +73,13 @@ $(document).ready(function () {
       },
     });
   }
+
+  $(".filtering-btn").click(function () {
+    $(".filtering-btn").removeClass("active");
+    $(this).addClass("active");
+
+    getMediasByType(this.id);
+  });
 
   getMediasByType("other");
 });
