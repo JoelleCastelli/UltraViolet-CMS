@@ -53,7 +53,6 @@ class Settings
                     }
                     unset($_FILES['favicon']);
                 }
-                Helpers::dd($_FILES);
                 // Success message
                 Helpers::setFlashMessage('success', "Les paramètres ont été mis à jour");
             }
