@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Core\FormBuilder;
 use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Core\View;
@@ -15,8 +16,7 @@ class Settings
      */
     public function showAllAction()
     {
-        $settings = new SettingsModel();
-        $form = $settings->formBuilderUpdateSettings();
+        $form = $this->formBuilderUpdateSettings();
         $view = new View("settings/list");
         $view->assign('title', 'Paramètres');
         $view->assign("form", $form);
@@ -37,6 +37,57 @@ class Settings
                 Helpers::setFlashMessage('success', "Les paramètres ont été mis à jour");
             }
             $view->assign("errors", $errors);
+        }
+    }
+
+    public function formBuilderUpdateSettings(): array
+    {
+        $settings = Helpers::readConfigFile();
+        if($settings) {
+            return [
+                "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "class" => "form_control card",
+                    "id" => "formAddCategory",
+                    "submit" => "Valider",
+                    "referer" => Helpers::callRoute('settings')
+                ],
+                "fields" => [
+                    "APP_NAME" => [
+                        "type" => "text",
+                        "minLength" => 1,
+                        "maxLength" => 60,
+                        "label" => "Nom de l'application",
+                        "class" => "search-bar",
+                        "value" => $settings['APP_NAME'],
+                        "error" => "Le nom l'application doit contenir entre 1 et 60 caractères",
+                        "required" => true,
+                    ],
+                    "META_TITLE" => [
+                        "type" => "text",
+                        "minLength" => 1,
+                        "maxLength" => 155,
+                        "label" => "Meta title par défaut",
+                        "class" => "search-bar",
+                        "value" => $settings['META_TITLE'],
+                        "error" => "La meta description ne peut pas dépasser 155 caractères",
+                    ],
+                    "META_DESC" => [
+                        "type" => "textarea",
+                        "minLength" => 1,
+                        "maxLength" => 160,
+                        "label" => "Meta description par défaut",
+                        "class" => "search-bar",
+                        "value" => $settings['META_DESC'],
+                        "error" => "La meta description ne peut pas dépasser 160 caractères",
+                    ],
+                    "csrfToken" => [
+                        "type"=>"hidden",
+                        "value"=> FormBuilder::generateCSRFToken(),
+                    ]
+                ],
+            ];
         }
     }
 
