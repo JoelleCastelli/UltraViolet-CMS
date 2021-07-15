@@ -5,7 +5,8 @@ $(document).ready(function () {
     autoWidth: false,
     responsive: true,
     columns: [{ data: "Miniature" }, { data: "Nom" }, { data: "Date d'ajout" }],
-
+    scrollY: "400px",
+    scrollCollapse: true,
     columnDefs: [{ className: "media-name-cta", targets: [1] }],
 
     language: {
@@ -38,24 +39,6 @@ $(document).ready(function () {
       },
     },
   });
-
-  // function getMediasByType(mediaType) {
-  //   $.ajax({
-  //     type: "POST",
-  //     url: callRoute("medias-data"),
-  //     data: { mediaType },
-  //     dataType: "json",
-  //     success: function (response) {
-  //       console.log(response);
-  //       table.clear();
-  //       table.rows.add(response).draw();
-  //       listenRowEvents();
-  //     },
-  //     error: function () {
-  //       console.log("Erreur dans la récupération des médias de type " + mediaType);
-  //     },
-  //   });
-  // }
 
   function getMediasByType(mediaType) {
     $.ajax({
