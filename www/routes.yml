@@ -84,3 +84,11 @@ sitemap:
   path:       /sitemap.xml
   controller: Main
   action:     generateSitemap
+
+#PAGE
+display_page:
+  path:       /page/{page}
+  controller: Page
+  action:     accessStaticPage
+  requirements:
+    page: ([a-z0-9]+(?:-[a-z0-9]+)*)
