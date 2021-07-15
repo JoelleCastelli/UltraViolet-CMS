@@ -1,7 +1,7 @@
 $(document).ready(function () {
   console.log("production modal");
   /* BUILD DATATABLES */
-  let table = $("#datatable-production").DataTable({
+  let tableProd = $("#datatable-production").DataTable({
     order: [],
     autoWidth: false,
     responsive: true,
@@ -16,8 +16,11 @@ $(document).ready(function () {
       { data: "Date d'ajout" },
       { data: "Actions" },
     ],
+    scrollY: "400px",
+    scrollCollapse: true,
 
     columnDefs: [
+      { className: "production-name-cta", targets: [1] },
       {
         targets: 8, // Actions column
         data: "name",
@@ -70,8 +73,8 @@ $(document).ready(function () {
   // On start, display movies
   getProductionsByType("movie");
 
-  table.columns([3]).visible(false); // season
-  table.columns([4]).visible(false); // series
+  tableProd.columns([3]).visible(false); // season
+  tableProd.columns([4]).visible(false); // series
   // Display different types on filtering button click
   $(".filtering-btn").click(function () {
     $(".filtering-btn").removeClass("active");
@@ -80,18 +83,18 @@ $(document).ready(function () {
 
     switch (this.id) {
       case "season":
-        table.columns([2]).visible(false); //original title
-        table.columns([3]).visible(false); // season
-        table.columns([4]).visible(true); // series
+        tableProd.columns([2]).visible(false); //original title
+        tableProd.columns([3]).visible(false); // season
+        tableProd.columns([4]).visible(true); // series
         break;
       case "episode":
-        table.columns([3]).visible(true); // season
-        table.columns([4]).visible(true); // series
+        tableProd.columns([3]).visible(true); // season
+        tableProd.columns([4]).visible(true); // series
         break;
       default:
-        table.columns([3]).visible(false); // season
-        table.columns([4]).visible(false); // series
-        table.columns([2]).visible(true); //original title
+        tableProd.columns([3]).visible(false); // season
+        tableProd.columns([4]).visible(false); // series
+        tableProd.columns([2]).visible(true); //original title
     }
   });
 
@@ -102,32 +105,39 @@ $(document).ready(function () {
       data: { productionType },
       dataType: "json",
       success: function (response) {
-        table.clear();
-        table.rows.add(response).draw();
+        tableProd.clear();
+        tableProd.rows.add(response).draw();
+        listenRowEventsProductions();
       },
       error: function () {
         console.log("Erreur dans la récupération des productions de type " + productionType);
       },
     });
   }
-
-  table.on("click", ".delete", function () {
-    if (confirm("Êtes-vous sûr.e de vouloir supprimer cette production ?")) {
-      let productionId = this.id.substring(this.id.lastIndexOf("-") + 1);
-      let row = table.row($(this).parents("tr"));
-      $.ajax({
-        type: "POST",
-        url: callRoute("production_delete"),
-        data: { productionId: productionId },
-        dataType: "json",
-        success: function (response) {
-          if (response["success"]) row.remove().draw();
-          else alert(response["message"]);
-        },
-        error: function () {
-          console.log("Erreur dans la suppression de la production ID " + productionId);
-        },
-      });
-    }
-  });
 });
+
+const inputProd = document.querySelector("#production");
+const modalProd = document.querySelector(".background-modal-production");
+const removeBGProduction = document.querySelector(".clickable-bg");
+
+inputProd.addEventListener("click", (e) => {
+  modalProd.classList.toggle("visible");
+});
+
+removeBGProduction.addEventListener("click", (e) => {
+  modalProd.classList.toggle("visible");
+});
+
+function listenRowEventsProductions() {
+  const mediaCTAs = document.querySelectorAll(".production-name-cta");
+  mediaCTAs.forEach((cta) => {
+    cta.addEventListener("click", (e) => {
+      const media = e.target.innerHTML;
+      console.log("nom du production get : " + media);
+
+      inputProd.value = media;
+      console.log(inputProd.value);
+      modalProd.classList.toggle("visible");
+    });
+  });
+}

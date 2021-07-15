@@ -536,6 +536,12 @@ class Article extends Database implements JsonSerializable
                     "error" => "La longueur de la description doit être comprise entre 2 et 100 caractères",
                     "required" => true,
                 ],
+                "production" => [
+                    "type" => "text",
+                    "label" => "Associer prod à article",
+                    "class" => "search-bar",
+                    "readonly" => true
+                ],
                 "state" => [
                     "type" => "radio",
                     "label" => "État *",
