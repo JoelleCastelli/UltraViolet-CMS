@@ -111,17 +111,107 @@ class TemplateVariable extends Database
                 "referer" => Helpers::callRoute('templates_lists')
             ],
             "fields" => [
-                "#navbar-front" => [
+                "navbarBackground" => [
                     "type" => "color",
-                    "label" => "Fond de la navbar",
-                    "value" => $currentVariables['#navbar-front'],
-                    "error" => "Ce code couleur n'est pas valable",
+                    "label" => "Couleur du menu",
+                    "value" => $currentVariables['navbarBackground'],
+                    "error" => "Le code couleur du menu n'est pas valable",
                     "required" => true,
                 ],
-                "#test" => [
+                "navbarColor" => [
                     "type" => "color",
-                    "label" => "Fond de la page",
-                    "error" => "Ce code couleur n'est pas valable",
+                    "label" => "Couleur des titres du menu",
+                    "value" => $currentVariables['navbarColor'],
+                    "error" => "Le code couleur des titres du menu n'est pas valable",
+                    "required" => true,
+                ],
+                "footerBackground" => [
+                    "type" => "color",
+                    "label" => "Couleur du footer",
+                    "value" => $currentVariables['footerBackground'],
+                    "error" => "Le code couleur du footer n'est pas valable",
+                    "required" => true,
+                ],
+                "footerColor" => [
+                    "type" => "color",
+                    "label" => "Couleur du texte du footer",
+                    "value" => $currentVariables['footerColor'],
+                    "error" => "Le code couleur des titres du footer n'est pas valable",
+                    "required" => true,
+                ],
+                "titleColor" => [
+                    "type" => "color",
+                    "label" => "Couleur des titres",
+                    "value" => $currentVariables['titleColor'],
+                    "error" => "Le code couleur des titres n'est pas valable",
+                    "required" => true,
+                ],
+                "tagsBackground" => [
+                    "type" => "color",
+                    "label" => "Couleur de fond des tags",
+                    "min" => "0.1",
+                    "value" => $currentVariables['tagsBackground'],
+                    "error" => "La hauteur de ligne ne peut pas être intéfieure à 0.1",
+                    "required" => true,
+                ],
+                "tagsColor" => [
+                    "type" => "color",
+                    "label" => "Couleur du texte des tags",
+                    "min" => "0.1",
+                    "value" => $currentVariables['tagsColor'],
+                    "error" => "La hauteur de ligne ne peut pas être intéfieure à 0.1",
+                    "required" => true,
+                ],
+                "fontFamily" => [
+                    "type" => "select",
+                    "label" => "Police",
+                    "options" => [
+                        [
+                            "value" => "mulish",
+                            "text" => "Mulish",
+                            "selected" => $currentVariables['fontFamily'] == 'mulish',
+                        ],
+                        [
+                            "value" => "comic",
+                            "text" => "Comic Sans MS",
+                            "selected" => $currentVariables['fontFamily'] == 'comic',
+                        ],
+                        [
+                            "value" => "arial",
+                            "text" => "Arial",
+                            "selected" => $currentVariables['fontFamily'] == 'arial',
+                        ],
+                        [
+                            "value" => "tahoma",
+                            "text" => "Tahoma",
+                            "selected" => $currentVariables['fontFamily'] == 'tahoma',
+                        ],
+                        [
+                            "value" => "poppins",
+                            "text" => "Poppins",
+                            "selected" => $currentVariables['fontFamily'] == 'poppins',
+                        ]
+                    ],
+                    "error" => "La police choisie n'existe pas",
+                    "required" => true,
+                ],
+                "customHeight" => [
+                    "type" => "number",
+                    "label" => "Hauteur de ligne",
+                    "class" => "search-bar",
+                    "value" => $currentVariables['customHeight'],
+                    "min" => "0",
+                    "step" => "0.1",
+                    "error" => "La hauteur de ligne ne peut pas être inférieure à 0.1",
+                    "required" => true,
+                ],
+                "customSize" => [
+                    "type" => "number",
+                    "label" => "Taille de la police",
+                    "class" => "search-bar",
+                    "value" => $currentVariables['customSize'],
+                    "min" => "5",
+                    "error" => "La taille de la police ne peut pas être inférieure à 5",
                     "required" => true,
                 ],
                 "csrfToken" => [

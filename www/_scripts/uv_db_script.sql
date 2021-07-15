@@ -26,8 +26,8 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ultraviolet`.`uv_template_variable` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `selector` VARCHAR(20) NOT NULL,
-  `value` VARCHAR(40) NOT NULL,
+  `selector` VARCHAR(60) NOT NULL,
+  `value` VARCHAR(60) NOT NULL,
   `defaultValue` VARCHAR(40) NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -332,5 +332,13 @@ VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Ceci est la de
 -- -----------------------------------------------------
 -- Insert default templates variables
 -- -----------------------------------------------------
-INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("#navbar-front", "#000d28", "#000d28");
-INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("#navbar", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("navbarBackground", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("navbarColor", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("footerBackground", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("footerColor", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("titleColor", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("tagsBackground", "#5f2eea", "#5f2eea");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("tagsColor", "#ffffff", "#ffffff");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("customFont", "mulish", "mulish");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("customHeight", "1.5", "1.5");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("customSize", "14", "14");
