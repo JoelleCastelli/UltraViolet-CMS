@@ -33,6 +33,7 @@ class Article {
             "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
             "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js',
             "media-modal" => PATH_TO_SCRIPTS.'bodyScripts/articles/media-pop-up.js',
+            "media-production" => PATH_TO_SCRIPTS.'bodyScripts/articles/production-pop-up.js',
         ]);
     
         if (!empty($_POST)) {
