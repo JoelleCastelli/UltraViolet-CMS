@@ -152,7 +152,6 @@ html {
 }
 
 body {
-  height: 100%;
   background: $main-bg-color;
   font-family: $mulish;
   position: relative;
@@ -194,7 +193,7 @@ b {
 }
 
 .clickable-tag {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 textarea {
@@ -202,7 +201,8 @@ textarea {
   resize: vertical;
 }
 
-input, textarea {
+input,
+textarea {
   font-size: 16px;
 }
 
