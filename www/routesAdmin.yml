@@ -228,9 +228,15 @@ comments_data:
 
 # TEMPLATES
 templates_lists:
-  path: /admin/templates
+  path:       /admin/templates
   controller: TemplateVariable
-  action: showAll
+  action:     showAll
+
+restore_templates:
+  path:       /admin/parametres/restaurer
+  controller: TemplateVariable
+  action:     restore
+  middleware: Admin
 
 # STATS
 stats:

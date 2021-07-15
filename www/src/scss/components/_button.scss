@@ -40,6 +40,11 @@
         margin-bottom: 20px;
     }
 
+    &.danger {
+        text-align: center;
+        background-color: $red-light;
+    }
+
     // Others alternatives
     &.btn--remove {
         background-color: $button-remove-bg;
