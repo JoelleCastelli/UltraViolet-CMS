@@ -64,10 +64,10 @@ $noTemplateUrl = [
     }
     ?>
 </body>
-<footer>
-    <?php foreach ($pages as $page) : ?>
-        <a href="<?= Helpers::callRoute('display_page', ['page', $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
-    <?php endforeach; ?>
-</footer>
+<?php
+if (!in_array(Request::getURI(), $noTemplateUrl)) {
+    include 'Views/components/footer-front.php';
+}
+?>
 
 </html>
