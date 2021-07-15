@@ -9,7 +9,7 @@ class MediaManager
     protected array $files = [];
     protected int $oneMegabytesInBytes = 1048576;
     protected array $result = [];
-    private array $imageExtensions = ['jpg', 'jpeg', 'png', 'svg'];
+    private array $imageExtensions = ['jpg', 'jpeg', 'png', 'svg', 'ico'];
 
     public function __construct()
     {

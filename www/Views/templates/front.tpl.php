@@ -20,7 +20,7 @@ $noTemplateUrl = [
     <meta charset="UTF-8">
     <title><?= isset($title) && $title  != "" ? APP_NAME . ' - ' . $title : META_TITLE ?></title>
     <meta name="description" content="<?= isset($description) && $description  != "" ? $description : META_DESC ?>">
-    <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>favicon.ico" />
+    <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>/logo/favicon.ico" />
 
     <!--JS-->
     <script src="<?= PATH_TO_DIST . 'main.js' ?>"></script>

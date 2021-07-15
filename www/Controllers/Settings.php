@@ -33,6 +33,25 @@ class Settings
                 foreach ($settingsList as $name => $value) {
                     Helpers::updateConfigField($name, $value);
                 }
+                // Save logo
+                if(!empty($_FILES['APP_LOGO'])) {
+                    // Rename file
+                    $_FILES['APP_LOGO']["name"] = "logo.png";
+                    $mediaManager = new MediaManager();
+                    $errors = $mediaManager->check($_FILES['APP_LOGO'], 'logo');
+                    if(empty($errors)) {
+                        $mediaManager->uploadFile($mediaManager->getFiles());
+                    }
+                }
+                if(!empty($_FILES['APP_FAVICON'])) {
+                    // Rename file
+                    $_FILES['APP_FAVICON']["name"] = "favicon.ico";
+                    $mediaManager = new MediaManager();
+                    $errors = $mediaManager->check($_FILES['APP_FAVICON'], 'logo');
+                    if(empty($errors)) {
+                        $mediaManager->uploadFile($mediaManager->getFiles());
+                    }
+                }
                 // Success message
                 Helpers::setFlashMessage('success', "Les paramètres ont été mis à jour");
             }
@@ -81,6 +100,16 @@ class Settings
                         "class" => "search-bar",
                         "value" => $settings['META_DESC'],
                         "error" => "La meta description ne peut pas dépasser 160 caractères",
+                    ],
+                    "APP_LOGO" => [
+                        "type" => "file",
+                        "accept" => ".jpg, .jpeg, .png",
+                        "label" => "Logo de l'application",
+                    ],
+                    "APP_FAVICON" => [
+                        "type" => "file",
+                        "accept" => ".ico",
+                        "label" => "Favicon de l'application",
                     ],
                     "csrfToken" => [
                         "type"=>"hidden",
