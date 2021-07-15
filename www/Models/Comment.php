@@ -40,9 +40,9 @@ class Comment extends Database {
 
         $this->actionsdeletedcomment = [
 
-            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id])] ,
-            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' =>'Restaurer', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('users_update_state', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('users_update', ['id' => $this->id]), 'role' => 'moderator'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('users_delete', ['id' => $this->id]), 'role' => 'moderator'],
+            ['name' =>'Restaurer', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('users_update_state', ['id' => $this->id]), 'role' => 'moderator'],
         ];
     }
 

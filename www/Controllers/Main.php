@@ -70,7 +70,7 @@ class Main
     public function getNbUsers()
     {
         $persons = new Person();
-        return $persons->count('id')->where('deletedAt', "NULL")->andWhere('email',"NOT NULL")->first(false);
+        return $persons->count('id')->where('deletedAt', "NULL")->andWhere( 'role' , 'vip', '!=')->first(false);
     }
 
     public function getNbViews()
