@@ -5,7 +5,8 @@ namespace App\Core;
 class FormValidator
 {
 
-    public static function check($config, $data) {
+    public static function check($config, $data): array
+    {
 
         self::validateCSRFToken($config['config']['referer'], $data['csrfToken']);
         $errors = [];
@@ -38,7 +39,6 @@ class FormValidator
                 }
 
                 if(!Helpers::isStrictlyEmpty($data[$fieldName])) {
-        
                     self::textInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::numberInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::passwordValidator($fieldName, $data[$fieldName], $fieldConfig, $errors);
@@ -46,6 +46,7 @@ class FormValidator
                     self::emailInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::dateInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::optionsValidator($data[$fieldName], $fieldConfig);
+                    self::colorValidator($data[$fieldName], $fieldConfig, $errors);
                 }
             }
         }
@@ -163,6 +164,14 @@ class FormValidator
             if (in_array(false, $correctOptions)) {
                 echo "Tentative de hack : l'option n'existe pas !";
                 exit;
+            }
+        }
+    }
+
+    public static function colorValidator($fieldContent, $fieldConfig, &$errors) {
+        if($fieldConfig['type'] == 'color') {
+            if(!preg_match('/^#([0-9a-f]{3}){1,2}$/', $fieldContent)) {
+                $errors[] = $fieldConfig["error"];
             }
         }
     }

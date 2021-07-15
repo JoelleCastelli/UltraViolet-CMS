@@ -22,12 +22,13 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
--- Table `ultraviolet`.`uv_settings`
+-- Table `ultraviolet`.`uv_template_variable`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ultraviolet`.`uv_settings` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uv_template_variable` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(20) NOT NULL,
-  `value` VARCHAR(60) NOT NULL,
+  `selector` VARCHAR(20) NOT NULL,
+  `value` VARCHAR(40) NOT NULL,
+  `defaultValue` VARCHAR(40) NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`))
@@ -327,3 +328,9 @@ INSERT INTO `ultraviolet`.`uv_category` (`name`, `position`, `descriptionSeo`) V
 -- -----------------------------------------------------
 INSERT INTO `ultraviolet`.`uv_page` (`title`, `slug`, `position`, `state`, `descriptionSeo`, `content`)
 VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Ceci est la description de votre page telle qu'elle sera vue par les moteurs de recherche", "<p>Voici la toute première page de votre site !</p>");
+
+-- -----------------------------------------------------
+-- Insert default templates variables
+-- -----------------------------------------------------
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("#navbar-front", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("#navbar", "#000d28", "#000d28");
