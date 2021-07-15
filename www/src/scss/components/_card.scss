@@ -7,3 +7,25 @@
   padding: 1rem;
   margin-bottom: 20px;
 }
+
+.card-forget {
+  background: $card-background-color;
+  border-radius: 8px;
+  border-width: 1px;
+  border-color: $card-border;
+  box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  padding: 1rem;
+
+  min-width: 265px;
+  max-width: 500px;
+  width: 50%;
+
+  margin: auto;
+  line-height: 1.5;
+  list-style: none;
+
+  input {
+    margin-top: 15px;
+  }
+}
