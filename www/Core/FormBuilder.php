@@ -99,7 +99,6 @@ class FormBuilder
                     $value = ($field['type'] === 'password') ? '' : htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
-
                 $html .="<input
                     type='".($field["type"] ?? "text")."'
                     name='".$fieldName."'
@@ -108,6 +107,7 @@ class FormBuilder
                     class='".($field["class"] ?? "")."'
                     min='".($field["min"] ?? "")."'
                     max='".($field["max"] ?? "")."'
+                    step='".($field["step"] ?? "")."'
                     id='".($field["id"] ?? $fieldName)."'
                     accept='".($field["accept"] ?? "")."'
                     $required $disabled $readonly $multiple

@@ -229,7 +229,7 @@ comments_data:
 # TEMPLATES
 templates_lists:
   path: /admin/templates
-  controller: Template
+  controller: TemplateVariable
   action: showAll
 
 # STATS

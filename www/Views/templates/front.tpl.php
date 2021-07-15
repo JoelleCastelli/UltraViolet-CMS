@@ -20,6 +20,8 @@
     <!--JS-->
     <script src="<?=PATH_TO_DIST.'main.js'?>"></script>
     <!--CSS-->
+    <link rel="stylesheet" href="/src/css/variables.css">
+    <link rel="stylesheet" href="/src/css/main.css">
     <link rel="stylesheet" href="<?=PATH_TO_DIST.'main.css'?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 
@@ -33,21 +35,18 @@
 </head>
 
 <body>
-    <div class="container">
+
+    <?php
+        if (!in_array(Request::getURI(), $noTemplateUrl)) {
+            include 'Views/components/navbar-front.php';
+        }
+    ?>
+    <main class="main">
         <?php
-            if (!in_array(Request::getURI(), $noTemplateUrl)) {
-                include 'Views/components/navbar-front.php';
-            }
+            if (isset($flash)) $this->displayFlash($flash);
+            include $this->view;
         ?>
-        <main class="main main-front">
-            <div class="main-content">
-                <?php
-                    if (isset($flash)) $this->displayFlash($flash);
-                    include $this->view;
-                ?>
-            </div>
-        </main>
-    </div>
+    </main>
 
     <?php
         if(isset($bodyScripts) && !empty($bodyScripts)) {
