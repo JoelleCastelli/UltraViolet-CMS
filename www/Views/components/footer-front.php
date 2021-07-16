@@ -23,6 +23,7 @@ use App\Core\Helpers; ?>
 
         <article>
             <p>©2021 Ultraviolet technologies Inc.</p>
+            <p>Ce site est protégé par Joëlle CASTELLI. Par ailleurs, la Politique de confidentialité et les Conditions d'utilisation de Joëlle s'appliquent.</p>
         </article>
     </div>
 </footer>
