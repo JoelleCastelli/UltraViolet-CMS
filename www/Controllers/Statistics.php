@@ -25,6 +25,9 @@ class Statistics
         $nbToDayUsers = $this->getNbToDayUsers();
         $view->assign('nbToDayUsers', $nbToDayUsers);
 
+        $nbToDayViews = $this->getNbToDayViews();
+        $view->assign('nbToDayViews', $nbToDayViews);
+
         $nbArticles = $this->getNbArticles();
         $view->assign('nbArticles', $nbArticles);
 
@@ -67,6 +70,13 @@ class Statistics
             WHERE cast(uvtr_person.createdAt as date) = cast(Now() as date) 
             and uvtr_person.deletedAt IS NULL 
             and uvtr_person.role != "vip"')->first(false);
+    }
+
+    public function getNbToDayViews()
+    {
+        $articleHistory = new ArticleHistory();
+        return $articleHistory->customQuery('SELECT SUM(uvtr_article_history.views) FROM uvtr_article_history 
+            WHERE cast(uvtr_article_history.date as date) = cast(Now() as date)')->first(false);
     }
 
     public function getNbArticles()
