@@ -32,8 +32,6 @@
         
             <?php
                 include 'Views/components/navbar-front.php';
-                if (isset($flash)) $this->displayFlash($flash);
-                include $this->view;
             ?>
             
         <main class="main">
