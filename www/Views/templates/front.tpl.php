@@ -51,15 +51,11 @@ $noTemplateUrl = [
                 if (!in_array(Request::getURI(), $noTemplateUrl)) {
                     include 'Views/components/navbar-front.php';
                 }
-            ?>
-            <main class="main">
-                <?php
-                if (!in_array(Request::getURI(), $noTemplateUrl)) {
-                    include 'Views/components/navbar-front.php';
-                }
                     if (isset($flash)) $this->displayFlash($flash);
                     include $this->view;
-                ?>
+            ?>
+            <main class="main">
+                
             </main>
 
             <?php  include 'Views/components/footer-front.php'; ?>
