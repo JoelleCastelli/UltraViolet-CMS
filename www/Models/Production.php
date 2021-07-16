@@ -424,7 +424,19 @@ class Production extends Database
 
     public function getWriters(): array
     {
-        return $this->writers;
+        $productionPersons = new ProductionPerson();
+        $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
+            ->andWhere('department', 'writer')->get();
+        $writers = [];
+        foreach ($productionPersons as $productionPerson) {
+            $writer = new Person();
+            $writer->setId($productionPerson->getPersonId());
+            $writer->getMedia();
+            $writers[$writer->getId()]['fullName'] = $writer->getFullName();
+            $writers[$writer->getId()]['photo'] = $writer->getMedia()->getPath();
+            $writers[$writer->getId()]['role'] = $productionPerson->getCharacter();
+        }
+        return $writers;
     }
 
     public function setWriters(array $writers): void
