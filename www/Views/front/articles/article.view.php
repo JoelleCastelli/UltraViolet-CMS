@@ -1,3 +1,5 @@
+<?php use App\Core\Helpers; ?>
+
 <div class="grid-article">
 
     <div class="cover">
@@ -9,25 +11,23 @@
         <small class="article__author">Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getPublicationDate() ?></small>
         <div class="article__tags">
             <?php foreach($article->getCategories() as $category) : ?>
-                <div class="article__tags__category"><?= $category->getName() ?></div>
+                <div class="article__tags__category tag-item"><?= $category->getName() ?></div>
             <?php endforeach; ?>
         </div>
         <article>
             <?= $article->getContent() ?>
         </article>
     </section>
-
-    <section class="production card">
-
-        <div class="production__image"></div>
-        <h2 class="production__title">Le seigneur des anneaux</h2>
-        <ul class="production__actors">
-            <li class="production__actors__actor">Jean Michel</li>
-            <li class="production__actors__actor">Crapoto del mare</li>
-            <li class="production__actors__actor">Inspector Boudacheh</li>
-        </ul>
-
-    </section>
+    
+    <?php foreach($article->getProductions() as $production) : ?>
+        <section class="production card">
+            <img class="production__image" src="<?= $production->getProductionPosterPath() ?>"></img>
+            <h2 class="production__title"><?= $production->getTitle() ?></h2>
+            <p class="production__type tag-item"><?= $production->getType() ?></p>
+            <p class="production__release-date">Date de sortie : <?= $production->getReleaseDate() ?></p>
+            <p></p>
+        </section>
+    <?php endforeach; ?>
 
     <section class="comments card">
 

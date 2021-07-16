@@ -49,7 +49,8 @@ input[type]:read-only {
   background: $light-grey;
 }
 
-input[name="media"]:read-only {
+input[name="media"]:read-only,
+input[name="production"]:read-only {
   background: #e7e9f3;
   color: $grey;
   font-family: $mulish;

@@ -1,4 +1,5 @@
-.background-modal {
+.background-modal,
+.background-modal-production {
   z-index: 100;
   display: none;
   top: 0;
@@ -43,7 +44,8 @@
   left: inherit;
 }
 
-.media-name-cta {
+.media-name-cta,
+.production-name-cta {
   transition: all 0.25s ease;
 
   &:hover {

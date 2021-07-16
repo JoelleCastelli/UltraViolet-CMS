@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Controller\Production;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
@@ -10,6 +11,10 @@ use JsonSerializable;
 use App\Models\Media as MediaModel;
 use App\Models\Category as CategoryModel; 
 use App\Models\CategoryArticle as CategoryArticleModel;
+use App\Models\ProductionArticle as ProductionArticleModel;
+use App\Models\Production as ProductionModel;
+
+
 
 class Article extends Database implements JsonSerializable
 {
@@ -29,6 +34,7 @@ class Article extends Database implements JsonSerializable
     protected $deletedAt;
 
     private $categories = [];
+    private $productions = [];
 
     public Media $media;
     public Person $person;
@@ -297,6 +303,10 @@ class Article extends Database implements JsonSerializable
     public function getCategories() : array {
         return $this->categories;
     }
+    
+    public function getProductions() : array {
+        return $this->productions;
+    }
 
     // MODEL-BASED FUNCTIONS
 
@@ -398,6 +408,17 @@ class Article extends Database implements JsonSerializable
       
         $this->categories = $categories;
         return $categories;
+    }
+
+    public function getProductionsRelated() {
+        $productionArticle = new ProductionArticleModel();
+        $production = new ProductionModel();
+
+        $productionsId =  $productionArticle->select("productionId")->where("articleId", $this->id)->get(false);
+        $productions = $production->select()->whereIn("id", $productionsId)->get();
+
+        $this->productions = $productions;
+        return $productions;
     }
 
     public function setToPublished() {
@@ -536,6 +557,12 @@ class Article extends Database implements JsonSerializable
                     "error" => "La longueur de la description doit être comprise entre 2 et 100 caractères",
                     "required" => true,
                 ],
+                "production" => [
+                    "type" => "text",
+                    "label" => "Associer prod à article",
+                    "class" => "search-bar",
+                    "readonly" => true
+                ],
                 "state" => [
                     "type" => "radio",
                     "label" => "État *",
@@ -605,6 +632,9 @@ class Article extends Database implements JsonSerializable
         $media = new MediaModel();
         $category = new CategoryModel();
         $categoryArticle = new CategoryArticleModel();
+        $productionArticleModel  = new ProductionArticleModel();
+        $productionModel = new ProductionModel();
+
         $this->setId($articleId);
         
         $mediaId = $this->select("MediaId")->where("id", $articleId)->first(0);
@@ -635,6 +665,9 @@ class Article extends Database implements JsonSerializable
         }
 
         $state = $this->getArticleState();
+
+        $productionId = $productionArticleModel->select("productionId")->where("articleId", $articleId)->first(0);
+        $productionName = $productionModel->select("title")->where("id", $productionId)->first(0);
 
         return [
             "config" => [
@@ -667,6 +700,13 @@ class Article extends Database implements JsonSerializable
                     "class" => "input search-bar",
                     "error" => "La longueur de la description doit être comprise entre 2 et 100 caractères",
                     "required" => true,
+                ],
+                "production" => [
+                    "type" => "text",
+                    "label" => "Associer prod à article",
+                    "class" => "search-bar",
+                    "readonly" => true,
+                    "value" => $productionName
                 ],
                 "state" => [
                     "type" => "radio",
