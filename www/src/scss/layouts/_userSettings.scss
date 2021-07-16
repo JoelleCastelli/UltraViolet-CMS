@@ -1,17 +1,19 @@
 #userSettings {
-    width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.5;
+  margin-top: 10.5rem;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+  padding-bottom: 4.5rem;
 
-    a {
-        float: right;
-        &:hover {
-            color: $white;
-        }
+  a {
+    float: right;
+    &:hover {
+      color: $white;
     }
+  }
 
-    .btn {
-        margin-top: 20px;
-    }
+  .btn {
+    margin-top: 20px;
+  }
 }

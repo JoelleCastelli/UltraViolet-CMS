@@ -87,6 +87,8 @@
         .userPicture img {
           border-radius: 50%;
           width: 40px;
+          height: 40px;
+          object-fit: cover;
           border-color: #dfe0eb;
           border-style: solid;
           border-width: 2px;

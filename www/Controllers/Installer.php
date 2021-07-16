@@ -162,7 +162,7 @@ class Installer
                     // Create new user in database
                     $admin->setPseudo(htmlspecialchars($_POST['pseudo']));
                     $admin->setEmail(htmlspecialchars($_POST['email']));
-                    $admin->setPassword(password_hash(htmlspecialchars($_POST['password']), PASSWORD_DEFAULT));
+                    $admin->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                     $admin->setEmailConfirmed(true);
                     $admin->setRole('admin');
                     $admin->generateEmailKey();
