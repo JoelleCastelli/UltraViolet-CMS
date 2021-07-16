@@ -50,33 +50,33 @@ class Statistics
     {
         $articles = new Article();
         $dateNow = date('Y-m-d');
-        return $articles->customQuery('SELECT count(uvtr_article.id) FROM uvtr_article 
-            WHERE cast(uvtr_article.publicationDate as date) = cast(Now() as date) 
-            and uvtr_article.deletedAt IS NULL')->first(false);
+        return $articles->customQuery('SELECT count('.DBPREFIXE.'article.id) FROM '.DBPREFIXE.'article 
+            WHERE cast('.DBPREFIXE.'article.publicationDate as date) = cast(Now() as date) 
+            and '.DBPREFIXE.'article.deletedAt IS NULL')->first(false);
     }
 
     public function getNbToDayComments()
     {
         $comments = new Comment();
-        return $comments->customQuery('SELECT count(uvtr_comment.id) FROM uvtr_comment 
-            WHERE cast(uvtr_comment.createdAt as date) = cast(Now() as date) 
-            and uvtr_comment.deletedAt IS NULL')->first(false);
+        return $comments->customQuery('SELECT count('.DBPREFIXE.'comment.id) FROM '.DBPREFIXE.'comment 
+            WHERE cast('.DBPREFIXE.'comment.createdAt as date) = cast(Now() as date) 
+            and '.DBPREFIXE.'comment.deletedAt IS NULL')->first(false);
     }
 
     public function getNbToDayUsers()
     {
         $persons = new Person();
-        return $persons->customQuery('SELECT count(uvtr_person.id) FROM uvtr_person 
-            WHERE cast(uvtr_person.createdAt as date) = cast(Now() as date) 
-            and uvtr_person.deletedAt IS NULL 
-            and uvtr_person.role != "vip"')->first(false);
+        return $persons->customQuery('SELECT count('.DBPREFIXE.'person.id) FROM '.DBPREFIXE.'person 
+            WHERE cast('.DBPREFIXE.'person.createdAt as date) = cast(Now() as date) 
+            and '.DBPREFIXE.'person.deletedAt IS NULL 
+            and '.DBPREFIXE.'person.role != "vip"')->first(false);
     }
 
     public function getNbToDayViews()
     {
         $articleHistory = new ArticleHistory();
-        return $articleHistory->customQuery('SELECT SUM(uvtr_article_history.views) FROM uvtr_article_history 
-            WHERE cast(uvtr_article_history.date as date) = cast(Now() as date)')->first(false);
+        return $articleHistory->customQuery('SELECT SUM('.DBPREFIXE.'article_history.views) FROM '.DBPREFIXE.'article_history 
+            WHERE cast('.DBPREFIXE.'article_history.date as date) = cast(Now() as date)')->first(false);
     }
 
     public function getNbArticles()
