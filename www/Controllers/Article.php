@@ -97,6 +97,7 @@ class Article {
     public function updateArticleAction($id) {
         $article = new ArticleModel();
         $media = new MediaModel();
+        $production = new ProductionModel();
 
         $articleExist = $article->setId($id);
         if (!$articleExist) Helpers::redirect404();
@@ -111,14 +112,20 @@ class Article {
             "tiny" => PATH_TO_SCRIPTS.'bodyScripts/tinymce.js',
             "articles" => PATH_TO_SCRIPTS.'bodyScripts/articles/articles.js',
             "media-modal" => PATH_TO_SCRIPTS.'bodyScripts/articles/media-pop-up.js',
+            "media-production" => PATH_TO_SCRIPTS.'bodyScripts/articles/production-pop-up.js',
         ]);
 
         if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
+
             if ($article->hasDuplicateSlug($_POST["title"], $id)) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
             $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
+
+            $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
+            if (empty($productionId)) $errors[] = "Cette production n'existe pas pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
 
             if (empty($errors)) {
 
@@ -161,6 +168,13 @@ class Article {
                     $newCategory->setCategoryId($entry);
                     $newCategory->save();
                 }
+
+                $productionArticleModel = new ProductionArticleModel();
+                
+                $entry = $productionArticleModel->select()->where("articleId", $id)->first();
+                $entry->setArticleId($id);
+                $entry->setProductionId($productionId);
+                $entry->save();
 
                 Helpers::namedRedirect("articles_list");
             

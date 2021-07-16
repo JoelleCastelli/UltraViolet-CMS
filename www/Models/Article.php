@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Controller\Production;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
@@ -631,6 +632,9 @@ class Article extends Database implements JsonSerializable
         $media = new MediaModel();
         $category = new CategoryModel();
         $categoryArticle = new CategoryArticleModel();
+        $productionArticleModel  = new ProductionArticleModel();
+        $productionModel = new ProductionModel();
+
         $this->setId($articleId);
         
         $mediaId = $this->select("MediaId")->where("id", $articleId)->first(0);
@@ -661,6 +665,9 @@ class Article extends Database implements JsonSerializable
         }
 
         $state = $this->getArticleState();
+
+        $productionId = $productionArticleModel->select("productionId")->where("articleId", $articleId)->first(0);
+        $productionName = $productionModel->select("title")->where("id", $productionId)->first(0);
 
         return [
             "config" => [
@@ -693,6 +700,13 @@ class Article extends Database implements JsonSerializable
                     "class" => "input search-bar",
                     "error" => "La longueur de la description doit être comprise entre 2 et 100 caractères",
                     "required" => true,
+                ],
+                "production" => [
+                    "type" => "text",
+                    "label" => "Associer prod à article",
+                    "class" => "search-bar",
+                    "readonly" => true,
+                    "value" => $productionName
                 ],
                 "state" => [
                     "type" => "radio",
