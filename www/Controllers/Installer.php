@@ -41,6 +41,10 @@ class Installer
      **/
     public function step2Action() {
         $form = $this->formBuilderInstallDB();
+
+        if($form == null)
+            die("L'installeur n'a pas pu lire votre fichier .env : si vous l'avez vidé ou supprimé, créez en un nouveau à partir du fichier .env.example.");
+
         $view = new View("installer/step2");
         $view->assign("form", $form);
 
