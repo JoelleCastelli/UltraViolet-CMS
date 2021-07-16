@@ -164,7 +164,9 @@ class Main
 
         foreach ($objects as $object) {
             if($class == 'category')
-                $loc = Helpers::getBaseUrl().'/'.Helpers::slugify($object->getName());
+                $loc = Helpers::getBaseUrl().'/categorie/'.Helpers::slugify($object->getName());
+            elseif ($class == 'article')
+                $loc = Helpers::getBaseUrl().'/article/'.$object->getSlug();
             else
                 $loc = Helpers::getBaseUrl().'/'.$object->getSlug();
 

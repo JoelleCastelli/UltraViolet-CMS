@@ -233,7 +233,7 @@ templates_lists:
   action:     showAll
 
 restore_templates:
-  path:       /admin/parametres/restaurer
+  path:       /admin/templates/restaurer
   controller: TemplateVariable
   action:     restore
   middleware: Admin

@@ -9,7 +9,7 @@ class MediaManager
     protected array $files = [];
     protected int $oneMegabytesInBytes = 1048576;
     protected array $result = [];
-    private array $imageExtensions = ['jpg', 'jpeg', 'png', 'svg'];
+    private array $imageExtensions = ['jpg', 'jpeg', 'png', 'svg', 'ico'];
 
     public function __construct()
     {
@@ -32,7 +32,10 @@ class MediaManager
         // verifications files
         foreach ($this->getFiles() as $file) {
 
-            if($file['error'] != UPLOAD_ERR_OK) return "Erreur dans le chargement du fichier";
+            if($file['error'] != UPLOAD_ERR_OK) {
+                $this->result['errors'][] = "Erreur dans le chargement du fichier";
+                return $this->result['errors'];
+            }
 
             //init
             $fileSize = $file['size'];

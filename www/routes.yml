@@ -46,7 +46,7 @@ forget_password:
 
 #SETTINGS
 user_update:
-  path:       /parametre
+  path:       /parametres
   controller: Person
   action:     updateUser
 

@@ -24,6 +24,7 @@ class Settings
 
         // If form is submitted, check the data and save settings
         if(!empty($_POST)) {
+
             $errors = FormValidator::check($form, $_POST);
             if(empty($errors)) {
                 $settingsList = $_POST;
@@ -33,8 +34,30 @@ class Settings
                 foreach ($settingsList as $name => $value) {
                     Helpers::updateConfigField($name, $value);
                 }
+
+                // Save logo
+                if($_FILES['logo']['error'] != UPLOAD_ERR_NO_FILE) {
+                    $_FILES['logo']["name"] = "logo.png";
+                    $mediaManager = new MediaManager();
+                    $errors = $mediaManager->check($_FILES['logo'], 'logo');
+                    if(empty($errors)) {
+                        $mediaManager->uploadFile($mediaManager->getFiles());
+                    }
+                    unset($_FILES['logo']);
+                }
+                // Save favicon
+                if($_FILES['favicon']['error'] != UPLOAD_ERR_NO_FILE) {
+                    $_FILES['favicon']["name"] = "favicon.ico";
+                    $mediaManager = new MediaManager();
+                    $errors = $mediaManager->check($_FILES['favicon'], 'logo');
+                    if(empty($errors)) {
+                        $mediaManager->uploadFile($mediaManager->getFiles());
+                    }
+                    unset($_FILES['favicon']);
+                }
                 // Success message
                 Helpers::setFlashMessage('success', "Les paramètres ont été mis à jour");
+                Helpers::namedRedirect('settings');
             }
             $view->assign("errors", $errors);
         }
@@ -81,6 +104,16 @@ class Settings
                         "class" => "search-bar",
                         "value" => $settings['META_DESC'],
                         "error" => "La meta description ne peut pas dépasser 160 caractères",
+                    ],
+                    "logo" => [
+                        "type" => "file",
+                        "accept" => ".jpg, .jpeg, .png",
+                        "label" => "Logo de l'application",
+                    ],
+                    "favicon" => [
+                        "type" => "file",
+                        "accept" => ".ico",
+                        "label" => "Favicon de l'application",
                     ],
                     "csrfToken" => [
                         "type"=>"hidden",
