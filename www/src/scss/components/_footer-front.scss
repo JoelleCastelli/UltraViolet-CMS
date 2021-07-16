@@ -1,21 +1,42 @@
 #footer-front {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 
-    position: absolute;
+  margin-bottom: -20rem;
+  padding-left: 8rem;
+  padding-right: 8rem;
+
+  height: 10rem;
+  background-color: #000d28;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  img {
+    height: 5rem;
+    object-fit: cover;
+  }
+
+  .path-section {
     display: flex;
-    bottom: 0;
-    height: 4rem;
-    width: 100%;
-    background-color: $purple4;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 
-    .logo-section {
+    a {
+      text-decoration: none;
+      color: whitesmoke;
+      border: solid 2px #000d28;
+      border-radius: 50px;
+      padding: 0.5rem;
 
-        
-
-
+      &:hover {
+        transition: 0.3s ease-in-out;
+        border: solid 2px $blue;
+      }
     }
-
-    .path-section {
-        height: 100%;
-    }
-
+  }
 }
