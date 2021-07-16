@@ -56,8 +56,9 @@ class Installer
                 unset($settingsList['csrfToken']);
 
                 // Prefix: force underscores if missing and remove duplicated ones
-                if(!strpos($settingsList['DBPREFIXE'], '_'))
+                if (!substr($settingsList['DBPREFIXE'], -1) !== '_' )
                     $settingsList['DBPREFIXE'] .= '_';
+
                 // Prefix: remove duplicated underscores
                 $settingsList['DBPREFIXE'] = preg_replace('~_+~', '_', $settingsList['DBPREFIXE']);
 
@@ -68,7 +69,7 @@ class Installer
 
                 // Check if connection is successful
                 try {
-                    new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT, DBUSER, DBPWD);
+                    new \PDO(DBDRIVER.":host=". DBHOST."; dbname=". htmlspecialchars($_POST['DBNAME'])."; port=". DBPORT, htmlspecialchars($_POST['DBUSER']), htmlspecialchars($_POST['DBPWD']));
                 } catch (Exception $e) {
                     $errors[] = "Nous n'avons pas pu nous connecter à votre base de données. Veuillez vérifier vos informations";
                 }
@@ -93,6 +94,7 @@ class Installer
      * Populate database: create tables + insert categories + insert first page
      **/
     public function step4Action() {
+
         // Get default SQL script
         $str = file_get_contents(getcwd().'/_scripts/uv_db_script.sql');
         if($str) {
@@ -105,14 +107,19 @@ class Installer
                 // Populate database from custom SQL script
                 $db = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
                 $sql = file_get_contents(getcwd().'/_scripts/custom_db_script.sql');
-                $db->exec($sql);
-                // Check that the tables have correctly been created in the database (13 tables expected)
-                if(count($db->query("SHOW TABLES")->fetchAll()) == 13) {
-                    $db = null;
-                    Helpers::redirect(Helpers::callRoute('configStep5'));
-                } else {
-                    $db = null;
-                    Helpers::setFlashMessage('error', "Erreur dans la création des tables dans la base de données, veuillez recommencer.");
+                
+                if(count($db->query("SHOW TABLES")->fetchAll()) == 0){
+                    $db->exec($sql);
+                    // Check that the tables have correctly been created in the database (13 tables expected)
+                    if(count($db->query("SHOW TABLES")->fetchAll()) == 13) {
+                        $db = null;
+                        Helpers::redirect(Helpers::callRoute('configStep5'));
+                    } else {
+                        $db = null;
+                        Helpers::setFlashMessage('error', "Erreur dans la création des tables dans la base de données, veuillez recommencer.");
+                    }
+                }else {
+                    Helpers::setFlashMessage('error', "Erreur : votre base de données est déjà remplie, veuillez la vider merci.");
                 }
             } else {
                 Helpers::setFlashMessage('error', "Erreur dans l'écriture du script SQL personnalisé, veuillez recommencer.");
@@ -237,41 +244,38 @@ class Installer
                 "fields" => [
                     "DBNAME" => [
                         "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 64,
                         "label" => "Nom de la base de données",
                         "class" => "search-bar",
                         "value" => $settings['DBNAME'],
-                        "error" => "Le nom la base de données doit contenir entre 1 et 64 caractères",
+                        "error" => "Le nom la base de données doit contenir entre 1 et 64 caractères et être correctement nommé",
                         "required" => true,
+                        "regex" => "/^[A-Za-z0-9][a-zA-Z0-9_-]+$/"
                     ],
                     "DBUSER" => [
                         "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 16,
                         "label" => "Identifiant",
                         "class" => "search-bar",
                         "value" => $settings['DBUSER'],
-                        "error" => "Le nom d'utilisateur de la base de données doit contenir entre 1 et 16 caractères",
+                        "error" => "Le nom d'utilisateur de la base de données doit contenir entre 1 et 16 caractères et être correctement nommé",
                         "required" => true,
+                        "regex" => "/^[A-Za-z0-9][a-zA-Z0-9_-]+$/"
                     ],
                     "DBPWD" => [
                         "type" => "password",
-                        "minLength" => 0,
-                        "maxLength" => 32,
                         "label" => "Mot de passe",
                         "class" => "search-bar",
-                        "error" => "Le mot de passe ne peut pas dépasser 32 caractères",
+                        "error" => "Le mot de passe ne peut pas dépasser 32 caractères et doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
+                        "regex" => "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
                     ],
                     "DBPREFIXE" => [
                         "type" => "text",
                         "minLength" => 0,
-                        "maxLength" => 6,
+                        "maxLength" => 10,
                         "label" => "Préfixe des tables",
                         "class" => "search-bar",
                         "value" => $settings['DBPREFIXE'],
-                        "error" => "Le préfixe doit contenir entre 1 et 6 caractères",
-                        "required" => true,
+                        "error" => "Le préfixe doit contenir entre 1 et 10 caractères et être correctement nommé",
+                        "regex" => "/^[A-Za-z0-9][a-zA-Z0-9_-]+$/"
                     ],
                     "csrfToken" => [
                         "type"=>"hidden",
@@ -299,39 +303,40 @@ class Installer
                 "APP_NAME" => [
                     "type" => "text",
                     "minLength" => 1,
-                    "maxLength" => 50,
+                    "maxLength" => 160,
                     "label" => "Titre du site",
                     "value" => $appName,
                     "class" => "search-bar",
-                    "error" => "Le titre du site doit contenir entre 1 et 50 caractères",
+                    "error" => "Le titre du site doit contenir entre 1 et 160 caractères",
                     "required" => true,
                 ],
                 "pseudo" => [
                     "type" => "text",
-                    "minLength" => 1,
+                    "minLength" => 2,
                     "maxLength" => 25,
                     "label" => "Pseudonyme",
                     "class" => "search-bar",
-                    "error" => "Le nom d'utilisateur de la base de données doit contenir entre 1 et 16 caractères",
+                    "error" => "Le nom d'utilisateur de la base de données doit contenir entre 2 et 25 caractères et être correctement nommé",
                     "required" => true,
+                    "regex" => "/^([a-zA-Z0-9-_]{2,25})$/",
                 ],
                 "email" => [
-                    "type" => "text",
-                    "minLength" => 0,
+                    "type" => "email",
+                    "minLength" => 8,
                     "maxLength" => 130,
                     "label" => "Adresse email",
                     "class" => "search-bar",
-                    "error" => "Votre adresse email doit comporter entre 8 et 130 caractères",
+                    "error" => "Votre adresse email doit comporter entre 8 et 130 caractères et être correctement écrit",
                     "required" => true,
                 ],
-                "password" => [
+                "pwd" => [
                     "type" => "password",
                     "minLength" => 8,
                     "maxLength" => 255,
                     "label" => "Mot de passe",
                     "class" => "search-bar",
                     "regex" => "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
-                    "error" => "Votre mot de passe comporter au minimum 8 caractères dont au moins une lettre minuscule, une majuscule, un chiffre et un caractère spécial",
+                    "error" => "Votre mot de passe comporter au minimum 8 et maximum 255 caractères dont au moins une lettre minuscule, une majuscule, un chiffre et un caractère spécial",
                     "required" => true,
                 ],
                 "csrfToken" => [
