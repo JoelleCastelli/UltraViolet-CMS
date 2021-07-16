@@ -84,25 +84,21 @@ class MediaManager
     public function uploadFile($mediaManagerFiles): bool
     {
         foreach ($mediaManagerFiles as $key => $file ) {
-
             $media = new Media();
             $existingMediaCount = $media->count('path')->where('path', $file['path'])->first();
 
-            if ($existingMediaCount->total > 0) {
+            // Format image name with (number) if not user profile picture
+            if ($existingMediaCount->total > 0 && !strpos($file['path'], PATH_TO_IMG_USERS) == 0) {
                 $number = 1;
-
-                // to format image name with number
-                while($existingMediaCount->total > 0)
-                {
+                while($existingMediaCount->total > 0) {
                     $title = $file['title'] . '(' . $number . ')';
                     $path = pathinfo($file['path'], PATHINFO_DIRNAME) . '/' . $title . '.' . pathinfo($file['path'], PATHINFO_EXTENSION);
-                $existingMediaCount = $media->count('path')->where('path', $path)->first();
+                    $existingMediaCount = $media->count('path')->where('path', $path)->first();
                     $number++;
                 }
 
                 $this->files[$key]['path'] = pathinfo($file['path'], PATHINFO_DIRNAME) . '/' . $title . '.' . pathinfo($file['path'], PATHINFO_EXTENSION);
                 $this->files[$key]['title'] = $title;
-
                 $file['path'] = $this->files[$key]['path'];
             }
 
@@ -118,12 +114,16 @@ class MediaManager
 
     public function saveFile($mediaManagerFiles) {
         foreach ($mediaManagerFiles as $file) {
-
-            $media = new Media();
-            $media->setPath($file['path']);
-            $media->setTitle($file['title']);
-            $media->save();
-            
+            $existingMedia = new Media();
+            $existingMedia = $existingMedia->findOneBy('path', $file['path']);
+            if($existingMedia) {
+                $existingMedia->save();
+            } else {
+                $media = new Media();
+                $media->setPath($file['path']);
+                $media->setTitle($file['title']);
+                $media->save();
+            }
         }
     }
 

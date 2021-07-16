@@ -207,6 +207,10 @@ textarea {
   font-size: 16px;
 }
 
+form .requiredField {
+  color: red;
+}
+
 @-webkit-keyframes fadeOut {
   from {
     opacity: 1;

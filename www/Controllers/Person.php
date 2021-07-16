@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\Helpers;
+use App\Core\MediaManager;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Core\Mail;
@@ -10,11 +11,12 @@ use App\Core\Request;
 use App\Models\Person as PersonModel;
 use App\Models\Comment as CommentModel;
 use App\Models\Article as ArticleModel;
+use App\Models\Media;
 
 
 class Person
 {
-    protected $columnsTable;
+    protected array $columnsTable;
 
     public function __construct()
     {
@@ -35,14 +37,8 @@ class Person
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/person.js']);
     }
 
-    public function defaultAction()
-    {
-        echo "User default";
-    }
-
     public function loginAction()
     {
-
         $this->redirectHomeIfLogged();
 
         $user = new PersonModel();
@@ -77,7 +73,6 @@ class Person
 
     public function registerAction()
     {
-
         $this->redirectHomeIfLogged();
 
         $user = new PersonModel();
@@ -165,7 +160,6 @@ class Person
     public function updatePersonAction($id)
     {
         if (!empty($id)) {
-            // Helpers::cleanDumpArray($id,'id post');
             $user = new PersonModel();
             $form = $user->formBuilderUpdatePerson($id);
 
@@ -182,10 +176,9 @@ class Person
                     $user->setEmail(htmlspecialchars($_POST["email"]));
                     $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
                     $user->setRole(htmlspecialchars($_POST["role"]));
-
                     $user->save();
 
-                    Helpers::setFlashMessage('success', "L'utilisateur a bien été mise à jour");
+                    Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
                     Helpers::redirect(Helpers::callRoute('users_list'));
                 } else {
                     $view->assign("errors", $errors);
@@ -216,12 +209,12 @@ class Person
     public function updateUserAction()
     {
         $user = Request::getUser();
-
         if ($user && $user->isLogged()) {
 
             $view = new View('userUpdate', 'front');
             $form = $user->formBuilderUpdatePersonalInfo();
             $view->assign("form", $form);
+            $view->assign("title", "Modifier vos informations");
             $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/settings.js']);
 
             if (!empty($_POST)) {
@@ -230,7 +223,63 @@ class Person
                 if (empty($errors)) {
 
                     if (!$user->isEmailConfirmed())
-                        $errors = ['Veuillez confirmer tout d\'abord votre mail actuel merci'];
+                        $errors = ['Veuillez confirmer d\'abord votre mail actuel'];
+
+                    if ($user->count('email')->where('email', htmlspecialchars($_POST['email']))->andWhere('id', $user->getId(), '!=')->first(false))
+                        $errors = ['Cet email est indisponible'];
+
+                    if ($user->count('pseudo')->where('pseudo', htmlspecialchars($_POST['pseudo']))->andWhere('id', $user->getId(), '!=')->first(false))
+                        $errors = ['Ce pseudonyme est indisponible'];
+
+                    if (empty($errors)) {
+                        $user->setEmail(htmlspecialchars($_POST["email"]));
+                        $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
+                        // Save profile picture
+                        if(!empty($_FILES['profilePicture'])) {
+                            $_FILES['profilePicture']["name"] = "user-".$user->getId().".png";
+                            $mediaManager = new MediaManager();
+                            $errors = $mediaManager->check($_FILES['profilePicture'], 'users');
+                            if(empty($errors)) {
+                                $mediaManager->uploadFile($mediaManager->getFiles());
+                                $mediaManager->saveFile($mediaManager->getFiles());
+                                $media = new Media();
+                                $media = $media->findOneBy('path', PATH_TO_IMG_USERS."user-".$user->getId().".png");
+                                $user->setMediaId($media->getId());
+                            }
+                            unset($_FILES['profilePicture']);
+                        }
+                        if ($user->save()) {
+                            Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
+                            Helpers::namedRedirect('user_update');
+                        }
+                        $errors = ['Oops ! Un soucis lors de la sauvegarde est survenu'];
+                    }
+                }
+                $view->assign("errors", $errors);
+            }
+        } else {
+            Helpers::namedRedirect('front_home');
+        }
+    }
+
+    public function updateUserPasswordAction()
+    {
+        $user = Request::getUser();
+        if ($user && $user->isLogged()) {
+
+            $view = new View('userUpdate', 'front');
+            $form = $user->formBuilderUpdatePassword();
+            $view->assign("form", $form);
+            $view->assign("title", "Modifier vos informations");
+            $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/settings.js']);
+
+            if (!empty($_POST)) {
+
+                $errors = FormValidator::check($form, $_POST);
+                if (empty($errors)) {
+
+                    if (!$user->isEmailConfirmed())
+                        $errors = ['Veuillez confirmer d\'abord votre mail actuel'];
 
                     if ($user->count('email')->where('email', htmlspecialchars($_POST['email']))->andWhere('id', $user->getId(), '!=')->first(false))
                         $errors = ['Cet email est indisponible'];
@@ -242,7 +291,7 @@ class Person
                     {
 
                         if (empty($errors)) {
-                            if (!password_verify($_POST['oldPwd'], $user->getPassword())) // check old password 
+                            if (!password_verify($_POST['oldPwd'], $user->getPassword())) // check old password
                                 $errors = ['Ancien mot de passe non correct'];
 
                             if (empty($errors))
@@ -260,6 +309,19 @@ class Person
                         $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
                         $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                         if ($user->save()) {
+
+                            // Save profile picture
+                            if(!empty($_FILES['profilePicture'])) {
+                                Helpers::dd("hé");
+                                $_FILES['profilePicture']["name"] = "user-".$user->getId().".png";
+                                $mediaManager = new MediaManager();
+                                $errors = $mediaManager->check($_FILES['profilePicture'], 'logo');
+                                if(empty($errors)) {
+                                    $mediaManager->uploadFile($mediaManager->getFiles());
+                                }
+                                unset($_FILES['profilePicture']);
+                            }
+
                             if (isset($emailChanged)) {
                                 $user->setEmailConfirmed(false);
 
@@ -354,12 +416,6 @@ class Person
         Helpers::redirect404();
     }
 
-    public function showAction()
-    {
-        //Affiche la vue user intégrée dans le template du front
-        $view = new View("user");
-    }
-
     public function verificationAction($pseudo, $key)
     {
 
@@ -397,8 +453,8 @@ class Person
                 if (!empty($user)) {
                     $to   = $_POST['email'];
                     $from = 'ultravioletcms@gmail.com';
-                    $name = 'Ultaviolet';
-                    $subj = 'Changée de mot de passe';
+                    $name = 'UltraViolet';
+                    $subj = 'UltraViolet : modification du mot de passe';
                     $msg = $user->forgetPasswordMail($user->getId(), $user->getEmailKey());
 
                     $mail = new Mail();
@@ -416,7 +472,6 @@ class Person
 
     public function resetPasswordAction($id, $key)
     {
-
         $user = new PersonModel();
         $view = new View("resetPassword", "front");
         $form = $user->formBuilderResetPassword($id, $key);

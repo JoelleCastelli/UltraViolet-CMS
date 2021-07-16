@@ -12,7 +12,9 @@
             echo "</div>";
         }
 
-    App\Core\FormBuilder::render($form);
+        echo "<h1>".$title."</h1>";
+
+        App\Core\FormBuilder::render($form);
     ?>
 
     <a href="<?= Helpers::callRoute('user_delete') ?>" class="btn danger">Supprimer mon compte</a>

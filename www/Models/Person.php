@@ -561,32 +561,54 @@ class Person extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "formUpdatePersonalInfo",
                 "submit" => "Valider",
+                "enctype" => "multipart/form-data",
                 "referer" => Helpers::callRoute('user_update')
             ],
-
             "fields" => [
-
                 "email" => [
                     "type" => "email",
-                    "label" => "Email *",
+                    "label" => "Email <span class='requiredField'>*<span>",
                     "placeholder" => "Email",
                     "class" => "input",
                     "id" => "email",
                     "error" => "Le format du champ e-mail est incorrect",
                     "required" => true,
                     "value" => $user->getEmail()
-
                 ],
-
                 "pseudo" => [
                     "type" => "pseudo",
-                    "label" => "Pseudonyme *",
+                    "label" => "Pseudonyme <span class='requiredField'>*<span>",
                     "class" => "input",
                     "id" => "pseudo",
                     "error" => "Le format du champ pseudo est incorrect",
                     "required" => true,
                     "value" => $user->getPseudo()
                 ],
+                "profilePicture" => [
+                    "type" => "file",
+                    "accept" => ".jpg, .jpeg, .png",
+                    "label" => "Photo de profil",
+                ],
+                "csrfToken" => [
+                    "type" => "hidden",
+                    "value" => FormBuilder::generateCSRFToken()
+                ],
+            ]
+        ];
+    }
+
+    public function formBuilderUpdatePassword(): array
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control",
+                "id" => "formUpdatePersonalInfo",
+                "submit" => "Valider",
+                "referer" => Helpers::callRoute('user_update')
+            ],
+            "fields" => [
                 "oldPwd" => [
                     "type" => "password",
                     "label" => "Ancien mot de passe",
@@ -607,7 +629,6 @@ class Person extends Database implements JsonSerializable
                     "confirm" => "pwd",
                     "error" => "Votre mot de passe de confirmation ne correspond pas",
                 ],
-
                 "csrfToken" => [
                     "type" => "hidden",
                     "value" => FormBuilder::generateCSRFToken()
