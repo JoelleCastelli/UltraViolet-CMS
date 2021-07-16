@@ -8,7 +8,7 @@ use App\Core\Helpers; ?>
     <p>Aucun article associés à cette catégorie.</p>
 <?php else : ?>
     <section class="article-list">
-    <h1>Tous les articles concernant : <strong><?= $category ?></strong></h1>
+        <h1>Tous les articles concernant : <strong><?= $category ?></strong></h1>
         <?php foreach ($articles as $article) : ?>
         <a href="<?= Helpers::callRoute('display_article', ['article' => $article->getSlug()])  ?>">
             <article class="grid-article-card article-card">
