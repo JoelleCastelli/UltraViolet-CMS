@@ -88,7 +88,7 @@ class Settings
                 "appName" => [
                     "type" => "text",
                     "minLength" => 1,
-                    "maxLength" => 60,
+                    "maxLength" => 160,
                     "label" => "Nom de l'application",
                     "class" => "search-bar",
                     "value" => $appName,
