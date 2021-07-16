@@ -8,7 +8,7 @@ class Database {
 
     protected ?\PDO $pdo = null;
     private string $table;
-    private string $query;
+    private ?string $query = null;
 
     private int $order = 0;
     private int $like = 0;
