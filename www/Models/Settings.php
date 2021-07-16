@@ -6,7 +6,7 @@ use App\Core\Database;
 use App\Core\FormBuilder;
 use App\Core\Helpers;
 
-class TemplateVariable extends Database
+class Settings extends Database
 {
     private ?int $id = null;
     protected string $selector;
@@ -84,7 +84,7 @@ class TemplateVariable extends Database
 
     public function getCurrentVariables(): array
     {
-        $variables = new TemplateVariable();
+        $variables = new Settings();
         $variables = $variables->findAll();
         $variablesArray = [];
         foreach ($variables as $variable) {

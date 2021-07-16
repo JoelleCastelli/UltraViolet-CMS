@@ -3,6 +3,12 @@
 use App\Core\Helpers;
 use App\Core\Request;
 use App\Models\Page;
+use App\Models\Settings;
+
+$settings = new Settings();
+$appName = $settings->findOneBy('selector', 'appName')->getValue();
+$metaTitle = $settings->findOneBy('selector', 'metaTitle')->getValue();
+$metaDesc = $settings->findOneBy('selector', 'metaDescription')->getValue();
 
 $pages = Page::getStaticPages();
 
@@ -18,8 +24,8 @@ $noTemplateUrl = [
 
 <head>
     <meta charset="UTF-8">
-    <title><?= isset($title) && $title  != "" ? APP_NAME . ' - ' . $title : META_TITLE ?></title>
-    <meta name="description" content="<?= isset($description) && $description  != "" ? $description : META_DESC ?>">
+    <title><?= isset($title) && $title  != "" ? $appName . ' - ' . $title : $metaTitle ?></title>
+    <meta name="description" content="<?= isset($description) && $description  != "" ? $description : $metaDesc ?>">
     <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>logo/favicon.ico" />
 
     <!--JS-->

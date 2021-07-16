@@ -224,12 +224,12 @@ comments_data:
 # TEMPLATES
 templates_lists:
   path:       /admin/templates
-  controller: TemplateVariable
+  controller: Templates
   action:     showAll
 
 restore_templates:
   path:       /admin/templates/restaurer
-  controller: TemplateVariable
+  controller: Templates
   action:     restore
   middleware: Admin
 

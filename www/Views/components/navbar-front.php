@@ -1,16 +1,19 @@
 <?php
 
 use App\Models\Category;
+use App\Models\Settings;
 use App\Core\Helpers;
 use App\Core\Request;
 
 $user = Request::getUser();
 $categoriesNavbar = Category::getMenuCategories();
+$appName = new Settings();
+$appName = $appName->findOneBy('selector', 'appName')->getValue();
 ?>
 
 <nav id="navbar-front">
     <a href="<?= Helpers::callRoute('front_home') ?>" class="brandLogo">
-        <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= APP_NAME ?>'>
+        <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= $appName ?>'>
     </a>
 
     <?php foreach ($categoriesNavbar['main'] as $mainCategory) : ?>
