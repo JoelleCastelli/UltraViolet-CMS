@@ -71,7 +71,7 @@ class Production
         $form = $production->formBuilderAddProductionTmdb();
         $view = new View("productions/add-production-tmdb");
         $view->assign("form", $form);
-        $view->assign("title", "Ajout d'une production");
+        $view->assign("title", "Nouvelle production");
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/addProduction.js']);
 
         if(!empty($_POST)) {
@@ -127,6 +127,11 @@ class Production
         }
     }
 
+    /**
+     * Get TMDB URL from user form
+     * Movie, series or season = 1 URL
+     * Episode: 2 URLs (parent series that includes season + episode URL)
+     */
     public function getTmdbUrl($data){
         if(!$data['productionType'] || !$data['productionID']) return false;
         $urlArray = [];
@@ -147,9 +152,8 @@ class Production
         }
 
         // French results + credits
-        foreach ($urlArray as $type => $url) {
+        foreach ($urlArray as $type => $url)
             $urlArray[$type] = $url."&language=fr&append_to_response=credits";
-        }
 
         return $urlArray;
     }

@@ -237,7 +237,12 @@ class Production extends Database
         return $this->actors;
     }
 
-    public function setActors($tmdbCast): void
+    public function setActors(array $actors): void
+    {
+        $this->actors = $actors;
+    }
+
+    public function getActorsFromTmdb($tmdbCast): array
     {
         $actors = [];
         for($i = 0; $i < 5 ; $i++) {
@@ -254,7 +259,7 @@ class Production extends Database
                 $actors[] = $person;
             }
         }
-        $this->actors = $actors;
+        return $actors;
     }
 
     public function saveActors() {
@@ -370,7 +375,12 @@ class Production extends Database
         return $this->directors;
     }
 
-    public function setDirectors(array $crewTeam): void
+    public function setDirectors(array $directors): void
+    {
+        $this->directors = $directors;
+    }
+
+    public function getDirectorsFromTmdb($crewTeam): array
     {
         $directors = [];
         foreach ($crewTeam as $crew) {
@@ -384,7 +394,7 @@ class Production extends Database
                 $directors[] = $person;
             }
         }
-        $this->directors = $directors;
+        return $directors;
     }
 
     public function getWriters(): array
@@ -392,7 +402,12 @@ class Production extends Database
         return $this->writers;
     }
 
-    public function setWriters(array $crewTeam): void
+    public function setWriters(array $writers): void
+    {
+        $this->writers = $writers;
+    }
+
+    public function getWritersFromTmdb($crewTeam): array
     {
         $writers = [];
         foreach ($crewTeam as $crew) {
@@ -406,7 +421,7 @@ class Production extends Database
                 $writers[] = $person;
             }
         }
-        $this->writers = $writers;
+        return $writers;
     }
 
     public function getCreators(): array
@@ -414,7 +429,13 @@ class Production extends Database
         return $this->creators;
     }
 
-    public function setCreators(array $tmdbCreators): void
+    public function setCreators(array $creators): void
+    {
+
+        $this->creators = $creators;
+    }
+
+    public function getCreatorsFromTmdb($tmdbCreators): array
     {
         $creators = [];
         foreach ($tmdbCreators as $creator) {
@@ -426,7 +447,7 @@ class Production extends Database
                 $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$creator->profile_path);
             $creators[] = $person;
         }
-        $this->creators = $creators;
+        return $creators;
     }
 
     public function saveCrew($department) {
@@ -759,18 +780,16 @@ class Production extends Database
         $this->setOverview($item->overview);
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
-        $this->setActors($item->credits->cast);
+        $this->setActors($this->getActorsFromTmdb($item->credits->cast));
         $this->setPoster($item->poster_path);
-
-        //$production0['genres'] = $item->genres; TODO
 
         switch ($post['productionType']) {
             case 'movie':
-                $this->setDirectors($item->credits->crew);
-                $this->setWriters($item->credits->crew);
+                $this->setDirectors($this->getDirectorsFromTmdb($item->credits->crew));
+                $this->setWriters($this->getWritersFromTmdb($item->credits->crew));
                 break;
             case 'series':
-                $this->setCreators($item->created_by);
+                $this->setCreators($this->getCreatorsFromTmdb($item->created_by));
                 $this->setTotalSeasons(sizeof($item->seasons));
                 $nbEpisodes = 0;
                 foreach ($item->seasons as $season) { $nbEpisodes += $season->episode_count; }
