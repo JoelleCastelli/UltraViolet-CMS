@@ -16,4 +16,12 @@ use App\Core\Helpers; ?>
         <?php endforeach; ?>
     </article>
 
+    <article class="path-section">
+        <?php foreach ($pages as $page) : ?>
+            <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
+        <?php endforeach; ?>
+    </article>
+
+    
+
 </footer>
