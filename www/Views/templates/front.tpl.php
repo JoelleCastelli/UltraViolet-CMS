@@ -12,11 +12,6 @@ $metaDesc = $settings->findOneBy('selector', 'metaDescription')->getValue();
 
 $pages = Page::getStaticPages();
 
-$noTemplateUrl = [
-    Helpers::callRoute('login'),
-    Helpers::callRoute('register'),
-    Helpers::callRoute('forget_password')
-];
 ?>
 
 <!DOCTYPE html>
@@ -48,11 +43,9 @@ $noTemplateUrl = [
     <body>
         
             <?php
-                if (!in_array(Request::getURI(), $noTemplateUrl)) {
-                    include 'Views/components/navbar-front.php';
-                }
-                    if (isset($flash)) $this->displayFlash($flash);
-                    include $this->view;
+                include 'Views/components/navbar-front.php';
+                if (isset($flash)) $this->displayFlash($flash);
+                include $this->view;
             ?>
             <main class="main">
                 
