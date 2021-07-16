@@ -10,10 +10,19 @@ use App\Core\Helpers; ?>
         </a>
     </article>
 
-    <article class="path-section">
-        <?php foreach ($pages as $page) : ?>
-            <a href="<?= Helpers::callRoute('display_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
-        <?php endforeach; ?>
-    </article>
+    <div class="path-section">
+        <article >
+            <?php foreach ($pages as $page) : ?>
+                <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
+            <?php endforeach; ?>
 
+            <?php foreach ($pages as $page) : ?>
+                <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
+            <?php endforeach; ?>
+        </article>
+
+        <article>
+            <p>©2021 Ultraviolet technologies Inc.</p>
+        </article>
+    </div>
 </footer>

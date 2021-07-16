@@ -20,7 +20,7 @@ $noTemplateUrl = [
     <meta charset="UTF-8">
     <title><?= isset($title) && $title  != "" ? APP_NAME . ' - ' . $title : META_TITLE ?></title>
     <meta name="description" content="<?= isset($description) && $description  != "" ? $description : META_DESC ?>">
-    <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>favicon.ico" />
+    <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>logo/favicon.ico" />
 
     <!--JS-->
     <script src="<?= PATH_TO_DIST . 'main.js' ?>"></script>
@@ -39,35 +39,32 @@ $noTemplateUrl = [
     ?>
 </head>
 
-<body>
+    <body>
+        
+            <?php
+                if (!in_array(Request::getURI(), $noTemplateUrl)) {
+                    include 'Views/components/navbar-front.php';
+                }
+            ?>
+            <main class="main">
+                <?php
+                if (!in_array(Request::getURI(), $noTemplateUrl)) {
+                    include 'Views/components/navbar-front.php';
+                }
+                    if (isset($flash)) $this->displayFlash($flash);
+                    include $this->view;
+                ?>
+            </main>
 
-    <?php
-        if (!in_array(Request::getURI(), $noTemplateUrl)) {
-            include 'Views/components/navbar-front.php';
-        }
-    ?>
-    <main class="main">
-        <?php
-        if (!in_array(Request::getURI(), $noTemplateUrl)) {
-            include 'Views/components/navbar-front.php';
-        }
-            if (isset($flash)) $this->displayFlash($flash);
-            include $this->view;
-        ?>
-    </main>
-
-    <?php
-    if (isset($bodyScripts) && !empty($bodyScripts)) {
-        foreach ($bodyScripts as $script) {
-            echo "<script src='$script'></script>";
-        }
-    }
-    ?>
-</body>
-<?php
-if (!in_array(Request::getURI(), $noTemplateUrl)) {
-    include 'Views/components/footer-front.php';
-}
-?>
-
+            <?php  include 'Views/components/footer-front.php'; ?>
+            <?php
+            if (isset($bodyScripts) && !empty($bodyScripts)) {
+                foreach ($bodyScripts as $script) {
+                    echo "<script src='$script'></script>";
+                }
+            }
+            ?>
+        
+    </body>
+    
 </html>

@@ -99,6 +99,12 @@ class FormBuilder
                     $value = ($field['type'] === 'password') ? '' : htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
+                // Add preview for app logo and favicon in Settings page
+                if($fieldName == "logo")
+                    $html .="<img id='appLogo' src='".PATH_TO_IMG."logo/$fieldName.png'>";
+                if($fieldName == "favicon")
+                    $html .="<img id='appFavicon' src='".PATH_TO_IMG."logo/$fieldName.ico'>";
+
                 $html .="<input
                     type='".($field["type"] ?? "text")."'
                     name='".$fieldName."'
