@@ -99,6 +99,7 @@ class Settings
                     "class" => "search-bar",
                     "value" => $settings::getMetaTitle(),
                     "error" => "La meta description ne peut pas dépasser 155 caractères",
+                    "required" => true,
                 ],
                 "metaDescription" => [
                     "type" => "textarea",
@@ -108,6 +109,7 @@ class Settings
                     "class" => "search-bar",
                     "value" => $settings::getMetaDescription(),
                     "error" => "La meta description ne peut pas dépasser 160 caractères",
+                    "required" => true,
                 ],
                 "logo" => [
                     "type" => "file",

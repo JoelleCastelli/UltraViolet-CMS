@@ -32,8 +32,8 @@ class FormValidator
                     exit;
                 }
 
-                // check if required field is not empty
-                if (isset($fieldConfig['required']) && empty($data[$fieldName]) && $data[$fieldName] != 0) {
+                // check if required field is not empty but still allow 0
+                if (isset($fieldConfig['required']) && empty($data[$fieldName]) && $data[$fieldName] !== "0" && $data[$fieldName] !== 0) {
                     echo "Tentative de hack : le champ $fieldName est obligatoire !";
                     exit;
                 }
