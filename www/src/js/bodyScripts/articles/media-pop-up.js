@@ -75,11 +75,11 @@ const modalMedia = document.querySelector(".background-modal");
 const removeBG = document.querySelector(".clickable-bg");
 
 input.addEventListener("click", (e) => {
-  modalMedia.classList.toggle("visible");
+  modalMedia.classList.add("visible");
 });
 
 removeBG.addEventListener("click", (e) => {
-  modalMedia.classList.toggle("visible");
+  modalMedia.classList.remove("visible");
 });
 
 function listenRowEvents() {

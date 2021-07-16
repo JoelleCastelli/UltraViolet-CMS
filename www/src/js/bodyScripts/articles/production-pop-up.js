@@ -121,11 +121,11 @@ const modalProd = document.querySelector(".background-modal-production");
 const removeBGProduction = document.querySelector(".clickable-bg");
 
 inputProd.addEventListener("click", (e) => {
-  modalProd.classList.toggle("visible");
+  modalProd.classList.add("visible");
 });
 
 removeBGProduction.addEventListener("click", (e) => {
-  modalProd.classList.toggle("visible");
+  modalProd.classList.remove("visible");
 });
 
 function listenRowEventsProductions() {
