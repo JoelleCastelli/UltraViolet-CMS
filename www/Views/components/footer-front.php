@@ -15,10 +15,6 @@ use App\Core\Helpers; ?>
             <?php foreach ($pages as $page) : ?>
                 <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
             <?php endforeach; ?>
-
-            <?php foreach ($pages as $page) : ?>
-                <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
-            <?php endforeach; ?>
         </article>
 
         <article>
