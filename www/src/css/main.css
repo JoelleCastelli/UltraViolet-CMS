@@ -236,6 +236,7 @@ b {
 
 #navbar-front #userImage img {
   height: 50px;
+  width: 50px;
   -o-object-fit: cover;
   object-fit: cover;
   border-radius: 50%;
@@ -245,12 +246,13 @@ b {
   transform: translate(-20%, 0);
 }
 #navbar-front a.brandLogo {
-  height: 4.5rem;
+  height: 3.5rem;
 }
 #navbar-front a.brandLogo img {
   max-height: 100%;
   -o-object-fit: scale-down;
   object-fit: scale-down;
+  height: 3.5rem;
 }
 #navbar-front .dropdown-content {
   position: absolute;
