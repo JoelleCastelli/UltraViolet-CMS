@@ -395,7 +395,6 @@ class Production extends Database
             $director->getMedia();
             $directors[$director->getId()]['fullName'] = $director->getFullName();
             $directors[$director->getId()]['photo'] = $director->getMedia()->getPath();
-            $directors[$director->getId()]['role'] = $productionPerson->getCharacter();
         }
         return $directors;
     }
@@ -434,7 +433,6 @@ class Production extends Database
             $writer->getMedia();
             $writers[$writer->getId()]['fullName'] = $writer->getFullName();
             $writers[$writer->getId()]['photo'] = $writer->getMedia()->getPath();
-            $writers[$writer->getId()]['role'] = $productionPerson->getCharacter();
         }
         return $writers;
     }
