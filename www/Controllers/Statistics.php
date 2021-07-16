@@ -22,6 +22,9 @@ class Statistics
         $nbToDayComments = $this->getNbToDayComments();
         $view->assign('nbToDayComments', $nbToDayComments);
 
+        $nbToDayUsers = $this->getNbToDayUsers();
+        $view->assign('nbToDayUsers', $nbToDayUsers);
+
         $nbArticles = $this->getNbArticles();
         $view->assign('nbArticles', $nbArticles);
 
@@ -55,6 +58,15 @@ class Statistics
         return $comments->customQuery('SELECT count(uvtr_comment.id) FROM uvtr_comment 
             WHERE cast(uvtr_comment.createdAt as date) = cast(Now() as date) 
             and uvtr_comment.deletedAt IS NULL')->first(false);
+    }
+
+    public function getNbToDayUsers()
+    {
+        $persons = new Person();
+        return $persons->customQuery('SELECT count(uvtr_person.id) FROM uvtr_person 
+            WHERE cast(uvtr_person.createdAt as date) = cast(Now() as date) 
+            and uvtr_person.deletedAt IS NULL 
+            and uvtr_person.role != "vip"')->first(false);
     }
 
     public function getNbArticles()
