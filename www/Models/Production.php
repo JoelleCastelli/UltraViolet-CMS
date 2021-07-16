@@ -925,6 +925,9 @@ class Production extends Database
             $seriesId = $this->saveParentSeries();
             $this->setParentProductionId($seriesId);
             $this->dbSave();
+            if($this->getPoster()->getPath() != null) {
+                $this->savePoster();
+            }
         } else {
             // Movie or Series
             $this->dbSave();
