@@ -27,6 +27,10 @@
             <li class="production__actors__actor">Inspector Boudacheh</li>
         </ul>
 
+        <?php foreach($article->getProductions() as $production) : ?>
+            <div class="production__title"><?= $production->getTitle() ?></div>
+        <?php endforeach; ?>
+
     </section>
 
     <section class="comments card">

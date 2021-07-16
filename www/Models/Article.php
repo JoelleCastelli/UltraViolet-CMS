@@ -10,6 +10,10 @@ use JsonSerializable;
 use App\Models\Media as MediaModel;
 use App\Models\Category as CategoryModel; 
 use App\Models\CategoryArticle as CategoryArticleModel;
+use App\Models\ProductionArticle as ProductionArticleModel;
+use App\Models\Production as ProductionModel;
+
+
 
 class Article extends Database implements JsonSerializable
 {
@@ -29,6 +33,7 @@ class Article extends Database implements JsonSerializable
     protected $deletedAt;
 
     private $categories = [];
+    private $productions = [];
 
     public Media $media;
     public Person $person;
@@ -297,6 +302,10 @@ class Article extends Database implements JsonSerializable
     public function getCategories() : array {
         return $this->categories;
     }
+    
+    public function getProductions() : array {
+        return $this->productions;
+    }
 
     // MODEL-BASED FUNCTIONS
 
@@ -398,6 +407,17 @@ class Article extends Database implements JsonSerializable
       
         $this->categories = $categories;
         return $categories;
+    }
+
+    public function getProductionsRelated() {
+        $productionArticle = new ProductionArticleModel();
+        $production = new ProductionModel();
+
+        $productionsId =  $productionArticle->select("productionId")->where("articleId", $this->id)->get(false);
+        $productions = $production->select()->whereIn("id", $productionsId)->get();
+
+        $this->productions = $productions;
+        return $productions;
     }
 
     public function setToPublished() {
