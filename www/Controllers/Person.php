@@ -215,7 +215,7 @@ class Person
             $form = $user->formBuilderUpdatePersonalInfo();
             $view->assign("form", $form);
             $view->assign("title", "Modifier vos informations");
-            $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/settings.js']);
+            $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/userSettings.js']);
 
             if (!empty($_POST)) {
 

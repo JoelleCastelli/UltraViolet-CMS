@@ -17,5 +17,5 @@
         App\Core\FormBuilder::render($form);
     ?>
 
-    <a href="<?= Helpers::callRoute('user_delete') ?>" class="btn danger">Supprimer mon compte</a>
+    <a id='delete-account' href="<?= Helpers::callRoute('user_delete') ?>" class="btn danger">Supprimer mon compte</a>
 </div>
