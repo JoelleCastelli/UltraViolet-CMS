@@ -5,12 +5,12 @@ namespace App\Controller;
 use App\Core\FormValidator;
 use App\Core\Helpers;
 use App\Core\View;
-use App\Models\TemplateVariable as TemplateVariableModel;
+use App\Models\Settings;
 
-class TemplateVariable {
+class Templates {
 
     public function showAllAction() {
-        $templateVariable = new TemplateVariableModel();
+        $templateVariable = new Settings();
         $form = $templateVariable->formBuilderUpdateTemplateVariables();
         $view = new View("templates/list");
         $view->assign('title', 'Templates');
@@ -25,7 +25,7 @@ class TemplateVariable {
                 unset($variables['csrfToken']);
                 // Save new values in database
                 foreach ($variables as $selector => $value) {
-                    $variable = new TemplateVariableModel();
+                    $variable = new Settings();
                     $variable = $variable->select()->where('selector', $selector)->first();
                     $variable->setValue($value);
                     $variable->save();
@@ -41,7 +41,7 @@ class TemplateVariable {
     }
 
     public function writeCssFile() {
-        $newVariables = new TemplateVariableModel();
+        $newVariables = new Settings();
         $newVariables = $newVariables->findAll();
         $cssString = '';
         foreach ($newVariables as $variable) {
@@ -62,11 +62,13 @@ class TemplateVariable {
     }
 
     public function restoreAction() {
-        $variables = new TemplateVariableModel();
+        $variables = new Settings();
         $variables = $variables->findAll();
         foreach ($variables as $variable) {
-            $variable->setValue($variable->getDefaultValue());
-            $variable->save();
+            if(!in_array($variable->getSelector(), ['appName', 'metaTitle', 'metaDescription'])) {
+                $variable->setValue($variable->getDefaultValue());
+                $variable->save();
+            }
         }
         Helpers::setFlashMessage('success', "Les valeurs par défaut ont bien été appliquées");
     }

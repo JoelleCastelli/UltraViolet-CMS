@@ -6,13 +6,12 @@
   flex-wrap: nowrap;
   justify-content: flex-start;
 
-  margin-bottom: -2rem;
   padding-left: 8rem;
   padding-right: 8rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
 
   background-color: #000d28;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 
   img {
     height: 5rem;
@@ -22,17 +21,20 @@
   .path-section {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
 
     article {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: flex-start;
       height: 100%;
+      padding-bottom: 1rem;
+      font-size: 0.8rem;
 
       p {
         color: whitesmoke;
+        padding-bottom: 0.8rem;
       }
 
       a {

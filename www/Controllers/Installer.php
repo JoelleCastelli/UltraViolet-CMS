@@ -10,6 +10,7 @@ use App\Models\CategoryArticle;
 use App\Models\Person;
 use App\Models\Article;
 use App\Models\Comment;
+use App\Models\Settings;
 use DateTime;
 use Exception;
 
@@ -133,8 +134,12 @@ class Installer
             if(empty($errors)) {
                 $admin = new Person();
 
-                // Update app name in .env file
-                Helpers::updateConfigField('APP_NAME', htmlspecialchars($_POST['APP_NAME']));
+                // Update app name in database
+                $appName = new Settings();
+                $appName = $appName->findOneBy('selector', 'appName');
+                $appName->setValue($_POST['APP_NAME']);
+                $appName->save();
+
                 // Check if pseudo is available (should not be necessary)
                 if($admin->findOneBy("pseudo", $_POST['pseudo']))
                     $errors[] = 'Ce pseudonyme est indisponible';
@@ -275,6 +280,8 @@ class Installer
 
     public function formBuilderCreateAdminUser(): array
     {
+        $appName = new Settings();
+        $appName = $appName->findOneBy('selector', 'appName')->getValue();
         return [
             "config" => [
                 "method" => "POST",
@@ -290,6 +297,7 @@ class Installer
                     "minLength" => 1,
                     "maxLength" => 50,
                     "label" => "Titre du site",
+                    "value" => $appName,
                     "class" => "search-bar",
                     "error" => "Le titre du site doit contenir entre 1 et 50 caractères",
                     "required" => true,

@@ -2,6 +2,9 @@
 
 use App\Core\Helpers;
 use App\Core\Request;
+use App\Models\Settings;
+$settings = new Settings();
+$appName = $settings->findOneBy('selector', 'appName')->getValue();
 ?>
 
 <header class="header">
@@ -12,13 +15,9 @@ use App\Core\Request;
             <img src="<?= Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
             <div class="dropdown-content dropdown-user">
                 <a href="<?= Helpers::callRoute('user_update') ?>">Paramètres</a>
-                <a href="<?= Helpers::callRoute('front_home') ?>"><?= APP_NAME ?></a>
+                <a href="<?= Helpers::callRoute('front_home') ?>"><?= $appName ?></a>
                 <a href="<?= Helpers::callRoute('logout') ?>">Déconnexion</a>
             </div>
         </div>
-        <!--   <div class="user-label">
-            <span><?= \App\Core\Request::getUser()->getPseudo() ?></span>
-            <img class="img-profil" src="<?= \App\Core\Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
-        </div> -->
     </div>
 </header>
