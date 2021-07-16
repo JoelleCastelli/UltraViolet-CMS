@@ -16,31 +16,31 @@ if(isset($errors)) {
             <div id='statToDayList'>
                 <div class='statToDayCard'>
                     <span class="title">
-                        Total d'articles
+                        Total d'articles du jour
                     </span>
                     <span class="stat">
                         <?= $nbToDayArticles ?>
                     </span>
                 </div>
-                <div class='statisticsCard'>
+                <div class='statToDayCard'>
                     <span class="title">
-                        Total de commentaires
+                        Total de commentaires du jour
                     </span>
                     <span class="stat">
                         <?= $nbToDayComments ?>
                     </span>
                 </div>
-                <div class='statisticsCard'>
+                <div class='statToDayCard'>
                     <span class="title">
-                        Total d'utilisateurs
+                        Total d'utilisateurs du jour
                     </span>
                     <span class="stat">
                         <?= $nbToDayUsers ?>
                     </span>
                 </div>
-                <div class='statisticsCard'>
+                <div class='statToDayCard'>
                     <span class="title">
-                        Total de vues
+                        Total de vues du jour
                     </span>
                     <span class="stat">
                         <?= $nbToDayViews ?>
