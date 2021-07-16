@@ -232,7 +232,15 @@ class Production extends Database
         return date("d/m/Y",strtotime($this->getCreatedAt()));
     }
 
+    /**
+     * @return array
+     */
     public function getActors(): array
+    {
+        return $this->actors;
+    }
+
+    public function getRelatedActors(): array
     {
         $productionPersons = new ProductionPerson();
         $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
@@ -383,7 +391,15 @@ class Production extends Database
         $this->parentProductionId = $parentProductionId;
     }
 
+    /**
+     * @return array
+     */
     public function getDirectors(): array
+    {
+        return $this->directors;
+    }
+
+    public function getRelatedDirectors(): array
     {
         $productionPersons = new ProductionPerson();
         $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
@@ -421,7 +437,15 @@ class Production extends Database
         return $directors;
     }
 
+    /**
+     * @return array
+     */
     public function getWriters(): array
+    {
+        return $this->writers;
+    }
+
+    public function getRelatedWriters(): array
     {
         $productionPersons = new ProductionPerson();
         $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
@@ -459,7 +483,15 @@ class Production extends Database
         return $writers;
     }
 
+    /**
+     * @return array
+     */
     public function getCreators(): array
+    {
+        return $this->creators;
+    }
+
+    public function getRelatedCreators(): array
     {
         $productionPersons = new ProductionPerson();
         $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
