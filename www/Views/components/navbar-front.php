@@ -15,10 +15,12 @@ $appName = $appName->findOneBy('selector', 'appName')->getValue();
     <a href="<?= Helpers::callRoute('front_home') ?>" class="brandLogo">
         <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= $appName ?>'>
     </a>
-
+    
+    
     <?php foreach ($categoriesNavbar['main'] as $mainCategory) : ?>
         <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
     <?php endforeach; ?>
+    
 
     <?php if (!empty($categoriesNavbar['other'])) : ?>
         <div id='otherCategories' class="dropdown dropdown-button">

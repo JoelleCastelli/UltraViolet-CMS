@@ -1,0 +1,110 @@
+#statistics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+
+  #statistics {
+    #statisticsList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      padding-bottom: 3rem;
+
+      .statisticsCard {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+        width: 200px;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+
+        margin-right: 1rem;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        border: 1px solid rgba(227, 227, 227, 0.5);
+        box-shadow: 1px 6px 20px -4px rgba(17, 17, 17, 0.1);
+
+        .title {
+          text-overflow: ellipsis;
+          padding: 0rem 1rem 0rem 1rem;
+          text-align: start;
+          font-size: 0.8rem;
+        }
+
+        .stat {
+          font-weight: bolder;
+          font-size: 24px;
+        }
+      }
+    }
+  }
+
+  #statToDay {
+    #statToDayList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      padding-bottom: 3rem;
+
+      .statToDayCard {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+        width: 200px;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+
+        margin-right: 1rem;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        border: 1px solid rgba(227, 227, 227, 0.5);
+        box-shadow: 1px 6px 20px -4px rgba(17, 17, 17, 0.1);
+
+        .title {
+          text-overflow: ellipsis;
+          padding: 0rem 1rem 0rem 1rem;
+          text-align: start;
+          font-size: 0.8rem;
+        }
+
+        .stat {
+          font-weight: bolder;
+          font-size: 24px;
+        }
+      }
+    }
+  }
+
+  .card {
+    flex-grow: 1;
+    min-width: 400px;
+    width: 3rem;
+    min-height: 400px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    .cardTitle {
+      font-weight: 700;
+      margin-bottom: 10px;
+      padding-bottom: 1rem;
+    }
+
+    p {
+      text-align: center;
+    }
+
+    .linkButton {
+      margin-top: auto;
+      text-align: right;
+    }
+    .linkButtonElse {
+      text-align: right;
+      margin-top: 20rem;
+    }
+  }
+}

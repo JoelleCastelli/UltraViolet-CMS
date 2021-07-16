@@ -10,18 +10,20 @@ use App\Core\Helpers; ?>
         </a>
     </article>
 
-    <article class="path-section">
-        <?php foreach ($pages as $page) : ?>
-            <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
-        <?php endforeach; ?>
-    </article>
+    <div class="path-section">
+        <article >
+            <?php foreach ($pages as $page) : ?>
+                <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
+            <?php endforeach; ?>
 
-    <article class="path-section">
-        <?php foreach ($pages as $page) : ?>
-            <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
-        <?php endforeach; ?>
-    </article>
+            <?php foreach ($pages as $page) : ?>
+                <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
+            <?php endforeach; ?>
+        </article>
 
-    
-
+        <article>
+            <p>©2021 Ultraviolet technologies Inc.</p>
+            <p>Ce site est protégé par Joëlle CASTELLI. Par ailleurs, la Politique de confidentialité et les Conditions d'utilisation de Joëlle s'appliquent.</p>
+        </article>
+    </div>
 </footer>
