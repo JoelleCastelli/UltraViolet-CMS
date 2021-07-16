@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\FormBuilder;
 use App\Core\FormValidator;
 use App\Core\Helpers;
+use App\Core\MediaManager;
 use App\Core\View;
 use App\Models\Settings as SettingsModel;
 
@@ -74,7 +75,8 @@ class Settings
                     "class" => "form_control card",
                     "id" => "formAddCategory",
                     "submit" => "Valider",
-                    "referer" => Helpers::callRoute('settings')
+                    "referer" => Helpers::callRoute('settings'),
+                    "enctype" => "multipart/form-data"
                 ],
                 "fields" => [
                     "APP_NAME" => [
