@@ -227,7 +227,8 @@ textarea-comment {
 
 .grid-article-card {
   display: grid;
-  height: 15rem;
+  height: 10rem;
+  width: 100%;
   grid-template-columns: 1.5fr 3fr;
   grid-template-rows: min-content 1fr min-content;
   column-gap: 10px;
