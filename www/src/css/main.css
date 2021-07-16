@@ -59,7 +59,7 @@ b {
   display: flex;
   flex-flow: column;
   flex-basis: 100%;
-  height: auto;
+  min-height: 80vh;
   overflow: auto;
   padding: 0 20px;
   margin-top: 6.5rem;
