@@ -35,26 +35,14 @@
                 if (isset($flash)) $this->displayFlash($flash);
                 include $this->view;
             ?>
-            <main class="main">
-                
-            </main>
-
-            <?php  include 'Views/components/footer-front.php'; ?>
-            <?php
-            if (isset($bodyScripts) && !empty($bodyScripts)) {
-                foreach ($bodyScripts as $script) {
-                    echo "<script src='$script'></script>";
-                }
-            }
-        ?>
+            
         <main class="main">
             <?php if (isset($flash)) $this->displayFlash($flash);
                     include $this->view;
             ?>
         </main>
         <?php  include 'Views/components/footer-front.php'; ?>
-        <?php
-        if (isset($bodyScripts) && !empty($bodyScripts)) {
+        <?php  if (isset($bodyScripts) && !empty($bodyScripts)) {
             foreach ($bodyScripts as $script) {
                 echo "<script src='$script'></script>";
             }
