@@ -1,17 +1,5 @@
 <?php
-
-use App\Core\Helpers;
-use App\Core\Request;
-use App\Models\Page;
-use App\Models\Settings;
-
-$settings = new Settings();
-$appName = $settings->findOneBy('selector', 'appName')->getValue();
-$metaTitle = $settings->findOneBy('selector', 'metaTitle')->getValue();
-$metaDesc = $settings->findOneBy('selector', 'metaDescription')->getValue();
-
-$pages = Page::getStaticPages();
-
+    use App\Models\Settings;
 ?>
 
 <!DOCTYPE html>
@@ -19,8 +7,8 @@ $pages = Page::getStaticPages();
 
 <head>
     <meta charset="UTF-8">
-    <title><?= isset($title) && $title  != "" ? $appName . ' - ' . $title : $metaTitle ?></title>
-    <meta name="description" content="<?= isset($description) && $description  != "" ? $description : $metaDesc ?>">
+    <title><?= isset($title) && $title  != "" ? Settings::getAppName() . ' - ' . $title : Settings::getMetaTitle() ?></title>
+    <meta name="description" content="<?= isset($description) && $description  != "" ? $description : Settings::getMetaDescription() ?>">
     <link rel="shortcut icon" href="<?= PATH_TO_IMG ?>logo/favicon.ico" />
 
     <!--JS-->

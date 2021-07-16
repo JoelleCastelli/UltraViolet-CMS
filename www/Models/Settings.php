@@ -93,6 +93,21 @@ class Settings extends Database
         return $variablesArray;
     }
 
+    public static function getAppName() {
+        $appName = new Settings();
+        return $appName->findOneBy('selector', 'appName')->getValue();
+    }
+
+    public static function getMetaTitle() {
+        $appName = new Settings();
+        return $appName->findOneBy('selector', 'metaTitle')->getValue();
+    }
+
+    public static function getMetaDescription() {
+        $appName = new Settings();
+        return $appName->findOneBy('selector', 'metaDescription')->getValue();
+    }
+
 
     /**
      * Form to read and update the template variables

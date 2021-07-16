@@ -70,10 +70,6 @@ class Settings
     public function formBuilderUpdateSettings(): array
     {
         $settings = new SettingsModel();
-        $appName = $settings->findOneBy('selector', 'appName')->getValue();
-        $metaTitle = $settings->findOneBy('selector', 'metaTitle')->getValue();
-        $metaDesc = $settings->findOneBy('selector', 'metaDescription')->getValue();
-
         return [
             "config" => [
                 "method" => "POST",
@@ -91,7 +87,7 @@ class Settings
                     "maxLength" => 160,
                     "label" => "Nom de l'application",
                     "class" => "search-bar",
-                    "value" => $appName,
+                    "value" => $settings::getAppName(),
                     "error" => "Le nom l'application doit contenir entre 1 et 60 caractères",
                     "required" => true,
                 ],
@@ -101,7 +97,7 @@ class Settings
                     "maxLength" => 155,
                     "label" => "Meta title par défaut",
                     "class" => "search-bar",
-                    "value" => $metaTitle,
+                    "value" => $settings::getMetaTitle(),
                     "error" => "La meta description ne peut pas dépasser 155 caractères",
                 ],
                 "metaDescription" => [
@@ -110,7 +106,7 @@ class Settings
                     "maxLength" => 160,
                     "label" => "Meta description par défaut",
                     "class" => "search-bar",
-                    "value" => $metaDesc,
+                    "value" => $settings::getMetaDescription(),
                     "error" => "La meta description ne peut pas dépasser 160 caractères",
                 ],
                 "logo" => [

@@ -1,12 +1,15 @@
 <?php
-
-use App\Core\Helpers; ?>
+    use App\Core\Helpers;
+    use App\Models\Page;
+    use App\Models\Settings;
+    $pages = Page::getStaticPages();
+?>
 
 <footer id="footer-front">
 
     <article class="logo-section">
         <a href="<?= Helpers::callRoute('front_home') ?>" class="brandLogo">
-            <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= $appName ?>'>
+            <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= Settings::getAppName() ?>'>
         </a>
     </article>
 
