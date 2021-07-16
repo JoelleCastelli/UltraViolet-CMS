@@ -46,9 +46,11 @@
                     echo "<script src='$script'></script>";
                 }
             }
-                if (isset($flash)) $this->displayFlash($flash);
-                include $this->view;
         ?>
+        <main class="main">
+            <?php if (isset($flash)) $this->displayFlash($flash);
+                    include $this->view;
+            ?>
         </main>
         <?php  include 'Views/components/footer-front.php'; ?>
         <?php
