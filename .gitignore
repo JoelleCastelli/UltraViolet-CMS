@@ -24,3 +24,5 @@ www/src/img/vip/
 www/src/img/other/
 www/src/img/logo/
 www/src/img/users/
+
+www/_scripts/custom_db_script.sql

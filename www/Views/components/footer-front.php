@@ -6,7 +6,7 @@ use App\Core\Helpers; ?>
 
     <article class="logo-section">
         <a href="<?= Helpers::callRoute('front_home') ?>" class="brandLogo">
-            <img src='<?= PATH_TO_IMG ?>logo_uv.png' alt='ultraviolet logo'>
+            <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= $appName ?>'>
         </a>
     </article>
 
