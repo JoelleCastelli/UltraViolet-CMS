@@ -56,12 +56,7 @@ b {
 }
 
 .main {
-  display: flex;
-  flex-flow: column;
-  flex-basis: 100%;
-  min-height: 80vh;
-  overflow: auto;
-  padding: 0 20px;
+  min-height: 100vh;
   margin-top: 6.5rem;
 }
 
