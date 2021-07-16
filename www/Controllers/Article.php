@@ -42,6 +42,7 @@ class Article {
         if (!empty($_POST)) {
             if (!isset($_POST['categories']))
                 $_POST['categories'] = [];
+                
             $errors = FormValidator::check($form, $_POST);
 
             if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce titre existe déjà. Veuillez changer votre titre d'article";
@@ -75,6 +76,7 @@ class Article {
                 $article->save();
                 $articleId = $article->getLastInsertId();
 
+                // if categories associated, add association
                 foreach ($_POST["categories"] as $categoryId) {
                     $categoryArticle = new CategoryArticleModel();
                     $categoryArticle->setArticleId($articleId);
@@ -82,6 +84,7 @@ class Article {
                     $categoryArticle->save();
                 }
 
+                // if productions associated, add association
                 if (!empty($productionId)){
                     $productionArticleModel = new ProductionArticleModel();
                     $productionArticleModel->setArticleId($articleId);
