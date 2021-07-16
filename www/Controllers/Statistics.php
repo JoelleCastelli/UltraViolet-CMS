@@ -16,6 +16,9 @@ class Statistics
         $view->assign('title', 'Statistiques');
         $view->assignFlash();
 
+        $nbToDayArticles = $this->getNbToDayArticles();
+        $view->assign('nbToDayArticles', $nbToDayArticles);
+
         $nbArticles = $this->getNbArticles();
         $view->assign('nbArticles', $nbArticles);
 
@@ -29,11 +32,43 @@ class Statistics
         $view->assign('nbViews', $nbViews);
 
         $articleHistory = $this->getViewsArticles();
-        Helpers::dd($articleHistory);
         $view->assign('articleHistory', $articleHistory);
 
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
 	}
+ 
+    public function getNbToDayArticles()
+    {
+        $articles = new Article();
+        $dateNow = date('Y-m-d');
+        return $articles->customQuery('SELECT count(uvtr_article.id) FROM uvtr_article 
+            WHERE cast(uvtr_article.publicationDate as date) = cast(Now() as date) 
+            and uvtr_article.deletedAt IS NULL')->first(false);
+    }
+
+    public function getNbToDayComments()
+    {
+        $comments = new Comment();
+        return $comments->customQuery('SELECT count(uvtr_comment.id) FROM uvtr_comment 
+            WHERE cast(uvtr_comment.createdAt as date) = cast(Now() as date) 
+            and uvtr_comment.deletedAt IS NULL')->first(false);
+    }
+
+    public function getNbToDayUsers()
+    {
+        $persons = new Person();
+        return $persons->customQuery('SELECT count(uvtr_person.id) FROM uvtr_person 
+            WHERE cast(uvtr_person.createdAt as date) = cast(Now() as date) 
+            and uvtr_person.deletedAt IS NULL 
+            and uvtr_person.role != "vip"')->first(false);
+    }
+
+    public function getNbToDayViews()
+    {
+        $articleHistory = new ArticleHistory();
+        return $articleHistory->customQuery('SELECT SUM(uvtr_article_history.views) FROM uvtr_article_history 
+            WHERE cast(uvtr_article_history.date as date) = cast(Now() as date)')->first(false);
+    }
 
     public function getNbArticles()
     {
