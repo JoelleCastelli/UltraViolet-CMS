@@ -68,7 +68,7 @@ class Production
 
     public function addProductionAction() {
         $production = new ProductionModel();
-        $form = $production->formBuilderAddProductionTmdb();
+        $form = $production->formBuilderAddProduction();
         $view = new View("productions/add-production-tmdb");
         $view->assign("form", $form);
         $view->assign("title", "Nouvelle production");
@@ -88,7 +88,7 @@ class Production
                     if (!empty($jsonResponseArray)) {
                         $production = new ProductionModel();
                         if($production->populateFromTmdb($_POST, $jsonResponseArray)) {
-                            if ($production->findOneBy('tmdbId', $production->getTmdbId())) {
+                            if ($production->select()->where('tmdbId', $production->getTmdbId())->andWhere('type', $_POST['productionType'])->first()) {
                                 $errors[] = "La production avec l'ID TMDB ".$production->getTmdbId()." existe déjà dans la base de données";
                             } else {
                                 $production->save();
