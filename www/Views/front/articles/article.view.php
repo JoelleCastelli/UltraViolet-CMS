@@ -16,22 +16,18 @@
             <?= $article->getContent() ?>
         </article>
     </section>
-
-    <section class="production card">
-
-        <div class="production__image"></div>
-        <h2 class="production__title">Le seigneur des anneaux</h2>
-        <ul class="production__actors">
-            <li class="production__actors__actor">Jean Michel</li>
-            <li class="production__actors__actor">Crapoto del mare</li>
-            <li class="production__actors__actor">Inspector Boudacheh</li>
-        </ul>
-
-        <?php foreach($article->getProductions() as $production) : ?>
-            <div class="production__title"><?= $production->getTitle() ?></div>
-        <?php endforeach; ?>
-
-    </section>
+    
+    <?php foreach($article->getProductions() as $production) : ?>
+        <section class="production card">
+            <img class="production__image" src="<?= $production->getProductionPosterPath() ?>"></img>
+            <h2 class="production__title"><?= $production->getTitle() ?></h2>
+            <ul class="production__actors">
+                <li class="production__actors__actor">Jean Michel</li>
+                <li class="production__actors__actor">Crapoto del mare</li>
+                <li class="production__actors__actor">Inspector Boudacheh</li>
+            </ul>
+        </section>
+    <?php endforeach; ?>
 
     <section class="comments card">
 
