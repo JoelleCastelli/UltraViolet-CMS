@@ -1,3 +1,5 @@
+<?php use App\Core\Helpers; ?>
+
 <div class="grid-article">
 
     <div class="cover">
@@ -21,11 +23,9 @@
         <section class="production card">
             <img class="production__image" src="<?= $production->getProductionPosterPath() ?>"></img>
             <h2 class="production__title"><?= $production->getTitle() ?></h2>
-            <ul class="production__actors">
-                <li class="production__actors__actor">Jean Michel</li>
-                <li class="production__actors__actor">Crapoto del mare</li>
-                <li class="production__actors__actor">Inspector Boudacheh</li>
-            </ul>
+            <p class="production__type"><?= $production->getType() ?></p>
+            <p class="production__release-date"><?= $production->getReleaseDate() ?></p>
+            <p></p>
         </section>
     <?php endforeach; ?>
 
