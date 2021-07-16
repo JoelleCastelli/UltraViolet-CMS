@@ -242,7 +242,9 @@ class Article {
         }
 
         $article->getCategoriesRelated();
-        $article->getProductionsRelated();
+
+        $productions = $article->getProductionsRelated();
+        $
 
         $view = new View('articles/article', 'front');
         $view->assign('title', $article->getTitle());
