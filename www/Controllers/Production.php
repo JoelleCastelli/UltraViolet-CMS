@@ -51,24 +51,9 @@ class Production
 
             $productionArray = [];
             foreach ($productions as $production) {
-                // Find production key art media and populate poster object
-                $productionMedia = new ProductionMedia();
-                $productionMedia = $productionMedia->select()->where('productionId', $production->getId())->andWhere('keyArt', 1)->first();
-                if($productionMedia) {
-                    $production->getPoster()->setId($productionMedia->getMediaId());
-                    // Display default image if file is not found
-                    if(file_exists(getcwd().$production->getPoster()->getPath()))
-                        $path = $production->getPoster()->getPath();
-                    else
-                        $path = PATH_TO_IMG.'default_poster.jpg';
-                } else {
-                    // Display default image if no key art is associated
-                    $path = PATH_TO_IMG.'default_poster.jpg';
-                }
-
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
-                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$path."'/>",
+                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$production->getProductionPosterPath()."'/>",
                     $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
                     $this->columnsTable['season'] => $production->getParentSeasonName(),
                     $this->columnsTable['series'] => $production->getParentSeriesName(),

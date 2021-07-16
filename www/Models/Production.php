@@ -896,4 +896,19 @@ class Production extends Database
         parent::save();
     }
 
+
+    public function getProductionPosterPath(): ?string
+    {
+        // Find production key art media
+        $productionMedia = new ProductionMedia();
+        $productionMedia = $productionMedia->select()->where('productionId', $this->getId())->andWhere('keyArt', 1)->first();
+        if($productionMedia) {
+            $this->getPoster()->setId($productionMedia->getMediaId());
+            if(file_exists(getcwd().$this->getPoster()->getPath()))
+                return $this->getPoster()->getPath();
+        }
+        // Display default image if no key art is associated or if file is not found
+        return PATH_TO_IMG.'default_poster.jpg';
+    }
+
 }
