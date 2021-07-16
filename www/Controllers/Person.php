@@ -218,7 +218,6 @@ class Person
             $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/userSettings.js']);
 
             if (!empty($_POST)) {
-
                 $errors = FormValidator::check($form, $_POST);
                 if (empty($errors)) {
 
@@ -232,6 +231,9 @@ class Person
                         $errors = ['Ce pseudonyme est indisponible'];
 
                     if (empty($errors)) {
+                        if ($_POST["email"] !== $user->getEmail())
+                            $emailChanged = true;
+
                         $user->setEmail(htmlspecialchars($_POST["email"]));
                         $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
                         // Save profile picture
@@ -243,12 +245,26 @@ class Person
                                 $mediaManager->uploadFile($mediaManager->getFiles());
                                 $mediaManager->saveFile($mediaManager->getFiles());
                                 $media = new Media();
-                                $media = $media->findOneBy('path', PATH_TO_IMG_USERS."user-".$user->getId().".png");
+                                $media = $media->findOneBy('path', PATH_TO_IMG_USERS.$_FILES['profilePicture']["name"]);
                                 $user->setMediaId($media->getId());
                             }
                             unset($_FILES['profilePicture']);
                         }
                         if ($user->save()) {
+                            if (isset($emailChanged)) {
+                                $user->setEmailConfirmed(false);
+
+                                /* Send mail confirmation */
+                                $to = $user->getEmail();
+                                $from = 'ultravioletcms@gmail.com';
+                                $name = 'UltraViolet';
+                                $subj = 'UltraViolet - Confirmez votre nouvelle adresse e-mail';
+                                $msg = $user->updateMail($user->getPseudo(), $user->getEmailKey()); // mail content
+                                $mail = new Mail();
+                                $mail->sendMail($to, $from, $name, $subj, $msg);
+
+                                $user->save();
+                            }
                             Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
                             Helpers::namedRedirect('user_update');
                         }
