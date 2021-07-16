@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_category` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL,
   `position` INT NOT NULL,
+  `descriptionSeo` VARCHAR(160) NULL DEFAULT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
@@ -21,12 +22,13 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
--- Table `ultraviolet`.`uvtr_settings`
+-- Table `ultraviolet`.`uvtr_template_variable`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_settings` (
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_template_variable` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(20) NOT NULL,
+  `selector` VARCHAR(60) NOT NULL,
   `value` VARCHAR(60) NOT NULL,
+  `defaultValue` VARCHAR(40) NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`))
@@ -87,11 +89,7 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_article` (
   `title` VARCHAR(100) NOT NULL,
   `description` VARCHAR(255) NOT NULL,
   `content` LONGTEXT NOT NULL,
-  `rating` INT NULL DEFAULT NULL,
   `slug` VARCHAR(100) NOT NULL,
-  `totalViews` INT NULL DEFAULT '0',
-  `titleSeo` VARCHAR(60) NULL DEFAULT NULL,
-  `descriptionSeo` VARCHAR(160) NULL DEFAULT NULL,
   `publicationDate` DATETIME NULL DEFAULT NULL,
   `contentUpdatedAt` DATETIME NULL DEFAULT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -110,6 +108,25 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_article` (
   CONSTRAINT `fk_uvtr_article_uvtr_person1`
     FOREIGN KEY (`personId`)
     REFERENCES `ultraviolet`.`uvtr_person` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `ultraviolet`.`uvtr_article_history`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_article_history` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `views` INT NULL DEFAULT '0',
+    `date` DATE NOT NULL,
+    `articleId` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_uvtr_article_history_uvtr_article_idx` (`articleId` ASC),
+    CONSTRAINT `fk_uvtr_article_history_uvtr_article`
+    FOREIGN KEY (`articleId`)
+    REFERENCES `ultraviolet`.`uvtr_article` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -179,7 +196,6 @@ CREATE TABLE IF NOT EXISTS `ultraviolet`.`uvtr_page` (
   `slug` VARCHAR(100) NOT NULL,
   `position` TINYINT NOT NULL,
   `state` ENUM('draft', 'scheduled', 'published', 'hidden', 'deleted') NOT NULL DEFAULT 'draft',
-  `titleSeo` VARCHAR(60) NULL DEFAULT NULL,
   `descriptionSeo` VARCHAR(160) NULL DEFAULT NULL,
   `publicationDate` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
@@ -302,13 +318,27 @@ INSERT INTO `ultraviolet`.`uvtr_media` (`title`, `path`) VALUES ("Article - Imag
 -- -----------------------------------------------------
 -- Insert example categories
 -- -----------------------------------------------------
-INSERT INTO `ultraviolet`.`uvtr_category` (`name`, `position`) VALUES ("Films", 1);
-INSERT INTO `ultraviolet`.`uvtr_category` (`name`, `position`) VALUES ("Séries", 2);
-INSERT INTO `ultraviolet`.`uvtr_category` (`name`, `position`) VALUES ("Actualités", 3);
-INSERT INTO `ultraviolet`.`uvtr_category` (`name`, `position`) VALUES ("Critiques", 4);
+INSERT INTO `ultraviolet`.`uvtr_category` (`name`, `position`, `descriptionSeo`) VALUES ("Films", 1, "Découvrez nos dernières news et critiques sur les meilleures films du moment !");
+INSERT INTO `ultraviolet`.`uvtr_category` (`name`, `position`, `descriptionSeo`) VALUES ("Séries", 2, "Découvrez nos dernières news et critiques sur les meilleures séries du moment !");
+INSERT INTO `ultraviolet`.`uvtr_category` (`name`, `position`, `descriptionSeo`) VALUES ("Actualités", 3, "Retrouvez nos dernières actualités sur les meilleurs films et séries");
+INSERT INTO `ultraviolet`.`uvtr_category` (`name`, `position`, `descriptionSeo`) VALUES ("Critiques", 4, "Retrouvez nos dernières critiques des meilleurs films et séries");
 
 -- -----------------------------------------------------
 -- Insert example page
 -- -----------------------------------------------------
-INSERT INTO `ultraviolet`.`uvtr_page` (`title`, `slug`, `position`, `state`, `titleSeo`, `descriptionSeo`, `content`)
-VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Bienvenue chez moi", "Bienvenue sur la première page de mon site", "Ceci est une page d'exemple");
+INSERT INTO `ultraviolet`.`uvtr_page` (`title`, `slug`, `position`, `state`, `descriptionSeo`, `content`)
+VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Ceci est la description de votre page telle qu'elle sera vue par les moteurs de recherche", "<p>Voici la toute première page de votre site !</p>");
+
+-- -----------------------------------------------------
+-- Insert default templates variables
+-- -----------------------------------------------------
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("navbarBackground", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("navbarColor", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("footerBackground", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("footerColor", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("titleColor", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("tagsBackground", "#5f2eea", "#5f2eea");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("tagsColor", "#ffffff", "#ffffff");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("fontFamily", "mulish", "mulish");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("customHeight", "1.5", "1.5");
+INSERT INTO `ultraviolet`.`uvtr_template_variable` (`selector`, `value`, `defaultValue`) VALUES ("customSize", "14", "14");
