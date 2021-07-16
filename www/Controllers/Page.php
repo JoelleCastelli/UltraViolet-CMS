@@ -308,4 +308,20 @@ class Page
         }
     }
 
+    /* 
+    * FRONT FUNCTIONS
+    */
+
+    public function accessStaticPageAction($slug)
+    {
+        $page = new PageModel;
+        $page = $page->select()->where('slug', $slug)->first();
+
+        if(empty($page))
+            Helpers::redirect404();
+
+        $view = new View('pages/page', 'front');
+        $view->assign('page', $page);
+
+    }
 }

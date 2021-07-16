@@ -10,7 +10,7 @@ $categoriesNavbar = Category::getMenuCategories();
 
 <nav id="navbar-front">
     <a href="<?= Helpers::callRoute('front_home') ?>" class="brandLogo">
-        <img src='<?= PATH_TO_IMG ?>logo_uv.png' alt='ultraviolet logo'>
+        <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= APP_NAME ?>'>
     </a>
 
     <?php foreach ($categoriesNavbar['main'] as $mainCategory) : ?>

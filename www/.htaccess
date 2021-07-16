@@ -1,5 +1,7 @@
 RewriteEngine On 
 
+ErrorDocument 403 /Views/front/404.view.php
+
 RewriteCond %{REQUEST_FILENAME} !-f 
 RewriteCond %{REQUEST_FILENAME} !-d
 
@@ -12,8 +14,3 @@ RedirectMatch 404 .sql*$
 
 #Transfert 404 to view
 ErrorDocument 404 /Views/front/404.view.php
-
-
-
-
-

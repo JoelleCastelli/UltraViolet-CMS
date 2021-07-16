@@ -1,30 +1,19 @@
-<div id="grid-update-user">
-
+<div id="userSettings" class="card">
     <?php
-
-use App\Core\Helpers;
-
-if (isset($errors)) {
-        echo "<div class='error-message-form'>";
-        foreach ($errors as $error) {
-            if (count($errors) == 1)
-                echo "$error";
-            else
-                echo "<li>$error</li>";
+        use App\Core\Helpers;
+        if (isset($errors)) {
+            echo "<div class='error-message-form'>";
+            foreach ($errors as $error) {
+                if (count($errors) == 1)
+                    echo "$error";
+                else
+                    echo "<li>$error</li>";
+            }
+            echo "</div>";
         }
-        echo "</div>";
-    }
+
+    App\Core\FormBuilder::render($form);
     ?>
 
-    <section class="grid-form-update-user">
-
-        <section class="card">
-            <article>
-                <article class="container-form">
-                    <?php App\Core\FormBuilder::render($form); ?>
-                </article><br>
-            </article>
-        </section>
-        <a href="<?= Helpers::callRoute('user_delete') ?>" id="suppress-my-account" class="error-message-form">Supprimer mon compte</a>
-    </section>
+    <a href="<?= Helpers::callRoute('user_delete') ?>" class="btn danger">Supprimer mon compte</a>
 </div>

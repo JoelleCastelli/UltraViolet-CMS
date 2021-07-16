@@ -1,7 +1,8 @@
 .grid-article {
   position: relative;
+  margin-left: 8rem;
+  margin-right: 6rem;
   display: grid;
-  height: 80vh;
   grid-template-columns: 6fr 2fr;
   grid-template-rows: 300px 3fr min-content;
   column-gap: 10px;
@@ -215,6 +216,13 @@ textarea-comment {
   display: flex;
   flex-flow: column;
   margin-top: 2rem;
+  margin-left: 8rem;
+  margin-right: 6rem;
+
+  h1 {
+    font-weight: bold;
+    padding-bottom: 2rem;
+  }
 }
 
 .grid-article-card {
@@ -272,5 +280,6 @@ textarea-comment {
   transition: all 0.3s ease;
   &:hover {
     transform: scale(1.015);
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);
   }
 }

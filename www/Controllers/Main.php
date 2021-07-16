@@ -155,7 +155,7 @@ class Main
         $classPath = explode('\\', get_class($objects));
         $class = mb_strtolower(end($classPath));
         if($class == 'category')
-            $objects = $objects->select()->where('position', 0, '=>')->get();
+            $objects = $objects->select()->where('position', 0, '>')->get();
         else
             $objects = $objects->select()->where('deletedAt', 'NULL')
                                          ->andWhere('publicationDate', 'NOT NULL')
@@ -164,7 +164,9 @@ class Main
 
         foreach ($objects as $object) {
             if($class == 'category')
-                $loc = Helpers::getBaseUrl().'/'.Helpers::slugify($object->getName());
+                $loc = Helpers::getBaseUrl().'/categorie/'.Helpers::slugify($object->getName());
+            elseif ($class == 'article')
+                $loc = Helpers::getBaseUrl().'/article/'.$object->getSlug();
             else
                 $loc = Helpers::getBaseUrl().'/'.$object->getSlug();
 

@@ -161,15 +161,10 @@ productions_list:
   controller: Production
   action: showAll
 
-productions_creation:
-  path: /admin/productions/creation-manuelle
-  controller: Production
-  action: addProduction
-
 productions_creation_tmdb:
   path: /admin/productions/creation
   controller: Production
-  action: addProductionTmdb
+  action: addProduction
 
 productions_show_preview:
   path: /admin/productions/tmdb-request
@@ -233,7 +228,7 @@ templates_lists:
   action:     showAll
 
 restore_templates:
-  path:       /admin/parametres/restaurer
+  path:       /admin/templates/restaurer
   controller: TemplateVariable
   action:     restore
   middleware: Admin

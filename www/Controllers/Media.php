@@ -67,7 +67,7 @@ class Media
             $mediasArray = [];
             foreach ($medias as $media) {
 
-                // Display default image if file is not found
+                // Dlay default image if file is not found
                 if(file_exists(getcwd().$media->getPath()))
                     $path = $media->getPath();
                 else

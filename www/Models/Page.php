@@ -265,6 +265,14 @@ class Page extends Database implements JsonSerializable
         $this->setPublicationDate(null);
     }
 
+    public static function getStaticPages()
+    {
+        $page = new Page;
+        $pages = $page->select()->where('deletedAt', 'NULL')->andWhere('state', 'published')->orderBy('position')->orderBy('title')->get();
+        return $pages;
+    }
+
+
     public function jsonSerialize(): array
     {
         return [

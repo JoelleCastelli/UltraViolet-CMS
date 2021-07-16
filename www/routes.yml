@@ -46,7 +46,7 @@ forget_password:
 
 #SETTINGS
 user_update:
-  path:       /parametre
+  path:       /parametres
   controller: Person
   action:     updateUser
 
@@ -57,11 +57,11 @@ user_delete:
 
 # PAGE
 display_static_page:
-  path:       /{slug}
+  path:       /{page}
   controller: Page
-  action:     showStaticPage
+  action:     accessStaticPage
   requirements:
-    slug: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
+    page: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
 
 # CATEGORY
 display_category:

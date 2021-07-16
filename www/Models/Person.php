@@ -558,7 +558,7 @@ class Person extends Database implements JsonSerializable
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control card",
+                "class" => "form_control",
                 "id" => "formUpdatePersonalInfo",
                 "submit" => "Valider",
                 "referer" => Helpers::callRoute('user_update')
@@ -581,24 +581,20 @@ class Person extends Database implements JsonSerializable
                 "pseudo" => [
                     "type" => "pseudo",
                     "label" => "Pseudonyme *",
-                    "placeholder" => "Pseudonyme",
                     "class" => "input",
                     "id" => "pseudo",
                     "error" => "Le format du champ pseudo est incorrect",
                     "required" => true,
                     "value" => $user->getPseudo()
                 ],
-
                 "oldPwd" => [
                     "type" => "password",
                     "label" => "Ancien mot de passe",
                     "class" => "input",
                 ],
-
                 "pwd" => [
                     "type" => "password",
                     "label" => "Nouveau mot de passe",
-                    "placeholder" => "Mot de passe",
                     "minLength" => 8,
                     "class" => "input",
                     "regex" => "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
@@ -606,8 +602,8 @@ class Person extends Database implements JsonSerializable
                 ],
                 "pwdConfirm" => [
                     "type" => "password",
+                    "label" => "Confirmation du nouveau mot de passe",
                     "class" => "input",
-                    "placeholder" => "Confirmation du mot de passe",
                     "confirm" => "pwd",
                     "error" => "Votre mot de passe de confirmation ne correspond pas",
                 ],
