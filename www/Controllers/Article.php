@@ -40,7 +40,8 @@ class Article {
         ]);
     
         if (!empty($_POST)) {
-
+            if (!isset($_POST['categories']))
+                $_POST['categories'] = [];
             $errors = FormValidator::check($form, $_POST);
 
             if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce titre existe déjà. Veuillez changer votre titre d'article";
@@ -48,9 +49,10 @@ class Article {
             $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
             
-            $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
-            if (empty($productionId)) $errors[] = "Cette production n'existe pas pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
-
+            if(!empty($_POST["production"])){
+                $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
+                if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
+            }
             if (empty($errors)) {
 
                 $title = htmlspecialchars($_POST["title"]);
@@ -71,7 +73,6 @@ class Article {
                 }
 
                 $article->save();
-
                 $articleId = $article->getLastInsertId();
 
                 foreach ($_POST["categories"] as $categoryId) {
@@ -79,12 +80,14 @@ class Article {
                     $categoryArticle->setArticleId($articleId);
                     $categoryArticle->setCategoryId(htmlspecialchars($categoryId));
                     $categoryArticle->save();
-                }  
+                }
 
-                $productionArticleModel = new ProductionArticleModel();
-                $productionArticleModel->setArticleId($articleId);
-                $productionArticleModel->setProductionId($productionId);
-                $productionArticleModel->save();
+                if (!empty($productionId)){
+                    $productionArticleModel = new ProductionArticleModel();
+                    $productionArticleModel->setArticleId($articleId);
+                    $productionArticleModel->setProductionId($productionId);
+                    $productionArticleModel->save();
+                }
 
                 Helpers::namedRedirect("articles_list");
 
@@ -125,7 +128,7 @@ class Article {
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
             $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
-            if (empty($productionId)) $errors[] = "Cette production n'existe pas pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
+            if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
 
             if (empty($errors)) {
 
