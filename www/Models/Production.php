@@ -385,7 +385,19 @@ class Production extends Database
 
     public function getDirectors(): array
     {
-        return $this->directors;
+        $productionPersons = new ProductionPerson();
+        $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
+            ->andWhere('department', 'director')->get();
+        $directors = [];
+        foreach ($productionPersons as $productionPerson) {
+            $director = new Person();
+            $director->setId($productionPerson->getPersonId());
+            $director->getMedia();
+            $directors[$director->getId()]['fullName'] = $director->getFullName();
+            $directors[$director->getId()]['photo'] = $director->getMedia()->getPath();
+            $directors[$director->getId()]['role'] = $productionPerson->getCharacter();
+        }
+        return $directors;
     }
 
     public function setDirectors(array $directors): void
