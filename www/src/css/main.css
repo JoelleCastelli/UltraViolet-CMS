@@ -59,10 +59,11 @@ b {
   display: flex;
   flex-flow: column;
   flex-basis: 100%;
-  height: 100%;
+  height: auto;
   overflow: auto;
   padding: 0 20px;
   margin-top: 6.5rem;
+  background-color: red;
 }
 
 .main > *:nth-child(n) {
