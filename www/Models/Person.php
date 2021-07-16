@@ -606,7 +606,7 @@ class Person extends Database implements JsonSerializable
                 "class" => "form_control",
                 "id" => "formUpdatePersonalInfo",
                 "submit" => "Valider",
-                "referer" => Helpers::callRoute('user_update')
+                "referer" => Helpers::callRoute('update_password')
             ],
             "fields" => [
                 "oldPwd" => [

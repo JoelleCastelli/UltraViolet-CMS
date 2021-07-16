@@ -278,84 +278,34 @@ class Person
         }
     }
 
-    public function updateUserPasswordAction()
+    public function updatePasswordAction()
     {
         $user = Request::getUser();
         if ($user && $user->isLogged()) {
-
             $view = new View('userUpdate', 'front');
             $form = $user->formBuilderUpdatePassword();
             $view->assign("form", $form);
-            $view->assign("title", "Modifier vos informations");
-            $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/persons/settings.js']);
+            $view->assign("title", "Modifier votre mot de passe");
 
             if (!empty($_POST)) {
-
                 $errors = FormValidator::check($form, $_POST);
                 if (empty($errors)) {
+                    // Check old password
+                    if (!password_verify($_POST['oldPwd'], $user->getPassword()))
+                        $errors[] = 'Ancien mot de passe non correct';
 
-                    if (!$user->isEmailConfirmed())
-                        $errors = ['Veuillez confirmer d\'abord votre mail actuel'];
-
-                    if ($user->count('email')->where('email', htmlspecialchars($_POST['email']))->andWhere('id', $user->getId(), '!=')->first(false))
-                        $errors = ['Cet email est indisponible'];
-
-                    if ($user->count('pseudo')->where('pseudo', htmlspecialchars($_POST['pseudo']))->andWhere('id', $user->getId(), '!=')->first(false))
-                        $errors = ['Ce pseudonyme est indisponible'];
-
-                    if (!empty($_POST['pwd'])) // if actual password mention
-                    {
-
-                        if (empty($errors)) {
-                            if (!password_verify($_POST['oldPwd'], $user->getPassword())) // check old password
-                                $errors = ['Ancien mot de passe non correct'];
-
-                            if (empty($errors))
-                                if ($_POST['pwdConfirm'] !== $_POST["pwd"]) // check password confirm
-                                    $errors = $form['fields']['pwdConfirm']['error'];
-                        }
-                    }
-
+                    // If old password is correct
                     if (empty($errors)) {
-
-                        if ($_POST["email"] !== $user->getEmail())
-                            $emailChanged = true;
-
-                        $user->setEmail(htmlspecialchars($_POST["email"]));
-                        $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
-                        $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
-                        if ($user->save()) {
-
-                            // Save profile picture
-                            if(!empty($_FILES['profilePicture'])) {
-                                Helpers::dd("hé");
-                                $_FILES['profilePicture']["name"] = "user-".$user->getId().".png";
-                                $mediaManager = new MediaManager();
-                                $errors = $mediaManager->check($_FILES['profilePicture'], 'logo');
-                                if(empty($errors)) {
-                                    $mediaManager->uploadFile($mediaManager->getFiles());
-                                }
-                                unset($_FILES['profilePicture']);
+                        // Check if new password and password confirmation match
+                        if ($_POST['pwdConfirm'] !== $_POST["pwd"]) {
+                            $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
+                            if ($user->save()) {
+                                Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
+                                Helpers::namedRedirect('user_update');
                             }
-
-                            if (isset($emailChanged)) {
-                                $user->setEmailConfirmed(false);
-
-                                /* Send mail confirmation */
-                                $to = $user->getEmail();
-                                $from = 'ultravioletcms@gmail.com';
-                                $name = 'UltraViolet';
-                                $subj = 'UltraViolet - Confirmez votre nouveau email';
-                                $msg = $user->updateMail($user->getPseudo(), $user->getEmailKey()); // mail content
-                                $mail = new Mail();
-                                $mail->sendMail($to, $from, $name, $subj, $msg);
-
-                                $user->save();
-                            }
-                            Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
-                            Helpers::namedRedirect('user_update');
+                            $errors = ['Oups ! Un problème est survenu lors de la sauvegarde'];
                         }
-                        $errors = ['Oops ! Un soucis lors de la sauvegarde est survenu'];
+                        $errors[] = $form['fields']['pwdConfirm']['error'];
                     }
                 }
                 $view->assign("errors", $errors);

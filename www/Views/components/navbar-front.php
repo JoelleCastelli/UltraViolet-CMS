@@ -40,6 +40,7 @@ $appName = $appName->findOneBy('selector', 'appName')->getValue();
             <img src="<?= Request::getUser()->getMedia()->getPath() ?>" alt="Photo de profil">
             <div class="dropdown-content dropdown-user">
                 <a href="<?= Helpers::callRoute('user_update') ?>">Paramètres</a>
+                <a href="<?= Helpers::callRoute('update_password') ?>">Modifier mot de passe</a>
                 <?php if ($user->canAccessBackOffice()) : ?>
                     <a href="<?= Helpers::callRoute('admin') ?>">Administration</a>
                 <?php endif; ?>

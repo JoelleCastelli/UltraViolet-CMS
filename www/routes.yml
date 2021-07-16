@@ -3,6 +3,18 @@ front_home:
   controller: Main
   action:     frontHome
 
+404:
+  path:       /404
+  controller: Main
+  action:     page404
+
+sitemap:
+  path:       /sitemap.xml
+  controller: Main
+  action:     generateSitemap
+
+
+# LOGIN / LOGOUT / REGISTER
 login:
   path:       /connexion
   controller: Person
@@ -39,10 +51,6 @@ forget_password:
   controller: Person
   action:     forgetPasswordMail
 
-404:
-  path:       /404
-  controller: Main
-  action:     page404
 
 #SETTINGS
 user_update:
@@ -51,9 +59,15 @@ user_update:
   action:     updateUser
 
 user_delete:
-  path:       /parametre/supprimer-mon-compte
+  path:       /parametres/supprimer-mon-compte
   controller: Person
   action:     deleteUser
+
+update_password:
+  path:       /parametres/modifier-mot-de-passe
+  controller: Person
+  action:     updatePassword
+
 
 # PAGE
 display_static_page:
@@ -62,6 +76,7 @@ display_static_page:
   action:     accessStaticPage
   requirements:
     page: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
+
 
 # CATEGORY
 display_category:
@@ -79,8 +94,3 @@ display_article:
   action:     showArticle
   requirements:
     article: ([a-z0-9]+(?:-[a-z0-9]+)*)
-
-sitemap:
-  path:       /sitemap.xml
-  controller: Main
-  action:     generateSitemap
