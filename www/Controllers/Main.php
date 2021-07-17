@@ -28,7 +28,7 @@ class Main
         $view->assign('comments', $comments);
 
         // Get last 4 productions
-        $productions = $this->getLatestProductions(4);
+        $productions = $this->getLatestProductions(3);
         $view->assign('productions', $productions);
 
         $nbArticles = $this->getNbArticles();
