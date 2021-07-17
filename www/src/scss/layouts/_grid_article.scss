@@ -292,6 +292,6 @@ textarea-comment {
   transition: all 0.3s ease;
   &:hover {
     transform: scale(1.015);
-    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
   }
 }

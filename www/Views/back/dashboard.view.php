@@ -119,6 +119,7 @@ if(isset($errors)) {
                         </div>
                     <?php } ?>
                 </div>
+            </div>
                 <div class="linkButton">
                     <a href='<?= Helpers::callRoute('productions_list') ?>'><button class='btn'>Voir toutes les productions</button></a>
                 </div>
@@ -127,7 +128,6 @@ if(isset($errors)) {
                     <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
                 </div>
             <?php } ?>
-        </div>
     </div>
 
     <!--STATISTICS-->
@@ -168,9 +168,8 @@ if(isset($errors)) {
                     </span>
                 </div>
             </div>
+        </div>
         <div class="linkButton">
             <a href='<?= Helpers::callRoute('stats') ?>'><button class='btn'>Voir toutes les statistiques</button></a>
         </div>
-    </div>
-
 </div>
