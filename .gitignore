@@ -23,9 +23,7 @@ www/src/img/posters/
 www/src/img/vip/
 www/src/img/other/
 www/src/img/logo/
-<<<<<<< Updated upstream
 www/src/img/users/
 
-=======
->>>>>>> Stashed changes
+# script db
 www/_scripts/custom_db_script.sql
