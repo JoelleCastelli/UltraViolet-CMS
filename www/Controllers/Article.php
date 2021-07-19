@@ -39,7 +39,10 @@ class Article {
             "media-production" => PATH_TO_SCRIPTS.'bodyScripts/articles/production-pop-up.js',
         ]);
     
+
         if (!empty($_POST)) {
+
+            // set categories if not checked by the user
             if (!isset($_POST['categories']))
                 $_POST['categories'] = [];
                 

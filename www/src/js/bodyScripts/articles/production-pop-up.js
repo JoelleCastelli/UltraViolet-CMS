@@ -97,7 +97,19 @@ $(document).ready(function () {
         tableProd.columns([2]).visible(true); //original title
     }
   });
+  function listenRowEventsProductions() {
+    const mediaCTAs = document.querySelectorAll(".production-name-cta");
+    mediaCTAs.forEach((cta) => {
+      cta.addEventListener("click", (e) => {
+        const media = e.target.innerHTML;
+        console.log("nom du production get : " + media);
 
+        inputProd.value = media;
+        console.log(inputProd.value);
+        modalProd.classList.toggle("visible");
+      });
+    });
+  }
   function getProductionsByType(productionType) {
     $.ajax({
       type: "POST",
@@ -114,30 +126,19 @@ $(document).ready(function () {
       },
     });
   }
+
+  // SEPARATE
+
+  const inputProd = document.querySelector("#production");
+  const modalProd = document.querySelector(".background-modal-production");
+  // const removeBGProduction = document.querySelector(".clickable-bg");
+
+ /*  inputProd.addEventListener("click", (e) => {
+    modalProd.classList.add("visible");
+  }); */
+
+ /*  removeBGProduction.addEventListener("click", (e) => {
+    modalProd.classList.remove("visible");
+  }); */
+
 });
-
-const inputProd = document.querySelector("#production");
-const modalProd = document.querySelector(".background-modal-production");
-const removeBGProduction = document.querySelector(".clickable-bg");
-
-inputProd.addEventListener("click", (e) => {
-  modalProd.classList.add("visible");
-});
-
-removeBGProduction.addEventListener("click", (e) => {
-  modalProd.classList.remove("visible");
-});
-
-function listenRowEventsProductions() {
-  const mediaCTAs = document.querySelectorAll(".production-name-cta");
-  mediaCTAs.forEach((cta) => {
-    cta.addEventListener("click", (e) => {
-      const media = e.target.innerHTML;
-      console.log("nom du production get : " + media);
-
-      inputProd.value = media;
-      console.log(inputProd.value);
-      modalProd.classList.toggle("visible");
-    });
-  });
-}

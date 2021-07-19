@@ -1,3 +1,5 @@
+a = 0;
+
 $(document).ready(function () {
   /* BUILD DATATABLES */
   let table = $("#datatable").DataTable({
@@ -5,7 +7,7 @@ $(document).ready(function () {
     autoWidth: false,
     responsive: true,
     columns: [{ data: "Miniature" }, { data: "Nom" }, { data: "Date d'ajout" }],
-    scrollY: "400px",
+    scrollY: "150px",
     scrollCollapse: true,
     columnDefs: [{ className: "media-name-cta", targets: [1] }],
 
@@ -70,16 +72,33 @@ $(document).ready(function () {
   getMediasByType("other");
 });
 
+// get bg to quit modals
+const removeBGs = document.querySelectorAll(".clickable-bg");
+
+// init media
 const input = document.querySelector("#media");
 const modalMedia = document.querySelector(".background-modal");
-const removeBG = document.querySelector(".clickable-bg");
 
+// init production
+const inputProd = document.querySelector("#production");
+const modalProd = document.querySelector(".background-modal-production");
+
+// Open media modal
 input.addEventListener("click", (e) => {
   modalMedia.classList.add("visible");
 });
 
-removeBG.addEventListener("click", (e) => {
-  modalMedia.classList.remove("visible");
+// Open prod modal
+inputProd.addEventListener("click", (e) => {
+  modalProd.classList.add("visible");
+});
+
+// Close media and prod modal
+removeBGs.forEach(item => {
+  item.addEventListener('click', event => {
+    modalProd.classList.remove("visible");
+    modalMedia.classList.remove("visible");
+  });
 });
 
 function listenRowEvents() {

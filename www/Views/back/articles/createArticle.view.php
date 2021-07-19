@@ -34,14 +34,14 @@
 
             <table id="datatable" class="display">
                 <thead>
-                <tr>
-                    <th>Miniature</th>
-                    <th>Nom</th>
-                    <th>Date d'ajout</th>
-                </tr>
+                    <tr>
+                        <th>Miniature</th>
+                        <th>Nom</th>
+                        <th>Date d'ajout</th>
+                    </tr>
                 </thead>
                 <tbody></tbody>
-            </table>        
+            </table>
         </div>
 
     </div>
@@ -50,7 +50,7 @@
     <div class="background-modal-production">
         <div class="clickable-bg"></div>
         <div class="modal-media">
-            <h1>Selectionnez l'image de votre article</h1>
+            <h1>Selectionnez la production de votre article</h1>
 
 
             <div class="filtering-status">
@@ -62,14 +62,14 @@
 
             <table id="datatable-production" class="display">
                 <thead>
-                <tr>
-                    <th>Miniature</th>
-                    <th>Nom</th>
-                    <th>Date d'ajout</th>
-                </tr>
+                    <tr>
+                        <th>Miniature</th>
+                        <th>Nom</th>
+                        <th>Date d'ajout</th>
+                    </tr>
                 </thead>
                 <tbody></tbody>
-            </table>        
+            </table>
         </div>
 
     </div>
