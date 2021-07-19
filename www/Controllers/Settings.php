@@ -19,7 +19,7 @@ class Settings
     {
         $form = $this->formBuilderUpdateSettings();
         $view = new View("settings/list");
-        $view->assign('title', 'Paramètres utilisateur');
+        $view->assign('title', 'Paramètres du site');
         $view->assign("form", $form);
         $view->assign("settings", Helpers::readConfigFile());
 

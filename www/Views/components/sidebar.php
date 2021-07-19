@@ -53,7 +53,7 @@
     <?php if ($user && $user->isLogged() && $user->isAdmin()) { ?>
         <a href="<?= Helpers::callRoute('settings') ?>">
             <i class="fas fa-cogs fa-fw"></i>
-            <div class="navLabel">Paramètres utilisateur</div>
+            <div class="navLabel">Paramètres <br>du site</div>
         </a>
     <?php } ?>
 </nav>
