@@ -88,7 +88,7 @@ class MediaManager
             $existingMediaCount = $media->count('path')->where('path', $file['path'])->first();
 
             // Format image name with (number) if not user profile picture
-            if ($existingMediaCount->total > 0 && !strpos($file['path'], PATH_TO_IMG_USERS) == 0) {
+            if ($existingMediaCount->total > 0 && strpos($file['path'], PATH_TO_IMG_USERS) === false) {
                 $number = 1;
                 while($existingMediaCount->total > 0) {
                     $title = $file['title'] . '(' . $number . ')';
