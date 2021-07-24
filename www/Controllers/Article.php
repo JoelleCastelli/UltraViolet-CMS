@@ -10,7 +10,6 @@ use App\Core\Request;
 use App\Models\Article as ArticleModel;
 use App\Models\ArticleHistory;
 use App\Models\Media as MediaModel;
-use App\Models\Category as CategoryModel;
 use App\Models\Comment as CommentModel;
 use App\Models\Production as ProductionModel;
 use App\Models\CategoryArticle as CategoryArticleModel;
@@ -208,8 +207,7 @@ class Article {
                 "Titre" => $article->getTitle(),
                 "Slug" => $article->getSlug(),
                 "Auteur" => $article->getPerson()->getPseudo(),
-                // "Vues" => $article->getTotalViews(),
-                "Vues" => "0",
+                "Vues" => $article->getTotalViews(),
                 "Commentaire" => count($article->getComments()),
                 "Date creation" => $article->getCleanCreatedAt(),
                 "Date publication" => $article->getCleanPublicationDate(),

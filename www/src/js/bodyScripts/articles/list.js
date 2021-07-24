@@ -69,15 +69,12 @@ $(document).ready(function () {
   });
 
   function getArticleByState(state) {
-    console.log("state selectioné pour le getArticlesState : " + state);
     $.ajax({
       type: "POST",
       url: callRoute("article_data"),
       data: { state: state },
       dataType: "json",
       success: function (response) {
-        console.log("Requete réussis");
-        console.log(response.articles);
         table.clear();
         table.rows.add(response.articles).draw();
       },
@@ -90,7 +87,6 @@ $(document).ready(function () {
 
   /* DELETE Article */
   table.on("click", ".delete", function (event) {
-    console.log("delete article CTA");
     event.preventDefault();
     if (confirm("Êtes-vous sûr.e de vouloir supprimer cet article ?")) {
       const id = this.id.substring(this.id.lastIndexOf("-") + 1);
@@ -104,7 +100,7 @@ $(document).ready(function () {
         },
         error: function () {
           $(".header").after(
-            "Erreur : impossible de supprimer l'article avec l'ID suivant :  " + id
+            "Erreur : impossible de supprimer l'article avec l'ID suivant " + id
           );
         },
       });

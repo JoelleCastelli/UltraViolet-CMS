@@ -25,6 +25,7 @@ class Article extends Database implements JsonSerializable
     protected $description;
     protected $content;
     protected $slug;
+    protected $totalViews;
     protected $contentUpdatedAt;
     protected $publicationDate;
     protected $mediaId;
@@ -127,6 +128,29 @@ class Article extends Database implements JsonSerializable
         $this->slug = $slug;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getTotalViews()
+    {
+        $history = new ArticleHistory();
+        $history = $history->select()->where('id', $this->id)->get();
+        $total = 0;
+        if($history) {
+            foreach ($history as $day) {
+                $total += $day->getViews();
+            }
+        }
+        return $total;
+    }
+
+    /**
+     * @param mixed $totalViews
+     */
+    public function setTotalViews($totalViews): void
+    {
+        $this->totalViews = $totalViews;
+    }
 
     /**
      * @return mixed
@@ -499,7 +523,7 @@ class Article extends Database implements JsonSerializable
             "description" => $this->getDescription(),
             "content" => $this->getContent(),
             "slug" => $this->getSlug(),
-            // "totalViews" => $this->getTotalViews(),
+            "totalViews" => $this->getTotalViews(),
             "publicationDate" => $this->getPublicationDate(),
             "contentUpdatedAt" => $this->getContentUpdatedAt(),
             "createdAt" => $this->getCreatedAt(),
