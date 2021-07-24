@@ -134,8 +134,10 @@ class Article {
 
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
-            $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
-            if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
+            if (!empty($_POST["production"])) {
+                $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
+                if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
+            }
 
             if (empty($errors)) {
 
@@ -179,12 +181,14 @@ class Article {
                     $newCategory->save();
                 }
 
-                $productionArticleModel = new ProductionArticleModel();
+                if (!empty($productionId)) {
+                    $productionArticleModel = new ProductionArticleModel();
                 
-                $entry = $productionArticleModel->select()->where("articleId", $id)->first();
-                $entry->setArticleId($id);
-                $entry->setProductionId($productionId);
-                $entry->save();
+                    $entry = $productionArticleModel->select()->where("articleId", $id)->first();
+                    $entry->setArticleId($id);
+                    $entry->setProductionId($productionId);
+                    $entry->save();
+                }
 
                 Helpers::namedRedirect("articles_list");
             

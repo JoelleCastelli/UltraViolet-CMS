@@ -762,7 +762,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "media" => [
                     "type" => "text",
-                    "label" => "Illustration de l'article",
+                    "label" => "Illustration de l'article *",
                     "class" => "search-bar",
                     "readonly" => true,
                     "value" => $mediaTitle,
@@ -778,7 +778,7 @@ class Article extends Database implements JsonSerializable
                 "content" => [
                     "id" => "articleContent",
                     "type" => "textarea",
-                    "label" => "Contenu de l'article",
+                    "label" => "Contenu de l'article *",
                     "minLength" => 2,
                     "class" => "input",
                     "error" => "Le contenu de l'article doit comprendre au minimum 2 caractères",
