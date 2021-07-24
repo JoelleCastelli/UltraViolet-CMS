@@ -309,6 +309,16 @@ class Person extends Database implements JsonSerializable
         $this->emailKey = $key;
     }
 
+    public function getGenerateEmailKey()
+    {
+        $lengthkey = 15;
+        $key = "";
+        for ($i = 1; $i < $lengthkey; $i++) {
+            $key .= mt_rand(0, 9);
+        }
+        return $key;
+    }
+
     public function saveMedia() {
         $actorImgPath = PATH_TO_IMG_VIP.$this->getTmdbId().".png";
         // Save vip's image file
