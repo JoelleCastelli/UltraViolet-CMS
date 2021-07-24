@@ -394,7 +394,7 @@ class Person
                 $user->setEmailConfirmed(1);
 
                 $user->save();
-                Helpers::setFlashMessage('success', "Votre compte a bien était activé");
+                Helpers::setFlashMessage('success', "Votre compte a bien été activé");
                 Helpers::namedRedirect('login');
             } else {
                 Helpers::setFlashMessage('error', "Votre compte est déjà activé");
