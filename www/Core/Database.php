@@ -328,17 +328,18 @@ class Database {
   
     public function generateActionsMenu(): string {
         $classPath = explode('\\', get_class($this));
-        $class = mb_strtolower(end($classPath));
+        $objClass = mb_strtolower(end($classPath));
 
         $actions = "<div class='actionsMenu'><div class='bubble-actions'></div><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
                 $tag = in_array($action['action'], ['delete', 'update-state']) ? "span" : "a";
+                $class = $action['class'] ?? '';
                 if($tag === 'a') {
                     $target = $action['action'] == 'go_to' ? 'target=_blank' : '';
-                    $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."' $target>".$action['name']."</$tag>";
+                    $actions .= "<$tag id='".$objClass.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."' $target>".$action['name']."</$tag>";
                 } else {
-                    $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . " clickable-tag' >" . $action['name'] . "</$tag>";
+                    $actions .= "<$tag id='" . $objClass . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . " clickable-tag' >" . $action['name'] . "</$tag>";
                 }
             }
         }

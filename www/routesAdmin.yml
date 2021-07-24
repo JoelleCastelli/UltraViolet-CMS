@@ -230,13 +230,6 @@ comments_delete:
   controller: Comment
   action: deleteComment
 
-comments_update:
-  path: /admin/commentaires/modification/{id}
-  controller: Comment
-  action: updateComment
-  requirements:
-    id: (\d+)
-
 comments_update_state:
   path: /admin/commentaires/update-state
   controller: Comment

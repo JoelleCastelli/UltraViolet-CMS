@@ -32,13 +32,13 @@ class Page extends Database implements JsonSerializable
 		parent::__construct();
 		$this->actions = [
 		    ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
-            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id])],
         ];
 
         $this->actionsDeletedPages = [
-            ['name' => 'Supprimer définitivement', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' => 'Restaurer en tant que brouillon', 'action' => 'update-state', 'class' => 'state-draft', 'url' => Helpers::callRoute('page_update_state'), 'role' => 'admin'],
-            ['name' =>'Restaurer en tant que publiée', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('page_update_state'), 'role' => 'admin'],
+            ['name' => 'Supprimer définitivement', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('page_delete', ['id' => $this->id])],
+            ['name' => 'Restaurer en tant que brouillon', 'action' => 'update-state', 'class' => 'state-draft', 'url' => Helpers::callRoute('page_update_state')],
+            ['name' =>'Restaurer en tant que publiée', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('page_update_state')],
         ];
 	}
 

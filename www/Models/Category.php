@@ -29,14 +29,14 @@ class Category extends Database
     {
         parent::__construct();
         $this->actions = [
-            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('category_update', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('category_delete', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' => 'Cacher', 'action' => 'hide-category', 'url' => Helpers::callRoute('category_hide', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('category_update', ['id' => $this->id])],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('category_delete', ['id' => $this->id])],
+            ['name' => 'Cacher', 'action' => 'hide-category', 'url' => Helpers::callRoute('category_hide', ['id' => $this->id])],
         ];
 
         $this->actionsDeletedCategories = [
-            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('category_delete', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' => 'Rendre visible', 'action' => 'restore', 'class' => '', 'url' => Helpers::callRoute('category_restore', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('category_delete', ['id' => $this->id])],
+            ['name' => 'Rendre visible', 'action' => 'restore', 'class' => '', 'url' => Helpers::callRoute('category_restore', ['id' => $this->id])],
         ];
     }
 
