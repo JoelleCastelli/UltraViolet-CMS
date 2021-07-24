@@ -35,16 +35,19 @@ if(isset($errors)) {
                     <?php } ?>
                 </div>
             <?php } else { ?>
-                <div class="linkButtonElse">
-                    <a href='<?= Helpers::callRoute('article_creation') ?>'><button class='btn'>Ecrire un article</button></a>
-                </div>
-            <?php } ?>
+                <p>Aucun article</p>
+                <?php if(!Request::getUser()->isModerator()) { ?>
+                    <div class="linkButtonElse">
+                        <a href='<?= Helpers::callRoute('article_creation') ?>'><button class='btn'>Ecrire un article</button></a>
+                    </div>
+                <?php }
+            } ?>
         </div>
-        <div class="linkButton">
-            <?php if($articles) { ?>
+        <?php if($articles && !Request::getUser()->isModerator()) { ?>
+            <div class="linkButton">
                 <a href='<?= Helpers::callRoute('articles_list') ?>'><button class='btn'>Voir tous les articles</button></a>
-            <?php } ?>
-        </div>
+            </div>
+        <?php } ?>
     </div>
 
     <!--COMMENTS-->
@@ -53,31 +56,29 @@ if(isset($errors)) {
         <div id="comments">
             <?php if($comments) { ?>
                 <div id='commentsList'>
-                    <?php 
-                        foreach ($comments as $comment) { 
-                            if (!$comment->getDeletedAt(!null) ) {  ?>
-                            
-                                <div class='commentCard'>
-                                    <div class="userPicture">
-                                        <img src="<?= $comment->getPerson()->getMedia()->getPath() ?>" alt="Photo de profil">
-                                    </div>
-                                    <div class="commentDetails">
-                                        <div class="commentHeader">
-                                            <span class="username">
-                                                <?= $comment->getPerson()->getPseudo() ?>
-                                            </span>
-                                            <span class="articleTitle">
-                                                <?= $comment->getArticle()->getTitle() ?>
-                                            </span>
-                                        </div>
-                                        <div class="commentPreview">
-                                            <?= $comment->getContent() ?>
-                                        </div>
-                                    </div>
-                                    <?php $comment->setActions($comment->getActions());
-                                    echo $comment->generateActionsMenu(); ?>
+                    <?php foreach ($comments as $comment) {
+                        if (!$comment->getDeletedAt(!null)) {  ?>
+                            <div class='commentCard'>
+                                <div class="userPicture">
+                                    <img src="<?= $comment->getPerson()->getMedia()->getPath() ?>" alt="Photo de profil">
                                 </div>
-                                <?php  } ?>
+                                <div class="commentDetails">
+                                    <div class="commentHeader">
+                                        <span class="username">
+                                            <?= $comment->getPerson()->getPseudo() ?>
+                                        </span>
+                                        <span class="articleTitle">
+                                            <?= $comment->getArticle()->getTitle() ?>
+                                        </span>
+                                    </div>
+                                    <div class="commentPreview">
+                                        <?= $comment->getContent() ?>
+                                    </div>
+                                </div>
+                                <?php $comment->setActions($comment->getActions());
+                                echo $comment->generateActionsMenu(); ?>
+                            </div>
+                        <?php } ?>
                     <?php } ?>
                 </div>
             <?php } else { ?>
@@ -85,9 +86,9 @@ if(isset($errors)) {
             <?php } ?>
         </div>
         <?php if($comments) { ?>
-        <div class="linkButton">
-            <a href='<?= Helpers::callRoute('comments_list') ?>'><button class='btn'>Voir tous les commentaires</button></a>
-        </div>
+            <div class="linkButton">
+                <a href='<?= Helpers::callRoute('comments_list') ?>'><button class='btn'>Voir tous les commentaires</button></a>
+            </div>
         <?php } ?>
     </div>
 
@@ -118,17 +119,20 @@ if(isset($errors)) {
                             </div>
                         </div>
                     <?php } ?>
+                </div>
+                <?php if($productions && !Request::getUser()->isModerator()) { ?>
+                    <div class="linkButton">
+                        <a href='<?= Helpers::callRoute('productions_list') ?>'><button class='btn'>Voir toutes les productions</button></a>
                     </div>
-                </div>
-            </div>
-                <div class="linkButton">
-                    <a href='<?= Helpers::callRoute('productions_list') ?>'><button class='btn'>Voir toutes les productions</button></a>
-                </div>
-            <?php } else { ?>
-                <div class="linkButtonElse">
-                    <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
-                </div>
-            <?php } ?>
+                <?php }
+            } else { ?>
+                <p>Aucune production</p>
+                <?php if(!Request::getUser()->isModerator()) { ?>
+                    <div class="linkButtonElse">
+                        <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
+                    </div>
+                <?php }
+            } ?>
         </div>
     </div>
 
@@ -171,7 +175,9 @@ if(isset($errors)) {
                 </div>
             </div>
         </div>
-        <div class="linkButton">
-            <a href='<?= Helpers::callRoute('stats') ?>'><button class='btn'>Voir toutes les statistiques</button></a>
-        </div>
+        <?php if($productions && !Request::getUser()->isModerator()) { ?>
+            <div class="linkButton">
+                <a href='<?= Helpers::callRoute('stats') ?>'><button class='btn'>Voir toutes les statistiques</button></a>
+            </div>
+        <?php } ?>
 </div>
