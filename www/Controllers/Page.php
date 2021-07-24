@@ -247,7 +247,7 @@ class Page
             ($_POST['state'] === "hidden" || $_POST['state'] === "draft" ) && 
             !empty($page->findOneBy('id', $_POST['id']))))){
 
-            $response['message'] = "Une erreur est survenu";
+            $response['message'] = "Une erreur est survenue";
             $response['success'] = false;
         }
 
