@@ -94,7 +94,7 @@ if(isset($errors)) {
     <!--PRODUCTIONS-->
     <div class="card">
         <div class="cardTitle">Dernières productions</div>
-        <div id="productions">
+            <div id="productions">
             <?php if($productions) { ?>
                 <div id='productionsList'>
                     <?php foreach ($productions as $production) { ?>
@@ -118,6 +118,7 @@ if(isset($errors)) {
                             </div>
                         </div>
                     <?php } ?>
+                    </div>
                 </div>
             </div>
                 <div class="linkButton">
@@ -128,6 +129,7 @@ if(isset($errors)) {
                     <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
                 </div>
             <?php } ?>
+        </div>
     </div>
 
     <!--STATISTICS-->
