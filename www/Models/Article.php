@@ -25,7 +25,7 @@ class Article extends Database implements JsonSerializable
     protected $description;
     protected $content;
     protected $slug;
-    protected $totalViews;
+    private $totalViews;
     protected $contentUpdatedAt;
     protected $publicationDate;
     protected $mediaId;
