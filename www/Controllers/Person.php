@@ -264,6 +264,11 @@ class Person
                                 $mail->sendMail($to, $from, $name, $subj, $msg);
 
                                 $user->save();
+
+                                // Message in cookie instead of session because it's destroyed during logout
+                                setcookie('new-mail', "Vos informations ont bien été mises à jour.
+                                Un e-mail vous a été envoyé pour confirmer votre nouvelle adresse");
+                                $this->logoutAction();
                             }
                             Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
                             Helpers::namedRedirect('user_update');
