@@ -11,12 +11,12 @@ if(isset($errors)) {
 <div id="statistics">
 
     <div class="card">
-        <div class="cardTitle">Statisque du jour</div>
+        <div class="cardTitle">Statistiques du jour</div>
         <div id="statToDay">
             <div id='statToDayList'>
                 <div class='statToDayCard'>
                     <span class="title">
-                        Total d'articles du jour
+                        Articles publiés
                     </span>
                     <span class="stat">
                         <?= $nbToDayArticles ?>
@@ -24,7 +24,7 @@ if(isset($errors)) {
                 </div>
                 <div class='statToDayCard'>
                     <span class="title">
-                        Total de commentaires du jour
+                        Commentaires publiés
                     </span>
                     <span class="stat">
                         <?= $nbToDayComments ?>
@@ -32,7 +32,7 @@ if(isset($errors)) {
                 </div>
                 <div class='statToDayCard'>
                     <span class="title">
-                        Total d'utilisateurs du jour
+                        Nouveaux utilisateurs
                     </span>
                     <span class="stat">
                         <?= $nbToDayUsers ?>
@@ -40,7 +40,7 @@ if(isset($errors)) {
                 </div>
                 <div class='statToDayCard'>
                     <span class="title">
-                        Total de vues du jour
+                        Vues totales
                     </span>
                     <span class="stat">
                         <?= $nbToDayViews ?>
@@ -51,12 +51,12 @@ if(isset($errors)) {
     </div>
 
     <div class="card">
-        <div class="cardTitle">Statistiques</div>
+        <div class="cardTitle">Statistiques totales</div>
         <div id="statistics">
             <div id='statisticsList'>
                 <div class='statisticsCard'>
                     <span class="title">
-                        Total d'articles
+                        Articles publiés
                     </span>
                     <span class="stat">
                         <?= $nbArticles ?>
@@ -64,7 +64,7 @@ if(isset($errors)) {
                 </div>
                 <div class='statisticsCard'>
                     <span class="title">
-                        Total de commentaires
+                        Commentaires publiés
                     </span>
                     <span class="stat">
                         <?= $nbComments ?>
@@ -72,7 +72,7 @@ if(isset($errors)) {
                 </div>
                 <div class='statisticsCard'>
                     <span class="title">
-                        Total d'utilisateurs
+                        Utilisateurs
                     </span>
                     <span class="stat">
                         <?= $nbUsers ?>
@@ -80,7 +80,7 @@ if(isset($errors)) {
                 </div>
                 <div class='statisticsCard'>
                     <span class="title">
-                        Total de vues
+                        Vues totales
                     </span>
                     <span class="stat">
                         <?= $nbViews ?>
