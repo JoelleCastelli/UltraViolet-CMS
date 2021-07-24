@@ -50,7 +50,9 @@ class Main
 	public function getLatestArticles($limit): array
     {
         $articles = new Article();
-        return $articles->select()->where('deletedAt', "NULL")->andWhere('publicationDate', 'NOT NULL')
+        return $articles->select()->where('deletedAt', "NULL")
+            ->andWhere('publicationDate', 'NOT NULL')
+            ->andWhere('publicationDate', 'NOW', '<=')
             ->orderBy('publicationDate', 'DESC')->limit($limit)->get();
     }
 

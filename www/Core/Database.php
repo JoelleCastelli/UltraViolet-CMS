@@ -182,6 +182,8 @@ class Database {
             $this->query .= 'AND `' . $column . '` IS NOT NULL ';
         } else if ($value == "NULL") {
             $this->query .= 'AND `' . $column . '` IS NULL ';
+        } else if ($value == "NOW") {
+            $this->query .= 'AND `' . $column . '` '.$equal.' NOW() ';
         } else {
             $this->query .= 'AND `' . $column . '` ' . $equal . ' "' . htmlspecialchars($value, ENT_QUOTES) . '" ';
         }
@@ -332,11 +334,12 @@ class Database {
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
                 $tag = in_array($action['action'], ['delete', 'update-state']) ? "span" : "a";
-                $class = $action['class'] ?? $action['action'];
-                if($tag === 'a')
-                    $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</$tag>";
-                else
+                if($tag === 'a') {
+                    $target = $action['action'] == 'go_to' ? 'target=_blank' : '';
+                    $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."' $target>".$action['name']."</$tag>";
+                } else {
                     $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . " clickable-tag' >" . $action['name'] . "</$tag>";
+                }
             }
         }
         $actions .= "</div></div>";

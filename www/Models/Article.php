@@ -48,8 +48,11 @@ class Article extends Database implements JsonSerializable
         $this->person = new Person;
         $this->actions = [
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('article_update', ['id' => $this->id])],
-            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('article_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('article_delete', ['id' => $this->id])],
         ];
+        if($this->publicationDate && $this->publicationDate <= date('Y-m-d H:i:s') && $this->deletedAt == null) {
+            $this->actions[] = ['name' => 'Consulter', 'action' => 'go_to', 'url' => Helpers::callRoute('display_article', ['article' => $this->slug])];
+        }
     }
 
     /**
