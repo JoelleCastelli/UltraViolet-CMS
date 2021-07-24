@@ -8,6 +8,7 @@ use App\Core\Helpers;
 use App\Core\FormValidator;
 use App\Core\Request;
 use App\Models\Article as ArticleModel;
+use App\Models\ArticleHistory;
 use App\Models\Media as MediaModel;
 use App\Models\Category as CategoryModel;
 use App\Models\Comment as CommentModel;
@@ -267,6 +268,8 @@ class Article {
         $article->getCategoriesRelated();
         $article->getProductionsRelated();
 
+        $history = $this->incrementViewOnArticle($article);
+
         $view = new View('articles/article', 'front');
         $view->assign('title', $article->getTitle());
         $view->assign('description', $article->getDescription());
@@ -275,7 +278,25 @@ class Article {
         $view->assign('bodyScripts', [
             "new-comment" => PATH_TO_SCRIPTS.'bodyScripts/comments/newComments.js',
         ]);
+
         if (isset($form)) $view->assign("form", $form);
 
+    }
+
+    public function incrementViewOnArticle($article) {
+        $articleHistory = new ArticleHistory;
+
+        $history = $articleHistory->customQuery('SELECT * FROM '.DBPREFIXE.'article_history 
+        WHERE '.DBPREFIXE.'article_history.articleId = '.$article->getId().' AND cast('.DBPREFIXE.'article_history.date as date) = cast(Now() as date)')->first();
+        if($history == false){
+            $articleHistory->setViews(1);
+            $articleHistory->setDate(date('Y-m-d H:i:s'));
+            $articleHistory->setArticleId($article->getId());
+            $articleHistory->save();
+        } else {
+            $articleHistory->setID($history->getId());
+            $articleHistory->setViews($history->getViews() + 1);
+            $articleHistory->save();
+        }
     }
 }
