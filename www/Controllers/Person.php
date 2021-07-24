@@ -297,7 +297,7 @@ class Person
                     // If old password is correct
                     if (empty($errors)) {
                         // Check if new password and password confirmation match
-                        if ($_POST['pwdConfirm'] !== $_POST["pwd"]) {
+                        if ($_POST['pwdConfirm'] == $_POST["pwd"]) {
                             $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                             if ($user->save()) {
                                 Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
