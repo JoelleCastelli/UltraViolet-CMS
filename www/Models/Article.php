@@ -475,6 +475,7 @@ class Article extends Database implements JsonSerializable
 
     public function articleHardDelete() {
         $categoryArticle = new CategoryArticleModel();
+        $productionArticle = new ProductionArticle();
         $articleId = $this->getId();
 
         $entries = $categoryArticle->select()->where("articleId", $articleId)->get();
@@ -485,6 +486,11 @@ class Article extends Database implements JsonSerializable
         $comments = $this->getComments();
         foreach ($comments as $comment) {
             $comment->hardDelete()->execute();
+        }
+
+        $productionEntries = $productionArticle->select()->where("articleId", $articleId)->get();
+        foreach ($productionEntries as $productionEntry) {
+            $productionEntry->hardDelete()->execute();
         }
 
         $this->hardDelete()->where("id", $articleId)->execute();
