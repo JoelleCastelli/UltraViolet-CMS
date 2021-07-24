@@ -17,19 +17,19 @@ class Person extends Database implements JsonSerializable
     use ModelsTrait;
 
     private ?int $id = null;
-    protected ?string $fullName;
-    protected ?string $pseudo;
+    protected ?string $fullName = null;
+    protected ?string $pseudo = null;
     protected string $role = 'user';
     private ?array $actions = [];
     private ?array $actionsDeletedPerson = [];
     private string $createdAt;
-    private ?string $updatedAt;
-    protected ?string $deletedAt;
+    private ?string $updatedAt = null;
+    protected ?string $deletedAt = null;
 
     // User-related
-    protected ?string $email;
-    protected ?string $emailKey;
-    protected ?string $password;
+    protected ?string $email = null;
+    protected ?string $emailKey = null;
+    protected ?string $password = null;
     protected bool $emailConfirmed = false;
     protected bool $optin = true;
 
