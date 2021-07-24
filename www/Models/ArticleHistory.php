@@ -5,9 +5,12 @@ namespace App\Models;
 
 
 use App\Core\Database;
+use App\Core\Traits\ModelsTrait;
 
 class ArticleHistory extends Database
 {
+    use ModelsTrait;
+
     private ?int $id = null;
     protected int $views;
     protected string $date;
@@ -16,14 +19,6 @@ class ArticleHistory extends Database
     public function __construct()
     {
         parent::__construct();
-    }
-
-    /**
-     * @param int|null $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
