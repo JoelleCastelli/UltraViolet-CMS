@@ -499,6 +499,7 @@ class Article extends Database implements JsonSerializable
 
     public function articleHardDelete() {
         $categoryArticle = new CategoryArticleModel();
+        $productionArticle = new ProductionArticle();
         $articleId = $this->getId();
 
         $entries = $categoryArticle->select()->where("articleId", $articleId)->get();
@@ -509,6 +510,11 @@ class Article extends Database implements JsonSerializable
         $comments = $this->getComments();
         foreach ($comments as $comment) {
             $comment->hardDelete()->execute();
+        }
+
+        $productionEntries = $productionArticle->select()->where("articleId", $articleId)->get();
+        foreach ($productionEntries as $productionEntry) {
+            $productionEntry->hardDelete()->execute();
         }
 
         $this->hardDelete()->where("id", $articleId)->execute();
@@ -780,7 +786,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "media" => [
                     "type" => "text",
-                    "label" => "Illustration de l'article",
+                    "label" => "Illustration de l'article *",
                     "class" => "search-bar",
                     "readonly" => true,
                     "value" => $mediaTitle,
@@ -796,7 +802,7 @@ class Article extends Database implements JsonSerializable
                 "content" => [
                     "id" => "articleContent",
                     "type" => "textarea",
-                    "label" => "Contenu de l'article",
+                    "label" => "Contenu de l'article *",
                     "minLength" => 2,
                     "class" => "input",
                     "error" => "Le contenu de l'article doit comprendre au minimum 2 caractères",

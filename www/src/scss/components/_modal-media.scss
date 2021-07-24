@@ -16,7 +16,8 @@
   align-items: center;
 }
 
-.modal-media {
+.modal-media,
+modal-production-details {
   background: white;
   z-index: 120;
   position: relative;
@@ -55,4 +56,105 @@
     cursor: pointer;
     transform: scale(0.9);
   }
+}
+
+.prod {
+  height: 100%;
+  display: grid;
+  grid-template-columns: min-content 3fr;
+  grid-template-rows: repeat(5, min-content);
+  grid-template-areas:
+    "prod-cover prod-details"
+    "actors actors"
+    "directors directors"
+    "writers writers"
+    "creators creators";
+
+  background: white;
+  z-index: 120;
+  position: relative;
+  width: 85%;
+  height: 85%;
+  border-radius: 15px;
+  padding: 2rem;
+  overflow: auto;
+
+  &__cover {
+    grid-area: prod-cover;
+    object-fit: cover;
+  }
+
+  &__details {
+    padding: 0 1rem 0 1rem;
+    grid-area: prod-details;
+    display: flex;
+    flex-flow: column;
+
+    * {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  &__actors {
+    position: relative;
+    grid-area: actors;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 4rem;
+  }
+
+  &__directors {
+    position: relative;
+    padding-top: 4rem;
+    grid-area: directors;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__writers {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding-top: 4rem;
+    grid-area: writers;
+  }
+
+  &__creators {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding-top: 4rem;
+    grid-area: creators;
+  }
+}
+
+.production {
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: $grey3;
+    transform: scale(1.01);
+  }
+}
+
+.little-thumbnail {
+  object-fit: cover;
+  width: 8vw;
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+.prod-modal-title {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateY(50%) translateX(-50%);
+}
+
+.person-card {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 }

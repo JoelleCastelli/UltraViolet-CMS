@@ -131,14 +131,13 @@ $(document).ready(function () {
 
   const inputProd = document.querySelector("#production");
   const modalProd = document.querySelector(".background-modal-production");
-  // const removeBGProduction = document.querySelector(".clickable-bg");
+  const removeBGProduction = document.querySelector(".clickable-bg");
 
- /*  inputProd.addEventListener("click", (e) => {
+  inputProd.addEventListener("click", (e) => {
     modalProd.classList.add("visible");
-  }); */
+  });
 
- /*  removeBGProduction.addEventListener("click", (e) => {
+  removeBGProduction.addEventListener("click", (e) => {
     modalProd.classList.remove("visible");
-  }); */
-
+  });
 });
