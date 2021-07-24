@@ -35,6 +35,7 @@ class Comment extends Database {
         $this->person = new Person();
         $this->actions = [
             ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('comments_delete', ['id' => $this->id])],
+            ['name' => "Voir l'article", 'action' => 'go_to', 'url' => Helpers::callRoute('display_article', ['article' => $this->getArticle()->getSlug()])],
         ];
 
         $this->actionsdeletedcomment = [
