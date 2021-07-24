@@ -119,13 +119,13 @@ class Installer
                         Helpers::setFlashMessage('error', "Erreur dans la création des tables dans la base de données, veuillez recommencer.");
                     }
                 }else {
-                    Helpers::setFlashMessage('error', "Erreur : votre base de données est déjà remplie, veuillez la vider merci.");
+                    Helpers::setFlashMessage('error', "Erreur : la base de données sélectionnée n'est pas vide. Veuillez la vider ou en sélectionner une autre.");
                 }
             } else {
                 Helpers::setFlashMessage('error', "Erreur dans l'écriture du script SQL personnalisé, veuillez recommencer.");
             }
         } else {
-            Helpers::setFlashMessage('error', "Erreur dans la lecture du script SQL n'a pas pu être lu, veuillez recommencer.");
+            Helpers::setFlashMessage('error', "Erreur dans la lecture du script SQL, veuillez recommencer.");
         }
         // Back to previous page with error flash message
         Helpers::redirect(Helpers::callRoute('configStep3'));
