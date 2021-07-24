@@ -268,21 +268,25 @@ class Article {
         }
 
         $article->getCategoriesRelated();
-        $production = $article->getProductionsRelated()[0];
-        
+        if(!empty($article->getProductionsRelated()))
+            $production = $article->getProductionsRelated()[0];
 
         $history = $this->incrementViewOnArticle($article);
 
         $view = new View('articles/article', 'front');
+
+        if(!empty($production)){
+            $view->assign('production', $production);
+            $view->assign('actors', $production->getRelatedActors());
+            $view->assign('directors', $production->getRelatedDirectors());
+            $view->assign('writers', $production->getRelatedWriters());
+            $view->assign('creators', $production->getRelatedCreators());
+        }
+
         $view->assign('title', $article->getTitle());
         $view->assign('description', $article->getDescription());
         $view->assign('article', $article);
         $view->assign('comments', $article->getComments());
-        $view->assign('production', $production);
-        $view->assign('actors', $production->getRelatedActors());
-        $view->assign('directors', $production->getRelatedDirectors());
-        $view->assign('writers', $production->getRelatedWriters());
-        $view->assign('creators', $production->getRelatedCreators());
         $view->assign('bodyScripts', [
             "new-comment" => PATH_TO_SCRIPTS.'bodyScripts/comments/newComments.js',
             "production-details" => PATH_TO_SCRIPTS.'bodyScripts/articles/production-details.js',

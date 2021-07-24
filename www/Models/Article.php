@@ -243,7 +243,7 @@ class Article extends Database implements JsonSerializable
     public function getComments(): array
     {
         $comments = new Comment();
-        $this->comments = $comments->select()->where('articleId', $this->id)->get();
+        $this->comments = $comments->select()->where('articleId', $this->id)->orderBy('createdAt', 'DESC')->get();
         return $this->comments;
     }
 
