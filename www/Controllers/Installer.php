@@ -172,7 +172,7 @@ class Installer
                         // Insert first article
                         $articleId = $this->insertExampleArticle($admin->getLastInsertId());
                         // Insert first comment
-                        $this->insertExampleComment($admin->getLastInsertId(), $articleId);
+                        $this->insertExampleComment(1, 1);
                         // Move on to next step
                         Helpers::redirect(Helpers::callRoute('configStep6'));
                     } else {
