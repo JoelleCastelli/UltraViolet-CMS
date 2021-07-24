@@ -8,7 +8,7 @@
 
     <section class="article card">
         <h1 class="article__title"><?= $article->getTitle() ?></h1>
-        <small class="article__author">Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getPublicationDate() ?></small>
+        <small class="article__author">Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getCleanPublicationDate() ?></small>
         <div class="article__tags">
             <?php foreach($article->getCategories() as $category) : ?>
                 <div class="article__tags__category tag-item"><?= $category->getName() ?></div>
@@ -47,7 +47,7 @@
         <?php foreach($comments as $comment) : ?>
         <div class="comment">
             <img class="comment__profile-picture" src="<?=PATH_TO_IMG?>default_user.jpg"></img>
-            <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?> le <?= $comment->getCreatedAt() ?></h3>
+            <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?> le <?= $comment->getCleanCreationDate() ?></h3>
             <p class="comment__content"><?= $comment->getContent() ?></p>
         </div>
         <?php endforeach; ?>
