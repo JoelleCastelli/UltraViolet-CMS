@@ -1,3 +1,15 @@
+# GLOBAL
+admin:
+  path: /admin
+  controller: Main
+  action: default
+  middleware: Moderator
+
+routes:
+  path: /admin/routes
+  controller: Main
+  action: getRoute
+
 #CONFIG
 configStep1:
   path: /installation/introduction
@@ -28,20 +40,6 @@ configStep6:
   path: /installation/conclusion
   controller: Installer
   action: step6
-
-
-# GLOBAL
-admin:
-  path: /admin
-  controller: Main
-  action: default
-  middleware: Moderator
-
-routes:
-  path: /admin/routes
-  controller: Main
-  action: getRoute
-
 
 # PAGES
 pages_list:
