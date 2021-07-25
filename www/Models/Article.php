@@ -404,9 +404,9 @@ class Article extends Database implements JsonSerializable
     public function hasDuplicateSlug($title, $id = null) : bool {
         $slug = Helpers::slugify($title);
         if (empty($id))
-            $DBslug = $this->select("slug")->where("slug", $slug)->first(0);
+            $DBslug = $this->select("slug")->where("slug", $slug)->first(false);
         else 
-            $DBslug = $this->select("slug")->where("slug", $slug)->andWhere("id", $id, "!=")->first(0);
+            $DBslug = $this->select("slug")->where("slug", $slug)->andWhere("id", $id, "!=")->first(false);
 
         return !empty($DBslug);
     }
@@ -591,24 +591,24 @@ class Article extends Database implements JsonSerializable
                 "title" => [
                     "type" => "text",
                     "label" => "Titre de l'article *",
-                    "minLength" => 2,
+                    "minLength" => 1,
                     "maxLength" => 100,
                     "class" => "input search-bar",
-                    "error" => "La longueur du titre doit être comprise entre 2 et 100 caractères",
+                    "error" => "La longueur du titre doit être comprise entre 1 et 100 caractères",
                     "required" => true,
                 ],
                 "description" => [
                     "type" => "textarea",
                     "label" => "Description de l'article *",
-                    "minLength" => 2,
+                    "minLength" => 1,
                     "maxLength" => 255,
                     "class" => "input search-bar",
-                    "error" => "La longueur de la description doit être comprise entre 2 et 100 caractères",
+                    "error" => "La longueur de la description doit être comprise entre 1 et 100 caractères",
                     "required" => true,
                 ],
                 "production" => [
                     "type" => "text",
-                    "label" => "Associer prod à article",
+                    "label" => "Associer une production à l'article",
                     "class" => "search-bar",
                     "readonly" => true
                 ],
@@ -647,7 +647,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "media" => [
                     "type" => "text",
-                    "label" => "Illustration de l'article",
+                    "label" => "Illustration de l'article *",
                     "class" => "search-bar",
                     "readonly" => true
                 ],
@@ -662,11 +662,11 @@ class Article extends Database implements JsonSerializable
                  "content" => [
                      "id" => "articleContent",
                      "type" => "textarea",
-                     "label" => "Contenu de l'article",
-                     "minLength" => 2,
+                     "label" => "Contenu de l'article *",
+                     "minLength" => 1,
                      "class" => "input",
-                     "error" => "Le contenu de l'article doit comprendre au minimum 2 caractères",
-                     "required" => false,
+                     "error" => "Le contenu de l'article doit comprendre au minimum 1 caractères",
+                     "required" => true,
                  ],
             ]
         ];
