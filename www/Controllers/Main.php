@@ -324,7 +324,7 @@ class Main
         $article->setPersonId($userIDs[$key]);
         $article->save();
 
-        $article->setTitle("Ratatouille : mima miam");
+        $article->setTitle("Ratatouille : miam miam");
         $article->setSlug("dev-ratatouille");
         $key = array_rand($userIDs);
         $article->setPersonId($userIDs[$key]);
