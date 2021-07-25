@@ -119,7 +119,11 @@ class Main
 	}
 
 	public function frontHomeAction(){
+        $article = new Article;
+        $articles = $article->select()->where('deletedAt', "NULL")->andWhere('publicationDate', date("Y-m-d H:i:s"), "<=")->orderBy('publicationDate', 'DESC')->limit()->get();
+
         $view = new View("home", "front");
+        $view->assign('articles', $articles);
     }
 
     public function generateSitemapAction() {
