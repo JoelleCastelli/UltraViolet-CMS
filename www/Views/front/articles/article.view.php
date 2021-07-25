@@ -51,7 +51,7 @@ use App\Core\Helpers; ?>
         <?php foreach ($comments as $comment) : ?>
             <div class="comment">
                 <img class="comment__profile-picture" src="<?= PATH_TO_IMG ?>default_user.jpg"></img>
-                <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?> le <?= $comment->getCleanCreationDate() ?></h3>
+                <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?? "Anonyme" ?> le <?= $comment->getCleanCreationDate() ?></h3>
                 <p class="comment__content"><?= $comment->getContent() ?></p>
             </div>
         <?php endforeach; ?>
