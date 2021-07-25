@@ -132,6 +132,7 @@ class Settings extends Database
                     "value" => $currentVariables['navbarBackground'],
                     "error" => "Le code couleur du menu n'est pas valable",
                     "required" => true,
+                    "max" => 160
                 ],
                 "navbarColor" => [
                     "type" => "color",
@@ -139,6 +140,7 @@ class Settings extends Database
                     "value" => $currentVariables['navbarColor'],
                     "error" => "Le code couleur des titres du menu n'est pas valable",
                     "required" => true,
+                    "max" => 160
                 ],
                 "footerBackground" => [
                     "type" => "color",
@@ -146,6 +148,7 @@ class Settings extends Database
                     "value" => $currentVariables['footerBackground'],
                     "error" => "Le code couleur du footer n'est pas valable",
                     "required" => true,
+                    "max" => 160
                 ],
                 "footerColor" => [
                     "type" => "color",
@@ -153,6 +156,7 @@ class Settings extends Database
                     "value" => $currentVariables['footerColor'],
                     "error" => "Le code couleur des titres du footer n'est pas valable",
                     "required" => true,
+                    "max" => 160
                 ],
                 "titleColor" => [
                     "type" => "color",
@@ -160,6 +164,7 @@ class Settings extends Database
                     "value" => $currentVariables['titleColor'],
                     "error" => "Le code couleur des titres n'est pas valable",
                     "required" => true,
+                    "max" => 160
                 ],
                 "tagsBackground" => [
                     "type" => "color",
@@ -168,6 +173,7 @@ class Settings extends Database
                     "value" => $currentVariables['tagsBackground'],
                     "error" => "La hauteur de ligne ne peut pas être intéfieure à 0.1",
                     "required" => true,
+                    "max" => 160
                 ],
                 "tagsColor" => [
                     "type" => "color",
@@ -176,6 +182,7 @@ class Settings extends Database
                     "value" => $currentVariables['tagsColor'],
                     "error" => "La hauteur de ligne ne peut pas être intéfieure à 0.1",
                     "required" => true,
+                    "max" => 160
                 ],
                 "fontFamily" => [
                     "type" => "select",
@@ -217,8 +224,9 @@ class Settings extends Database
                     "value" => $currentVariables['customHeight'],
                     "min" => "0",
                     "step" => "0.1",
-                    "error" => "La hauteur de ligne ne peut pas être inférieure à 0.1",
+                    "error" => "La hauteur de ligne ne peut pas être inférieure à 0.1 ni supérieur à 5",
                     "required" => true,
+                    "max" => "5"
                 ],
                 "customSize" => [
                     "type" => "number",
@@ -226,7 +234,8 @@ class Settings extends Database
                     "class" => "search-bar",
                     "value" => $currentVariables['customSize'],
                     "min" => "5",
-                    "error" => "La taille de la police ne peut pas être inférieure à 5",
+                    "max" => "1000",
+                    "error" => "La taille de la police ne peut pas être inférieure à 5 ni supérieur à 1000",
                     "required" => true,
                 ],
                 "csrfToken" => [
