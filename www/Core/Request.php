@@ -28,6 +28,9 @@ class Request {
         if(isset($_SESSION['user_id'])) {
             if(isset($_SESSION['user_id']) && self::$user->findOneBy('id', $_SESSION['user_id'])) {
                 self::$user = self::$user->findOneBy('id', $_SESSION['user_id']);
+            }elseif(isset($_SESSION['user_id']) && !self::$user->findOneBy('id', $_SESSION['user_id'])) {
+                session_destroy();
+                Helpers::namedRedirect('logout');
             }
         }
     }
