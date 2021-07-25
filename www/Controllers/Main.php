@@ -189,12 +189,23 @@ class Main
     }
 
     public function populateDatabaseAction(){
+        
+        if (ENV === "dev") {
 
-        $this->populateUsers();
-        $this->populateArticles();
-        $this->populateComments();
-        $this->populateArticlesHistory(); 
-        $this->populateArticleCategory();
+            $settings = Helpers::readConfigFile();
+
+            if($settings['HAS_BEEN_POPULATED'] == "false"){
+                $this->populateUsers();
+                $this->populateArticles();
+                $this->populateComments();
+                $this->populateArticlesHistory(); 
+                $this->populateArticleCategory();
+                Helpers::updateConfigField('HAS_BEEN_POPULATED', 'true');
+
+            }
+
+        }
+       Helpers::namedRedirect("front_home");
     }
 
     private function populateUsers(){
