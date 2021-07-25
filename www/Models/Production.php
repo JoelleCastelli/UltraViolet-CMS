@@ -662,19 +662,26 @@ class Production extends Database
                         "type" => "text",
                         "class" => "search-bar",
                         "value" => $production->getTitle(),
-                        "label" => "Titre :"
+                        "label" => "Titre :",
+                        "maxLength" => "100",
+                        "error" => "La taille maximal du titre doit être de 100 caractères"
                     ],
                     "originalTitle" => [
                         "type" => "text",
                         "class" => "search-bar",
                         "value" => $production->getOriginalTitle(),
-                        "label" => "Titre original :"
+                        "label" => "Titre original :",
+                        "maxLength" => 100,
+                        "error" => "La taille maximal du titre doit être de 100 caractères"
                     ],
                     "runtime" => [
                         "type" => "number",
                         "class" => "search-bar",
                         "label" => "Durée (en minutes) :",
                         "value" => $production->getRuntime(),
+                        "max" => 99999,
+                        "min" => 1,
+                        "error" => "La taille de la durée du film est de maximum 99999 minutes et minimum 1 minute"
                     ],
                     "releaseDate" => [
                         "type" => "date",
@@ -687,8 +694,8 @@ class Production extends Database
                         "class" => "search-bar",
                         "value" => $production->getOverview(),
                         "label" => "Résumé :",
-                        "maxLength" => 1000,
-                        "error" => "Le résumé ne peut pas dépasser 1000 caractères"
+                        "maxLength" => 30000,
+                        "error" => "Le résumé ne peut pas dépasser 30000 caractères"
                     ],
                     "csrfToken" => [
                         "type" => "hidden",
