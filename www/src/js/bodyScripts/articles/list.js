@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     columnDefs: [
       {
-        targets: 6,
+        targets: 7,
         data: "name",
         searchable: false,
         orderable: false,
