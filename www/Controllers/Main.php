@@ -26,7 +26,7 @@ class Main
         $view->assign('articles', $articles);
 
         // Get last 3 comments
-        $comments = $this->getLatestComments(4);
+        $comments = $this->getLatestComments(3);
         $view->assign('comments', $comments);
 
         // Get last 4 productions
@@ -44,7 +44,6 @@ class Main
 
         $nbViews = $this->getNbViews();
         $view->assign('nbViews', $nbViews);
-
 
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
 	}
@@ -86,7 +85,7 @@ class Main
     public function getLatestComments($limit): array
     {
         $comments = new Comment();
-        return $comments->select()->orderBy('createdAt', 'DESC')->limit($limit)->get();
+        return $comments->select()->where("deletedAt", 'NULL')->orderBy('createdAt', 'DESC')->limit($limit)->get();
     }
 
     public function getLatestProductions($limit): array
