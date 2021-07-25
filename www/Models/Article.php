@@ -500,24 +500,33 @@ class Article extends Database implements JsonSerializable
     public function articleHardDelete() {
         $categoryArticle = new CategoryArticleModel();
         $productionArticle = new ProductionArticle();
+        $articleHistory = new ArticleHistory();
         $articleId = $this->getId();
 
+        // delete article related
         $entries = $categoryArticle->select()->where("articleId", $articleId)->get();
         foreach ($entries as $entry) {
             $entry->hardDelete()->execute();
         }
 
+        // delete comments related
         $comments = $this->getComments();
         foreach ($comments as $comment) {
             $comment->hardDelete()->execute();
         }
-
+        // delete productions related
         $productionEntries = $productionArticle->select()->where("articleId", $articleId)->get();
         foreach ($productionEntries as $productionEntry) {
             $productionEntry->hardDelete()->execute();
         }
 
-        $this->hardDelete()->where("id", $articleId)->execute();
+        // delete article_history related
+        $articleHistories = $articleHistory->select()->where("articleId", $articleId)->get();
+        foreach ($articleHistories as $articleHistory) {
+            $articleHistory->hardDelete()->execute();
+        }
+
+       $this->hardDelete()->where("id", $articleId)->execute();
     }
 
     public function getLastInsertId(): string

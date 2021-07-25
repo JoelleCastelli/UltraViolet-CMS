@@ -228,9 +228,19 @@ class Article {
         if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
-        $article->setId($_POST["id"]);
+        if(!empty($article->findOneBy('id', $_POST["id"]))){
 
-        $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
+            $article->setId($_POST["id"]);
+            $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
+
+            $response['success'] = true;
+            $response['id'] = $_POST["id"];
+
+        }else{
+            $response['success'] = false;
+        }
+
+        echo json_encode($response);
     }
 
     /***************** */

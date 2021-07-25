@@ -79,8 +79,7 @@ $(document).ready(function () {
         table.rows.add(response.articles).draw();
       },
       error: function (response) {
-        console.log("Erreur dans la récupération des articles");
-        console.log(response);
+        alert("Erreur dans la récupération des articles");
       },
     });
   }
@@ -95,13 +94,13 @@ $(document).ready(function () {
         type: "POST",
         url: callRoute("article_delete"),
         data: { id: id },
-        success: function () {
-          row.remove().draw();
+        dataType: 'json',
+        success: function (response) {
+          if(response['success'] && response['id'] == id)
+            row.remove().draw();
         },
         error: function () {
-          $(".header").after(
-            "Erreur : impossible de supprimer l'article avec l'ID suivant " + id
-          );
+          alert("Erreur : impossible de supprimer l'article avec l'ID suivant " + id);
         },
       });
     }

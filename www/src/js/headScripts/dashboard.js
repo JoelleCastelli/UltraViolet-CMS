@@ -7,9 +7,12 @@ $('.articleCard .delete').click(function() {
             type: "POST",
             url: callRoute("article_delete"),
             data: { id: id },
-            success: function () {
-                let divId = '#article-' + id;
-                $(divId).remove();
+            dataType: "json",
+            success: function (response) {
+                if(response['success'] && response['id'] == id){
+                    let divId = '#article-' + id;
+                    $(divId).remove();
+                }
             },
             error: function () {
                 alert("Erreur : impossible de supprimer l'article avec l'ID suivant :  " + id)
