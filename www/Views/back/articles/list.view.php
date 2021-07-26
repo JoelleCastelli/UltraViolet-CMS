@@ -22,8 +22,8 @@
             <th>Auteur</th>
             <th>Vues</th>
             <th>Commentaires</th>
-            <th>Date creation</th>
-            <th>Date publication</th>
+            <th>Création</th>
+            <th>Publication</th>
             <th>Actions</th>
         </tr>
     </thead>

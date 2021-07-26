@@ -10,8 +10,8 @@ $(document).ready(function () {
       { data: "Auteur" },
       { data: "Vues" },
       { data: "Commentaire" },
-      { data: "Date creation" },
-      { data: "Date publication" },
+      { data: "Création" },
+      { data: "Publication" },
       { data: "Actions" },
     ],
 

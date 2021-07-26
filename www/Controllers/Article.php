@@ -213,8 +213,8 @@ class Article {
                 "Auteur" => $article->getPerson()->getPseudo(),
                 "Vues" => $article->getTotalViews(),
                 "Commentaire" => count($article->getComments()),
-                "Date creation" => $article->getCleanCreatedAt(),
-                "Date publication" => $article->getCleanPublicationDate(),
+                "Création" => $article->getCleanCreatedAt(),
+                "Publication" => $article->getCleanPublicationDate(),
                 "Actions" => $article->generateActionsMenu()
             ];
         }

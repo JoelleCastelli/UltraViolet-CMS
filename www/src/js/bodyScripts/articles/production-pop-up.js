@@ -101,10 +101,7 @@ $(document).ready(function () {
     mediaCTAs.forEach((cta) => {
       cta.addEventListener("click", (e) => {
         const media = e.target.innerHTML;
-        console.log("nom du production get : " + media);
-
         inputProd.value = media;
-        console.log(inputProd.value);
         modalProd.classList.toggle("visible");
       });
     });
