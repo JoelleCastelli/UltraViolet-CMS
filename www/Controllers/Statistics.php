@@ -43,7 +43,7 @@ class Statistics
         $articleHistory = $this->getViewsArticles();
         $view->assign('articleHistory', $articleHistory);
 
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/statistics/chart.js']);
 	}
  
     public function getNbToDayArticles()
@@ -108,6 +108,15 @@ class Statistics
     {
         $articleHistory = new ArticleHistory();
         return $articleHistory->select()->orderBy('views', 'DESC')->get();
+    }
+
+    public function getViewsGraph()
+    {
+        $articleHistory = new ArticleHistory();
+        $subDay = date('Y-m-d', strtotime('today - 30 days'));
+        $dateNow = date('Y-m-d H:i:s');
+        return $articleHistory->select('articleId')->whereBetween('date', $subDay, $dateNow)
+            ->orderBy('date', 'ASC')->get();
     }
 
 }
