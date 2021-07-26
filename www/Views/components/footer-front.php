@@ -14,14 +14,14 @@
     </article>
 
     <div class="path-section">
-        <article class="footerColor">
+        <article>
             <?php foreach ($pages as $page) : ?>
-                <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
+                <a class="footerColor" href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
             <?php endforeach; ?>
         </article>
 
         <article class="footerColor">
-            <p>©2021 Ultraviolet technologies Inc.</p>
+            <p>©2021 UltraViolet Technologies Inc.</p>
             <p>Ce site est protégé par Joëlle CASTELLI. Par ailleurs, la Politique de confidentialité et les Conditions d'utilisation de Joëlle s'appliquent.</p>
         </article>
     </div>

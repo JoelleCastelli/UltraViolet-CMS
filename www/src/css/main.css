@@ -165,10 +165,6 @@ a:focus {
     color: initial;
 }
 
-a:hover {
-    color: #4622ab;
-}
-
 a:active {
     color: initial;
 }
@@ -1154,16 +1150,7 @@ textarea-comment {
 }
 
 #footer-front .path-section article a {
-    text-decoration: none;
-    color: whitesmoke;
-    border: solid 2px #000d28;
-    border-radius: 50px;
     padding: 0.5rem;
-}
-
-#footer-front .path-section article a:hover {
-    transition: 0.3s ease-in-out;
-    border: solid 2px #3751ff;
 }
 
 .header {
