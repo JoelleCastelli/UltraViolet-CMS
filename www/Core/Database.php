@@ -196,6 +196,12 @@ class Database {
         return $this;
     }
 
+    public function whereBetween($column, $value1, $value2): Database
+    {
+        $this->query .= 'WHERE `' . $column . '` BETWEEN "' . $value1 . '" AND "' . $value2 . '" ';
+        return $this;
+    }
+
     //JOINS
     public function innerJoin($table, $statement): Database
     {
