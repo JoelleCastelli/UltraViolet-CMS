@@ -23,7 +23,7 @@ $appName = $appName->findOneBy('selector', 'appName')->getValue();
     
 
     <?php if (!empty($categoriesNavbar['other'])) : ?>
-        <div id='otherCategories' class="dropdown dropdown-button">
+        <div id='otherCategories' class="dropdown dropdown-button navbarColor">
             <span>Toutes les catégories</span>
             <div class="dropdown-content">
                 <?php foreach ($categoriesNavbar['other']  as $otherCategory) : ?>
