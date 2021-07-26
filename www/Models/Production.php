@@ -875,4 +875,11 @@ class Production extends Database
         return PATH_TO_IMG.'default_poster.jpg';
     }
 
+    public function getLastInsertId(): string
+    {
+        $latestProduction = new Production();
+        $latestProduction = $latestProduction->select()->orderby('id', 'DESC')->first();
+        return $latestProduction->id;
+    }
+
 }

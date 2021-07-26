@@ -334,9 +334,4 @@ class Database {
         return $actions;
     }
 
-    public function getLastInsertId(): string
-    {
-        return $this->pdo->lastInsertId();
-    }
-
 }

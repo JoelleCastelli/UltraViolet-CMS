@@ -383,6 +383,13 @@ class Person extends Database implements JsonSerializable
         }
     }
 
+    public function getLastInsertId(): string
+    {
+        $latestPerson = new Person();
+        $latestPerson = $latestPerson->select()->orderby('id', 'DESC')->first();
+        return $latestPerson->id;
+    }
+
     public function formBuilderLogin(): array {
         return [
             "config" => [

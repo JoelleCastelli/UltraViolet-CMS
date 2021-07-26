@@ -520,6 +520,13 @@ class Article extends Database implements JsonSerializable
         $this->hardDelete()->where("id", $articleId)->execute();
     }
 
+    public function getLastInsertId(): string
+    {
+        $lastArticle = new Article();
+        $lastArticle = $lastArticle->select()->orderby('id', 'DESC')->first();
+        return $lastArticle->id;
+    }
+
     // JSON FORMAT
     public function jsonSerialize(): array
     {
