@@ -94,18 +94,18 @@ class Settings extends Database
     }
 
     public static function getAppName() {
-        $appName = new Settings();
-        return $appName->findOneBy('selector', 'appName')->getValue();
+        $settings = new Settings();
+        return $settings->findOneBy('selector', 'appName')->getValue();
     }
 
     public static function getMetaTitle() {
-        $appName = new Settings();
-        return $appName->findOneBy('selector', 'metaTitle')->getValue();
+        $settings = new Settings();
+        return $settings->findOneBy('selector', 'metaTitle')->getValue();
     }
 
     public static function getMetaDescription() {
-        $appName = new Settings();
-        return $appName->findOneBy('selector', 'metaDescription')->getValue();
+        $settings = new Settings();
+        return $settings->findOneBy('selector', 'metaDescription')->getValue();
     }
 
 
