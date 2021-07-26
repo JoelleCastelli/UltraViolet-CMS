@@ -51,7 +51,16 @@ if(isset($errors)) {
     </div>
 
     <div class="card">
-        <div class="cardTitle">Statistiques totales</div>
+        <div class="cardTitle">Graphique du nombre de vue par jour</div>
+        <div id="statChart">
+            <div id="graph-container-view">
+                <canvas id="viewResults" class="chart-js" data-data="" data-name="view" data-type="line"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="cardTitle">Statistiques</div>
         <div id="statistics">
             <div id='statisticsList'>
                 <div class='statisticsCard'>
