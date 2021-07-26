@@ -54,7 +54,11 @@ class Article {
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
             
             if(!empty($_POST["production"])){
-                $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
+                // get id between parenthesis
+                $matches = preg_split("/[\(\)]/", $_POST["production"], -1, PREG_SPLIT_NO_EMPTY);
+                $id = $matches[count($matches) - 1];
+
+                $productionId = $production->select("id")->where("id", htmlspecialchars($id))->first(false);
                 if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
             }
             if (empty($errors)) {
@@ -134,7 +138,11 @@ class Article {
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
             if (!empty($_POST["production"])) {
-                $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
+                // get id between parenthesis
+                $matches = preg_split("/[\(\)]/", $_POST["production"], -1, PREG_SPLIT_NO_EMPTY);
+                $id = $matches[count($matches) - 1];
+
+                $productionId = $production->select("id")->where("title", $id)->first(0);
                 if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
             }
 

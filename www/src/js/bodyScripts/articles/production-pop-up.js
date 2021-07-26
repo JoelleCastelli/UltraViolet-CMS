@@ -7,6 +7,8 @@ $(document).ready(function () {
     columns: [
       { data: "Miniature" },
       { data: "Titre" },
+      { data: "Identifiant" },
+     
       { data: "Titre original" },
       { data: "Saison" },
       { data: "Série" },
@@ -19,22 +21,20 @@ $(document).ready(function () {
     scrollCollapse: true,
 
     columnDefs: [
-      { className: "production-name-cta", targets: [1] },
       {
-        targets: 8, // Actions column
+        targets: 0,
         data: "name",
         searchable: false,
         orderable: false,
       },
-      { width: "12%", targets: 0 },
-      { width: "12%", targets: 1 },
-      { width: "12%", targets: 2 },
-      { width: "12%", targets: 3 },
-      { width: "12%", targets: 4 },
-      { width: "12%", targets: 5 },
-      { width: "12%", targets: 6 },
-      { width: "12%", targets: 7 },
-      { width: "5%", targets: 8 },
+      {
+        targets: 1,
+        className: "production-name-cta",
+      },
+      {
+        targets: 2,
+        className: "production-id-cta",
+      },
     ],
 
     language: {
@@ -71,9 +71,9 @@ $(document).ready(function () {
   /* FILTERS */
   // On start, display movies
   getProductionsByType("movie");
+  tableProd.columns([0, 1, 2]).visible(true); //thumbnail, title, id
+  tableProd.columns([3, 4, 5, 6, 7, 8, 9 ]).visible(false);
 
-  tableProd.columns([3]).visible(false); // season
-  tableProd.columns([4]).visible(false); // series
   // Display different types on filtering button click
   $(".filtering-btn").click(function () {
     $(".filtering-btn").removeClass("active");
@@ -82,7 +82,13 @@ $(document).ready(function () {
 
     switch (this.id) {
       case "season":
-        tableProd.columns([2]).visible(false); //original title
+/*         tableProd.columns([2]).visible(false); //original title
+        tableProd.columns([3]).visible(false); // season
+        tableProd.columns([4]).visible(true); // series */
+
+        tableProd.columns([1]).visible(true); //thumbnail
+        tableProd.columns([2]).visible(true); //title
+        tableProd.columns([1]).visible(true); //original title
         tableProd.columns([3]).visible(false); // season
         tableProd.columns([4]).visible(true); // series
         break;
@@ -91,21 +97,26 @@ $(document).ready(function () {
         tableProd.columns([4]).visible(true); // series
         break;
       default:
-        tableProd.columns([3]).visible(false); // season
-        tableProd.columns([4]).visible(false); // series
-        tableProd.columns([2]).visible(true); //original title
+        tableProd.columns([0, 1, 2]).visible(true); //thumbnail, title, id
+        tableProd.columns([3, 4, 5, 6, 7, 8, 9 ]).visible(false);
+ 
+        break;
     }
   });
   function listenRowEventsProductions() {
-    const mediaCTAs = document.querySelectorAll(".production-name-cta");
-    mediaCTAs.forEach((cta) => {
+    const prodCTAs = document.querySelectorAll(".production-name-cta");
+    
+    prodCTAs.forEach((cta) => {
       cta.addEventListener("click", (e) => {
-        const media = e.target.innerHTML;
-        inputProd.value = media;
+        idElement = e.target.parentNode.querySelector("td.production-id-cta");
+        const prod = idElement.innerHTML;
+
+        inputProd.value = e.target.innerHTML + " (" + prod + ")";
         modalProd.classList.toggle("visible");
       });
     });
   }
+
   function getProductionsByType(productionType) {
     $.ajax({
       type: "POST",
@@ -124,7 +135,6 @@ $(document).ready(function () {
   }
 
   // SEPARATE
-
   const inputProd = document.querySelector("#production");
   const modalProd = document.querySelector(".background-modal-production");
   const removeBGProduction = document.querySelector(".clickable-bg");

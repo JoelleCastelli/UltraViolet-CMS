@@ -65,7 +65,7 @@
                     <tr>
                         <th>Miniature</th>
                         <th>Nom</th>
-                        <th>Date d'ajout</th>
+                        <th>Identifiant</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
