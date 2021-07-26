@@ -1,8 +1,7 @@
 <?php use App\Core\Helpers; ?>
+<?php use App\Core\Request; ?>
 
 <div class="grid-article">
-
-
 
     <section class="article card">
         <div class="cover">
@@ -28,10 +27,10 @@
 
     <?php if (!empty($production)) :  ?>
         <section id="production-card" class="production card">
-            <img class="production__image" src="<?= $production->getProductionPosterPath() ?>"></img>
+            <img class="production__image" src="<?= $production->getProductionPosterPath() ?>">
             <h2 class="production__title"><?= $production->getTitle() ?></h2>
-            <p class="production__type tag-item"><?= $production->getType() ?></p>
-            <p class="production__release-date">Date de sortie : <?= $production->getReleaseDate() ?></p>
+            <p class="production__type tag-item"><?= $production->getTranslatedType() ?></p>
+            <p class="production__release-date">Date de sortie : <?= $production->getCleanReleaseDate() ?></p>
             <p></p>
         </section>
     <?php endif; ?>
@@ -41,24 +40,35 @@
 
         <h2 class="title-section">Commentaires</h2>
 
-        <div id="add-btn" class="title-btn">
-            <button class="btn title-btn">Commenter
-                <div class="add-btn"></div>
-            </button>
-        </div>
-
-
-        <div id="test-comment" class="test-comment">
-            <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
-        </div>
-
-        <?php foreach ($comments as $comment) : ?>
-            <div class="comment">
-                <img class="comment__profile-picture" src="<?= PATH_TO_IMG ?>default_user.jpg"></img>
-                <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?? "Anonyme" ?> le <?= $comment->getCleanCreationDate() ?></h3>
-                <p class="comment__content"><?= $comment->getContent() ?></p>
+        <!--Comment form only for logged users-->
+        <?php if(Request::getUser()->isLogged()) { ?>
+            <div id="add-btn" class="title-btn">
+                <button class="btn title-btn">Commenter
+                    <div class="add-btn"></div>
+                </button>
             </div>
-        <?php endforeach; ?>
+
+            <div id="test-comment" class="test-comment">
+                <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
+            </div>
+        <?php } else { ?>
+            <div class="noComment">
+                <a target="_blank" href="<?= Helpers::callRoute('login') ?>">Connectez-vous ou inscrivez-vous pour commenter cet article</a>
+            </div>
+        <?php } ?>
+
+        <?php
+        if(!empty($comments)) {
+            foreach ($comments as $comment) { ?>
+                <div class="comment">
+                    <img class="comment__profile-picture" src="<?= PATH_TO_IMG ?>default_user.jpg">
+                    <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?? "Anonyme" ?> le <?= $comment->getCleanCreationDate() ?></h3>
+                    <p class="comment__content"><?= $comment->getContent() ?></p>
+                </div>
+            <?php }
+        } else { ?>
+            <p>Aucun commentaire sur cet article</p>
+        <?php }?>
 
 
     </section>
@@ -73,54 +83,77 @@
         <div class="clickable-bg"></div>
         <div class="modal-production-details prod">
 
-            <img class="prod__cover" src="<?= $production->getProductionPosterPath() ?>"></img>
+            <img class="prod__cover" src="<?= $production->getProductionPosterPath() ?>">
             <article class="prod__details">
                 <h1 class="prod__details_title"><?= $production->getTitle() ?></h1>
-                <p class="prod__details_type tag-item"><?= $production->getType() ?></p>
-                <p class="prod__details_date"><?= $production->getReleaseDate() ?></p>
-                <small class="prod__details_resume"><?= $production->getOverview() ?></small>
+                <p class="prod__details_type tag-item"><b>Type :</b> <?= $production->getTranslatedType() ?></p>
+                <p class="prod__details_type"><b>Titre original :</b> <?= $production->getOriginalTitle() ?></p>
+                <p class="prod__details_date"><b>Date de sortie :</b> <?= $production->getCleanReleaseDate() ?></p>
+                <p class="prod__details_date"><b>Durée :</b> <?= $production->getRuntime() ?> minutes</p>
+                <small class="prod__details_resume"><b>Résumé :</b> <br><?= $production->getOverview() ?></small>
             </article>
 
-            <article class="prod__actors">
-                <?php if (!empty($actors)) echo '<h1 class="prod-modal-title" >Casting</h1>'; ?>
-                <?php foreach ($actors as $actor) { ?>
-                    <div class="person-card">
-                        <img class="little-thumbnail" src="<?= $actor["photo"] ?>" alt="portrait de <?= $actor["fullName"] ?>">
-                        <small><?= $actor["fullName"] ?></small>
-                        <small>alias : <?= $actor["role"] ?></small>
-                    </div>
-                <?php } ?>
-            </article>
 
-            <article class="prod__directors">
-                <?php if (!empty($directors)) echo '<h1 class="prod-modal-title" >Réalisation</h1>'; ?>
-                <?php foreach ($directors as $director) { ?>
-                    <div class="person-card">
-                        <img class="little-thumbnail" src="<?= $director["photo"] ?>" alt="portrait de <?= $director["fullName"] ?>">
-                        <small><?= $director["fullName"] ?></small>
-                    </div>
-                <?php } ?>
-            </article>
+            <?php if(!empty($actors)) { ?>
+                <article class="prod__actors">
+                    <h1 class="prod-modal-title" >Casting</h1>
+                    <?php foreach ($actors as $actor) {
+                        echo "<div class='person-card'>";
+                            if(!file_exists(getcwd().$actor["photo"]))
+                                echo "<img class='person-img' src='" . PATH_TO_IMG . "default_poster.jpg'/>";
+                            else
+                                echo "<img class='person-img' src='" . $actor["photo"] . "'/>";
+                            echo "<div class='person-name'>".$actor["fullName"]."</div>";
+                            echo "<div class='character'>".$actor["role"]."</div>";
+                        echo "</div>";
+                    } ?>
+                </article>
+            <?php } ?>
 
-            <article class="prod__writers">
-                <?php if (!empty($writers)) echo '<h1 class="prod-modal-title" >Scénario</h1>'; ?>
-                <?php foreach ($writers as $writer) { ?>
-                    <div class="person-card">
-                        <img class="little-thumbnail" src="<?= $writer["photo"] ?>" alt="">
-                        <small><?= $writer["fullName"] ?></small>
-                    </div>
-                <?php } ?>
-            </article>
+            <?php if(!empty($directors)) { ?>
+                <article class="prod__directors">
+                    <h1 class="prod-modal-title">Réalisation</h1>
+                    <?php foreach ($directors as $director) {
+                        echo "<div class='person-card'>";
+                        if(!file_exists(getcwd().$director["photo"]))
+                            echo "<img class='person-img' src='" . PATH_TO_IMG . "default_poster.jpg'/>";
+                        else
+                            echo "<img class='person-img' src='" . $director["photo"] . "'/>";
+                        echo "<div class='person-name'>".$director["fullName"]."</div>";
+                        echo "</div>";
+                    } ?>
+                </article>
+            <?php } ?>
 
-            <article class="prod__creators">
-                <?php if (!empty($creators)) echo '<h1 class="prod-modal-title" >Realisation</h1>'; ?>
-                <?php foreach ($creators as $creator) { ?>
-                    <div class="person-card">
-                        <img class="little-thumbnail" src="<?= $creator["photo"] ?>" alt="">
-                        <small><?= $creator["fullName"] ?></small>
-                    </div>
-                <?php } ?>
-            </article>
+            <?php if(!empty($writers)) { ?>
+                <article class="prod__writers">
+                    <h1 class="prod-modal-title">Scénario</h1>
+                    <?php foreach ($writers as $writer) {
+                        echo "<div class='person-card'>";
+                        if(!file_exists(getcwd().$writer["photo"]))
+                            echo "<img class='person-img' src='" . PATH_TO_IMG . "default_poster.jpg'/>";
+                        else
+                            echo "<img class='person-img' src='" . $writer["photo"] . "'/>";
+                        echo "<div class='person-name'>".$writer["fullName"]."</div>";
+                        echo "</div>";
+                    } ?>
+                </article>
+            <?php } ?>
+
+            <?php if(!empty($creators)) { ?>
+                <article class="prod__creators">
+                    <h1 class="prod-modal-title">Création</h1>
+                    <?php foreach ($creators as $creator) {
+                        echo "<div class='person-card'>";
+                        if(!file_exists(getcwd().$creator["photo"]))
+                            echo "<img class='person-img' src='" . PATH_TO_IMG . "default_poster.jpg'/>";
+                        else
+                            echo "<img class='person-img' src='" . $creator["photo"] . "'/>";
+                        echo "<div class='person-name'>".$creator["fullName"]."</div>";
+                        echo "</div>";
+                    } ?>
+                </article>
+            <?php } ?>
 
         </div>
     </div>

@@ -328,7 +328,19 @@ class Person
             $user->setId($id);
             $response = [];
 
-            if($user->isAdmin() && $user->count('email')->where('role', 'admin')->first(false) > 1){
+            
+            
+
+            if(!$user->isAdmin() ||  $user->isAdmin() && $user->count('id')->where('role', 'admin')->andWhere('deletedAt', "NULL")->first(false) > 1){
+
+                // si pas admin --> OK 
+                // si admin && count(admin) < 2      ::   1<2  VRAI
+                // si admin && count(admin) < 2      ::   2<2  FAUX
+                // si admin && count(admin) > 2      ::   1>2  FAUX
+                // si admin && count(admin) > 2      ::   2>2  FAUX
+                // si admin && count(admin) > 1      ::   2>1  VRAI
+                // si admin && count(admin) > 1      ::   1>1  FAUX
+
                 if ($user->getDeletedAt()) {
                     //HARD DELETE USER
                     //Comments HARD delete
@@ -349,6 +361,7 @@ class Person
                     //SOFT DELETE USER
                     $user->setPseudo('Anonyme' . $id);
                     $user->setEmail('anonyme' . $id . 'mail.com');
+                    $user->setRole('user');
                     $user->delete();
                 }
                 $response['message'] = "Vous aviez bien supprimer cette utilisateur";

@@ -3,7 +3,11 @@
 use App\Core\Helpers; ?>
 
 <?php if (empty($articles)) : ?>
-    <p>Aucun article associés à cette catégorie.</p>
+    <section class="article-list">
+        <article class="grid-article-card article-card">
+            <p class="article-card__description">Aucun article associé à cette catégorie.</p>
+        </article>
+    </section>
 <?php else : ?>
     <section class="article-list">
             <h1>Tous les articles de la catégorie <strong><?= $category ?></strong></h1>

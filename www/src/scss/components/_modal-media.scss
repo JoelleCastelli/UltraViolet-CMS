@@ -59,7 +59,6 @@ modal-production-details {
 }
 
 .prod {
-  height: 100%;
   display: grid;
   grid-template-columns: min-content 3fr;
   grid-template-rows: repeat(5, min-content);
@@ -79,6 +78,9 @@ modal-production-details {
   padding: 2rem;
   overflow: auto;
 
+  h1 {
+    font-size: 1.5rem;
+  }
   &__cover {
     grid-area: prod-cover;
     object-fit: cover;
@@ -90,18 +92,42 @@ modal-production-details {
     display: flex;
     flex-flow: column;
 
+    &_resume {
+      text-align: justify;
+      line-height: 1.2;
+    }
+
     * {
       padding-bottom: 0.5rem;
     }
   }
 
-  &__actors {
+  &__actors, &__creators, &__writers, &__directors {
     position: relative;
     grid-area: actors;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     padding-top: 4rem;
+
+    .person-card {
+      border-radius: 8px;
+      margin-bottom: 5px;
+      border: solid rgba(0, 0, 0, 0) 3px;
+      box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
+
+      .person-name {
+        text-align: center;
+        padding-bottom: 5px;
+      }
+      .character {
+        font-style: italic;
+      }
+      .person-img {
+        border-radius: 8px 8px 0 0;
+        width: 100px;
+      }
+    }
   }
 
   &__directors {
@@ -147,6 +173,7 @@ modal-production-details {
 }
 
 .prod-modal-title {
+  font-size: 1.5rem;
   position: absolute;
   left: 50%;
   top: 0;
