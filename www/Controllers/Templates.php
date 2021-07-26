@@ -70,6 +70,7 @@ class Templates {
                 $variable->save();
             }
         }
+        $this->writeCssFile();
         Helpers::setFlashMessage('success', "Les valeurs par défaut ont bien été appliquées");
     }
 

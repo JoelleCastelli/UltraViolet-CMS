@@ -11,14 +11,14 @@ $appName = new Settings();
 $appName = $appName->findOneBy('selector', 'appName')->getValue();
 ?>
 
-<nav id="navbar-front">
+<nav id="navbar-front" class="navbarBackground">
     <a href="<?= Helpers::callRoute('front_home') ?>" class="brandLogo">
         <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= $appName ?>'>
     </a>
     
     
     <?php foreach ($categoriesNavbar['main'] as $mainCategory) : ?>
-        <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
+        <a class="navbarColor" href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
     <?php endforeach; ?>
     
 
