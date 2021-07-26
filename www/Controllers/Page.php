@@ -322,6 +322,7 @@ class Page
 
         $view = new View('pages/page', 'front');
         $view->assign('page', $page);
-
+        $view->assign('title', $page->getTitle());
+        $view->assign('description', $page->getDescriptionSeo());
     }
 }
