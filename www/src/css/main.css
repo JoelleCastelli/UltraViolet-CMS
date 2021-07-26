@@ -251,7 +251,7 @@ form .requiredField {
     display: flex;
     flex-flow: column nowrap;
     flex-basis: 100%;
-    min-height: 100vh;
+    min-height: 80vh;
     margin-top: 6.5rem;
 }
 
