@@ -404,6 +404,14 @@ class Article extends Database implements JsonSerializable
         }
     }
 
+    public function getCleanContentUpdatedAt() {
+        if (!is_null($this->getContentUpdatedAt())) {
+            return date("d/m/Y à H:i", strtotime($this->getContentUpdatedAt()));
+        } else {
+            return "";
+        }
+    }
+
     public function hasDuplicateSlug($title, $id = null) : bool {
         $slug = Helpers::slugify($title);
         if (empty($id))
