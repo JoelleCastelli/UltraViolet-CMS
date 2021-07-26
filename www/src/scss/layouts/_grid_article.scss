@@ -15,22 +15,19 @@
   .cover {
     position: relative;
     grid-area: cover;
-    // background: red;
 
     img {
       object-fit: cover;
       width: 100%;
-      //   height: 100%; does not work on Chrome wtf
       height: 300px;
     }
   }
 
   .article {
     grid-area: article;
-    // background: blue;
 
     &__title {
-      font-size: 2.5rem;
+      font-size: 1.5rem;
       font-weight: bold;
       margin-bottom: 1rem;
     }
@@ -43,7 +40,8 @@
     &__tags {
       display: flex;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 14px;
 
       &__category {
         color: $white;
@@ -53,6 +51,10 @@
           margin-left: 0;
         }
       }
+    }
+    article {
+      line-height: 1.5;
+      text-align: justify;
     }
   }
 
@@ -96,6 +98,10 @@
     grid-area: comments;
     display: flex;
     flex-flow: column;
+
+    h2 {
+      font-size: 1.5rem;
+    }
   }
 }
 
@@ -109,7 +115,7 @@
     "profile-picture title"
     "profile-picture content";
   padding: 1rem 2rem;
-  margin: 1rem 0;
+  margin: 0.8rem 0;
 
   &__profile-picture {
     grid-area: profile-picture;
@@ -269,15 +275,14 @@ textarea-comment {
   &__title {
     margin-top: 0.75rem;
     grid-area: title;
-    font-size: 2rem;
+    font-size: 20px;
     font-weight: bold;
   }
 
   &__description {
     grid-area: description;
     margin-top: 1.25rem;
-    margin-left: 0.5rem;
-    font-size: 1.2rem;
+    font-size: 16px;
     font-weight: normal;
   }
 

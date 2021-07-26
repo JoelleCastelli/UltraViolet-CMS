@@ -1,11 +1,9 @@
-<?php
-
-use App\Core\Helpers; ?>
+<?php use App\Core\Helpers; ?>
 
 <div class="grid-article">
 
     <div class="cover">
-        <img alt="imge de couverture de l'article" src="<?= $article->getMedia()->getPath() ?>"></img>
+        <img alt="image de couverture de l'article" src="<?= $article->getMedia()->getPath() ?>">
     </div>
 
     <section class="article card">
@@ -13,7 +11,7 @@ use App\Core\Helpers; ?>
         <small class="article__author">Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getCleanPublicationDate() ?></small>
         <div class="article__tags">
             <?php foreach ($article->getCategories() as $category) : ?>
-                <div class="article__tags__category tag-item"><?= $category->getName() ?></div>
+                <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($category->getName())]) ?>"><div class="article__tags__category tag-item"><?= $category->getName() ?></div></a>
             <?php endforeach; ?>
         </div>
         <article>
@@ -35,7 +33,7 @@ use App\Core\Helpers; ?>
 
     <section class="comments card">
 
-        <h2 class="title-section">Section commentaire</h2>
+        <h2 class="title-section">Commentaires</h2>
 
         <div id="add-btn" class="title-btn">
             <button class="btn title-btn">Commenter
