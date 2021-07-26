@@ -1,4 +1,5 @@
 <?php use App\Core\Helpers; ?>
+<?php use App\Core\Request; ?>
 
 <div class="grid-article">
 
@@ -39,24 +40,35 @@
 
         <h2 class="title-section">Commentaires</h2>
 
-        <div id="add-btn" class="title-btn">
-            <button class="btn title-btn">Commenter
-                <div class="add-btn"></div>
-            </button>
-        </div>
-
-
-        <div id="test-comment" class="test-comment">
-            <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
-        </div>
-
-        <?php foreach ($comments as $comment) : ?>
-            <div class="comment">
-                <img class="comment__profile-picture" src="<?= PATH_TO_IMG ?>default_user.jpg">
-                <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?? "Anonyme" ?> le <?= $comment->getCleanCreationDate() ?></h3>
-                <p class="comment__content"><?= $comment->getContent() ?></p>
+        <!--Comment form only for logged users-->
+        <?php if(Request::getUser()->isLogged()) { ?>
+            <div id="add-btn" class="title-btn">
+                <button class="btn title-btn">Commenter
+                    <div class="add-btn"></div>
+                </button>
             </div>
-        <?php endforeach; ?>
+
+            <div id="test-comment" class="test-comment">
+                <?php if (isset($form)) App\Core\FormBuilder::render($form); ?>
+            </div>
+        <?php } else { ?>
+            <div class="noComment">
+                <a target="_blank" href="<?= Helpers::callRoute('login') ?>">Connectez-vous ou inscrivez-vous pour commenter cet article</a>
+            </div>
+        <?php } ?>
+
+        <?php
+        if(!empty($comments)) {
+            foreach ($comments as $comment) { ?>
+                <div class="comment">
+                    <img class="comment__profile-picture" src="<?= PATH_TO_IMG ?>default_user.jpg">
+                    <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?? "Anonyme" ?> le <?= $comment->getCleanCreationDate() ?></h3>
+                    <p class="comment__content"><?= $comment->getContent() ?></p>
+                </div>
+            <?php }
+        } else { ?>
+            <p>Aucun commentaire sur cet article</p>
+        <?php }?>
 
 
     </section>
