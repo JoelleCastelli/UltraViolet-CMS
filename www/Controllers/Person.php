@@ -306,7 +306,7 @@ class Person
                             $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                             if ($user->save()) {
                                 Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
-                                Helpers::namedRedirect('user_update');
+                                Helpers::namedRedirect('update_password');
                             }
                             $errors = ['Oups ! Un problème est survenu lors de la sauvegarde'];
                         }
