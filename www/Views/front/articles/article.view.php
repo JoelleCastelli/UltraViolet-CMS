@@ -99,7 +99,7 @@
                     <h1 class="prod-modal-title" >Casting</h1>
                     <?php foreach ($actors as $actor) {
                         echo "<div class='person-card'>";
-                            if ($actor["photo"] == '')
+                            if(!file_exists(getcwd().$actor["photo"]))
                                 echo "<img class='person-img' src='" . PATH_TO_IMG . "default_poster.jpg'/>";
                             else
                                 echo "<img class='person-img' src='" . $actor["photo"] . "'/>";
@@ -115,7 +115,7 @@
                     <h1 class="prod-modal-title">Réalisation</h1>
                     <?php foreach ($directors as $director) {
                         echo "<div class='person-card'>";
-                        if ($director["photo"] == '')
+                        if(!file_exists(getcwd().$director["photo"]))
                             echo "<img class='person-img' src='" . PATH_TO_IMG . "default_poster.jpg'/>";
                         else
                             echo "<img class='person-img' src='" . $director["photo"] . "'/>";
@@ -130,7 +130,7 @@
                     <h1 class="prod-modal-title">Scénario</h1>
                     <?php foreach ($writers as $writer) {
                         echo "<div class='person-card'>";
-                        if ($writer["photo"] == '')
+                        if(!file_exists(getcwd().$writer["photo"]))
                             echo "<img class='person-img' src='" . PATH_TO_IMG . "default_poster.jpg'/>";
                         else
                             echo "<img class='person-img' src='" . $writer["photo"] . "'/>";
@@ -145,7 +145,7 @@
                     <h1 class="prod-modal-title">Création</h1>
                     <?php foreach ($creators as $creator) {
                         echo "<div class='person-card'>";
-                        if ($creator["photo"] == '')
+                        if(!file_exists(getcwd().$creator["photo"]))
                             echo "<img class='person-img' src='" . PATH_TO_IMG . "default_poster.jpg'/>";
                         else
                             echo "<img class='person-img' src='" . $creator["photo"] . "'/>";
