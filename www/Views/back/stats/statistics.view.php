@@ -52,7 +52,7 @@ if(isset($errors)) {
 
     <div class="card">
         <div class="cardTitle">Graphique du nombre de vue par jour</div>
-        <canvas id="myChart" width="400" height="400"></canvas>
+        <canvas id="viewResults" class="chart-js" data-data="<?php $viewsChart ?>" data-type="line"></canvas>
     </div>
 
     <div class="card">

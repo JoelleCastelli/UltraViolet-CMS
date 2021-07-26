@@ -10,6 +10,11 @@ routes:
   controller: Main
   action: getRoute
 
+views:
+  path: /admin/views-stats
+  controller: Statistics
+  action: getViewsGraph
+
 #CONFIG
 configStep1:
   path: /installation/introduction

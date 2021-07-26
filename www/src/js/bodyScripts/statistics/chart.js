@@ -1,39 +1,46 @@
 $(document).ready(function () {
 
-    var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
+    var chart = document.getElementById('viewResults');
+
+    let datas = chart.dataset.data
+    let type = chart.dataset.type
+
+    console.log(datas);
+    console.log(type);
+
+    function getViewsStats() {
+        $.ajax({
+            type: "GET",
+            url: '/admin/views-stats',
+            async: true,
+            success: function(responce) {
+                data = responce;
+                console.log(data);
+                console.log('yes');
             },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+            error: function(responce) {
+                data = "";
+                console.log('null');
             }
         });
+        return data;
+    }
 
+    console.log(getViewsStats())
+
+    var ctx = document.getElementById('viewResults').getContext('2d');
+    var viewResults = new Chart(ctx, {
+        type: type,
+        data: {
+            labels: datas.labels,
+            datasets: [{
+                label: 'Nombres de vues',
+                data: datas.data,
+                fill: false,
+                borderColor: 'rgb(95, 46, 234)',
+                backgroundColor: 'rgb(95, 46, 234)',
+                tension: 0.1
+            }]
+        }
+    });
 })

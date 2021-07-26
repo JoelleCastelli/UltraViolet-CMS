@@ -43,7 +43,12 @@ class Statistics
         $articleHistory = $this->getViewsArticles();
         $view->assign('articleHistory', $articleHistory);
 
+        $viewsChart = $this->getViewsGraphAction();
+        $view->assign('viewsChart', $viewsChart);
+
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/statistics/chart.js']);
+
+        Helpers::dd($viewsChart);
 	}
  
     public function getNbToDayArticles()
@@ -110,13 +115,25 @@ class Statistics
         return $articleHistory->select()->orderBy('views', 'DESC')->get();
     }
 
-    public function getViewsGraph()
+    public function getViewsGraphAction()
     {
         $articleHistory = new ArticleHistory();
-        $subDay = date('Y-m-d', strtotime('today - 30 days'));
-        $dateNow = date('Y-m-d H:i:s');
-        return $articleHistory->select('articleId')->whereBetween('date', $subDay, $dateNow)
-            ->orderBy('date', 'ASC')->get();
+        $formatResult = [
+            "labels" => [],
+            "data" => []
+        ];
+
+        $views = $articleHistory->customQuery('SELECT SUM('.DBPREFIXE.'article_history.views) as total, '.DBPREFIXE.'article_history.date as date
+            FROM '.DBPREFIXE.'article_history 
+            WHERE DATE('.DBPREFIXE.'article_history.date) >= DATE(NOW()) - INTERVAL 30 DAY 
+            GROUP BY '.DBPREFIXE.'article_history.date')->get(false);
+
+        foreach ($views as $key => $view) {
+            array_push($formatResult["labels"], $view["date"]);
+            array_push($formatResult["data"], $view["total"]);
+        }
+
+        return json_encode($formatResult);
     }
 
 }

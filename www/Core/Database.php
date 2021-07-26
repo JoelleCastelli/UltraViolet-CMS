@@ -276,7 +276,7 @@ class Database {
             if ($setFetchMode)
                 return $query->fetchAll();
             else
-                return $query->fetchAll(\PDO::FETCH_COLUMN);
+                return $query->fetchAll(\PDO::FETCH_BOTH);
 
         } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();
