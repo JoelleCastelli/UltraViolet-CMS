@@ -4,6 +4,7 @@ $(document).ready(function () {
     order: [],
     autoWidth: false,
     responsive: true,
+    scrollY: "200px",
     columns: [
       { data: "Miniature" },
       { data: "Titre" },
@@ -17,7 +18,6 @@ $(document).ready(function () {
       { data: "Date d'ajout" },
       { data: "Actions" },
     ],
-    scrollY: "400px",
     scrollCollapse: true,
 
     columnDefs: [

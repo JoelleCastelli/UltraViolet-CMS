@@ -50,7 +50,10 @@ class Article {
 
             if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce titre existe déjà. Veuillez changer votre titre d'article";
 
-            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+            // get id between parenthesis
+            $matches = preg_split("/[\(\)]/", $_POST["media"], -1, PREG_SPLIT_NO_EMPTY);
+            $id = $matches[count($matches) - 1];
+            $mediaId = $media->getMediaByTitle(htmlspecialchars($id));
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
             
             if(!empty($_POST["production"])){
@@ -133,7 +136,11 @@ class Article {
             $errors = FormValidator::check($form, $_POST);
 
             if ($article->hasDuplicateSlug($_POST["title"], $id)) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
-            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+            
+            // get id between parenthesis
+            $matches = preg_split("/[\(\)]/", $_POST["media"], -1, PREG_SPLIT_NO_EMPTY);
+            $id = $matches[count($matches) - 1];
+            $mediaId = $media->getMediaByTitle($id);
 
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 

@@ -817,7 +817,8 @@ class Article extends Database implements JsonSerializable
                     "label" => "Illustration de l'article",
                     "class" => "search-bar",
                     "readonly" => true,
-                    "value" => $mediaTitle,
+                    "value" => $mediaTitle . " (" . $mediaId . ")"
+
                 ],
                 "categories" => [
                     "type" => "checkbox",
