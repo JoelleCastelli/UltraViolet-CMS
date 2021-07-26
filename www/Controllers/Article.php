@@ -10,7 +10,6 @@ use App\Core\Request;
 use App\Models\Article as ArticleModel;
 use App\Models\ArticleHistory;
 use App\Models\Media as MediaModel;
-use App\Models\Category as CategoryModel;
 use App\Models\Comment as CommentModel;
 use App\Models\Production as ProductionModel;
 use App\Models\CategoryArticle as CategoryArticleModel;
@@ -134,8 +133,10 @@ class Article {
 
             if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
 
-            $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
-            if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
+            if (!empty($_POST["production"])) {
+                $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
+                if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
+            }
 
             if (empty($errors)) {
 
@@ -179,12 +180,14 @@ class Article {
                     $newCategory->save();
                 }
 
-                $productionArticleModel = new ProductionArticleModel();
+                if (!empty($productionId)) {
+                    $productionArticleModel = new ProductionArticleModel();
                 
-                $entry = $productionArticleModel->select()->where("articleId", $id)->first();
-                $entry->setArticleId($id);
-                $entry->setProductionId($productionId);
-                $entry->save();
+                    $entry = $productionArticleModel->select()->where("articleId", $id)->first();
+                    $entry->setArticleId($id);
+                    $entry->setProductionId($productionId);
+                    $entry->save();
+                }
 
                 Helpers::namedRedirect("articles_list");
             
@@ -208,8 +211,7 @@ class Article {
                 "Titre" => $article->getTitle(),
                 "Slug" => $article->getSlug(),
                 "Auteur" => $article->getPerson()->getPseudo(),
-                // "Vues" => $article->getTotalViews(),
-                "Vues" => "0",
+                "Vues" => $article->getTotalViews(),
                 "Commentaire" => count($article->getComments()),
                 "Date creation" => $article->getCleanCreatedAt(),
                 "Date publication" => $article->getCleanPublicationDate(),
@@ -226,9 +228,19 @@ class Article {
         if (empty($_POST["id"])) return;
 
         $article = new ArticleModel();
-        $article->setId($_POST["id"]);
+        if(!empty($article->findOneBy('id', $_POST["id"]))){
 
-        $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
+            $article->setId($_POST["id"]);
+            $article->getDeletedAt() ? $article->articleHardDelete() : $article->articleSoftDelete();
+
+            $response['success'] = true;
+            $response['id'] = $_POST["id"];
+
+        }else{
+            $response['success'] = false;
+        }
+
+        echo json_encode($response);
     }
 
     /***************** */
@@ -266,17 +278,28 @@ class Article {
         }
 
         $article->getCategoriesRelated();
-        $article->getProductionsRelated();
+        if(!empty($article->getProductionsRelated()))
+            $production = $article->getProductionsRelated()[0];
 
         $history = $this->incrementViewOnArticle($article);
 
         $view = new View('articles/article', 'front');
+
+        if(!empty($production)){
+            $view->assign('production', $production);
+            $view->assign('actors', $production->getRelatedActors());
+            $view->assign('directors', $production->getRelatedDirectors());
+            $view->assign('writers', $production->getRelatedWriters());
+            $view->assign('creators', $production->getRelatedCreators());
+        }
+
         $view->assign('title', $article->getTitle());
         $view->assign('description', $article->getDescription());
         $view->assign('article', $article);
         $view->assign('comments', $article->getComments());
         $view->assign('bodyScripts', [
             "new-comment" => PATH_TO_SCRIPTS.'bodyScripts/comments/newComments.js',
+            "production-details" => PATH_TO_SCRIPTS.'bodyScripts/articles/production-details.js',
         ]);
 
         if (isset($form)) $view->assign("form", $form);

@@ -54,7 +54,7 @@ class FormValidator
     }
 
     public static function textInputValidator($textInput, $fieldConfig, &$errors) {
-        if($fieldConfig["type"] == "text") {
+        if($fieldConfig["type"] == "text" || $fieldConfig["type"] == "textarea" ) {
             if (!empty($fieldConfig["minLength"]) && strlen($textInput) < $fieldConfig["minLength"]) {
                 $errors[] = $fieldConfig["error"];
             }

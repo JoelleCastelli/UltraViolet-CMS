@@ -105,6 +105,13 @@ class Media extends Database
         $this->deletedAt = $deletedAt;
     }
 
+    public function getLastInsertId(): string
+    {
+        $latestMedia = new Media();
+        $latestMedia = $latestMedia->select()->orderby('id', 'DESC')->first();
+        return $latestMedia->id;
+    }
+
     public function formBuilderUpload(): array
     {
         return [

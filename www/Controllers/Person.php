@@ -264,6 +264,11 @@ class Person
                                 $mail->sendMail($to, $from, $name, $subj, $msg);
 
                                 $user->save();
+
+                                // Message in cookie instead of session because it's destroyed during logout
+                                setcookie('new-mail', "Vos informations ont bien été mises à jour.
+                                Un e-mail vous a été envoyé pour confirmer votre nouvelle adresse");
+                                $this->logoutAction();
                             }
                             Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
                             Helpers::namedRedirect('user_update');
@@ -317,40 +322,51 @@ class Person
 
     public function deletePersonAction()
     {
-
         if (!empty($_POST['id'])) {
             $user = new PersonModel();
             $id = $_POST['id'];
             $user->setId($id);
+            $response = [];
 
-            if ($user->getDeletedAt()) {
-                //HARD DELETE USER
-                //Comments HARD delete
-                $comments = new CommentModel();
-                $comments = $comments->select()->where("personId", $id)->get();
-                foreach ($comments as $comment) {
-                    $comment->hardDelete()->where('id', $comment->getId())->execute();
+            if($user->isAdmin() && $user->count('email')->where('role', 'admin')->first(false) > 1){
+                if ($user->getDeletedAt()) {
+                    //HARD DELETE USER
+                    //Comments HARD delete
+                    $comments = new CommentModel();
+                    $comments = $comments->select()->where("personId", $id)->get();
+                    foreach ($comments as $comment) {
+                        $comment->hardDelete()->where('id', $comment->getId())->execute();
+                    }
+                    //Articles HARD delete
+                    $articles = new ArticleModel();
+                    $articles = $articles->select()->where("personId", $id)->get();
+                    foreach ($articles as $article) {
+                        $article->articleHardDelete();
+                    }
+                    $user->delete();
+
+                } else {
+                    //SOFT DELETE USER
+                    $user->setPseudo('Anonyme' . $id);
+                    $user->setEmail('anonyme' . $id . 'mail.com');
+                    $user->delete();
                 }
-                //Articles HARD delete
-                $articles = new ArticleModel();
-                $articles = $articles->select()->where("personId", $id)->get();
-                foreach ($articles as $article) {
-                    $article->articleHardDelete();
-                }
-                $user->delete();
-            } else {
-                //SOFT DELETE USER
-                $user->setPseudo('Anonyme' . $id);
-                $user->setEmail('anonyme' . $id . 'mail.com');
-                $user->delete();
-                $user->save();
+                $response['message'] = "Vous aviez bien supprimer cette utilisateur";
+                $response['success'] = true;
+
+            }else{
+                $response['message'] = "Vous êtes le seul administrateur, par conséquent vous ne pouvez pas supprimer ce compte.";
+                $response['success'] = false;
             }
-
-            Helpers::setFlashMessage('success', "Vous aviez bien supprimer cette utilisateur");
         } else {
-            Helpers::setFlashMessage('error', "La suppression de l'utilisateur n'a pas abouti");
+            $response['message'] = "La suppression de l'utilisateur n'a pas abouti";
+            $response['success'] = false;
         }
+
+        echo json_encode($response);
+        
     }
+
     public function deleteUserAction()
     {
         $user = Request::getUser();

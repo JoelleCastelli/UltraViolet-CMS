@@ -14,22 +14,9 @@ class Database {
     private int $like = 0;
 
     protected function __construct() {
-        if ($this->pdo === null) {
-            if (ENV === "dev") {
-                try {
-                    $this->pdo = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
-                    $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-                } catch (Exception $e) {
-                    die("Erreur SQL (dev mode) : " . $e->getMessage());
-                }
-            } else if (ENV === "prod") {
-                try {
-                    $this->pdo = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
-                } catch (Exception $e) {
-                    die("La connexion à la base de données n'a pas pu être effectuée");
-                }
-            }
-        }
+        $database = DatabaseConnection::getInstance();
+        $this->pdo= $database->getConnection();
+
         $classExploded = explode("\\", get_called_class());
         $this->table = strtolower(Helpers::convertToSnakeCase(DBPREFIXE . end($classExploded)));
     }
@@ -345,11 +332,6 @@ class Database {
         }
         $actions .= "</div></div>";
         return $actions;
-    }
-
-    public function getLastInsertId(): string
-    {
-        return $this->pdo->lastInsertId();
     }
 
 }

@@ -174,6 +174,7 @@ class Helpers{
     {
         $settings = [];
         $envFile = Helpers::getEnv() == 'dev' ? '.env.dev' : '.env';
+        chmod($envFile, 0777);
         $config = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($config as $setting) {
             if(substr($setting, 0, 1) !== '#') {

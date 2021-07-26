@@ -93,12 +93,12 @@ $(document).ready(function () {
     "click",
     ".state-draft, .state-hidden",
     function (event) {
+      
       const pageId = this.id.substring(this.id.lastIndexOf("-") + 1);
       const row = table.row($(this).parents("tr"));
-      const state = $(this)
-        .attr("class")
-        .substring($(this).attr("class").lastIndexOf("-") + 1);
-
+      const className = $(this).attr("class").split(' ')[0];
+      const state = className.substring(className.lastIndexOf("-") + 1);
+      
       $.ajax({
         type: "POST",
         url: callRoute("page_update_state"),

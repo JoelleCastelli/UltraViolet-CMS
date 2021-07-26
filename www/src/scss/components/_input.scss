@@ -43,14 +43,14 @@
   background: $light-grey;
 }
 
-input[type="date"],
-input[type="time"] {
+.publicationDateInput[type="date"],
+.publicationDateInput[type="time"] {
   font-weight: lighter;
   font-size: 16px;
 }
 
-input[name="media"]:read-only,
-input[name="production"]:read-only {
+.publicationDateInput[name="media"]:read-only,
+.publicationDateInput[name="production"]:read-only {
   background: #e7e9f3;
   color: $grey;
   font-family: $mulish;

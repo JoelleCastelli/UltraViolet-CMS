@@ -123,8 +123,14 @@ $(document).ready(function () {
         type: "POST",
         url: callRoute("users_delete"),
         data: { id: personId },
-        success: function () {
-          row.remove().draw();
+        dataType: "json",
+        success: function (response) {
+          if(response['success']){
+              row.remove().draw();
+
+          }else {
+            alert(response['message']);
+          }
         },
         error: function () {
           $(".header").after(

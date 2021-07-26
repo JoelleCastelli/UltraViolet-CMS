@@ -6,7 +6,7 @@ use App\Core\Helpers; ?>
     <p>Aucun article associés à cette catégorie.</p>
 <?php else : ?>
     <section class="article-list">
-            <h1>Tous les articles concernant : <strong><?= $category ?></strong></h1>
+            <h1>Tous les articles de la catégorie <strong><?= $category ?></strong></h1>
             <?php foreach ($articles as $article) : ?>
                 <a href="<?= Helpers::callRoute('display_article', ['article' => $article->getSlug()])  ?>">
                     <article class="grid-article-card article-card">
@@ -15,7 +15,7 @@ use App\Core\Helpers; ?>
                         <p class="article-card__description"><?= $article->getDescription(); ?></p>
                         <small class="article-card__author">
                             <span>par <?= $article->getPerson()->getPseudo(); ?></span>
-                            <span>Publié le : <?= $article->getPublicationDate(); ?></span>
+                            <span>Publié le <?= $article->getCleanPublicationDate(); ?></span>
                         </small>
                     </article>
                 </a>

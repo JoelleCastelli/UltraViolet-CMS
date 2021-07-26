@@ -60,7 +60,7 @@ class Comment
                 }
                 
                 $commentsArray[] = [
-                    $this->columnsTable['author'] => $comment->getPerson()->getPseudo(),
+                    $this->columnsTable['author'] => $comment->getPerson()->getPseudo() ?? 'Anonyme',
                     $this->columnsTable['article'] => $comment->getArticle()->getTitle(),
                     $this->columnsTable['content'] => $comment->getContent(),
                     $this->columnsTable['createdAt'] => $comment->getCleanCreationDate(),

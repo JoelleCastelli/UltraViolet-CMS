@@ -200,6 +200,7 @@ class Production
                         }
                     }
                 }
+                $production->setTmdbId($production->select('tmdbId')->where('id', $_POST['id'])->first(false));
                 $production->save();
                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été mise à jour");
                 Helpers::redirect(Helpers::callRoute('productions_list'));

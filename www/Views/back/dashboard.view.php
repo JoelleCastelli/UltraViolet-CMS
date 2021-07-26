@@ -1,7 +1,9 @@
 <?php
+
 use App\Core\Helpers;
 use App\Core\Request;
-if(isset($errors)) {
+
+if (isset($errors)) {
     foreach ($errors as $error) {
         echo "<li>$error</li>";
     }
@@ -14,10 +16,10 @@ if(isset($errors)) {
     <div class="card">
         <div class="cardTitle">Derniers articles</div>
         <div id="articles">
-            <?php if($articles) { ?>
+            <?php if ($articles) { ?>
                 <div id='articlesList'>
                     <?php foreach ($articles as $article) { ?>
-                        <div id="article-<?=$article->getId()?>" class='articleCard'>
+                        <div id="article-<?= $article->getId() ?>" class='articleCard'>
                             <div class="articleInfos">
                                 <div class="articleTitle"><?= $article->getTitle() ?></div>
                                 <div class="articleDetails">Publié le <?= $article->getCleanPublicationDate() ?> par <?= $article->getPerson()->getPseudo() ?></div>
@@ -27,7 +29,7 @@ if(isset($errors)) {
                                     <i class="fas fa-comment-dots"></i>
                                     <span class="commentsNb"><?= count($article->getComments()) ?></span>
                                 </div>
-                                <?php if(!Request::getUser()->isModerator()) {
+                                <?php if (!Request::getUser()->isModerator()) {
                                     echo $article->generateActionsMenu();
                                 } ?>
                             </div>
@@ -36,14 +38,14 @@ if(isset($errors)) {
                 </div>
             <?php } else { ?>
                 <p>Aucun article</p>
-                <?php if(!Request::getUser()->isModerator()) { ?>
+                <?php if (!Request::getUser()->isModerator()) { ?>
                     <div class="linkButtonElse">
                         <a href='<?= Helpers::callRoute('article_creation') ?>'><button class='btn'>Ecrire un article</button></a>
                     </div>
-                <?php }
+            <?php }
             } ?>
         </div>
-        <?php if($articles && !Request::getUser()->isModerator()) { ?>
+        <?php if ($articles && !Request::getUser()->isModerator()) { ?>
             <div class="linkButton">
                 <a href='<?= Helpers::callRoute('articles_list') ?>'><button class='btn'>Voir tous les articles</button></a>
             </div>
@@ -54,11 +56,10 @@ if(isset($errors)) {
     <div class="card">
         <div class="cardTitle">Derniers commentaires</div>
         <div id="comments">
-            <?php if($comments) { ?>
+            <?php if (!empty($comments)) { ?>
                 <div id='commentsList'>
-                    <?php foreach ($comments as $comment) {
-                        if (!$comment->getDeletedAt(!null)) {  ?>
-                            <div class='commentCard'>
+                    <?php foreach ($comments as $comment) { ?>
+                            <div id="comment-<?= $comment->getId() ?>" class='commentCard'>
                                 <div class="userPicture">
                                     <img src="<?= $comment->getPerson()->getMedia()->getPath() ?>" alt="Photo de profil">
                                 </div>
@@ -78,14 +79,13 @@ if(isset($errors)) {
                                 <?php $comment->setActions($comment->getActions());
                                 echo $comment->generateActionsMenu(); ?>
                             </div>
-                        <?php } ?>
                     <?php } ?>
                 </div>
             <?php } else { ?>
                 <p>Aucun commentaire</p>
             <?php } ?>
         </div>
-        <?php if($comments) { ?>
+        <?php if (!empty($comments)) { ?>
             <div class="linkButton">
                 <a href='<?= Helpers::callRoute('comments_list') ?>'><button class='btn'>Voir tous les commentaires</button></a>
             </div>
@@ -95,43 +95,43 @@ if(isset($errors)) {
     <!--PRODUCTIONS-->
     <div class="card">
         <div class="cardTitle">Dernières productions</div>
-            <div id="productions">
-            <?php if($productions) { ?>
+        <div id="productions">
+            <?php if ($productions) { ?>
                 <div id='productionsList'>
                     <?php foreach ($productions as $production) { ?>
                         <div class='productionCard'>
-                            <?php if (file_exists(getcwd().$production->getPoster()->getPath())) { ?>
+                            <?php if (file_exists(getcwd() . $production->getPoster()->getPath())) { ?>
                                 <div class='productionImg' style="background-image: url('<?= $production->getPoster()->getPath() ?>')"></div>
                             <?php } else { ?>
-                                <div class='productionImg' style="background-image: url('<?= PATH_TO_IMG."default_poster.jpg" ?>')"></div>
+                                <div class='productionImg' style="background-image: url('<?= PATH_TO_IMG . "default_poster.jpg" ?>')"></div>
                             <?php } ?>
 
                             <div class='productionName'>
                                 <?php
-                                    if($production->getParentProduction()) {
-                                        if($production->getParentProduction()->getParentProduction()) {
-                                            echo $production->getParentProduction()->getParentProduction()->getTitle().' - ';
-                                        }
-                                        echo $production->getParentProduction()->getTitle().' - ';
+                                if ($production->getParentProduction()) {
+                                    if ($production->getParentProduction()->getParentProduction()) {
+                                        echo $production->getParentProduction()->getParentProduction()->getTitle() . ' - ';
                                     }
-                                    echo $production->getTitle();
+                                    echo $production->getParentProduction()->getTitle() . ' - ';
+                                }
+                                echo $production->getTitle();
                                 ?>
                             </div>
                         </div>
                     <?php } ?>
                 </div>
-                <?php if($productions && !Request::getUser()->isModerator()) { ?>
+                <?php if ($productions && !Request::getUser()->isModerator()) { ?>
                     <div class="linkButton">
                         <a href='<?= Helpers::callRoute('productions_list') ?>'><button class='btn'>Voir toutes les productions</button></a>
                     </div>
                 <?php }
             } else { ?>
                 <p>Aucune production</p>
-                <?php if(!Request::getUser()->isModerator()) { ?>
+                <?php if (!Request::getUser()->isModerator()) { ?>
                     <div class="linkButtonElse">
                         <a href='<?= Helpers::callRoute('productions_creation_tmdb') ?>'><button class='btn'>Ajouter une production</button></a>
                     </div>
-                <?php }
+            <?php }
             } ?>
         </div>
     </div>
@@ -175,9 +175,9 @@ if(isset($errors)) {
                 </div>
             </div>
         </div>
-        <?php if($productions && !Request::getUser()->isModerator()) { ?>
+        <?php if ($productions && !Request::getUser()->isModerator()) { ?>
             <div class="linkButton">
                 <a href='<?= Helpers::callRoute('stats') ?>'><button class='btn'>Voir toutes les statistiques</button></a>
             </div>
         <?php } ?>
-</div>
+    </div>

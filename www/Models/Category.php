@@ -202,9 +202,10 @@ class Category extends Database
                 "position" => [
                     "type" => "number",
                     "min" => 1,
+                    "max" => 500,
                     "label" => "Position dans le menu",
                     "class" => "search-bar",
-                    "error" => "La position doit être supérieure ou égale à 1",
+                    "error" => "La position doit être supérieure ou égale à 1 et inférieur à 501",
                     "required" => true,
                 ],
                 "descriptionSeo" => [
@@ -259,10 +260,11 @@ class Category extends Database
                     "position" => [
                         "type" => "number",
                         "min" => 1,
+                        "max" => 500,
                         "label" => "Position dans le menu",
                         "class" => "search-bar",
                         "value" => $category->getPosition(),
-                        "error" => "La position doit être supérieure ou égale à 1",
+                        "error" => "La position doit être supérieure ou égale à 1 et inférieur à 501",
                         "required" => true,
                     ],
                     "descriptionSeo" => [

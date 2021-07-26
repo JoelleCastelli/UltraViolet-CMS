@@ -37,7 +37,7 @@ class Mail
             $mail->Password = $this->Password;
             
             $mail->IsHTML(true);
-            $mail->CharSet = $mail->CHARSET_UTF8;
+            $mail->CharSet = 'utf-8';
             $mail->From=$this->Username;
             $mail->FromName=$from_name;
             $mail->Sender=$from;

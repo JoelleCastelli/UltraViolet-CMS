@@ -103,6 +103,7 @@ class Installer
             // Replace default "uv_" prefix name by env value
             $str = str_replace("uv_", DBPREFIXE, $str);
             // Write updated script in user SQL script
+            chmod(getcwd().'/_scripts/custom_db_script.sql', 0777);
             if(file_put_contents(getcwd().'/_scripts/custom_db_script.sql', $str)) {
                 // Populate database from custom SQL script
                 $db = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
@@ -318,7 +319,7 @@ class Installer
                     "class" => "search-bar",
                     "error" => "Le nom d'utilisateur de la base de données doit contenir entre 2 et 25 caractères et être correctement nommé",
                     "required" => true,
-                    "regex" => "/^([a-zA-Z0-9-_]{2,25})$/",
+                    "regex" => "/^([a-zA-Z0-9-_ ]{2,25})$/",
                 ],
                 "email" => [
                     "type" => "email",
