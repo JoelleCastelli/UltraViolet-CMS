@@ -47,16 +47,10 @@ class Templates {
         foreach ($newVariables as $variable) {
             if(strpos($variable->getSelector(), 'Background'))
                 $cssString .= '.'.$variable->getSelector()." { background-color: ".$variable->getValue()."; }\n";
-            else if(strpos($variable->getSelector(), 'Font'))
-                $cssString .= '.'.$variable->getSelector()." { font-size: ".$variable->getValue()."; }\n";
             else if(strpos($variable->getSelector(), 'Color'))
                 $cssString .= '.'.$variable->getSelector()." { color: ".$variable->getValue()."; }\n";
-            else if(strpos($variable->getSelector(), 'Height'))
-                $cssString .= '.'.$variable->getSelector()." { line-height: ".$variable->getValue()."; }\n";
             else if(strpos($variable->getSelector(), 'Family'))
                 $cssString .= '.'.$variable->getSelector()." { font-family: ".$variable->getValue().", sans-serif; }\n";
-            else if(strpos($variable->getSelector(), 'Size'))
-                $cssString .= '.'.$variable->getSelector()." { font-size: ".$variable->getValue()."px; }\n";
         }
         file_put_contents(getcwd().'/src/css/variables.css', $cssString);
     }

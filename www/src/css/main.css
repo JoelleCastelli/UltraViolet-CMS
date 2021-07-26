@@ -288,52 +288,6 @@ form .requiredField {
     flex-direction: column;
 }
 
-#bannerToManual div {
-    margin-bottom: 5px;
-}
-
-
-
-#installation {
-    margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 30px;
-    width: 600px;
-    line-height: 1.5;
-}
-
-#installation .logo {
-    text-align: center;
-}
-
-#installation .logo img {
-    width: 100px;
-}
-
-#installation .details {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-#installation .details p {
-    margin-bottom: 10px;
-    margin-top: 10px;
-    text-align: justify;
-}
-
-#installation .details ul {
-    list-style: inside;
-}
-
-#installation form .btn {
-    margin-top: 10px;
-}
-
-#installation a {
-    color: #f7f7fc;
-}
-
 #login-subscription {
     min-width: 265px;
     max-width: 500px;
@@ -1136,7 +1090,6 @@ textarea-comment {
 }
 
 #navbar-front a:hover {
-    color: #b898ff;
     transform: scale(1.05);
     color: whitesmoke;
     transition: 0.2s ease-out;
@@ -1225,7 +1178,7 @@ textarea-comment {
 }
 
 .header h1 i {
-    margin: 0px 5px;
+    margin: 0 5px;
     color: #5f2eea;
 }
 
@@ -1364,11 +1317,6 @@ textarea-comment {
 
 .search-bar input::placeholder {
     color: #b5b5b5;
-}
-
-.search-bar i {
-    color: #5b1ce0;
-    margin-right: 10px;
 }
 
 .search-bar:focus-within {
@@ -1729,14 +1677,6 @@ modal-production-details h1 {
 .production:hover {
     background: #e7e9f3;
     transform: scale(1.01);
-}
-
-.little-thumbnail {
-    -o-object-fit: cover;
-    object-fit: cover;
-    width: 8vw;
-    font-size: 1.05rem;
-    margin-bottom: 0.5rem;
 }
 
 .prod-modal-title {

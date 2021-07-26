@@ -340,8 +340,6 @@ INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VA
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("tagsBackground", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("tagsColor", "#f5f5f5", "#f5f5f5");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("fontFamily", "mulish", "mulish");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("customHeight", "1.5", "1.5");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("customSize", "14", "14");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("appName", "MonSite.com", "");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("metaTitle", "Ceci est le title par défaut de votre site", "");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("metaDescription", "Ceci est la meta description par défaut de votre site", "");

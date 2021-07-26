@@ -227,27 +227,6 @@ class Settings extends Database
                     "error" => "La police choisie n'existe pas",
                     "required" => true,
                 ],
-                "customHeight" => [
-                    "type" => "number",
-                    "label" => "Hauteur de ligne",
-                    "class" => "search-bar",
-                    "value" => $currentVariables['customHeight'],
-                    "min" => "0",
-                    "step" => "0.1",
-                    "error" => "La hauteur de ligne ne peut pas être inférieure à 0.1 ni supérieur à 5",
-                    "required" => true,
-                    "max" => "5"
-                ],
-                "customSize" => [
-                    "type" => "number",
-                    "label" => "Taille de la police",
-                    "class" => "search-bar",
-                    "value" => $currentVariables['customSize'],
-                    "min" => "5",
-                    "max" => "1000",
-                    "error" => "La taille de la police ne peut pas être inférieure à 5 ni supérieur à 1000",
-                    "required" => true,
-                ],
                 "csrfToken" => [
                     "type"=>"hidden",
                     "value"=> FormBuilder::generateCSRFToken(),
