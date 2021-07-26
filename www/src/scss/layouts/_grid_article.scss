@@ -4,17 +4,16 @@
   margin-right: 6rem;
   display: grid;
   grid-template-columns: 6fr auto;
-  grid-template-rows: 300px 3fr min-content;
+  grid-template-rows: min-content 3fr min-content;
   column-gap: 10px;
   row-gap: 5px;
   grid-template-areas:
-    "cover cover"
     "article production"
     "comments comments";
 
   .cover {
-    position: relative;
     grid-area: cover;
+    margin-bottom: 20px;
 
     img {
       object-fit: cover;

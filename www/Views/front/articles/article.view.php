@@ -2,11 +2,12 @@
 
 <div class="grid-article">
 
-    <div class="cover">
-        <img alt="image de couverture de l'article" src="<?= $article->getMedia()->getPath() ?>">
-    </div>
+
 
     <section class="article card">
+        <div class="cover">
+            <img alt="image de couverture de l'article" src="<?= $article->getMedia()->getPath() ?>">
+        </div>
         <h1 class="article__title"><?= $article->getTitle() ?></h1>
         <small class="article__author">
             Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getCleanPublicationDate() ?>
