@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  console.log("production modal");
   /* BUILD DATATABLES */
   let tableProd = $("#datatable-production").DataTable({
     order: [],
