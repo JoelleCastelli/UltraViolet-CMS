@@ -45,12 +45,16 @@ class Templates {
         $newVariables = $newVariables->findAll();
         $cssString = '';
         foreach ($newVariables as $variable) {
-            if(strpos($variable->getSelector(), 'Background'))
+            if(strpos($variable->getSelector(), 'Background')) {
                 $cssString .= '.'.$variable->getSelector()." { background-color: ".$variable->getValue()."; }\n";
-            else if(strpos($variable->getSelector(), 'Color'))
-                $cssString .= '.'.$variable->getSelector()." { color: ".$variable->getValue()."; }\n";
-            else if(strpos($variable->getSelector(), 'Family'))
+            } else if(strpos($variable->getSelector(), 'Color')) {
+                if(strpos($variable->getSelector(), 'Hover'))
+                    $cssString .= '.'.$variable->getSelector().":hover { color: ".$variable->getValue()." }\n";
+                else
+                    $cssString .= '.'.$variable->getSelector()." { color: ".$variable->getValue()."; }\n";
+            } else if(strpos($variable->getSelector(), 'Family')) {
                 $cssString .= '.'.$variable->getSelector()." { font-family: ".$variable->getValue().", sans-serif; }\n";
+            }
         }
         file_put_contents(getcwd().'/src/css/variables.css', $cssString);
     }

@@ -16,7 +16,7 @@
     <div class="path-section">
         <article>
             <?php foreach ($pages as $page) : ?>
-                <a class="footerColor" href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
+                <a class="footerColor footerColorHover" href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
             <?php endforeach; ?>
         </article>
 

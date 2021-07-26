@@ -18,12 +18,12 @@ $appName = $appName->findOneBy('selector', 'appName')->getValue();
     
     
     <?php foreach ($categoriesNavbar['main'] as $mainCategory) : ?>
-        <a class="navbarColor" href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
+        <a class="navbarColor navbarColorHover" href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
     <?php endforeach; ?>
     
 
     <?php if (!empty($categoriesNavbar['other'])) : ?>
-        <div id='otherCategories' class="dropdown dropdown-button navbarColor">
+        <div id='otherCategories' class="dropdown dropdown-button navbarColor navbarColorHover">
             <span>Toutes les catégories</span>
             <div class="dropdown-content">
                 <?php foreach ($categoriesNavbar['other']  as $otherCategory) : ?>

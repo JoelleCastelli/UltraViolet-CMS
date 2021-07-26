@@ -948,12 +948,6 @@ textarea-comment {
     transform: scale(1.1);
 }
 
-.btn.preview {
-    background-color: #1cb1e0;
-    margin-top: 15px;
-    margin-bottom: 20px;
-}
-
 .btn.danger {
     text-align: center;
     background-color: #ff2626;
@@ -977,8 +971,8 @@ textarea-comment {
 }
 
 .dropdown:hover {
-    transition: 2.5s;
     z-index: 40;
+    transition: 0.2s;
 }
 
 .dropdown .dropdown-button {
@@ -1087,7 +1081,6 @@ textarea-comment {
 
 #navbar-front a:hover {
     transform: scale(1.05);
-    color: whitesmoke;
     transition: 0.2s ease-out;
     opacity: 1;
 }
@@ -1151,6 +1144,10 @@ textarea-comment {
 
 #footer-front .path-section article a {
     padding: 0.5rem;
+}
+
+#footer-front .path-section article a:hover {
+    transition: 0.2s;;
 }
 
 .header {

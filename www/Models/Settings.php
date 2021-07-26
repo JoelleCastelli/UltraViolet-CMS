@@ -126,6 +126,14 @@ class Settings extends Database
                 "referer" => Helpers::callRoute('templates_lists')
             ],
             "fields" => [
+                "pageBackground" => [
+                    "type" => "color",
+                    "label" => "Fond de la page",
+                    "value" => $currentVariables['pageBackground'],
+                    "error" => "Le code couleur du fond de la page n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
                 "navbarBackground" => [
                     "type" => "color",
                     "label" => "Couleur du menu",
@@ -139,6 +147,14 @@ class Settings extends Database
                     "label" => "Couleur des titres du menu",
                     "value" => $currentVariables['navbarColor'],
                     "error" => "Le code couleur des titres du menu n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "navbarColorHover" => [
+                    "type" => "color",
+                    "label" => "Couleur des titres du menu survolés",
+                    "value" => $currentVariables['navbarColorHover'],
+                    "error" => "Le code couleur des titres du menu survolés n'est pas valable",
                     "required" => true,
                     "max" => 160
                 ],
@@ -158,6 +174,14 @@ class Settings extends Database
                     "required" => true,
                     "max" => 160
                 ],
+                "footerColorHover" => [
+                    "type" => "color",
+                    "label" => "Couleur des liens du footer survolés",
+                    "value" => $currentVariables['footerColorHover'],
+                    "error" => "Le code couleur des liens du footer survolés n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
                 "titleColor" => [
                     "type" => "color",
                     "label" => "Couleur des titres",
@@ -168,10 +192,10 @@ class Settings extends Database
                 ],
                 "tagsBackground" => [
                     "type" => "color",
-                    "label" => "Couleur de fond des tags",
+                    "label" => "Couleur du fond des tags",
                     "min" => "0.1",
                     "value" => $currentVariables['tagsBackground'],
-                    "error" => "La hauteur de ligne ne peut pas être intéfieure à 0.1",
+                    "error" => "Le code couleur du fond des tags n'est pas valable",
                     "required" => true,
                     "max" => 160
                 ],
@@ -180,7 +204,7 @@ class Settings extends Database
                     "label" => "Couleur du texte des tags",
                     "min" => "0.1",
                     "value" => $currentVariables['tagsColor'],
-                    "error" => "La hauteur de ligne ne peut pas être intéfieure à 0.1",
+                    "error" => "Le code couleur du texte des tags n'est pas valable",
                     "required" => true,
                     "max" => 160
                 ],
