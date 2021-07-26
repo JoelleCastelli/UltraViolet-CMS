@@ -18,7 +18,7 @@ use App\Core\Helpers; ?>
                         <h2 class="article-card__title titleColor"><?= $article->getTitle(); ?></h2>
                         <p class="article-card__description"><?= $article->getDescription(); ?></p>
                         <small class="article-card__author">
-                            <span>par <?= $article->getPerson()->getPseudo(); ?></span>
+                            <span>Ecrit par <?= $article->getPerson()->getPseudo(); ?></span>
                             <span>Publié le <?= $article->getCleanPublicationDate(); ?></span>
                         </small>
                     </article>

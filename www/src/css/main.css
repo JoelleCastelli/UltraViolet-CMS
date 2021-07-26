@@ -835,6 +835,7 @@ textarea-comment {
     display: grid;
     height: 10rem;
     width: 100%;
+    min-width: 460px;
     grid-template-columns: 1.5fr 3fr;
     grid-template-rows: -webkit-min-content 1fr -webkit-min-content;
     grid-template-rows: min-content 1fr min-content;
@@ -875,6 +876,8 @@ textarea-comment {
     margin-top: 1.25rem;
     font-size: 16px;
     font-weight: normal;
+    padding-right: 10px;
+    text-align: justify;
 }
 
 .article-card__author {
