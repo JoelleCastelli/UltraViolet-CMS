@@ -319,7 +319,7 @@ class Installer
                     "class" => "search-bar",
                     "error" => "Le nom d'utilisateur de la base de données doit contenir entre 2 et 25 caractères et être correctement nommé",
                     "required" => true,
-                    "regex" => "/^([a-zA-Z0-9-_]{2,25})$/",
+                    "regex" => "/^([a-zA-Z0-9-_ ]{2,25})$/",
                 ],
                 "email" => [
                     "type" => "email",

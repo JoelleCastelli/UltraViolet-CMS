@@ -448,7 +448,7 @@ class Person extends Database implements JsonSerializable
                     "minLength" => 2,
                     "maxLength" => 25,
                     "class" => "input",
-                    "regex" => "/^([a-zA-Z0-9-_]{2,25})$/",
+                    "regex" => "/^([a-zA-Z0-9-_ ]{2,25})$/",
                     "error" => "Votre pseudo doit faire entre 2 et 25 caractères",
                     "required" => true,
                 ],
@@ -544,7 +544,8 @@ class Person extends Database implements JsonSerializable
                         "id" => "pseudo",
                         "error" => "Le format du champs pseudo est incorrect",
                         "required" => true,
-                        "value" => $user->getPseudo()
+                        "value" => $user->getPseudo(),
+                        "regex" => "/^([a-zA-Z0-9-_ ]{2,25})$/",
 
                     ],
 
@@ -599,7 +600,9 @@ class Person extends Database implements JsonSerializable
                     "id" => "pseudo",
                     "error" => "Le format du champ pseudo est incorrect",
                     "required" => true,
-                    "value" => $user->getPseudo()
+                    "value" => $user->getPseudo(),
+                    "regex" => "/^([a-zA-Z0-9-_ ]{2,25})$/",
+
                 ],
                 "profilePicture" => [
                     "type" => "file",
