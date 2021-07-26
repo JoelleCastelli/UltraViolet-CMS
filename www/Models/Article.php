@@ -344,6 +344,7 @@ class Article extends Database implements JsonSerializable
            return $this->select()
            ->where("publicationDate", $now, "<=")
            ->andWhere("deletedAt", "NULL", "=")
+           ->orderBy('publicationDate', 'DESC')
            ->get();
         } 
         
@@ -351,6 +352,7 @@ class Article extends Database implements JsonSerializable
             return $this->select()
             ->where("publicationDate", $now, ">")
             ->andWhere("deletedAt", "NULL")
+            ->orderBy('publicationDate', 'DESC')
             ->get();
         } 
         
@@ -358,11 +360,12 @@ class Article extends Database implements JsonSerializable
             return $this->select()
             ->where("publicationDate", "NULL")
             ->andWhere("deletedAt", "NULL")
+            ->orderBy('publicationDate', 'DESC')
             ->get();
         } 
         
         if ($state == "removed") {
-            return $this->select()->where("deletedAt", "NOT NULL")->get();
+            return $this->select()->where("deletedAt", "NOT NULL")->orderBy('publicationDate', 'DESC')->get();
         }
 
         return [];
@@ -396,6 +399,14 @@ class Article extends Database implements JsonSerializable
     public function getCleanPublicationDate() {
         if (!is_null($this->getPublicationDate())) {
             return date("d/m/Y à H:i", strtotime($this->getPublicationDate()));
+        } else {
+            return "";
+        }
+    }
+
+    public function getCleanContentUpdatedAt() {
+        if (!is_null($this->getContentUpdatedAt())) {
+            return date("d/m/Y à H:i", strtotime($this->getContentUpdatedAt()));
         } else {
             return "";
         }
@@ -666,7 +677,7 @@ class Article extends Database implements JsonSerializable
                      "minLength" => 1,
                      "class" => "input",
                      "error" => "Le contenu de l'article doit comprendre au minimum 1 caractères",
-                     "required" => true,
+                     "required" => false,
                  ],
             ]
         ];

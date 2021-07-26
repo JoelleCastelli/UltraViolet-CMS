@@ -62,11 +62,10 @@ $(document).ready(function () {
   $(".filtering-btn").click(function () {
     $(".filtering-btn").removeClass("active");
     $(this).addClass("active");
-
     getMediasByType(this.id);
   });
 
-  getMediasByType("other");
+  getMediasByType("poster");
 });
 
 // get bg to quit modals

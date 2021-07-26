@@ -149,6 +149,7 @@ class Article {
                 $article->setContent($_POST["content"]);
                 $article->setMediaId($mediaId);
                 $article->setPersonId($user->getId());
+                $article->setContentUpdatedAt(date("Y-m-d H:i:s"));
 
                 if ($state == "published") {
                     $article->setToPublished();
@@ -162,10 +163,10 @@ class Article {
 
                 $article->save();
 
+                // Save categories
                 $categoryArticle = new CategoryArticleModel();
                 $entriesInDB = $categoryArticle->select("categoryId")->where("articleId", $id)->get(false);
                 $categoriesInPost = $_POST["categories"];
-                
                 $entriesToRemove = array_diff($entriesInDB, $categoriesInPost);
                 $entriesToAdd = array_diff($categoriesInPost, $entriesInDB);
 
@@ -180,6 +181,7 @@ class Article {
                     $newCategory->save();
                 }
 
+                // Save production
                 if (!empty($productionId)) {
                     $productionArticleModel = new ProductionArticleModel();
                 
@@ -213,8 +215,8 @@ class Article {
                 "Auteur" => $article->getPerson()->getPseudo(),
                 "Vues" => $article->getTotalViews(),
                 "Commentaire" => count($article->getComments()),
-                "Date creation" => $article->getCleanCreatedAt(),
-                "Date publication" => $article->getCleanPublicationDate(),
+                "Création" => $article->getCleanCreatedAt(),
+                "Publication" => $article->getCleanPublicationDate(),
                 "Actions" => $article->generateActionsMenu()
             ];
         }

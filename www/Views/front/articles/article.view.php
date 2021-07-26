@@ -1,19 +1,23 @@
-<?php
-
-use App\Core\Helpers; ?>
+<?php use App\Core\Helpers; ?>
 
 <div class="grid-article">
 
-    <div class="cover">
-        <img alt="imge de couverture de l'article" src="<?= $article->getMedia()->getPath() ?>"></img>
-    </div>
+
 
     <section class="article card">
+        <div class="cover">
+            <img alt="image de couverture de l'article" src="<?= $article->getMedia()->getPath() ?>">
+        </div>
         <h1 class="article__title"><?= $article->getTitle() ?></h1>
-        <small class="article__author">Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getCleanPublicationDate() ?></small>
+        <small class="article__author">
+            Ecrit par <?= $article->getPerson()->getPseudo() ?> le <?= $article->getCleanPublicationDate() ?>
+            <?php if($article->getCleanContentUpdatedAt() != "") {?>
+                <span> (modifié le <?= $article->getCleanContentUpdatedAt()?>) </span>
+            <?php } ?>
+        </small>
         <div class="article__tags">
             <?php foreach ($article->getCategories() as $category) : ?>
-                <div class="article__tags__category tag-item"><?= $category->getName() ?></div>
+                <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($category->getName())]) ?>"><div class="article__tags__category tag-item"><?= $category->getName() ?></div></a>
             <?php endforeach; ?>
         </div>
         <article>
@@ -35,7 +39,7 @@ use App\Core\Helpers; ?>
 
     <section class="comments card">
 
-        <h2 class="title-section">Section commentaire</h2>
+        <h2 class="title-section">Commentaires</h2>
 
         <div id="add-btn" class="title-btn">
             <button class="btn title-btn">Commenter
