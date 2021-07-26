@@ -18,7 +18,7 @@ class Mail
 	public function __construct(){
 		$this->Host = HOST_MAIL;
 		$this->Port = PORT_MAIL;
-        $this->SMTPSecure = SMTP_SECURE;
+        $this->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 		$this->Username = MAIL_ACCOUNT;
 		$this->Password = PASSWORD_ACCCOUNT;
 	}
