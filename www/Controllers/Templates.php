@@ -48,10 +48,18 @@ class Templates {
             if(strpos($variable->getSelector(), 'Background')) {
                 $cssString .= '.'.$variable->getSelector()." { background-color: ".$variable->getValue()."; }\n";
             } else if(strpos($variable->getSelector(), 'Color')) {
-                if(strpos($variable->getSelector(), 'Hover'))
+
+                // Dropdown menu
+                if($variable->getSelector() == 'navbarColor')
+                    $cssString .= ".dropdown .dropdown-content > a:hover { transition: 0.2s; z-index: 40; color: " . $variable->getValue() . "; }\n";
+                if($variable->getSelector() == 'navbarColorHover')
+                    $cssString .= ".dropdown .dropdown-content > a:hover { background-color: " . $variable->getValue() . "; }\n";
+
+                if(strpos($variable->getSelector(), 'Hover')) {
                     $cssString .= '.'.$variable->getSelector().":hover { color: ".$variable->getValue()." }\n";
-                else
+                } else {
                     $cssString .= '.'.$variable->getSelector()." { color: ".$variable->getValue()."; }\n";
+                }
             } else if(strpos($variable->getSelector(), 'Family')) {
                 $cssString .= '.'.$variable->getSelector()." { font-family: ".$variable->getValue().", sans-serif; }\n";
             }

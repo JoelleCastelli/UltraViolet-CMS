@@ -1003,13 +1003,6 @@ textarea-comment {
     display: block;
 }
 
-.dropdown .dropdown-content > a:hover {
-    background-color: #b898ff;
-    color: whitesmoke;
-    transition: 0.2s;
-    z-index: 40;
-}
-
 .dropdown:hover .dropdown-content {
     display: block;
     z-index: 40;

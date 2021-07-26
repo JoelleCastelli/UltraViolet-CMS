@@ -335,7 +335,7 @@ VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Ceci est la de
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("pageBackground", "#e5e5e5", "#e5e5e5");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarBackground", "#000d28", "#000d28");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarColor", "#f5f5f5", "#f5f5f5");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarColorHover", "#f5f5f5", "#f5f5f5");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarColorHover", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerBackground", "#000d28", "#000d28");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerColor", "#f5f5f5", "#f5f5f5");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerColorHover", "#f5f5f5", "#f5f5f5");
