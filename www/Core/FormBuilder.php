@@ -125,7 +125,7 @@ class FormBuilder
                 >";
             }
 		}
-        $html .= "<input type='submit' class='btn' value=\"".($config["config"]["submit"]??"Valider")."\">";
+        $html .= "<input type='submit' class='btn tagsBackground tagsColor' value=\"".($config["config"]["submit"]??"Valider")."\">";
 		$html .= "</form>";
 
 		if($show) {

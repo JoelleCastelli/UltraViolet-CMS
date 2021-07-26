@@ -776,9 +776,7 @@ textarea-comment {
     position: relative;
     width: 2rem;
     height: 2rem;
-    border-radius: 100px;
     background: #fff;
-    color: #5b1ce0;
     font-size: 2rem;
     cursor: pointer;
     border-radius: 100%;
@@ -788,7 +786,6 @@ textarea-comment {
 .add-btn::before {
     height: 60%;
     width: 3px;
-    background: #5b1ce0;
     transform: translateY(-50%) rotate(0deg);
     transition: all 0.4s ease;
 }
@@ -796,7 +793,6 @@ textarea-comment {
 .add-btn::after {
     height: 3px;
     width: 60%;
-    background: #5b1ce0;
     transform: translateX(-50%) rotate(0deg);
     transition: all 0.4s ease;
 }
@@ -941,10 +937,6 @@ textarea-comment {
     transition: all 0.3s ease-out;
     padding: 0.5rem 2rem;
     cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #4622ab;
 }
 
 .btn:active {

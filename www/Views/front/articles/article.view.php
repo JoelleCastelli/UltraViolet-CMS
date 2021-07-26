@@ -45,7 +45,7 @@
         <!--Comment form only for logged users-->
         <?php if(Request::getUser()->isLogged()) { ?>
             <div id="add-btn" class="title-btn">
-                <button class="btn title-btn">Commenter
+                <button class="btn title-btn tagsBackground tagsColor">Commenter
                     <div class="add-btn"></div>
                 </button>
             </div>

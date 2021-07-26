@@ -47,8 +47,12 @@ class Templates {
         foreach ($newVariables as $variable) {
             if(strpos($variable->getSelector(), 'Background')) {
                 $cssString .= '.'.$variable->getSelector()." { background-color: ".$variable->getValue()."; }\n";
+                // Comment button sign
+                if($variable->getSelector() == "tagsBackground") {
+                    $cssString .= ".add-btn::before { background: " . $variable->getValue() . "; }\n";
+                    $cssString .= ".add-btn::after { background: " . $variable->getValue() . "; }\n";
+                }
             } else if(strpos($variable->getSelector(), 'Color')) {
-
                 // Dropdown menu
                 if($variable->getSelector() == 'navbarColor')
                     $cssString .= ".dropdown .dropdown-content > a:hover { transition: 0.2s; z-index: 40; color: " . $variable->getValue() . "; }\n";
