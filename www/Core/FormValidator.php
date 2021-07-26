@@ -32,7 +32,8 @@ class FormValidator
                     return $errors;
                 }
 
-                $data[$fieldName] = trim($data[$fieldName]);
+                if(is_string($data[$fieldName]))
+                    $data[$fieldName] = trim($data[$fieldName]);
 
                 // check if required field is not empty but still allow 0
                 if (isset($fieldConfig['required']) && empty($data[$fieldName]) && $data[$fieldName] !== "0" && $data[$fieldName] !== 0) {
