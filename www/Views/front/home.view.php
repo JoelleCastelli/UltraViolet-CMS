@@ -3,7 +3,11 @@
 use App\Core\Helpers; ?>
 
 <?php if (empty($articles)) : ?>
-    <h1>Aucun article récents.</h1>
+    <section class="article-list">
+        <article class="grid-article-card article-card">
+            <p class="article-card__description">Aucun article publié</p>
+        </article>
+    </section>
 <?php else : ?>
     <section class="article-list">
         <h1>Les articles récents</h1>
