@@ -107,10 +107,6 @@ section {
     display: block;
 }
 
-body {
-    line-height: 1;
-}
-
 ol,
 ul {
     list-style: none;
@@ -153,6 +149,7 @@ html {
 
 body {
     height: 100%;
+    line-height: 1;
     background: #e5e5e5;
     font-family: "Mulish", sans-serif;
     position: relative;

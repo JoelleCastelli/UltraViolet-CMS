@@ -27,7 +27,7 @@
         ?>
     </head>
 
-    <body>
+    <body class="fontFamily">
 
         <?php include 'Views/components/navbar-front.php'; ?>
             

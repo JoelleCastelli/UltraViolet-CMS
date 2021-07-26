@@ -194,14 +194,9 @@ class Settings extends Database
                             "selected" => $currentVariables['fontFamily'] == 'mulish',
                         ],
                         [
-                            "value" => "comic",
-                            "text" => "Comic Sans MS",
-                            "selected" => $currentVariables['fontFamily'] == 'comic',
-                        ],
-                        [
-                            "value" => "arial",
-                            "text" => "Arial",
-                            "selected" => $currentVariables['fontFamily'] == 'arial',
+                            "value" => "poppins",
+                            "text" => "Poppins",
+                            "selected" => $currentVariables['fontFamily'] == 'poppins',
                         ],
                         [
                             "value" => "tahoma",
@@ -209,9 +204,24 @@ class Settings extends Database
                             "selected" => $currentVariables['fontFamily'] == 'tahoma',
                         ],
                         [
-                            "value" => "poppins",
-                            "text" => "Poppins",
-                            "selected" => $currentVariables['fontFamily'] == 'poppins',
+                            "value" => "calibri",
+                            "text" => "Calibri",
+                            "selected" => $currentVariables['fontFamily'] == 'calibri',
+                        ],
+                        [
+                            "value" => "roboto",
+                            "text" => "Roboto",
+                            "selected" => $currentVariables['fontFamily'] == 'roboto',
+                        ],
+                        [
+                            "value" => "arial",
+                            "text" => "Arial",
+                            "selected" => $currentVariables['fontFamily'] == 'arial',
+                        ],
+                        [
+                            "value" => "papyrus",
+                            "text" => "Papyrus",
+                            "selected" => $currentVariables['fontFamily'] == 'papyrus',
                         ]
                     ],
                     "error" => "La police choisie n'existe pas",
