@@ -526,7 +526,7 @@ class Person extends Database implements JsonSerializable
                 "fields" => [
                     "email" => [
                         "type" => "email",
-                        "label" => "Email *",
+                        "label" => "Email",
                         "placeholder" => "Email",
                         "class" => "input",
                         "id" => "email",
@@ -538,7 +538,7 @@ class Person extends Database implements JsonSerializable
 
                     "pseudo" => [
                         "type" => "pseudo",
-                        "label" => "Pseudonyme *",
+                        "label" => "Pseudonyme",
                         "placeholder" => "Pseudonyme",
                         "class" => "input",
                         "id" => "pseudo",
@@ -551,7 +551,7 @@ class Person extends Database implements JsonSerializable
 
                     "role" => [
                         "type" => "select",
-                        "label" => "Role de l'utilisateur",
+                        "label" => "Rôle",
                         "class" => "search-bar",
                         "options" => $rolesoptions,
                         "required" => true,
@@ -585,7 +585,7 @@ class Person extends Database implements JsonSerializable
             "fields" => [
                 "email" => [
                     "type" => "email",
-                    "label" => "Email <span class='requiredField'>*<span>",
+                    "label" => "Email",
                     "placeholder" => "Email",
                     "class" => "input",
                     "id" => "email",
@@ -595,7 +595,7 @@ class Person extends Database implements JsonSerializable
                 ],
                 "pseudo" => [
                     "type" => "pseudo",
-                    "label" => "Pseudonyme <span class='requiredField'>*<span>",
+                    "label" => "Pseudonyme",
                     "class" => "input",
                     "id" => "pseudo",
                     "error" => "Le format du champ pseudo est incorrect",
@@ -633,6 +633,7 @@ class Person extends Database implements JsonSerializable
                     "type" => "password",
                     "label" => "Ancien mot de passe",
                     "class" => "input",
+                    "required" => true
                 ],
                 "pwd" => [
                     "type" => "password",
@@ -641,6 +642,7 @@ class Person extends Database implements JsonSerializable
                     "class" => "input",
                     "regex" => "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
                     "error" => "Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
+                    "required" => true
                 ],
                 "pwdConfirm" => [
                     "type" => "password",
@@ -648,6 +650,7 @@ class Person extends Database implements JsonSerializable
                     "class" => "input",
                     "confirm" => "pwd",
                     "error" => "Votre mot de passe de confirmation ne correspond pas",
+                    "required" => true
                 ],
                 "csrfToken" => [
                     "type" => "hidden",

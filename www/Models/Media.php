@@ -118,6 +118,7 @@ class Media extends Database
             "config" => [
                 "method" => "POST",
                 "action" => '',
+                "id" => "form_add_media",
                 "referer" => Helpers::callRoute('media_list'),
                 "enctype" => "multipart/form-data"
             ],
