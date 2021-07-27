@@ -45,9 +45,6 @@ class Statistics
 
         $articleHistory = $this->getViewsArticles();
         $view->assign('articleHistory', $articleHistory);
-
-        Helpers::dd($nbToDayViews);
-
 	}
  
     public function getNbToDayArticles()
