@@ -109,6 +109,7 @@ class Article {
                     $productionArticleModel->save();
                 }
 
+                Helpers::setFlashMessage('success', "L'article a bien été enregisté");
                 Helpers::namedRedirect("articles_list");
 
             } else {
@@ -213,16 +214,19 @@ class Article {
 
                 // Save production
                 if (!empty($productionId)) {
-                    $productionArticleModel = new ProductionArticleModel();
-                
-                    $entry = $productionArticleModel->select()->where("articleId", $id)->first();
-                    $entry->setArticleId($id);
-                    $entry->setProductionId($productionId);
-                    $entry->save();
+                    $existingProductionArticle = new ProductionArticleModel();
+                    $existingProductionArticle = $existingProductionArticle->select()->where("articleId", $id)->first();
+                    if($existingProductionArticle) {
+                        $existingProductionArticle->save();
+                    } else {
+                        $productionArticle = new ProductionArticleModel();
+                        $productionArticle->setArticleId($id);
+                        $productionArticle->setProductionId($productionId);
+                        $productionArticle->save();
+                    }
                 }
-
+                Helpers::setFlashMessage('success', "L'article a bien été mis à jour");
                 Helpers::namedRedirect("articles_list");
-            
             } else {
                 $view->assign("errors", $errors);
             }
