@@ -4,6 +4,7 @@
   flex-wrap: wrap;
   z-index: 2;
   margin-top: 1rem;
+  padding-bottom: 1.5rem;
 
   .buttons {
     display: flex;
@@ -15,7 +16,6 @@
 .dataTables_wrapper {
   font-family: $mulish;
   font-size: 14px;
-  margin-bottom: 30px;
   border: 1px solid #dfe0eb;
   border-radius: 8px;
   margin-top: 2rem;
