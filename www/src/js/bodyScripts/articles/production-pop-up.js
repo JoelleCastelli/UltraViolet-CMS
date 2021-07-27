@@ -4,12 +4,12 @@ $(document).ready(function () {
     order: [],
     autoWidth: false,
     responsive: true,
-    scrollY: "200px",
+    scrollY: "250px",
     columns: [
       { data: "Miniature" },
       { data: "Titre" },
       { data: "Identifiant" },
-     
+
       { data: "Titre original" },
       { data: "Saison" },
       { data: "Série" },
@@ -56,7 +56,8 @@ $(document).ready(function () {
       },
       oAria: {
         sSortAscending: ": activer pour trier la colonne par ordre croissant",
-        sSortDescending: ": activer pour trier la colonne par ordre décroissant",
+        sSortDescending:
+          ": activer pour trier la colonne par ordre décroissant",
       },
       select: {
         rows: {
@@ -71,7 +72,7 @@ $(document).ready(function () {
   /* FILTERS */
   // On start, display movies
   tableProd.columns([0, 1, 2]).visible(true); //thumbnail, title, id
-  tableProd.columns([3, 4, 5, 6, 7, 8, 9 ]).visible(false);
+  tableProd.columns([3, 4, 5, 6, 7, 8, 9]).visible(false);
 
   // Display different types on filtering button click
   $(".filtering-btn").click(function () {
@@ -81,7 +82,7 @@ $(document).ready(function () {
 
     switch (this.id) {
       case "season":
-/*         tableProd.columns([2]).visible(false); //original title
+        /*         tableProd.columns([2]).visible(false); //original title
         tableProd.columns([3]).visible(false); // season
         tableProd.columns([4]).visible(true); // series */
 
@@ -97,14 +98,14 @@ $(document).ready(function () {
         break;
       default:
         tableProd.columns([0, 1, 2]).visible(true); //thumbnail, title, id
-        tableProd.columns([3, 4, 5, 6, 7, 8, 9 ]).visible(false);
- 
+        tableProd.columns([3, 4, 5, 6, 7, 8, 9]).visible(false);
+
         break;
     }
   });
   function listenRowEventsProductions() {
     const prodCTAs = document.querySelectorAll(".production-name-cta");
-    
+
     prodCTAs.forEach((cta) => {
       cta.addEventListener("click", (e) => {
         idElement = e.target.parentNode.querySelector("td.production-id-cta");
@@ -128,7 +129,10 @@ $(document).ready(function () {
         listenRowEventsProductions();
       },
       error: function () {
-        console.log("Erreur dans la récupération des productions de type " + productionType);
+        console.log(
+          "Erreur dans la récupération des productions de type " +
+            productionType
+        );
       },
     });
   }
