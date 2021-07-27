@@ -313,6 +313,7 @@ html,
   margin-left: 8rem;
   margin-right: 8rem;
   line-height: 2.2rem;
+  min-height: 80vh;
 }
 
 .grid-article {
