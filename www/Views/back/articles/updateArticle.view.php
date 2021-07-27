@@ -45,12 +45,14 @@
     <div class="background-modal-production">
         <div class="clickable-bg"></div>
         <div class="modal-media">
-            <h1>Selectionnez l'image de votre article</h1>
+            <h1>Selectionnez une production</h1>
 
 
             <div class="filtering-status">
                 <div class="filtering-btn active" id="movie">Films</div>
                 <div class="filtering-btn" id="series">Séries</div>
+                <div class="filtering-btn" id="season">Saisons</div>
+                <div class="filtering-btn" id="episode">Episodes</div>
             </div>
 
             <table id="datatable-production" class="display">
