@@ -40,19 +40,6 @@ class Page
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS . 'bodyScripts/pages/pages.js']);
     }
 
-    public function showStaticPageAction($slug)
-    {
-        $page = new PageModel();
-        $page = $page->select()->where('slug', $slug)->andWhere('state', 'published')->first();
-        if(empty($page))
-            Helpers::redirect404();
-
-        $view = new View('staticPage', 'front');
-        $view->assign('content', $page->getContent());
-        $view->assign('title', $page->getTitle());
-        $view->assign('description', $page->getDescriptionSeo());
-    }
-
     public function getPagesAction()
     {
         if (!empty($_POST['pageType'])) {
@@ -312,7 +299,7 @@ class Page
     * FRONT FUNCTIONS
     */
 
-    public function accessStaticPageAction($slug)
+    public function showStaticPageAction($slug)
     {
         $page = new PageModel;
         $page = $page->select()->where('slug', $slug)->first();
