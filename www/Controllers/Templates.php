@@ -13,7 +13,7 @@ class Templates {
         $templateVariable = new Settings();
         $form = $templateVariable->formBuilderUpdateTemplateVariables();
         $view = new View("templates/list");
-        $view->assign('title', 'Templates');
+        $view->assign('title', 'Apparence');
         $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/templates.js']);
         $view->assign("form", $form);
 

@@ -123,7 +123,7 @@ class Statistics
         $views = $articleHistory->customQuery('SELECT SUM('.DBPREFIXE.'article_history.views) as total, '.DBPREFIXE.'article_history.date as date
             FROM '.DBPREFIXE.'article_history 
             WHERE DATE('.DBPREFIXE.'article_history.date) >= DATE(NOW()) - INTERVAL 30 DAY 
-            GROUP BY '.DBPREFIXE.'article_history.date')->get(false);
+            GROUP BY '.DBPREFIXE.'article_history.date')->get(false, true);
 
         foreach ($views as $key => $view) {
             array_push($formatResult["labels"], date('d/m/Y', strtotime($view['date'])));
