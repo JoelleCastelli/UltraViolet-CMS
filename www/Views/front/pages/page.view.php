@@ -1,5 +1,5 @@
 <div class="grid-page">
-    <section class="article card">
+    <section class="page-in card">
         <h1 class="titleColor"><?= $page->getTitle() ?></h1>
         <article>
             <?= $page->getContent() ?>
