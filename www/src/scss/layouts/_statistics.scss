@@ -4,6 +4,24 @@
   justify-content: space-between;
   padding-bottom: 1rem;
 
+  .row-stats {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+
+    .card-statistique {
+      background: $card-background-color;
+      border-radius: 8px;
+      border-width: 1px;
+      border-color: $card-border;
+      box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
+      padding: 1rem;
+      margin-bottom: 20px;
+      width: 49%;
+    }
+  }
+
   #statToDay {
     #statToDayList {
       display: flex;
@@ -43,9 +61,9 @@
 
   #statChart {
     display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      padding-bottom: 3rem;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding-bottom: 3rem;
   }
 
   #statistics {
