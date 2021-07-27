@@ -126,7 +126,7 @@ class Statistics
             GROUP BY '.DBPREFIXE.'article_history.date')->get(false);
 
         foreach ($views as $key => $view) {
-            array_push($formatResult["labels"], $view["date"]);
+            array_push($formatResult["labels"], date('d/m/Y', strtotime($view['date'])));
             array_push($formatResult["data"], $view["total"]);
         }
 
