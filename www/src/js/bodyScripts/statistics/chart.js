@@ -1,46 +1,34 @@
 $(document).ready(function () {
 
     var chart = document.getElementById('viewResults');
-
-    let datas = chart.dataset.data
     let type = chart.dataset.type
-
-    console.log(datas);
-    console.log(type);
-
+    getViewsStats()
     function getViewsStats() {
         $.ajax({
             type: "GET",
             url: '/admin/views-stats',
             async: true,
-            success: function(responce) {
-                data = responce;
-                console.log(data);
-                console.log('yes');
+            dataType: 'json',
+            success: function(data) {
+                var ctx = document.getElementById('viewResults').getContext('2d');
+                var viewResults = new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Nombres de vues',
+                            data: data.data,
+                            fill: false,
+                            borderColor: 'rgb(95, 46, 234)',
+                            backgroundColor: 'rgb(95, 46, 234)',
+                            tension: 0.1
+                        }]
+                    }
+                });
             },
-            error: function(responce) {
-                data = "";
-                console.log('null');
+            error: function(data) {
+                return data = "";
             }
         });
-        return data;
     }
-
-    console.log(getViewsStats())
-
-    var ctx = document.getElementById('viewResults').getContext('2d');
-    var viewResults = new Chart(ctx, {
-        type: type,
-        data: {
-            labels: datas.labels,
-            datasets: [{
-                label: 'Nombres de vues',
-                data: datas.data,
-                fill: false,
-                borderColor: 'rgb(95, 46, 234)',
-                backgroundColor: 'rgb(95, 46, 234)',
-                tension: 0.1
-            }]
-        }
-    });
 })

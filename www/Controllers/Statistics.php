@@ -15,6 +15,7 @@ class Statistics
 		$view = new View("stats/statistics");
         $view->assign('title', 'Statistiques');
         $view->assignFlash();
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/statistics/chart.js']);
 
         $nbToDayArticles = $this->getNbToDayArticles();
         $view->assign('nbToDayArticles', $nbToDayArticles);
@@ -26,6 +27,8 @@ class Statistics
         $view->assign('nbToDayUsers', $nbToDayUsers);
 
         $nbToDayViews = $this->getNbToDayViews();
+        if ($nbToDayViews == null)
+            $nbToDayViews = 0;
         $view->assign('nbToDayViews', $nbToDayViews);
 
         $nbArticles = $this->getNbArticles();
@@ -43,12 +46,8 @@ class Statistics
         $articleHistory = $this->getViewsArticles();
         $view->assign('articleHistory', $articleHistory);
 
-        $viewsChart = $this->getViewsGraphAction();
-        $view->assign('viewsChart', $viewsChart);
+        Helpers::dd($nbToDayViews);
 
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/statistics/chart.js']);
-
-        Helpers::dd($viewsChart);
 	}
  
     public function getNbToDayArticles()
@@ -133,7 +132,7 @@ class Statistics
             array_push($formatResult["data"], $view["total"]);
         }
 
-        return json_encode($formatResult);
+        echo json_encode($formatResult);
     }
 
 }
