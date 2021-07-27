@@ -15,6 +15,7 @@ class Statistics
 		$view = new View("stats/statistics");
         $view->assign('title', 'Statistiques');
         $view->assignFlash();
+        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'bodyScripts/statistics/chart.js']);
 
         $nbToDayArticles = $this->getNbToDayArticles();
         $view->assign('nbToDayArticles', $nbToDayArticles);
@@ -26,6 +27,8 @@ class Statistics
         $view->assign('nbToDayUsers', $nbToDayUsers);
 
         $nbToDayViews = $this->getNbToDayViews();
+        if ($nbToDayViews == null)
+            $nbToDayViews = 0;
         $view->assign('nbToDayViews', $nbToDayViews);
 
         $nbArticles = $this->getNbArticles();
@@ -43,7 +46,8 @@ class Statistics
         $articleHistory = $this->getViewsArticles();
         $view->assign('articleHistory', $articleHistory);
 
-        $view->assign('bodyScripts', [PATH_TO_SCRIPTS.'headScripts/dashboard.js']);
+        Helpers::dd($nbToDayViews);
+
 	}
  
     public function getNbToDayArticles()
@@ -108,6 +112,28 @@ class Statistics
     {
         $articleHistory = new ArticleHistory();
         return $articleHistory->select()->orderBy('views', 'DESC')->get();
+    }
+
+    public function getViewsGraphAction()
+    {
+        $articleHistory = new ArticleHistory();
+        
+        $formatResult = [
+            "labels" => [],
+            "data" => []
+        ];
+
+        $views = $articleHistory->customQuery('SELECT SUM('.DBPREFIXE.'article_history.views) as total, '.DBPREFIXE.'article_history.date as date
+            FROM '.DBPREFIXE.'article_history 
+            WHERE DATE('.DBPREFIXE.'article_history.date) >= DATE(NOW()) - INTERVAL 30 DAY 
+            GROUP BY '.DBPREFIXE.'article_history.date')->get(false);
+
+        foreach ($views as $key => $view) {
+            array_push($formatResult["labels"], $view["date"]);
+            array_push($formatResult["data"], $view["total"]);
+        }
+
+        echo json_encode($formatResult);
     }
 
 }

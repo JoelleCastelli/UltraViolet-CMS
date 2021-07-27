@@ -196,6 +196,12 @@ class Database {
         return $this;
     }
 
+    public function whereBetween($column, $value1, $value2): Database
+    {
+        $this->query .= 'WHERE `' . $column . '` BETWEEN "' . $value1 . '" AND "' . $value2 . '" ';
+        return $this;
+    }
+
     //JOINS
     public function innerJoin($table, $statement): Database
     {
@@ -270,7 +276,7 @@ class Database {
             if ($setFetchMode)
                 return $query->fetchAll();
             else
-                return $query->fetchAll(\PDO::FETCH_COLUMN);
+                return $query->fetchAll(\PDO::FETCH_BOTH);
 
         } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();

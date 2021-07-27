@@ -4,14 +4,14 @@
   justify-content: space-between;
   padding-bottom: 1rem;
 
-  #statistics {
-    #statisticsList {
+  #statToDay {
+    #statToDayList {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-evenly;
       padding-bottom: 3rem;
 
-      .statisticsCard {
+      .statToDayCard {
         display: flex;
         justify-content: space-evenly;
         align-items: center;
@@ -41,14 +41,21 @@
     }
   }
 
-  #statToDay {
-    #statToDayList {
+  #statChart {
+    display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      padding-bottom: 3rem;
+  }
+
+  #statistics {
+    #statisticsList {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-evenly;
       padding-bottom: 3rem;
 
-      .statToDayCard {
+      .statisticsCard {
         display: flex;
         justify-content: space-evenly;
         align-items: center;
