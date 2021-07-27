@@ -23,6 +23,17 @@ $(document).ready(function () {
                             backgroundColor: 'rgb(95, 46, 234)',
                             tension: 0.1
                         }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                min: 0,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
                     }
                 });
             },
