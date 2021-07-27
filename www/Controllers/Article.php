@@ -217,6 +217,8 @@ class Article {
                     $existingProductionArticle = new ProductionArticleModel();
                     $existingProductionArticle = $existingProductionArticle->select()->where("articleId", $id)->first();
                     if($existingProductionArticle) {
+                        $existingProductionArticle->setArticleId($id);
+                        $existingProductionArticle->setProductionId($productionId);
                         $existingProductionArticle->save();
                     } else {
                         $productionArticle = new ProductionArticleModel();
