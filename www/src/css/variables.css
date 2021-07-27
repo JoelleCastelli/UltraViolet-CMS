@@ -6,7 +6,7 @@
 .navbarColorHover:hover { color: #5f2eea }
 .footerBackground { background-color: #000d28; }
 .footerColor { color: #f5f5f5; }
-.footerColorHover:hover { color: #f5f5f5 }
+.footerColorHover:hover { color: #5f2eea }
 .titleColor { color: #000000; }
 .tagsBackground { background-color: #5f2eea; }
 .add-btn::before { background: #5f2eea; }
