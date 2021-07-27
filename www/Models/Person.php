@@ -484,33 +484,9 @@ class Person extends Database implements JsonSerializable
     }
 
     public function formBuilderUpdatePerson($id): array {
-        
         $user = new Person();
-
         $user = $user->findOneBy('id', $id);
 
-        //Role option for select
-        $firstRoleOption = $user->getRole();
-        $roles = array($firstRoleOption,"user","moderator","editor","vip","admin");
-        $rolesoptions= [];
-
-        foreach ($roles as $role) {
-            if ($firstRoleOption !== $role){
-                $options = [
-                    "value" => $role,
-                    "text" => $role
-                ];
-                array_push($rolesoptions, $options);
-            }
-         }
-
-         $options = [
-            "value" => $firstRoleOption,
-            "text" => $firstRoleOption
-        ];
-        array_unshift($rolesoptions, $options);
-        
-        //Fo
         if($user) {
             return [
                 "config" => [
@@ -553,7 +529,29 @@ class Person extends Database implements JsonSerializable
                         "type" => "select",
                         "label" => "Rôle",
                         "class" => "search-bar",
-                        "options" => $rolesoptions,
+                        "options" => [
+                            [
+                                "value"=>"user",
+                                "text"=>"Utilisateur",
+                                "selected" => $user->getRole() == 'user'
+                            ],
+                            [
+                                "value"=>"moderator",
+                                "text"=>"Modérateur",
+                                "selected" => $user->getRole() == 'moderator'
+                            ],
+                            [
+                                "value"=>"editor",
+                                "text"=>"Rédacteur",
+                                "selected" => $user->getRole() == 'editor'
+                            ],
+                            [
+                                "value"=>"admin",
+                                "text"=>"Administrateur",
+                                "selected" => $user->getRole() == 'admin'
+
+                            ],
+                        ],
                         "required" => true,
                         "error" => "Vous devez sélectionner un role.",
                         
