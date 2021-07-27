@@ -17,7 +17,7 @@ $appName = $appName->findOneBy('selector', 'appName')->getValue();
 
     <?php App\Core\FormBuilder::render($form, true); ?>
     <div>
-        Déjà un compte ? <a href="<?= \App\Core\Helpers::callRoute('login')?>">Je me connecte.</a>
+        Déjà un compte ? <a class="linksColor" href="<?= \App\Core\Helpers::callRoute('login')?>">Je me connecte.</a>
     </div>
 </div>
 
