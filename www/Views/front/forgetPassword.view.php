@@ -12,7 +12,6 @@
     ?>
 
     <section class="grid-form-forget-password-user">
-        <h1 class="title-form">UltraViolet</h1>
         <section class="card-forget">
             <h3> Entrez l'email associé à votre compte utilisateur pour réinitialiser votre mot de passe</h3>
             <?php if (empty($send)) {

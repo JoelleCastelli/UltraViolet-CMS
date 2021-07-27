@@ -3,7 +3,7 @@ use App\Models\Settings;
 $appName = new Settings();
 $appName = $appName->findOneBy('selector', 'appName')->getValue();
 ?>
-<h1 class="title-form"><?= $appName ?></h1>
+
 <div id='login-subscription' class="card">
     <div class="error-message-form">
         <?php
