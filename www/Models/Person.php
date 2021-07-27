@@ -486,6 +486,11 @@ class Person extends Database implements JsonSerializable
     public function formBuilderUpdatePerson($id): array {
         $user = new Person();
         $user = $user->findOneBy('id', $id);
+        $disabledField = true;
+        // Prevent last admin from changing role
+        if(!$user->isAdmin() || $user->isAdmin() && $user->count('id')->where('role', 'admin')->andWhere('deletedAt', "NULL")->first(false) > 1) {
+            $disabledField = false;
+        }
 
         if($user) {
             return [
@@ -553,6 +558,7 @@ class Person extends Database implements JsonSerializable
                             ],
                         ],
                         "required" => true,
+                        "disabled" => $disabledField,
                         "error" => "Vous devez sélectionner un role.",
                         
                     ],
