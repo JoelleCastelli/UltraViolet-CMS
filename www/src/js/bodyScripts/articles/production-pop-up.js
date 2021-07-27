@@ -70,7 +70,6 @@ $(document).ready(function () {
 
   /* FILTERS */
   // On start, display movies
-  getProductionsByType("movie");
   tableProd.columns([0, 1, 2]).visible(true); //thumbnail, title, id
   tableProd.columns([3, 4, 5, 6, 7, 8, 9 ]).visible(false);
 
@@ -140,6 +139,7 @@ $(document).ready(function () {
   const removeBGProduction = document.querySelector(".clickable-bg");
 
   inputProd.addEventListener("click", (e) => {
+    getProductionsByType("movie");
     modalProd.classList.add("visible");
   });
 
