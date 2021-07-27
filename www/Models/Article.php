@@ -767,7 +767,7 @@ class Article extends Database implements JsonSerializable
                     "label" => "Associer une production à l'article",
                     "class" => "search-bar",
                     "readonly" => true,
-                    "value" => $productionName . " (" . $productionId . ")"
+                    "value" => !empty($productionId) ?  $productionName . " (" . $productionId . ")" : ""
                 ],
                 "state" => [
                     "type" => "radio",
@@ -835,6 +835,7 @@ class Article extends Database implements JsonSerializable
                     "minLength" => 2,
                     "class" => "input",
                     "error" => "Le contenu de l'article doit comprendre au minimum 2 caractères",
+                    "required" => false,
                 ],
             ]
         ];
