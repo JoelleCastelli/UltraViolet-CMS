@@ -141,6 +141,8 @@ class Article {
 
         if (!empty($_POST)) {
 
+            if(!isset($_POST['productionRemove'])) { $_POST['productionRemove'] = ''; }
+            if(!isset($_POST['mediaRemove'])) { $_POST['mediaRemove'] = ''; }
             $errors = FormValidator::check($form, $_POST);
 
             if ($article->hasDuplicateSlug($_POST["title"], $id)) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
@@ -226,6 +228,14 @@ class Article {
                         $productionArticle->setProductionId($productionId);
                         $productionArticle->save();
                     }
+                }else {
+
+                    // remove existing related productions if exists
+                    $existingProductionArticle = new ProductionArticleModel();
+                    $existingProductionArticle = $existingProductionArticle->select()->where("articleId", $id)->first();
+
+                    if(!empty($existingProductionArticle))
+                        $existingProductionArticle->hardDelete()->where('articleId', $existingProductionArticle->getArticleId())->execute();
                 }
                 Helpers::setFlashMessage('success', "L'article a bien été mis à jour");
                 Helpers::namedRedirect("articles_list");
