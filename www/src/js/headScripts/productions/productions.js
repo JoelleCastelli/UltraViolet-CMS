@@ -12,6 +12,7 @@ $(document).ready( function () {
             { data: 'Saison' },
             { data: 'Série' },
             { data: 'Durée' },
+            { data: 'Identifiant' },
             { data: 'Date de sortie' },
             { data: 'Date d\'ajout' },
             { data: 'Actions' }
@@ -19,20 +20,11 @@ $(document).ready( function () {
 
         columnDefs: [
             {
-                targets: 8, // Actions column
+                targets: 9, // Actions column
                 data: "name",
                 searchable: false,
                 orderable: false
             },
-            { width: "12%", targets: 0 },
-            { width: "12%", targets: 1 },
-            { width: "12%", targets: 2 },
-            { width: "12%", targets: 3 },
-            { width: "12%", targets: 4 },
-            { width: "12%", targets: 5 },
-            { width: "12%", targets: 6 },
-            { width: "12%", targets: 7 },
-            { width: "5%", targets: 8 },
         ],
 
 
@@ -73,6 +65,7 @@ $(document).ready( function () {
 
     table.columns([3]).visible(false); // season
     table.columns([4]).visible(false); // series
+    table.columns([6]).visible(false); // ID
     // Display different types on filtering button click
     $(".filtering-btn").click(function() {
         $(".filtering-btn").removeClass('active');

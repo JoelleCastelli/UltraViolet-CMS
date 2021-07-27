@@ -190,6 +190,14 @@ class Settings extends Database
                     "required" => true,
                     "max" => 160
                 ],
+                "linksColor" => [
+                    "type" => "color",
+                    "label" => "Couleur des liens",
+                    "value" => $currentVariables['linksColor'],
+                    "error" => "Le code couleur des liens n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
                 "tagsBackground" => [
                     "type" => "color",
                     "label" => "Couleur du fond des tags",

@@ -80,6 +80,8 @@ class Article {
                 $article->setContent($_POST["content"]);
                 if (!empty($mediaId))
                     $article->setMediaId($mediaId);
+                else 
+                    $article->setDefaultPicture();
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {
@@ -107,6 +109,7 @@ class Article {
                     $productionArticleModel->save();
                 }
 
+                Helpers::setFlashMessage('success', "L'article a bien été enregisté");
                 Helpers::namedRedirect("articles_list");
 
             } else {
@@ -173,6 +176,8 @@ class Article {
 
                 if(!empty($mediaId))
                     $article->setMediaId($mediaId);
+                else
+                    $article->setDefaultPicture();
 
                 $article->setPersonId($user->getId());
                 $article->setContentUpdatedAt(date("Y-m-d H:i:s"));
@@ -209,16 +214,21 @@ class Article {
 
                 // Save production
                 if (!empty($productionId)) {
-                    $productionArticleModel = new ProductionArticleModel();
-                
-                    $entry = $productionArticleModel->select()->where("articleId", $id)->first();
-                    $entry->setArticleId($id);
-                    $entry->setProductionId($productionId);
-                    $entry->save();
+                    $existingProductionArticle = new ProductionArticleModel();
+                    $existingProductionArticle = $existingProductionArticle->select()->where("articleId", $id)->first();
+                    if($existingProductionArticle) {
+                        $existingProductionArticle->setArticleId($id);
+                        $existingProductionArticle->setProductionId($productionId);
+                        $existingProductionArticle->save();
+                    } else {
+                        $productionArticle = new ProductionArticleModel();
+                        $productionArticle->setArticleId($id);
+                        $productionArticle->setProductionId($productionId);
+                        $productionArticle->save();
+                    }
                 }
-
+                Helpers::setFlashMessage('success', "L'article a bien été mis à jour");
                 Helpers::namedRedirect("articles_list");
-            
             } else {
                 $view->assign("errors", $errors);
             }

@@ -48,14 +48,14 @@
                 <div class="navLabel">Utilisateurs</div>
             </a>
 
-            <a href="<?= Helpers::callRoute('templates_lists') ?>">
-                <i class="fas fa-paste fa-fw"></i>
-                <div class="navLabel">Templates</div>
-            </a>
-
             <a href="<?= Helpers::callRoute('stats') ?>">
                 <i class="fas fa-chart-line fa-fw"></i>
                 <div class="navLabel">Statistiques</div>
+            </a>
+
+            <a href="<?= Helpers::callRoute('templates_lists') ?>">
+                <i class="fas fa-palette"></i>
+                <div class="navLabel">Apparence</div>
             </a>
 
             <a href="<?= Helpers::callRoute('settings') ?>">

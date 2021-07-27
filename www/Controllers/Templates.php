@@ -59,6 +59,10 @@ class Templates {
                 if($variable->getSelector() == 'navbarColorHover')
                     $cssString .= ".dropdown .dropdown-content > a:hover { background-color: " . $variable->getValue() . "; }\n";
 
+                // Link colors (interface + articles)
+                if($variable->getSelector() == 'linksColor')
+                    $cssString .= ".article.card article a { color: ".$variable->getValue()." }\n";
+
                 if(strpos($variable->getSelector(), 'Hover')) {
                     $cssString .= '.'.$variable->getSelector().":hover { color: ".$variable->getValue()." }\n";
                 } else {

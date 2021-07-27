@@ -3,7 +3,7 @@ use App\Models\Settings;
 $appName = new Settings();
 $appName = $appName->findOneBy('selector', 'appName')->getValue();
 ?>
-<h1 class="title-form"><?= $appName ?></h1>
+
 <div id='login-subscription' class="card">
     <div class="error-message-form">
         <?php
@@ -17,9 +17,9 @@ $appName = $appName->findOneBy('selector', 'appName')->getValue();
 
     <?php App\Core\FormBuilder::render($form, true); ?>
     <div>
-        Mot de passe perdu ? <a href="<?= \App\Core\Helpers::callRoute('forget_password')?>">Réinitialiser mon mot de passe</a>
+        Mot de passe perdu ? <a class="linksColor" href="<?= \App\Core\Helpers::callRoute('forget_password')?>">Réinitialiser mon mot de passe</a>
     </div>
     <div>
-        Vous n'avez pas de compte ? <a href="<?= \App\Core\Helpers::callRoute('register')?>">Rejoignez-nous !</a>
+        Vous n'avez pas de compte ? <a class="linksColor" href="<?= \App\Core\Helpers::callRoute('register')?>">Rejoignez-nous !</a>
     </div>
 </div>

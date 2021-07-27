@@ -6,32 +6,26 @@ $(document).ready(function () {
     order: [],
     autoWidth: false,
     responsive: true,
-    columns: 
-      [
-        { data: "Miniature" }, 
-        { data: "Nom" }, 
-        { data: "Identifiant" }
-      ],
+    columns: [{ data: "Miniature" }, { data: "Nom" }, { data: "Identifiant" }],
 
     scrollY: "200px",
     scrollCollapse: true,
-    columnDefs: 
-      [
-        {
-          targets: 0,
-          data: "name",
-          searchable: false,
-          orderable: false,
-        },
-        { 
-          className: "media-name-cta", 
-          targets: [1] 
-        },
-        { 
-          className: "media-id-cta", 
-          targets: [2] 
-        }
-      ],
+    columnDefs: [
+      {
+        targets: 0,
+        data: "name",
+        searchable: false,
+        orderable: false,
+      },
+      {
+        className: "media-name-cta",
+        targets: [1],
+      },
+      {
+        className: "media-id-cta",
+        targets: [2],
+      },
+    ],
 
     language: {
       sEmptyTable: "Aucune donnée disponible dans le tableau",
@@ -52,7 +46,8 @@ $(document).ready(function () {
       },
       oAria: {
         sSortAscending: ": activer pour trier la colonne par ordre croissant",
-        sSortDescending: ": activer pour trier la colonne par ordre décroissant",
+        sSortDescending:
+          ": activer pour trier la colonne par ordre décroissant",
       },
       select: {
         rows: {
@@ -76,7 +71,9 @@ $(document).ready(function () {
         listenRowEvents();
       },
       error: function () {
-        console.log("Erreur dans la récupération des médias de type " + mediaType);
+        console.log(
+          "Erreur dans la récupération des médias de type " + mediaType
+        );
       },
     });
   }
@@ -112,8 +109,8 @@ inputProd.addEventListener("click", (e) => {
 });
 
 // Close media and prod modal
-removeBGs.forEach(item => {
-  item.addEventListener('click', event => {
+removeBGs.forEach((item) => {
+  item.addEventListener("click", (event) => {
     modalProd.classList.remove("visible");
     modalMedia.classList.remove("visible");
   });

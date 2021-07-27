@@ -103,8 +103,9 @@ class MediaManager
             }
 
             $check = move_uploaded_file($file['tempPath'], getcwd() . $file['path']);
+            $checkList[] = $check;
 
-            if($check){
+            if(!$check){
                 $this->result['errors'][] = "Le téléchargement n'a pas pu être effectué. ";
                 return false;
             }

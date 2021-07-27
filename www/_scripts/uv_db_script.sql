@@ -338,8 +338,9 @@ INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VA
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarColorHover", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerBackground", "#000d28", "#000d28");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerColor", "#f5f5f5", "#f5f5f5");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerColorHover", "#f5f5f5", "#f5f5f5");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerColorHover", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("titleColor", "#000000", "#000000");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("linksColor", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("tagsBackground", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("tagsColor", "#f5f5f5", "#f5f5f5");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("fontFamily", "mulish", "mulish");
