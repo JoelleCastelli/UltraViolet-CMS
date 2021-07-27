@@ -21,8 +21,8 @@ modal-production-details {
   background: white;
   z-index: 120;
   position: relative;
-  width: 80%;
-  height: 80%;
+  width: 90%;
+  height: 90%;
   display: flex;
   flex-flow: column;
   align-items: stretch;
@@ -50,11 +50,12 @@ modal-production-details {
   transition: all 0.25s ease;
 
   &:hover {
-    border-radius: 100px;
+    border-radius: 15px;
     background-color: $purple2;
     color: white;
     cursor: pointer;
     transform: scale(0.9);
+    transition: 0.2s ease;
   }
 }
 
@@ -102,7 +103,10 @@ modal-production-details {
     }
   }
 
-  &__actors, &__creators, &__writers, &__directors {
+  &__actors,
+  &__creators,
+  &__writers,
+  &__directors {
     position: relative;
     grid-area: actors;
     display: flex;
