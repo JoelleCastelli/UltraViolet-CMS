@@ -602,7 +602,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "title" => [
                     "type" => "text",
-                    "label" => "Titre de l'article *",
+                    "label" => "Titre de l'article",
                     "minLength" => 1,
                     "maxLength" => 100,
                     "class" => "input search-bar",
@@ -611,7 +611,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "description" => [
                     "type" => "textarea",
-                    "label" => "Description de l'article *",
+                    "label" => "Description de l'article",
                     "minLength" => 1,
                     "maxLength" => 255,
                     "class" => "input search-bar",
@@ -626,7 +626,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État *",
+                    "label" => "État",
                     "class" => "state",
                     "required" => true,
                     "error" => "Le champs Etat est vide",
@@ -665,7 +665,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "categories" => [
                     "type" => "checkbox",
-                    "label" => "Catégorie de l'article *",
+                    "label" => "Catégorie de l'article <span class='requiredField'>*</span>",
                     "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
@@ -674,7 +674,7 @@ class Article extends Database implements JsonSerializable
                  "content" => [
                      "id" => "articleContent",
                      "type" => "textarea",
-                     "label" => "Contenu de l'article *",
+                     "label" => "Contenu de l'article <span class='requiredField'>*</span>",
                      "minLength" => 1,
                      "class" => "input",
                      "error" => "Le contenu de l'article doit comprendre au minimum 1 caractères",
@@ -746,7 +746,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "title" => [
                     "type" => "text",
-                    "label" => "Titre de l'article *",
+                    "label" => "Titre de l'article",
                     "minLength" => 2,
                     "maxLength" => 100,
                     "class" => "input search-bar",
@@ -755,7 +755,7 @@ class Article extends Database implements JsonSerializable
                 ],
                 "description" => [
                     "type" => "textarea",
-                    "label" => "Description de l'article *",
+                    "label" => "Description de l'article",
                     "minLength" => 2,
                     "maxLength" => 255,
                     "class" => "input search-bar",
@@ -764,14 +764,14 @@ class Article extends Database implements JsonSerializable
                 ],
                 "production" => [
                     "type" => "text",
-                    "label" => "Associer prod à article",
+                    "label" => "Associer une production à l'article",
                     "class" => "search-bar",
                     "readonly" => true,
-                    "value" => $productionName
+                    "value" => !empty($productionId) ?  $productionName . " (" . $productionId . ")" : ""
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État *",
+                    "label" => "État <span class='requiredField'>*</span>",
                     "class" => "state",
                     "error" => "Le champs Etat est vide",
                     "options" => [
@@ -814,14 +814,15 @@ class Article extends Database implements JsonSerializable
                 ],
                 "media" => [
                     "type" => "text",
-                    "label" => "Illustration de l'article *",
+                    "label" => "Illustration de l'article",
                     "class" => "search-bar",
                     "readonly" => true,
-                    "value" => $mediaTitle,
+                    "value" => $mediaTitle . " (" . $mediaId . ")"
+
                 ],
                 "categories" => [
                     "type" => "checkbox",
-                    "label" => "Catégorie de l'article *",
+                    "label" => "Catégorie de l'article <span class='requiredField'>*</span>",
                     "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
@@ -830,10 +831,11 @@ class Article extends Database implements JsonSerializable
                 "content" => [
                     "id" => "articleContent",
                     "type" => "textarea",
-                    "label" => "Contenu de l'article *",
+                    "label" => "Contenu de l'article <span class='requiredField'>*</span>",
                     "minLength" => 2,
                     "class" => "input",
                     "error" => "Le contenu de l'article doit comprendre au minimum 2 caractères",
+                    "required" => false,
                 ],
             ]
         ];

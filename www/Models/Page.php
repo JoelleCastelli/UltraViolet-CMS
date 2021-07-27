@@ -314,7 +314,7 @@ class Page extends Database implements JsonSerializable
 				"method"=>"POST",
 				"action"=>"",
 				"class"=>"form_control form-add-page",
-				"id"=>"form_register",
+				"id"=>"form_create_page",
 				"submit"=>"Ajout d'une page",
                 "referer" => Helpers::callRoute('page_creation')
 			],
@@ -322,7 +322,7 @@ class Page extends Database implements JsonSerializable
 				"title" => [
                     "type" => "text",
                     "placeholder" => "Nous contacter",
-                    "label" => "Titre *",
+                    "label" => "Titre",
                     "class" => "search-bar",
                     "error" => "Votre titre doit faire entre 1 et 100 caractères",
                     "required" => true,
@@ -342,7 +342,7 @@ class Page extends Database implements JsonSerializable
 				"position"=>[
                     "type" => "number",
                     "placeholder" => "3",
-                    "label" => "Position * ",
+                    "label" => "Position",
                     "class" => "search-bar",
                     "error" => "Le champs position est vide et doit être supérieur à 0",
                     "min" => 1,
@@ -359,12 +359,13 @@ class Page extends Database implements JsonSerializable
                 ],
                 "content" => [
                     "id" => "articleContent",
+                    "label" => "Contenu de la page <span class='requiredField'>*</span>",
                     "type" => "textarea",
                     "class" => "input",
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État *",
+                    "label" => "État",
                     "class" => "state",
                     "required" => true,
                     "error" => "Le champs Etat est vide",
@@ -411,7 +412,7 @@ class Page extends Database implements JsonSerializable
                 "method" => "POST",
                 "action" => "",
                 "class" => "form_control",
-                "id" => "",
+                "id" => "form_update_page",
                 "submit" => "Modifier la page",
                 "referer" => Helpers::callRoute('page_update', ['id' => $id])
             ],
@@ -420,7 +421,7 @@ class Page extends Database implements JsonSerializable
                 "title" => [
                     "type" => "text",
                     "placeholder" => "Nous contacter",
-                    "label" => "Titre *",
+                    "label" => "Titre",
                     "class" => "search-bar",
                     "error" => "Votre titre doit faire entre 1 et 100 caractères",
                     "required" => true,
@@ -440,7 +441,7 @@ class Page extends Database implements JsonSerializable
                 "position" => [
                     "type" => "number",
                     "placeholder" => "3",
-                    "label" => "Position * ",
+                    "label" => "Position",
                     "class" => "search-bar",
                     "error" => "Le champs position est vide et doit être supérieur à 0",
                     "min" => 1,
@@ -457,12 +458,13 @@ class Page extends Database implements JsonSerializable
                 ],
                 "content" => [
                     "id" => "articleContent",
+                    "label" => "Contenu de la page <span class='requiredField'>*</span>",
                     "type" => "textarea",
                     "class" => "input",
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État *",
+                    "label" => "État",
                     "class" => "",
                     "required" => true,
                     "error" => "Le champs état est vide",

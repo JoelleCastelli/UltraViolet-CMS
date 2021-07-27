@@ -16,7 +16,9 @@
         </small>
         <div class="article__tags">
             <?php foreach ($article->getCategories() as $category) : ?>
-                <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($category->getName())]) ?>"><div class="article__tags__category tag-item"><?= $category->getName() ?></div></a>
+                <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($category->getName())]) ?>">
+                    <div class="tag-item tagsBackground tagsColor"><?= $category->getName() ?></div>
+                </a>
             <?php endforeach; ?>
         </div>
         <article>
@@ -29,7 +31,7 @@
         <section id="production-card" class="production card">
             <img class="production__image" src="<?= $production->getProductionPosterPath() ?>">
             <h2 class="production__title"><?= $production->getTitle() ?></h2>
-            <p class="production__type tag-item"><?= $production->getTranslatedType() ?></p>
+            <p class="production__type tag-item tagsBackground tagsColor"><?= $production->getTranslatedType() ?></p>
             <p class="production__release-date">Date de sortie : <?= $production->getCleanReleaseDate() ?></p>
             <p></p>
         </section>
@@ -43,7 +45,7 @@
         <!--Comment form only for logged users-->
         <?php if(Request::getUser()->isLogged()) { ?>
             <div id="add-btn" class="title-btn">
-                <button class="btn title-btn">Commenter
+                <button class="btn title-btn tagsBackground tagsColor">Commenter
                     <div class="add-btn"></div>
                 </button>
             </div>
@@ -61,7 +63,7 @@
         if(!empty($comments)) {
             foreach ($comments as $comment) { ?>
                 <div class="comment">
-                    <img class="comment__profile-picture" src="<?= PATH_TO_IMG ?>default_user.jpg">
+                    <img class="comment__profile-picture" src="<?= $comment->getPerson()->getMedia()->getPath() ?>">
                     <h3 class="comment__title">Ecrit par <?= $comment->getPerson()->getPseudo() ?? "Anonyme" ?> le <?= $comment->getCleanCreationDate() ?></h3>
                     <p class="comment__content"><?= $comment->getContent() ?></p>
                 </div>

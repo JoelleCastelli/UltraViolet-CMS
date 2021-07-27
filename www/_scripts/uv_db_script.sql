@@ -332,16 +332,18 @@ VALUES ("Ma première page", "ma-premiere-page", 1, "published", "Ceci est la de
 -- -----------------------------------------------------
 -- Insert default templates variables
 -- -----------------------------------------------------
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("pageBackground", "#e5e5e5", "#e5e5e5");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarBackground", "#000d28", "#000d28");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarColor", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarColor", "#f5f5f5", "#f5f5f5");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("navbarColorHover", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerBackground", "#000d28", "#000d28");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerColor", "#000d28", "#000d28");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("titleColor", "#000d28", "#000d28");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerColor", "#f5f5f5", "#f5f5f5");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("footerColorHover", "#5f2eea", "#5f2eea");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("titleColor", "#000000", "#000000");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("linksColor", "#5f2eea", "#5f2eea");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("tagsBackground", "#5f2eea", "#5f2eea");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("tagsColor", "#ffffff", "#ffffff");
+INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("tagsColor", "#f5f5f5", "#f5f5f5");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("fontFamily", "mulish", "mulish");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("customHeight", "1.5", "1.5");
-INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("customSize", "14", "14");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("appName", "MonSite.com", "");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("metaTitle", "Ceci est le title par défaut de votre site", "");
 INSERT INTO `ultraviolet`.`uv_settings` (`selector`, `value`, `defaultValue`) VALUES ("metaDescription", "Ceci est la meta description par défaut de votre site", "");

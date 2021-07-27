@@ -23,6 +23,7 @@ class Production
             "season" => 'Saison',
             "series" => 'Série',
             "runtime" => 'Durée',
+            "id" => 'Identifiant',
             "releaseDate" => 'Date de sortie',
             "createdAt" => 'Date d\'ajout',
             "actions" => 'Actions'
@@ -57,6 +58,7 @@ class Production
                     $this->columnsTable['season'] => $production->getParentSeasonName(),
                     $this->columnsTable['series'] => $production->getParentSeriesName(),
                     $this->columnsTable['runtime'] => $production->getCleanRuntime(),
+                    $this->columnsTable['id'] => $production->getId(),
                     $this->columnsTable['releaseDate'] => $production->getCleanReleaseDate(),
                     $this->columnsTable['createdAt'] => $production->getCleanCreatedAt(),
                     $this->columnsTable['actions'] => $production->generateActionsMenu(),

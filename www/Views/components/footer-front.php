@@ -5,7 +5,7 @@
     $pages = Page::getStaticPages();
 ?>
 
-<footer id="footer-front">
+<footer id="footer-front" class="footerBackground">
 
     <article class="logo-section">
         <a href="<?= Helpers::callRoute('front_home') ?>" class="brandLogo">
@@ -14,14 +14,14 @@
     </article>
 
     <div class="path-section">
-        <article >
+        <article>
             <?php foreach ($pages as $page) : ?>
-                <a href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
+                <a class="footerColor footerColorHover" href="<?= Helpers::callRoute('display_static_page', ['page' => $page->getSlug()]) ?>"><?= $page->getTitle() ?></a>
             <?php endforeach; ?>
         </article>
 
-        <article>
-            <p>©2021 Ultraviolet technologies Inc.</p>
+        <article class="footerColor">
+            <p>©2021 UltraViolet Technologies Inc.</p>
             <p>Ce site est protégé par Joëlle CASTELLI. Par ailleurs, la Politique de confidentialité et les Conditions d'utilisation de Joëlle s'appliquent.</p>
         </article>
     </div>

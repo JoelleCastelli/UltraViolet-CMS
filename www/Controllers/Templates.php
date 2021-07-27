@@ -45,18 +45,32 @@ class Templates {
         $newVariables = $newVariables->findAll();
         $cssString = '';
         foreach ($newVariables as $variable) {
-            if(strpos($variable->getSelector(), 'Background'))
+            if(strpos($variable->getSelector(), 'Background')) {
                 $cssString .= '.'.$variable->getSelector()." { background-color: ".$variable->getValue()."; }\n";
-            else if(strpos($variable->getSelector(), 'Font'))
-                $cssString .= '.'.$variable->getSelector()." { font-size: ".$variable->getValue()."; }\n";
-            else if(strpos($variable->getSelector(), 'Color'))
-                $cssString .= '.'.$variable->getSelector()." { color: ".$variable->getValue()."; }\n";
-            else if(strpos($variable->getSelector(), 'Height'))
-                $cssString .= '.'.$variable->getSelector()." { line-height: ".$variable->getValue()."; }\n";
-            else if(strpos($variable->getSelector(), 'Family'))
+                // Comment button sign
+                if($variable->getSelector() == "tagsBackground") {
+                    $cssString .= ".add-btn::before { background: " . $variable->getValue() . "; }\n";
+                    $cssString .= ".add-btn::after { background: " . $variable->getValue() . "; }\n";
+                }
+            } else if(strpos($variable->getSelector(), 'Color')) {
+                // Dropdown menu
+                if($variable->getSelector() == 'navbarColor')
+                    $cssString .= ".dropdown .dropdown-content > a:hover { transition: 0.2s; z-index: 40; color: " . $variable->getValue() . "; }\n";
+                if($variable->getSelector() == 'navbarColorHover')
+                    $cssString .= ".dropdown .dropdown-content > a:hover { background-color: " . $variable->getValue() . "; }\n";
+
+                // Link colors (interface + articles)
+                if($variable->getSelector() == 'linksColor')
+                    $cssString .= ".article.card article a { color: ".$variable->getValue()." }\n";
+
+                if(strpos($variable->getSelector(), 'Hover')) {
+                    $cssString .= '.'.$variable->getSelector().":hover { color: ".$variable->getValue()." }\n";
+                } else {
+                    $cssString .= '.'.$variable->getSelector()." { color: ".$variable->getValue()."; }\n";
+                }
+            } else if(strpos($variable->getSelector(), 'Family')) {
                 $cssString .= '.'.$variable->getSelector()." { font-family: ".$variable->getValue().", sans-serif; }\n";
-            else if(strpos($variable->getSelector(), 'Size'))
-                $cssString .= '.'.$variable->getSelector()." { font-size: ".$variable->getValue()."px; }\n";
+            }
         }
         file_put_contents(getcwd().'/src/css/variables.css', $cssString);
     }
@@ -70,6 +84,7 @@ class Templates {
                 $variable->save();
             }
         }
+        $this->writeCssFile();
         Helpers::setFlashMessage('success', "Les valeurs par défaut ont bien été appliquées");
     }
 

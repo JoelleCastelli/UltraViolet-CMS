@@ -17,8 +17,10 @@ class Media
         $this->columnsTable = [
             "thumbnail" => 'Miniature',
             "title" => 'Nom',
+            "id" => "Identifiant",
             "createdAt" => "Date d'ajout",
-            "actions" => 'Actions'
+            "actions" => "Actions"
+
         ];
     }
 
@@ -76,6 +78,7 @@ class Media
                 $mediasArray[] = [
                     $this->columnsTable['title'] => $media->getTitle(),
                     $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$path."'/>",
+                    $this->columnsTable['id'] => $media->getId(),
                     $this->columnsTable['createdAt'] => $media->getCleanCreatedAtDate(),
                     $this->columnsTable['actions'] => $media->generateActionsMenu(),
                 ];

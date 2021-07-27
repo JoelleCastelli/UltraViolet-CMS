@@ -6,10 +6,32 @@ $(document).ready(function () {
     order: [],
     autoWidth: false,
     responsive: true,
-    columns: [{ data: "Miniature" }, { data: "Nom" }, { data: "Date d'ajout" }],
-    scrollY: "150px",
+    columns: 
+      [
+        { data: "Miniature" }, 
+        { data: "Nom" }, 
+        { data: "Identifiant" }
+      ],
+
+    scrollY: "200px",
     scrollCollapse: true,
-    columnDefs: [{ className: "media-name-cta", targets: [1] }],
+    columnDefs: 
+      [
+        {
+          targets: 0,
+          data: "name",
+          searchable: false,
+          orderable: false,
+        },
+        { 
+          className: "media-name-cta", 
+          targets: [1] 
+        },
+        { 
+          className: "media-id-cta", 
+          targets: [2] 
+        }
+      ],
 
     language: {
       sEmptyTable: "Aucune donnée disponible dans le tableau",
@@ -101,10 +123,9 @@ function listenRowEvents() {
   const mediaCTAs = document.querySelectorAll(".media-name-cta");
   mediaCTAs.forEach((cta) => {
     cta.addEventListener("click", (e) => {
-      const media = e.target.innerHTML;
-      console.log("nom du media get : " + media);
-      input.value = media;
-      console.log(input.value);
+      idElement = e.target.parentNode.querySelector("td.media-id-cta");
+      const media = idElement.innerHTML;
+      input.value = e.target.innerHTML + " (" + media + ")";
       modalMedia.classList.toggle("visible");
     });
   });

@@ -24,7 +24,12 @@ class FormBuilder
             $readonly = isset($field["readonly"]) && $field["readonly"] == true ? "readonly" : '';
             $multiple = isset($field["multiple"]) && $field["multiple"] == true ? "multiple" : '';
 
-            $html .= "<label class='".($field["classLabel"] ?? "")."' for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
+            // Add * next to label if required
+            $html .= "<label class='".($field["classLabel"] ?? "")."' for = '".($field["id"] ?? $fieldName)."'>";
+            $html .= ($field["label"] ?? "");
+            if(!in_array($config["config"]["id"], ['form_register', 'form_add_media']))
+                $html .= $required ? ' <span class="requiredField">*</span>' : '';
+            $html .= "</label>";
 
             // SELECT
 		    if ($field["type"] == "select") {
@@ -120,7 +125,7 @@ class FormBuilder
                 >";
             }
 		}
-        $html .= "<input type='submit' class='btn' value=\"".($config["config"]["submit"]??"Valider")."\">";
+        $html .= "<input type='submit' class='btn tagsBackground tagsColor' value=\"".($config["config"]["submit"]??"Valider")."\">";
 		$html .= "</form>";
 
 		if($show) {

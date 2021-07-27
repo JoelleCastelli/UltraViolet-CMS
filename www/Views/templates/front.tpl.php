@@ -14,9 +14,8 @@
         <!--JS-->
         <script src="<?= PATH_TO_DIST . 'main.js' ?>"></script>
         <!--CSS-->
-        <link rel="stylesheet" href="/src/css/variables.css">
         <link rel="stylesheet" href="/src/css/main.css">
-        <link rel="stylesheet" href="<?=PATH_TO_DIST.'main.css'?>">
+        <link rel="stylesheet" href="/src/css/variables.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 
         <?php
@@ -28,7 +27,7 @@
         ?>
     </head>
 
-    <body>
+    <body class="pageBackground fontFamily">
 
         <?php include 'Views/components/navbar-front.php'; ?>
             

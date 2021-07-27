@@ -11,19 +11,19 @@ $appName = new Settings();
 $appName = $appName->findOneBy('selector', 'appName')->getValue();
 ?>
 
-<nav id="navbar-front">
+<nav id="navbar-front" class="navbarBackground">
     <a href="<?= Helpers::callRoute('front_home') ?>" class="brandLogo">
         <img src='<?= PATH_TO_IMG ?>logo/logo.png' alt='Logo <?= $appName ?>'>
     </a>
     
     
     <?php foreach ($categoriesNavbar['main'] as $mainCategory) : ?>
-        <a href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
+        <a class="navbarColor navbarColorHover" href="<?= Helpers::callRoute('display_category', ['category' => Helpers::slugify($mainCategory->getName())]) ?>"><?= $mainCategory->getName() ?></a>
     <?php endforeach; ?>
     
 
     <?php if (!empty($categoriesNavbar['other'])) : ?>
-        <div id='otherCategories' class="dropdown dropdown-button">
+        <div id='otherCategories' class="dropdown dropdown-button navbarColor navbarColorHover">
             <span>Toutes les catégories</span>
             <div class="dropdown-content">
                 <?php foreach ($categoriesNavbar['other']  as $otherCategory) : ?>

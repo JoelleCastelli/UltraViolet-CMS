@@ -28,14 +28,17 @@ class FormValidator
                 $fieldName = str_replace("[]", "", $fieldName);
 
                 if(!isset($data[$fieldName])) {
-                    echo "Tentative de hack !";
-                    exit;
+                    $errors[] = "Tentative de hack : le champ ".$fieldConfig['label']." est requis !";
+                    return $errors;
                 }
+
+                if(is_string($data[$fieldName]))
+                    $data[$fieldName] = trim($data[$fieldName]);
 
                 // check if required field is not empty but still allow 0
                 if (isset($fieldConfig['required']) && empty($data[$fieldName]) && $data[$fieldName] !== "0" && $data[$fieldName] !== 0) {
-                    echo "Tentative de hack : le champ $fieldName est obligatoire !";
-                    exit;
+                    $errors[] = "Le champ ".$fieldConfig['label']." est obligatoire !";
+                    return $errors;
                 }
 
                 if(!Helpers::isStrictlyEmpty($data[$fieldName])) {
@@ -162,8 +165,8 @@ class FormValidator
             }
 
             if (in_array(false, $correctOptions)) {
-                echo "Tentative de hack : l'option n'existe pas !";
-                exit;
+                $errors[] = "Tentative de hack : l'option n'existe pas !";
+                return $errors;
             }
         }
     }

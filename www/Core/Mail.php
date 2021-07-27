@@ -16,11 +16,11 @@ class Mail
 	private string $Password;
 
 	public function __construct(){
-		$this->Host = 'smtp.gmail.com';
-		$this->Port = 587;
-        $this->SMTPSecure = 'tls';
-		$this->Username = 'ultravioletcms@gmail.com';
-		$this->Password = 'Ultraviolet123';
+		$this->Host = HOST_MAIL;
+		$this->Port = PORT_MAIL;
+        $this->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+		$this->Username = MAIL_ACCOUNT;
+		$this->Password = PASSWORD_ACCCOUNT;
 	}
 
 	public function sendMail($to, $from, $from_name, $subject, $msg) {

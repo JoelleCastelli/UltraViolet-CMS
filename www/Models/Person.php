@@ -484,33 +484,9 @@ class Person extends Database implements JsonSerializable
     }
 
     public function formBuilderUpdatePerson($id): array {
-        
         $user = new Person();
-
         $user = $user->findOneBy('id', $id);
 
-        //Role option for select
-        $firstRoleOption = $user->getRole();
-        $roles = array($firstRoleOption,"user","moderator","editor","vip","admin");
-        $rolesoptions= [];
-
-        foreach ($roles as $role) {
-            if ($firstRoleOption !== $role){
-                $options = [
-                    "value" => $role,
-                    "text" => $role
-                ];
-                array_push($rolesoptions, $options);
-            }
-         }
-
-         $options = [
-            "value" => $firstRoleOption,
-            "text" => $firstRoleOption
-        ];
-        array_unshift($rolesoptions, $options);
-        
-        //Fo
         if($user) {
             return [
                 "config" => [
@@ -526,7 +502,7 @@ class Person extends Database implements JsonSerializable
                 "fields" => [
                     "email" => [
                         "type" => "email",
-                        "label" => "Email *",
+                        "label" => "Email",
                         "placeholder" => "Email",
                         "class" => "input",
                         "id" => "email",
@@ -538,7 +514,7 @@ class Person extends Database implements JsonSerializable
 
                     "pseudo" => [
                         "type" => "pseudo",
-                        "label" => "Pseudonyme *",
+                        "label" => "Pseudonyme",
                         "placeholder" => "Pseudonyme",
                         "class" => "input",
                         "id" => "pseudo",
@@ -551,9 +527,31 @@ class Person extends Database implements JsonSerializable
 
                     "role" => [
                         "type" => "select",
-                        "label" => "Role de l'utilisateur",
+                        "label" => "Rôle",
                         "class" => "search-bar",
-                        "options" => $rolesoptions,
+                        "options" => [
+                            [
+                                "value"=>"user",
+                                "text"=>"Utilisateur",
+                                "selected" => $user->getRole() == 'user'
+                            ],
+                            [
+                                "value"=>"moderator",
+                                "text"=>"Modérateur",
+                                "selected" => $user->getRole() == 'moderator'
+                            ],
+                            [
+                                "value"=>"editor",
+                                "text"=>"Rédacteur",
+                                "selected" => $user->getRole() == 'editor'
+                            ],
+                            [
+                                "value"=>"admin",
+                                "text"=>"Administrateur",
+                                "selected" => $user->getRole() == 'admin'
+
+                            ],
+                        ],
                         "required" => true,
                         "error" => "Vous devez sélectionner un role.",
                         
@@ -585,7 +583,7 @@ class Person extends Database implements JsonSerializable
             "fields" => [
                 "email" => [
                     "type" => "email",
-                    "label" => "Email <span class='requiredField'>*<span>",
+                    "label" => "Email",
                     "placeholder" => "Email",
                     "class" => "input",
                     "id" => "email",
@@ -595,7 +593,7 @@ class Person extends Database implements JsonSerializable
                 ],
                 "pseudo" => [
                     "type" => "pseudo",
-                    "label" => "Pseudonyme <span class='requiredField'>*<span>",
+                    "label" => "Pseudonyme",
                     "class" => "input",
                     "id" => "pseudo",
                     "error" => "Le format du champ pseudo est incorrect",
@@ -633,6 +631,7 @@ class Person extends Database implements JsonSerializable
                     "type" => "password",
                     "label" => "Ancien mot de passe",
                     "class" => "input",
+                    "required" => true
                 ],
                 "pwd" => [
                     "type" => "password",
@@ -641,6 +640,7 @@ class Person extends Database implements JsonSerializable
                     "class" => "input",
                     "regex" => "/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/",
                     "error" => "Votre mot de passe doit faire au minimum 8 caractères, comporté au moins une lettre minusucule et majuscule, un chiffre et une lettre spéciale.",
+                    "required" => true
                 ],
                 "pwdConfirm" => [
                     "type" => "password",
@@ -648,6 +648,7 @@ class Person extends Database implements JsonSerializable
                     "class" => "input",
                     "confirm" => "pwd",
                     "error" => "Votre mot de passe de confirmation ne correspond pas",
+                    "required" => true
                 ],
                 "csrfToken" => [
                     "type" => "hidden",
@@ -836,7 +837,7 @@ class Person extends Database implements JsonSerializable
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-bottom:15px\"><h2 style=\"Margin:0;line-height:29px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:24px;font-style:normal;font-weight:normal;color:#333333\">Email de confirmation</h2></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de création de compte pour Ultraviolet à bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de création de compte sur ".Settings::getAppName()." a bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('verification', ['pseudo' => $pseudo, 'key' => $key], true)."</p></td> 
@@ -845,7 +846,7 @@ class Person extends Database implements JsonSerializable
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:15px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Dans la plupart des logiciels de courriel, cette adresse devrait apparaître comme un lien de couleur bleue qu'il vous suffit de cliquer. Si cel ane fonctionne pas, copiez ce lien et collez-le dans la barre d'adresse de votre navigateur web. </p></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Cordialement, Ultraviolet<br><br></p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Cordialement, l'équipe ".Settings::getAppName()."<br><br></p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Ce mail est un mail automatique. Merci de ne pas y répondre.</p></td> 
@@ -977,7 +978,7 @@ class Person extends Database implements JsonSerializable
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-bottom:15px\"><h2 style=\"Margin:0;line-height:29px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:24px;font-style:normal;font-weight:normal;color:#333333\">Email de confirmation</h2></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de changement de mail pour Ultraviolet a bien été enregistrée. Pour valider votre nouveau email, merci de cliquer sur le lien ci-dessous :</p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de changement d'adresse email sur ".Settings::getAppName()." a bien été enregistrée. Pour valider votre nouvelle adresse, merci de cliquer sur le lien ci-dessous :</p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">" . Helpers::callRoute('verification', ['pseudo' => $pseudo, 'key' => $key], true) . "</p></td> 
@@ -986,7 +987,7 @@ class Person extends Database implements JsonSerializable
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:15px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Dans la plupart des logiciels de courriel, cette adresse devrait apparaître comme un lien de couleur bleue qu'il vous suffit de cliquer. Si ce lien ne fonctionne pas, copiez ce lien et collez-le dans la barre d'adresse de votre navigateur web. </p></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Cordialement, Ultraviolet<br><br></p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Cordialement, l'équipe ".Settings::getAppName()."<br><br></p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Ce mail est un mail automatique. Merci de ne pas y répondre.</p></td> 
@@ -1117,7 +1118,7 @@ class Person extends Database implements JsonSerializable
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-bottom:15px\"><h2 style=\"Margin:0;line-height:29px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:24px;font-style:normal;font-weight:normal;color:#333333\">Email de confirmation</h2></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de création de compte pour Ultraviolet à bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Votre demande de renouvellement de mot de passe sur ".Settings::getAppName()." a bien été enregistrée. Pour valider votre compte, merci de cliquer sur le lien ci-dessous :</p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">".Helpers::callRoute('reset_password', ['id' => $id, 'key' => $key], true)."</p></td> 
@@ -1126,7 +1127,7 @@ class Person extends Database implements JsonSerializable
                               <td align=\"left\" style=\"padding:0;Margin:0;padding-top:15px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Dans la plupart des logiciels de courriel, cette adresse devrait apparaître comme un lien de couleur bleue qu'il vous suffit de cliquer. Si cel ane fonctionne pas, copiez ce lien et collez-le dans la barre d'adresse de votre navigateur web. </p></td> 
                              </tr> 
                              <tr> 
-                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Cordialement, Ultraviolet<br><br></p></td> 
+                              <td align=\"left\" style=\"padding:0;Margin:0;padding-top:20px\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Cordialement, l'équipe ".Settings::getAppName()."<br><br></p></td> 
                              </tr> 
                              <tr> 
                               <td align=\"left\" style=\"padding:0;Margin:0\"><p style=\"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px\">Ce mail est un mail automatique. Merci de ne pas y répondre.</p></td> 

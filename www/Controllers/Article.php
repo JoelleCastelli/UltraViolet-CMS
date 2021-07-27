@@ -50,11 +50,22 @@ class Article {
 
             if ($article->hasDuplicateSlug($_POST["title"])) $errors[] = "Ce titre existe déjà. Veuillez changer votre titre d'article";
 
-            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
-            if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
-            
+
+            // Verification Media
+            if (!empty($_POST['media'])) {
+                // get id between parenthesis
+                $matches = preg_split("/[\(\)]/", $_POST["media"], -1, PREG_SPLIT_NO_EMPTY);
+                $id = $matches[count($matches) - 1];
+                $mediaId = $media->select("id")->where("id", htmlspecialchars($id))->first(false);
+                if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
+            }
+      
             if(!empty($_POST["production"])){
-                $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
+                // get id between parenthesis
+                $matches = preg_split("/[\(\)]/", $_POST["production"], -1, PREG_SPLIT_NO_EMPTY);
+                $id = $matches[count($matches) - 1];
+
+                $productionId = $production->select("id")->where("id", htmlspecialchars($id))->first(false);
                 if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
             }
             if (empty($errors)) {
@@ -67,7 +78,10 @@ class Article {
                 $article->setSlug(Helpers::slugify($title));
                 $article->setDescription(htmlspecialchars($_POST["description"]));
                 $article->setContent($_POST["content"]);
-                $article->setMediaId($mediaId);
+                if (!empty($mediaId))
+                    $article->setMediaId($mediaId);
+                else 
+                    $article->setDefaultPicture();
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {
@@ -129,12 +143,23 @@ class Article {
             $errors = FormValidator::check($form, $_POST);
 
             if ($article->hasDuplicateSlug($_POST["title"], $id)) $errors[] = "Ce slug (titre adapté à l'URL) existe déjà. Veuillez changer votre titre d'article";
-            $mediaId = $media->getMediaByTitle(htmlspecialchars($_POST["media"]));
+            
+            // Verification Media
+            if(!empty($_POST['media'])){
+                // get id between parenthesis
 
-            if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
+                $matches = preg_split("/[\(\)]/", $_POST["media"], -1, PREG_SPLIT_NO_EMPTY);
+                $mediaId = $matches[count($matches) - 1];
+                $mediaId = $media->select("id")->where("id", htmlspecialchars($mediaId))->first(false);
+                if ($mediaId === -1) $errors[] = "Le média n'existe pas. Veuillez en choisir qui existe déjà ou ajoutez-en un dans la section Media";
+            }
 
+            // Verification Production
             if (!empty($_POST["production"])) {
-                $productionId = $production->select("id")->where("title", htmlspecialchars($_POST["production"]))->first(0);
+                // get id between parenthesis
+                $matches = preg_split("/[\(\)]/", $_POST["production"], -1, PREG_SPLIT_NO_EMPTY);
+                $productionId = $matches[count($matches) - 1];
+                $productionId = $production->select("id")->where("id", htmlspecialchars($productionId))->first(false);
                 if (empty($productionId)) $errors[] = "Cette production n'existe pas. Veuillez en choisir une autre ou en ajouter une vous-même dans la section correspondante";
             }
 
@@ -147,7 +172,12 @@ class Article {
                 $article->setTitle($title);
                 $article->setSlug(Helpers::slugify($title));
                 $article->setContent($_POST["content"]);
-                $article->setMediaId($mediaId);
+
+                if(!empty($mediaId))
+                    $article->setMediaId($mediaId);
+                else
+                    $article->setDefaultPicture();
+
                 $article->setPersonId($user->getId());
                 $article->setContentUpdatedAt(date("Y-m-d H:i:s"));
 

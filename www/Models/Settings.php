@@ -126,6 +126,14 @@ class Settings extends Database
                 "referer" => Helpers::callRoute('templates_lists')
             ],
             "fields" => [
+                "pageBackground" => [
+                    "type" => "color",
+                    "label" => "Fond de la page",
+                    "value" => $currentVariables['pageBackground'],
+                    "error" => "Le code couleur du fond de la page n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
                 "navbarBackground" => [
                     "type" => "color",
                     "label" => "Couleur du menu",
@@ -139,6 +147,14 @@ class Settings extends Database
                     "label" => "Couleur des titres du menu",
                     "value" => $currentVariables['navbarColor'],
                     "error" => "Le code couleur des titres du menu n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "navbarColorHover" => [
+                    "type" => "color",
+                    "label" => "Couleur des titres du menu survolés",
+                    "value" => $currentVariables['navbarColorHover'],
+                    "error" => "Le code couleur des titres du menu survolés n'est pas valable",
                     "required" => true,
                     "max" => 160
                 ],
@@ -158,6 +174,14 @@ class Settings extends Database
                     "required" => true,
                     "max" => 160
                 ],
+                "footerColorHover" => [
+                    "type" => "color",
+                    "label" => "Couleur des liens du footer survolés",
+                    "value" => $currentVariables['footerColorHover'],
+                    "error" => "Le code couleur des liens du footer survolés n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
                 "titleColor" => [
                     "type" => "color",
                     "label" => "Couleur des titres",
@@ -166,12 +190,20 @@ class Settings extends Database
                     "required" => true,
                     "max" => 160
                 ],
+                "linksColor" => [
+                    "type" => "color",
+                    "label" => "Couleur des liens",
+                    "value" => $currentVariables['linksColor'],
+                    "error" => "Le code couleur des liens n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
                 "tagsBackground" => [
                     "type" => "color",
-                    "label" => "Couleur de fond des tags",
+                    "label" => "Couleur du fond des tags",
                     "min" => "0.1",
                     "value" => $currentVariables['tagsBackground'],
-                    "error" => "La hauteur de ligne ne peut pas être intéfieure à 0.1",
+                    "error" => "Le code couleur du fond des tags n'est pas valable",
                     "required" => true,
                     "max" => 160
                 ],
@@ -180,7 +212,7 @@ class Settings extends Database
                     "label" => "Couleur du texte des tags",
                     "min" => "0.1",
                     "value" => $currentVariables['tagsColor'],
-                    "error" => "La hauteur de ligne ne peut pas être intéfieure à 0.1",
+                    "error" => "Le code couleur du texte des tags n'est pas valable",
                     "required" => true,
                     "max" => 160
                 ],
@@ -194,14 +226,9 @@ class Settings extends Database
                             "selected" => $currentVariables['fontFamily'] == 'mulish',
                         ],
                         [
-                            "value" => "comic",
-                            "text" => "Comic Sans MS",
-                            "selected" => $currentVariables['fontFamily'] == 'comic',
-                        ],
-                        [
-                            "value" => "arial",
-                            "text" => "Arial",
-                            "selected" => $currentVariables['fontFamily'] == 'arial',
+                            "value" => "poppins",
+                            "text" => "Poppins",
+                            "selected" => $currentVariables['fontFamily'] == 'poppins',
                         ],
                         [
                             "value" => "tahoma",
@@ -209,33 +236,27 @@ class Settings extends Database
                             "selected" => $currentVariables['fontFamily'] == 'tahoma',
                         ],
                         [
-                            "value" => "poppins",
-                            "text" => "Poppins",
-                            "selected" => $currentVariables['fontFamily'] == 'poppins',
+                            "value" => "calibri",
+                            "text" => "Calibri",
+                            "selected" => $currentVariables['fontFamily'] == 'calibri',
+                        ],
+                        [
+                            "value" => "roboto",
+                            "text" => "Roboto",
+                            "selected" => $currentVariables['fontFamily'] == 'roboto',
+                        ],
+                        [
+                            "value" => "arial",
+                            "text" => "Arial",
+                            "selected" => $currentVariables['fontFamily'] == 'arial',
+                        ],
+                        [
+                            "value" => "papyrus",
+                            "text" => "Papyrus",
+                            "selected" => $currentVariables['fontFamily'] == 'papyrus',
                         ]
                     ],
                     "error" => "La police choisie n'existe pas",
-                    "required" => true,
-                ],
-                "customHeight" => [
-                    "type" => "number",
-                    "label" => "Hauteur de ligne",
-                    "class" => "search-bar",
-                    "value" => $currentVariables['customHeight'],
-                    "min" => "0",
-                    "step" => "0.1",
-                    "error" => "La hauteur de ligne ne peut pas être inférieure à 0.1 ni supérieur à 5",
-                    "required" => true,
-                    "max" => "5"
-                ],
-                "customSize" => [
-                    "type" => "number",
-                    "label" => "Taille de la police",
-                    "class" => "search-bar",
-                    "value" => $currentVariables['customSize'],
-                    "min" => "5",
-                    "max" => "1000",
-                    "error" => "La taille de la police ne peut pas être inférieure à 5 ni supérieur à 1000",
                     "required" => true,
                 ],
                 "csrfToken" => [
