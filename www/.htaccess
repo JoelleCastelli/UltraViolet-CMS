@@ -6,13 +6,16 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php
 
 # Transfert 404 and 403 to 404 page view
-ErrorDocument 404 /Views/front/404.view.php
-ErrorDocument 403 /Views/front/404.view.php
+ErrorDocument 404 /404.view.php
+ErrorDocument 403 /404.view.php
 
 # Forbidden sensitives files inside root folder
 RedirectMatch 403 /.env
 RedirectMatch 403 .yml*$
 RedirectMatch 403 .sql*$
+RedirectMatch 403 .json*$
+RedirectMatch 403 .mix.js*$
+RedirectMatch 403 Autoload.php
 
 # Forbidden sensitive folders
 RedirectMatch 403 ^/Controllers/.*$
@@ -23,11 +26,7 @@ RedirectMatch 403 ^/Models/.*$
 RedirectMatch 403 ^/node_modules/.*$
 # /dist open
 # /src open
-# /Views open
+RedirectMatch 403 ^/Views/.*$
 
 # Desactivate indexation of the directories
 Options -Indexes
-
-# TODO Next
-# 1. Deny Views but keep the 404 view. Because we don't call View directly in our project
-# 2. Deny all files in root folder but keep the index.php one
