@@ -96,6 +96,6 @@ display_article:
 
 #DATABASE
 populate-database:
-  path:       /base-de-donnees/peupler
+  path:       /populate
   controller: Main
   action:  populateDatabase
