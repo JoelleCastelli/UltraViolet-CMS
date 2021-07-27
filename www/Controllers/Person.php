@@ -173,16 +173,24 @@ class Person
             if (!empty($_POST)) {
                 $errors = FormValidator::check($form, $_POST);
                 if (empty($errors)) {
-                    $user->setEmail(htmlspecialchars($_POST["email"]));
-                    $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
-                    $user->setRole(htmlspecialchars($_POST["role"]));
-                    $user->save();
 
-                    Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
-                    Helpers::redirect(Helpers::callRoute('users_list'));
-                } else {
-                    $view->assign("errors", $errors);
+                    if ($user->count('email')->where('email', htmlspecialchars($_POST['email']))->andWhere('id', $user->getId(), '!=')->first(false))
+                        $errors = ['Cet email est indisponible'];
+
+                    if ($user->count('pseudo')->where('pseudo', htmlspecialchars($_POST['pseudo']))->andWhere('id', $user->getId(), '!=')->first(false))
+                        $errors = ['Ce pseudonyme est indisponible'];
+
+                    if (empty($errors)) {
+                        $user->setEmail(htmlspecialchars($_POST["email"]));
+                        $user->setPseudo(htmlspecialchars($_POST["pseudo"]));
+                        $user->setRole(htmlspecialchars($_POST["role"]));
+                        $user->save();
+
+                        Helpers::setFlashMessage('success', "Vos informations ont bien été mises à jour");
+                        Helpers::redirect(Helpers::callRoute('users_list'));
+                    }
                 }
+                $view->assign("errors", $errors);
             }
         }
     }
