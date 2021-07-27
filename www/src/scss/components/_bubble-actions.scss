@@ -1,49 +1,56 @@
-.bubble-actions {
+.actionsMenu {
+  &.active {
+    .bubble-actions::after {
+      transform: rotate(90deg) translate(3px, 3px);
+    }
+    .actionsDropdown {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  .bubble-actions {
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
 
     &::after {
-        content: '\2807';
-        font-size: 25px;
-        color: $purple;
-        transition: all .3s ease;
+      content: "\2807";
+      font-size: 25px;
+      color: #5f2eea;
+      transition: all 0.3s ease;
     }
 
     &:hover {
-        cursor: pointer;
+      cursor: pointer;
+      transition: 0.2s;
     }
+  }
 
-    &.active {
-        &::after {
-            transform: rotate(90deg) translate(3px, 3px);
-        }
-        .actionsDropdown {
-            visibility: visible;
-            opacity: 1;
-        }
+  .actionsDropdown {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    background-color: white;
+    min-width: 120px;
+    overflow: auto;
+    box-shadow: 1px 6px 20px -4px rgba(17, 17, 17, 0.1);
+    z-index: 1;
+    transition: visibility 0.2s, opacity 0.2s linear;
+    transform: translateX(-50%);
+
+    a,
+    span {
+      color: black;
+      padding: 10px 10px;
+      display: block;
+      text-align: center;
+      &:hover {
+        background-color: $purple-light;
+        color: whitesmoke;
+        transition: 0.2s ease-out;
+      }
     }
-
-    .actionsDropdown {
-        visibility: hidden;
-        opacity: 0;
-        position: absolute;
-        top: 50px;
-        background-color: #f1f1f1;
-        min-width: 120px;
-        overflow: auto;
-        box-shadow: 0 8px 16px 0 rgba(95, 46, 234,0.3);
-        z-index: 1;
-        transition: visibility .2s, opacity 0.2s linear;
-
-        a, span {
-            color: black;
-            padding: 10px 10px;
-            display: block;
-            &:hover {
-                background-color: rgba(95, 46, 234,0.3);
-            }
-        }
-    }
+  }
 }

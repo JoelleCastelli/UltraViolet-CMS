@@ -28,6 +28,10 @@ $(document).ready(function() {
         }
     });
 
+    $(".actionsMenu").click(function() {
+        displayActionsMenu($(this));
+    });
+
     /***********************/
 
     // Fadeout for JS flash messages
@@ -95,12 +99,16 @@ waitForElement("#datatable", function() {
     wrapper.children().slice(0, 2).wrapAll("<div id='tableHeader'></div>");
     wrapper.children().slice(2, 4).wrapAll("<div id='tableFooter'></div>");
 
-    $("#datatable tbody").on('click', '.bubble-actions', function() {
-        $(this).toggleClass("active");
-        $('.bubble-actions').not(this).removeClass('active');
+    $("#datatable tbody").on('click', '.actionsMenu', function() {
+        displayActionsMenu($(this));
     });
 });
 
+// Actions button: rotation on click + display submenu
+function displayActionsMenu(elem) {
+    elem.toggleClass("active");
+    $('.actionsMenu').not(elem).removeClass('active');
+}
 
 /* Message Error and Success */
 function successMessageForm(message) {

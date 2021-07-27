@@ -39,7 +39,7 @@ class Production extends Database
         $this->poster = new Media();
         $this->actions = [
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('production_update', ['id' => $this->id])],
-            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute('production_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('production_delete', ['id' => $this->id]), 'role' => 'admin'],
         ];
     }
 
@@ -232,12 +232,38 @@ class Production extends Database
         return date("d/m/Y",strtotime($this->getCreatedAt()));
     }
 
+    /**
+     * @return array
+     */
     public function getActors(): array
     {
         return $this->actors;
     }
 
-    public function setActors($tmdbCast): void
+    public function getRelatedActors(): array
+    {
+        $productionPersons = new ProductionPerson();
+        $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
+                                                         ->andWhere('department', 'actor')->get();
+        $actors = [];
+        foreach ($productionPersons as $productionPerson) {
+            $actor = new Person();
+            $actor->setId($productionPerson->getPersonId());
+            $actor->getMedia();
+            $actors[$actor->getId()]['fullName'] = $actor->getFullName();
+            $actors[$actor->getId()]['photo'] = $actor->getMedia()->getPath();
+            $actors[$actor->getId()]['role'] = $productionPerson->getCharacter();
+        }
+
+        return $actors;
+    }
+
+    public function setActors(array $actors): void
+    {
+        $this->actors = $actors;
+    }
+
+    public function getActorsFromTmdb($tmdbCast): array
     {
         $actors = [];
         for($i = 0; $i < 5 ; $i++) {
@@ -254,7 +280,7 @@ class Production extends Database
                 $actors[] = $person;
             }
         }
-        $this->actors = $actors;
+        return $actors;
     }
 
     public function saveActors() {
@@ -365,12 +391,36 @@ class Production extends Database
         $this->parentProductionId = $parentProductionId;
     }
 
+    /**
+     * @return array
+     */
     public function getDirectors(): array
     {
         return $this->directors;
     }
 
-    public function setDirectors(array $crewTeam): void
+    public function getRelatedDirectors(): array
+    {
+        $productionPersons = new ProductionPerson();
+        $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
+            ->andWhere('department', 'director')->get();
+        $directors = [];
+        foreach ($productionPersons as $productionPerson) {
+            $director = new Person();
+            $director->setId($productionPerson->getPersonId());
+            $director->getMedia();
+            $directors[$director->getId()]['fullName'] = $director->getFullName();
+            $directors[$director->getId()]['photo'] = $director->getMedia()->getPath();
+        }
+        return $directors;
+    }
+
+    public function setDirectors(array $directors): void
+    {
+        $this->directors = $directors;
+    }
+
+    public function getDirectorsFromTmdb($crewTeam): array
     {
         $directors = [];
         foreach ($crewTeam as $crew) {
@@ -384,15 +434,39 @@ class Production extends Database
                 $directors[] = $person;
             }
         }
-        $this->directors = $directors;
+        return $directors;
     }
 
+    /**
+     * @return array
+     */
     public function getWriters(): array
     {
         return $this->writers;
     }
 
-    public function setWriters(array $crewTeam): void
+    public function getRelatedWriters(): array
+    {
+        $productionPersons = new ProductionPerson();
+        $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
+            ->andWhere('department', 'writer')->get();
+        $writers = [];
+        foreach ($productionPersons as $productionPerson) {
+            $writer = new Person();
+            $writer->setId($productionPerson->getPersonId());
+            $writer->getMedia();
+            $writers[$writer->getId()]['fullName'] = $writer->getFullName();
+            $writers[$writer->getId()]['photo'] = $writer->getMedia()->getPath();
+        }
+        return $writers;
+    }
+
+    public function setWriters(array $writers): void
+    {
+        $this->writers = $writers;
+    }
+
+    public function getWritersFromTmdb($crewTeam): array
     {
         $writers = [];
         foreach ($crewTeam as $crew) {
@@ -406,15 +480,40 @@ class Production extends Database
                 $writers[] = $person;
             }
         }
-        $this->writers = $writers;
+        return $writers;
     }
 
+    /**
+     * @return array
+     */
     public function getCreators(): array
     {
         return $this->creators;
     }
 
-    public function setCreators(array $tmdbCreators): void
+    public function getRelatedCreators(): array
+    {
+        $productionPersons = new ProductionPerson();
+        $productionPersons = $productionPersons->select()->where('productionId', $this->getId())
+            ->andWhere('department', 'creator')->get();
+        $creators = [];
+        foreach ($productionPersons as $productionPerson) {
+            $creator = new Person();
+            $creator->setId($productionPerson->getPersonId());
+            $creator->getMedia();
+            $creators[$creator->getId()]['fullName'] = $creator->getFullName();
+            $creators[$creator->getId()]['photo'] = $creator->getMedia()->getPath();
+        }
+        return $creators;
+    }
+
+    public function setCreators(array $creators): void
+    {
+
+        $this->creators = $creators;
+    }
+
+    public function getCreatorsFromTmdb($tmdbCreators): array
     {
         $creators = [];
         foreach ($tmdbCreators as $creator) {
@@ -426,7 +525,7 @@ class Production extends Database
                 $person->media->setTmdbPosterPath(TMDB_IMG_PATH.$creator->profile_path);
             $creators[] = $person;
         }
-        $this->creators = $creators;
+        return $creators;
     }
 
     public function saveCrew($department) {
@@ -465,149 +564,6 @@ class Production extends Database
     }
 
     public function formBuilderAddProduction(): array
-    {
-        $series = new Production();
-        $series = $series->selectWhere('type', 'series');
-        if(empty($series)) $series['empty'] = "Aucune série disponible";
-        $seriesOptions = [];
-        $i = 0;
-        if(!isset($series['empty'])) {
-            foreach ($series as $serie) {
-                $seriesOptions[$i]["value"] = $serie->getId();
-                $seriesOptions[$i++]["text"] = $serie->getTitle();
-            }
-        }
-
-        return [
-            "config" => [
-                "method" => "POST",
-                "action" => "",
-                "class" => "form_control card",
-                "id" => "formAddProduction",
-                "submit" => "Valider",
-                "enctype" => "multipart/form-data",
-                "referer" => Helpers::callRoute('productions_creation')
-            ],
-            "fields" => [
-                "type" => [
-                    "type" => "radio",
-                    "label" => "Type",
-                    "required" => true,
-                    "class" => "form_input",
-                    "error" => "Un type de production est nécessaire",
-                    "options" => [
-                        [
-                            "value"=>"movie",
-                            "text"=>"Film",
-                        ],
-                        [
-                            "value"=>"series",
-                            "text"=>"Série",
-                        ],
-                        [
-                            "value"=>"season",
-                            "text"=>"Saison",
-                        ],
-                        [
-                            "value"=>"episode",
-                            "text"=>"Episode",
-                        ]
-                    ],
-                ],
-                "title" => [
-                    "type" => "text",
-                    "placeholder" => "",
-                    "label" => "Titre",
-                    "required" => true,
-                    "class" => "search-bar",
-                    "minLength" => 1,
-                    "maxLength" => 100,
-                    "error" => "Le titre doit faire entre 1 et 100 caractères"
-                ],
-                "originalTitle" => [
-                    "type" => "text",
-                    "placeholder" => "",
-                    "label" => "Titre original",
-                    "class" => "search-bar",
-                    "maxLength" => 100,
-                    "error" => "Le titre doit faire entre 1 et 100 caractères"
-                ],
-                "releaseDate" => [
-                    "type" => "date",
-                    "label" => "Date de sortie",
-                    "class" => "search-bar",
-                    "minLength" => 10,
-                    "maxLength" => 10,
-                    "error" => "Le format de la date est incorrect"
-                ],
-                "runtime" => [
-                    "type" => "number",
-                    "placeholder" => "",
-                    "label" => "Durée (du film ou d'un épisode)",
-                    "class" => "search-bar",
-                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
-                ],
-                "series" => [
-                    "type" => "select",
-                    "placeholder" => "",
-                    "label" => "Nom de la série",
-                    "class" => "search-bar",
-                    "options" => $seriesOptions
-                ],
-                "season" => [
-                    "type" => "select",
-                    "placeholder" => "",
-                    "label" => "Numéro de la saison",
-                    "class" => "search-bar",
-                    "options" => [
-                        [
-                            "value"=>"movie",
-                            "text"=>"Film",
-                        ],
-                        [
-                            "value"=>"series",
-                            "text"=>"Série",
-                        ],
-                        [
-                            "value"=>"season",
-                            "text"=>"Saison",
-                        ],
-                        [
-                            "value"=>"episode",
-                            "text"=>"Episode",
-                        ]
-                    ],
-                ],
-                "number" => [
-                    "type" => "number",
-                    "placeholder" => "",
-                    "label" => "Numéro",
-                    "class" => "search-bar",
-                ],
-                "poster" => [
-                    "type" => "file",
-                    "accept" => ".jpg, .jpeg, .png",
-                    "label" => "Poster (uniquement des fichiers JPG, JPEG ou PNG)",
-                    "class" => "search-bar",
-                ],
-                "overview" => [
-                    "type" => "textarea",
-                    "placeholder" => "",
-                    "label" => "Résumé",
-                    "class" => "search-bar",
-                    "maxLength" => 1000,
-                    "error" => "Le résumé ne peut pas dépasser 1000 caractères"
-                ],
-                "csrfToken" => [
-                    "type"=>"hidden",
-                    "value"=> FormBuilder::generateCSRFToken(),
-                ]
-            ]
-
-        ];
-    }
-
-    public function formBuilderAddProductionTmdb(): array
     {
         return [
             "config" => [
@@ -706,19 +662,26 @@ class Production extends Database
                         "type" => "text",
                         "class" => "search-bar",
                         "value" => $production->getTitle(),
-                        "label" => "Titre :"
+                        "label" => "Titre :",
+                        "maxLength" => "100",
+                        "error" => "La taille maximal du titre doit être de 100 caractères"
                     ],
                     "originalTitle" => [
                         "type" => "text",
                         "class" => "search-bar",
                         "value" => $production->getOriginalTitle(),
-                        "label" => "Titre original :"
+                        "label" => "Titre original :",
+                        "maxLength" => 100,
+                        "error" => "La taille maximal du titre doit être de 100 caractères"
                     ],
                     "runtime" => [
                         "type" => "number",
                         "class" => "search-bar",
                         "label" => "Durée (en minutes) :",
                         "value" => $production->getRuntime(),
+                        "max" => 99999,
+                        "min" => 1,
+                        "error" => "La taille de la durée du film est de maximum 99999 minutes et minimum 1 minute"
                     ],
                     "releaseDate" => [
                         "type" => "date",
@@ -731,8 +694,8 @@ class Production extends Database
                         "class" => "search-bar",
                         "value" => $production->getOverview(),
                         "label" => "Résumé :",
-                        "maxLength" => 1000,
-                        "error" => "Le résumé ne peut pas dépasser 1000 caractères"
+                        "maxLength" => 30000,
+                        "error" => "Le résumé ne peut pas dépasser 30000 caractères"
                     ],
                     "csrfToken" => [
                         "type" => "hidden",
@@ -759,18 +722,16 @@ class Production extends Database
         $this->setOverview($item->overview);
         $this->setReleaseDate($item->release_date ?? $item->first_air_date);
         $this->setRuntime($item->runtime ?? $item->episode_run_time[0] ?? '0');
-        $this->setActors($item->credits->cast);
+        $this->setActors($this->getActorsFromTmdb($item->credits->cast));
         $this->setPoster($item->poster_path);
-
-        //$production0['genres'] = $item->genres; TODO
 
         switch ($post['productionType']) {
             case 'movie':
-                $this->setDirectors($item->credits->crew);
-                $this->setWriters($item->credits->crew);
+                $this->setDirectors($this->getDirectorsFromTmdb($item->credits->crew));
+                $this->setWriters($this->getWritersFromTmdb($item->credits->crew));
                 break;
             case 'series':
-                $this->setCreators($item->created_by);
+                $this->setCreators($this->getCreatorsFromTmdb($item->created_by));
                 $this->setTotalSeasons(sizeof($item->seasons));
                 $nbEpisodes = 0;
                 foreach ($item->seasons as $season) { $nbEpisodes += $season->episode_count; }
@@ -828,6 +789,9 @@ class Production extends Database
             $seriesId = $this->saveParentSeries();
             $this->setParentProductionId($seriesId);
             $this->dbSave();
+            if($this->getPoster()->getPath() != null) {
+                $this->savePoster();
+            }
         } else {
             // Movie or Series
             $this->dbSave();
@@ -894,6 +858,28 @@ class Production extends Database
 
     public function dbSave() {
         parent::save();
+    }
+
+
+    public function getProductionPosterPath(): ?string
+    {
+        // Find production key art media
+        $productionMedia = new ProductionMedia();
+        $productionMedia = $productionMedia->select()->where('productionId', $this->getId())->andWhere('keyArt', 1)->first();
+        if($productionMedia) {
+            $this->getPoster()->setId($productionMedia->getMediaId());
+            if(file_exists(getcwd().$this->getPoster()->getPath()))
+                return $this->getPoster()->getPath();
+        }
+        // Display default image if no key art is associated or if file is not found
+        return PATH_TO_IMG.'default_poster.jpg';
+    }
+
+    public function getLastInsertId(): string
+    {
+        $latestProduction = new Production();
+        $latestProduction = $latestProduction->select()->orderby('id', 'DESC')->first();
+        return $latestProduction->id;
     }
 
 }

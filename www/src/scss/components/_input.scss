@@ -12,39 +12,50 @@
 //     box-shadow: 0px 3px 5px 0px lighten(black, 80%);
 // }
 
- .input {
+.input {
+  //Input
+  display: inline-block;
+  background: #e7e9f3;
+  height: 41px;
+  border: 1px solid #e9ecef;
+  box-sizing: border-box;
+  box-shadow: 1px 6px 20px -4px rgba(17, 17, 17, 0.05);
+  border-radius: 5px;
 
-   //Input
-   display: inline-block;
-   background: #E7E9F3;
-   height: 41px;
-   border: 1px solid #E9ECEF;
-   box-sizing: border-box;
-   box-shadow: 1px 6px 20px -4px rgba(17, 17, 17, 0.05);
-   border-radius: 5px;
+  //Text
+  font-family: $mulish;
+  font-style: normal;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 20px;
+  align-items: center;
+  color: $grey;
+  padding-left: 15px;
 
-   //Text
-   font-family: $mulish;
-   font-style: normal;
-   font-size: 16px;
-   font-weight: normal;
-   line-height: 20px;
-   align-items: center;
-   color: $grey;
-   padding-left: 15px;
-
-   .input__transparent{
+  .input__transparent {
     background: red;
-   }
-
- }
-
-input[type=date], input[type=time] {
-    font-weight: lighter;
-    font-size: 16px;
+  }
 }
 
-input[type]:disabled, input[type]:read-only,  {
-    color: $grey6;
-    background: $light-grey;
+.publicationDateInput[type]:disabled,
+.publicationDateInput[type]:read-only {
+  color: $grey6;
+  background: $light-grey;
+}
+
+.publicationDateInput[type="date"],
+.publicationDateInput[type="time"] {
+  font-weight: lighter;
+  font-size: 16px;
+}
+
+.publicationDateInput[name="media"]:read-only,
+.publicationDateInput[name="production"]:read-only {
+  background: #e7e9f3;
+  color: $grey;
+  font-family: $mulish;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  padding-left: 15px;
 }

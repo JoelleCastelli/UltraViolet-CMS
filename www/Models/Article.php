@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Controller\Production;
 use App\Core\Database;
 use App\Core\Helpers;
 use App\Core\Traits\ModelsTrait;
@@ -10,6 +11,10 @@ use JsonSerializable;
 use App\Models\Media as MediaModel;
 use App\Models\Category as CategoryModel; 
 use App\Models\CategoryArticle as CategoryArticleModel;
+use App\Models\ProductionArticle as ProductionArticleModel;
+use App\Models\Production as ProductionModel;
+
+
 
 class Article extends Database implements JsonSerializable
 {
@@ -19,11 +24,8 @@ class Article extends Database implements JsonSerializable
     protected $title;
     protected $description;
     protected $content;
-    protected $rating;
     protected $slug;
-    protected $totalViews = 0;
-    protected $titleSeo;
-    protected $descriptionSeo;
+    private $totalViews;
     protected $contentUpdatedAt;
     protected $publicationDate;
     protected $mediaId;
@@ -31,6 +33,9 @@ class Article extends Database implements JsonSerializable
     private $createdAt;
     private $updatedAt;
     protected $deletedAt;
+
+    private $categories = [];
+    private $productions = [];
 
     public Media $media;
     public Person $person;
@@ -44,8 +49,11 @@ class Article extends Database implements JsonSerializable
         $this->person = new Person;
         $this->actions = [
             ['name' => 'Modifier', 'action' => 'modify', 'url' => Helpers::callRoute('article_update', ['id' => $this->id])],
-            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('article_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('article_delete', ['id' => $this->id])],
         ];
+        if($this->publicationDate && $this->publicationDate <= date('Y-m-d H:i:s') && $this->deletedAt == null) {
+            $this->actions[] = ['name' => 'Consulter', 'action' => 'go_to', 'url' => Helpers::callRoute('display_article', ['article' => $this->slug])];
+        }
     }
 
     /**
@@ -107,22 +115,6 @@ class Article extends Database implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getRating()
-    {
-        return $this->rating;
-    }
-
-    /**
-     * @param mixed $rating
-     */
-    public function setRating($rating): void
-    {
-        $this->rating = $rating;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getSlug()
     {
         return $this->slug;
@@ -136,13 +128,20 @@ class Article extends Database implements JsonSerializable
         $this->slug = $slug;
     }
 
-
     /**
      * @return mixed
      */
     public function getTotalViews()
     {
-        return $this->totalViews;
+        $history = new ArticleHistory();
+        $history = $history->select()->where('id', $this->id)->get();
+        $total = 0;
+        if($history) {
+            foreach ($history as $day) {
+                $total += $day->getViews();
+            }
+        }
+        return $total;
     }
 
     /**
@@ -151,22 +150,6 @@ class Article extends Database implements JsonSerializable
     public function setTotalViews($totalViews): void
     {
         $this->totalViews = $totalViews;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitleSeo()
-    {
-        return $this->titleSeo;
-    }
-
-    /**
-     * @param mixed $titleSeo
-     */
-    public function setTitleSeo($titleSeo): void
-    {
-        $this->titleSeo = $titleSeo;
     }
 
     /**
@@ -183,22 +166,6 @@ class Article extends Database implements JsonSerializable
     public function setPersonId($personId): void
     {
         $this->personId = $personId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescriptionSeo()
-    {
-        return $this->descriptionSeo;
-    }
-
-    /**
-     * @param mixed $descriptionSeo
-     */
-    public function setDescriptionSeo($descriptionSeo): void
-    {
-        $this->descriptionSeo = $descriptionSeo;
     }
 
     /**
@@ -238,6 +205,9 @@ class Article extends Database implements JsonSerializable
      */
     public function getMedia(): Media
     {
+        if (!empty($this->mediaId) && is_numeric($this->mediaId))
+            $this->media->setId($this->mediaId);
+
         return $this->media;
     }
 
@@ -273,7 +243,8 @@ class Article extends Database implements JsonSerializable
     public function getComments(): array
     {
         $comments = new Comment();
-        $this->comments = $comments->select()->where('articleId', $this->id)->get();
+        $this->comments = $comments->select()->where('articleId', $this->id)
+                        ->andWhere('deletedAt', 'NULL')->orderBy('createdAt', 'DESC')->get();
         return $this->comments;
     }
 
@@ -357,6 +328,14 @@ class Article extends Database implements JsonSerializable
         return $this->actions;
     }
 
+    public function getCategories() : array {
+        return $this->categories;
+    }
+    
+    public function getProductions() : array {
+        return $this->productions;
+    }
+
     // MODEL-BASED FUNCTIONS
 
     public function getArticlesBySate($state) : array {
@@ -366,13 +345,15 @@ class Article extends Database implements JsonSerializable
            return $this->select()
            ->where("publicationDate", $now, "<=")
            ->andWhere("deletedAt", "NULL", "=")
+           ->orderBy('publicationDate', 'DESC')
            ->get();
         } 
         
         if ($state == "scheduled") {
             return $this->select()
-            ->where("publicationDate", $now, ">=")
+            ->where("publicationDate", $now, ">")
             ->andWhere("deletedAt", "NULL")
+            ->orderBy('publicationDate', 'DESC')
             ->get();
         } 
         
@@ -380,11 +361,12 @@ class Article extends Database implements JsonSerializable
             return $this->select()
             ->where("publicationDate", "NULL")
             ->andWhere("deletedAt", "NULL")
+            ->orderBy('publicationDate', 'DESC')
             ->get();
         } 
         
         if ($state == "removed") {
-            return $this->select()->where("deletedAt", "NOT NULL")->get();
+            return $this->select()->where("deletedAt", "NOT NULL")->orderBy('publicationDate', 'DESC')->get();
         }
 
         return [];
@@ -407,6 +389,14 @@ class Article extends Database implements JsonSerializable
         return false;
     }
 
+    public function getCleanCreatedAt() {
+        if (!is_null($this->getCreatedAt())) {
+            return date("d/m/Y à H:i", strtotime($this->getCreatedAt()));
+        } else {
+            return "";
+        }
+    }
+
     public function getCleanPublicationDate() {
         if (!is_null($this->getPublicationDate())) {
             return date("d/m/Y à H:i", strtotime($this->getPublicationDate()));
@@ -415,12 +405,20 @@ class Article extends Database implements JsonSerializable
         }
     }
 
+    public function getCleanContentUpdatedAt() {
+        if (!is_null($this->getContentUpdatedAt())) {
+            return date("d/m/Y à H:i", strtotime($this->getContentUpdatedAt()));
+        } else {
+            return "";
+        }
+    }
+
     public function hasDuplicateSlug($title, $id = null) : bool {
         $slug = Helpers::slugify($title);
         if (empty($id))
-            $DBslug = $this->select("slug")->where("slug", $slug)->first(0);
+            $DBslug = $this->select("slug")->where("slug", $slug)->first(false);
         else 
-            $DBslug = $this->select("slug")->where("slug", $slug)->andWhere("id", $id, "!=")->first(0);
+            $DBslug = $this->select("slug")->where("slug", $slug)->andWhere("id", $id, "!=")->first(false);
 
         return !empty($DBslug);
     }
@@ -439,6 +437,117 @@ class Article extends Database implements JsonSerializable
         }
     }
 
+    public function getCategoriesRelated()
+    {
+        $categoryArticleModel = new CategoryArticleModel;
+        $categoryModel = new CategoryModel;
+
+        $categoriesId = $categoryArticleModel->select('categoryId')->where('articleId', $this->id)->get(false);
+        $categories = $categoryModel->select()->whereIn('id', $categoriesId)->get();
+      
+        $this->categories = $categories;
+        return $categories;
+    }
+
+    public function getProductionsRelated() {
+        $productionArticle = new ProductionArticleModel();
+        $production = new ProductionModel();
+
+        $productionsId =  $productionArticle->select("productionId")->where("articleId", $this->id)->get(false);
+        $productions = $production->select()->whereIn("id", $productionsId)->get();
+
+        $this->productions = $productions;
+        return $productions;
+    }
+
+    public function setToPublished() {
+        $today = date("Y-m-d\TH:i");
+
+        $this->setPublicationDate($today);
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
+    public function setToScheduled($publicationDate) {
+        $this->setPublicationDate(htmlspecialchars($publicationDate));
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
+    public function setToDraft() {
+        $this->setPublicationDate(null);
+        $this->setDeletedAt(null);
+
+        if (!empty($this->getId())) {
+            $this->toggleComments();
+        }
+    }
+
+    public function articleSoftDelete() {
+        $this->toggleComments("hide");
+        $this->delete();
+    }
+
+    // state == display / hide
+    public function toggleComments($state = "display") {
+        if (!($state == "display" || $state == "hide")) return;
+
+        $comments = $this->getComments();
+        foreach ($comments as $comment) {
+            if ($state == "hide") {
+                $comment->delete();
+            } else {
+                $comment->setDeletedAt(null);
+                $comment->save();
+            }
+        }
+    }
+
+    public function articleHardDelete() {
+        $categoryArticle = new CategoryArticleModel();
+        $productionArticle = new ProductionArticle();
+        $articleHistory = new ArticleHistory();
+        $articleId = $this->getId();
+
+        // delete article related
+        $entries = $categoryArticle->select()->where("articleId", $articleId)->get();
+        foreach ($entries as $entry) {
+            $entry->hardDelete()->execute();
+        }
+
+        // delete comments related
+        $comments = $this->getComments();
+        foreach ($comments as $comment) {
+            $comment->hardDelete()->execute();
+        }
+        // delete productions related
+        $productionEntries = $productionArticle->select()->where("articleId", $articleId)->get();
+        foreach ($productionEntries as $productionEntry) {
+            $productionEntry->hardDelete()->execute();
+        }
+
+        // delete article_history related
+        $articleHistories = $articleHistory->select()->where("articleId", $articleId)->get();
+        foreach ($articleHistories as $articleHistory) {
+            $articleHistory->hardDelete()->execute();
+        }
+
+       $this->hardDelete()->where("id", $articleId)->execute();
+    }
+
+    public function getLastInsertId(): string
+    {
+        $lastArticle = new Article();
+        $lastArticle = $lastArticle->select()->orderby('id', 'DESC')->first();
+        return $lastArticle->id;
+    }
+
     // JSON FORMAT
     public function jsonSerialize(): array
     {
@@ -447,11 +556,8 @@ class Article extends Database implements JsonSerializable
             "title" => $this->getTitle(),
             "description" => $this->getDescription(),
             "content" => $this->getContent(),
-            "rating" => $this->getRating(),
             "slug" => $this->getSlug(),
             "totalViews" => $this->getTotalViews(),
-            "titleSeo" => $this->getTitleSeo(),
-            "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),
             "contentUpdatedAt" => $this->getContentUpdatedAt(),
             "createdAt" => $this->getCreatedAt(),
@@ -468,21 +574,9 @@ class Article extends Database implements JsonSerializable
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
 
-        $media = new MediaModel();
-        $category = new CategoryModel();
+        $category = new CategoryModel();     
 
-        $medias = $media->findAll();
         $categories = $category->findAll();
-
-        $mediaOptions = [];
-
-        foreach ($medias as $media) {
-           array_push($mediaOptions, [
-                "value" => $media->getId(),
-                "text" => $media->getTitle()
-           ]);
-        }
-
         $categoryOptions = [];
 
         foreach ($categories as $category) {
@@ -496,7 +590,7 @@ class Article extends Database implements JsonSerializable
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control",
+                "class" => "form_control card",
                 "id" => "form_create_article",
                 "submit" => "Créer un article",
                 "referer" => Helpers::callRoute('article_creation'),
@@ -508,30 +602,34 @@ class Article extends Database implements JsonSerializable
                 ],
                 "title" => [
                     "type" => "text",
-                    "label" => "Titre de l'article *",
-                    "placeholder" => "Titre de l'article",
-                    "minLength" => 2,
+                    "label" => "Titre de l'article",
+                    "minLength" => 1,
                     "maxLength" => 100,
-                    "class" => "input",
-                    "error" => "Le longueur du titre doit être comprise entre 2 et 100 caractères",
-                    // "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "class" => "input search-bar",
+                    "error" => "La longueur du titre doit être comprise entre 1 et 100 caractères",
                     "required" => true,
                 ],
                 "description" => [
-                    "type" => "text",
-                    "label" => "Description de l'article *",
-                    "placeholder" => "Description de l'article",
-                    "minLength" => 2,
-                    "class" => "input",
-                    "error" => "La longeur doit être de plus de 2 caracrtères",
+                    "type" => "textarea",
+                    "label" => "Description de l'article",
+                    "minLength" => 1,
+                    "maxLength" => 255,
+                    "class" => "input search-bar",
+                    "error" => "La longueur de la description doit être comprise entre 1 et 100 caractères",
                     "required" => true,
+                ],
+                "production" => [
+                    "type" => "text",
+                    "label" => "Associer une production à l'article",
+                    "class" => "search-bar",
+                    "readonly" => true
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État *",
+                    "label" => "État",
                     "class" => "state",
                     "required" => true,
-                    "error" => "Le champs état est vide",
+                    "error" => "Le champs Etat est vide",
                     "options" => [
                         [
                             "value" => "published",
@@ -560,27 +658,26 @@ class Article extends Database implements JsonSerializable
                     "readonly" => true,
                 ],
                 "media" => [
-                    "type" => "select",
-                    "label" => "Image de cover *",
+                    "type" => "text",
+                    "label" => "Illustration de l'article *",
                     "class" => "search-bar",
-                    "options" => $mediaOptions,
-                    "required" => true,
+                    "readonly" => true
                 ],
                 "categories" => [
                     "type" => "checkbox",
-                    "label" => "Categorie de l'article *",
+                    "label" => "Catégorie de l'article <span class='requiredField'>*</span>",
                     "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
-                    "error" => "Vous devez selectionner au moins une catégories."
+                    "error" => "Vous devez sélectionner au moins une catégorie"
                 ],
                  "content" => [
+                     "id" => "articleContent",
                      "type" => "textarea",
-                     "label" => "Contenu de l'article",
-                     "placeholder" => "Contenu de l article",
-                     "minLength" => 2,
+                     "label" => "Contenu de l'article <span class='requiredField'>*</span>",
+                     "minLength" => 1,
                      "class" => "input",
-                     "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
+                     "error" => "Le contenu de l'article doit comprendre au minimum 1 caractères",
                      "required" => false,
                  ],
             ]
@@ -596,24 +693,13 @@ class Article extends Database implements JsonSerializable
         $media = new MediaModel();
         $category = new CategoryModel();
         $categoryArticle = new CategoryArticleModel();
+        $productionArticleModel  = new ProductionArticleModel();
+        $productionModel = new ProductionModel();
+
         $this->setId($articleId);
         
-        $medias = $media->findAll();
-        $mediaOptions = [];
-
-        // Get all media and select one of them is the article is using it
-        foreach ($medias as $media) {
-            $mediaIsAlreadySelected = false;
-            if ($this->getMediaId() == $media->getId()) {
-                $mediaIsAlreadySelected = true;
-            }
-            $options = [
-                "value" => $media->getId(),
-                "text" => $media->getTitle(),
-                "selected" => $mediaIsAlreadySelected,
-            ];
-           array_push($mediaOptions, $options);
-        }
+        $mediaId = $this->select("MediaId")->where("id", $articleId)->first(0);
+        $mediaTitle = $media->select("title")->where("id", $mediaId)->first(0);
 
         $categories = $category->findAll();
         $categoriesByArticle = $categoryArticle->select()->where("articleId", $articleId, "=")->get();
@@ -641,11 +727,14 @@ class Article extends Database implements JsonSerializable
 
         $state = $this->getArticleState();
 
+        $productionId = $productionArticleModel->select("productionId")->where("articleId", $articleId)->first(0);
+        $productionName = $productionModel->select("title")->where("id", $productionId)->first(0);
+
         return [
             "config" => [
                 "method" => "POST",
                 "action" => "",
-                "class" => "form_control",
+                "class" => "form_control card",
                 "id" => "form_create_article",
                 "submit" => "Valider les modifications",
                 "referer" => Helpers::callRoute('article_update', ['id' => $articleId]),
@@ -657,29 +746,34 @@ class Article extends Database implements JsonSerializable
                 ],
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Titre de l'article",
-                    "label" => "Titre de l'article *",
+                    "label" => "Titre de l'article",
                     "minLength" => 2,
                     "maxLength" => 100,
-                    "class" => "input",
-                    "error" => "Le longueur du titre doit être comprise entre 2 et 100 caractères",
-                    // "regex" => "/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/u",
+                    "class" => "input search-bar",
+                    "error" => "La longueur du titre doit être comprise entre 2 et 100 caractères",
                     "required" => true,
                 ],
                 "description" => [
-                    "type" => "text",
-                    "placeholder" => "Description de l'article",
-                    "label" => "Description de l'article *",
+                    "type" => "textarea",
+                    "label" => "Description de l'article",
                     "minLength" => 2,
-                    "class" => "input",
-                    "error" => "La longeur doit être de plus de 2 caracrtères",
+                    "maxLength" => 255,
+                    "class" => "input search-bar",
+                    "error" => "La longueur de la description doit être comprise entre 2 et 100 caractères",
                     "required" => true,
+                ],
+                "production" => [
+                    "type" => "text",
+                    "label" => "Associer une production à l'article",
+                    "class" => "search-bar",
+                    "readonly" => true,
+                    "value" => $productionName . " (" . $productionId . ")"
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État *",
+                    "label" => "État <span class='requiredField'>*</span>",
                     "class" => "state",
-                    "error" => "Le champs état est vide",
+                    "error" => "Le champs Etat est vide",
                     "options" => [
                         [
                             "value" => "published",
@@ -689,7 +783,7 @@ class Article extends Database implements JsonSerializable
                         [
                             "value" => "scheduled",
                             "class" => "stateScheduled",
-                            "text" => "Re planifier à plus tard"
+                            "text" => "Planifier"
                         ],
                         [
                             "value" => "draft",
@@ -719,29 +813,28 @@ class Article extends Database implements JsonSerializable
                     "readonly" => $state !== "scheduled"
                 ],
                 "media" => [
-                    "type" => "select",
-                    "label" => "Image de cover *",
+                    "type" => "text",
+                    "label" => "Illustration de l'article",
                     "class" => "search-bar",
-                    "options" => $mediaOptions,
-                    "required" => true,
-                    "error" => "Vous devez sélectionner un media."
+                    "readonly" => true,
+                    "value" => $mediaTitle . " (" . $mediaId . ")"
+
                 ],
                 "categories" => [
                     "type" => "checkbox",
-                    "label" => "Categorie de l'article *",
+                    "label" => "Catégorie de l'article <span class='requiredField'>*</span>",
                     "class" => "form_select",
                     "options" => $categoryOptions,
                     "multiple" => true,
-                    "error" => "Vous devez selectionner au moins une catégories."
+                    "error" => "Vous devez sélectionner au moins une catégorie"
                 ],
                 "content" => [
+                    "id" => "articleContent",
                     "type" => "textarea",
-                    "placeholder" => "Contenu de l article",
-                    "label" => "Contenu de l'article",
+                    "label" => "Contenu de l'article <span class='requiredField'>*</span>",
                     "minLength" => 2,
                     "class" => "input",
-                    "error" => "Le longueur du titre doit être comprise entre 2 et 255 caractères",
-                    "required" => false,
+                    "error" => "Le contenu de l'article doit comprendre au minimum 2 caractères",
                 ],
             ]
         ];

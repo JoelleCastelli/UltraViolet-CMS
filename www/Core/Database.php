@@ -8,28 +8,15 @@ class Database {
 
     protected ?\PDO $pdo = null;
     private string $table;
-    private string $query;
+    private ?string $query = null;
 
     private int $order = 0;
     private int $like = 0;
 
     protected function __construct() {
-        if ($this->pdo === null) {
-            if (ENV === "dev") {
-                try {
-                    $this->pdo = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
-                    $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-                } catch (Exception $e) {
-                    die("Erreur SQL (dev mode) : " . $e->getMessage());
-                }
-            } else if (ENV === "prod") {
-                try {
-                    $this->pdo = new \PDO(DBDRIVER.":host=".DBHOST."; dbname=".DBNAME."; port=".DBPORT."; charset=UTF8", DBUSER, DBPWD);
-                } catch (Exception $e) {
-                    die("La connexion à la base de données n'a pas pu être effectuée");
-                }
-            }
-        }
+        $database = DatabaseConnection::getInstance();
+        $this->pdo= $database->getConnection();
+
         $classExploded = explode("\\", get_called_class());
         $this->table = strtolower(Helpers::convertToSnakeCase(DBPREFIXE . end($classExploded)));
     }
@@ -150,6 +137,12 @@ class Database {
         return $this;
     }
 
+    public function sum($column = "*"): Database
+    {
+        $this->query = 'SELECT SUM(`' . $column . '`) as total FROM ' . $this->table . ' ';
+        return $this;
+    }
+
     public function customQuery($string): Database
     {
         $this->query .= $string . ' ';
@@ -159,9 +152,10 @@ class Database {
     // WHERE
     public function where($column, $value, $equal = "=" ): Database
     {
-        if($value == 'NOT NULL') {
+
+        if($value === 'NOT NULL') {
             $this->query .= 'WHERE `' . $column . '` IS NOT NULL ';
-        } else if ($value == 'NULL') {
+        } else if ($value === 'NULL') {
             $this->query .= 'WHERE `' . $column . '` IS NULL ';
         } else {
             $this->query .= 'WHERE `' . $column . '` ' . $equal . ' "' . htmlspecialchars($value, ENT_QUOTES) . '" ';
@@ -175,6 +169,8 @@ class Database {
             $this->query .= 'AND `' . $column . '` IS NOT NULL ';
         } else if ($value == "NULL") {
             $this->query .= 'AND `' . $column . '` IS NULL ';
+        } else if ($value == "NOW") {
+            $this->query .= 'AND `' . $column . '` '.$equal.' NOW() ';
         } else {
             $this->query .= 'AND `' . $column . '` ' . $equal . ' "' . htmlspecialchars($value, ENT_QUOTES) . '" ';
         }
@@ -189,7 +185,14 @@ class Database {
 
     public function whereIn($column, $value): Database
     {
-        $this->query .= 'WHERE `' . $column . '` IN ' . htmlspecialchars($value, ENT_QUOTES) . ' ';
+
+        if (is_array($value)) {
+            $result = "('" . implode("','", $value) . "')";
+        } else {
+            $result = "('" . $value . "')";
+        }
+
+        $this->query .= 'WHERE `' . $column . '` IN ' . $result . ' ';
         return $this;
     }
 
@@ -250,12 +253,14 @@ class Database {
             $this->order++;
         }
         else
-            $this->query .= ', `' . $column . '` '. $order . '" ';
+            $this->query .= ', `' . $column . '` '. $order . ' ';
         return $this;
     }
 
     public function get($setFetchMode = true): array
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->query($this->query);
 
         if ($setFetchMode)
@@ -275,6 +280,8 @@ class Database {
 
     public function execute(): bool
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->prepare($this->query);
         try {
             return $query->execute();
@@ -286,6 +293,8 @@ class Database {
 
     public function first($setFetchMode = true)
     {
+        $this->order = 0;
+        $this->like = 0;
         $query = $this->pdo->query($this->query);
 
         if ($setFetchMode)
@@ -306,26 +315,23 @@ class Database {
   
     public function generateActionsMenu(): string {
         $classPath = explode('\\', get_class($this));
-        $class = mb_strtolower(end($classPath));
+        $objClass = mb_strtolower(end($classPath));
 
-        $actions = "<div class='bubble-actions'><div class='actionsDropdown'>";
+        $actions = "<div class='actionsMenu'><div class='bubble-actions'></div><div class='actionsDropdown'>";
         foreach ($this->getActions() as $action) {
             if (!isset($action['role']) || (isset($action['role']) && Request::getUser()->checkRights(($action['role'])))) {
                 $tag = in_array($action['action'], ['delete', 'update-state']) ? "span" : "a";
-                $class = $action['class'] ?? $action['action'];
-                if($tag === 'a')
-                    $actions .= "<$tag id='".$class.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."'>".$action['name']."</$tag>";
-                else
-                    $actions .= "<$tag id='" . $class . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . "' >" . $action['name'] . "</$tag>";
+                $class = $action['class'] ?? '';
+                if($tag === 'a') {
+                    $target = $action['action'] == 'go_to' ? 'target=_blank' : '';
+                    $actions .= "<$tag id='".$objClass.'-'.$action['action'].'-'.$this->getId()."' class='".$class."' href='".$action['url']."' $target>".$action['name']."</$tag>";
+                } else {
+                    $actions .= "<$tag id='" . $objClass . '-' . $action['action'] . '-' . $this->getId() . "' class='" . $class . " clickable-tag' >" . $action['name'] . "</$tag>";
+                }
             }
         }
         $actions .= "</div></div>";
         return $actions;
-    }
-
-    public function getLastInsertId(): string
-    {
-        return $this->pdo->lastInsertId();
     }
 
 }

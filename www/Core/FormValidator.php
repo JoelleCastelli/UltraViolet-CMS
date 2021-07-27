@@ -5,7 +5,8 @@ namespace App\Core;
 class FormValidator
 {
 
-    public static function check($config, $data) {
+    public static function check($config, $data): array
+    {
 
         self::validateCSRFToken($config['config']['referer'], $data['csrfToken']);
         $errors = [];
@@ -24,27 +25,23 @@ class FormValidator
         } else {
             foreach ($config["fields"] as $fieldName => $fieldConfig) {
 
-                // check if config field has a matching $_POST field
-                // echo $fieldName;
-                // echo '<br>';
-
                 $fieldName = str_replace("[]", "", $fieldName);
 
-                // echo $fieldName;
-                // echo '<br>';
                 if(!isset($data[$fieldName])) {
-                    echo "Tentative de hack !";
-                    exit;
+                    $errors[] = "Tentative de hack : le champ ".$fieldConfig['label']." est requis !";
+                    return $errors;
                 }
 
-                // check if required field is not empty
-                if (isset($fieldConfig['required']) && empty($data[$fieldName])) {
-                    echo "Tentative de hack : le champ $fieldName est obligatoire !";
-                    exit;
+                if(is_string($data[$fieldName]))
+                    $data[$fieldName] = trim($data[$fieldName]);
+
+                // check if required field is not empty but still allow 0
+                if (isset($fieldConfig['required']) && empty($data[$fieldName]) && $data[$fieldName] !== "0" && $data[$fieldName] !== 0) {
+                    $errors[] = "Le champ ".$fieldConfig['label']." est obligatoire !";
+                    return $errors;
                 }
 
-                if(!empty($data[$fieldName])) {
-        
+                if(!Helpers::isStrictlyEmpty($data[$fieldName])) {
                     self::textInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::numberInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::passwordValidator($fieldName, $data[$fieldName], $fieldConfig, $errors);
@@ -52,6 +49,7 @@ class FormValidator
                     self::emailInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::dateInputValidator($data[$fieldName], $fieldConfig, $errors);
                     self::optionsValidator($data[$fieldName], $fieldConfig);
+                    self::colorValidator($data[$fieldName], $fieldConfig, $errors);
                 }
             }
         }
@@ -59,7 +57,7 @@ class FormValidator
     }
 
     public static function textInputValidator($textInput, $fieldConfig, &$errors) {
-        if($fieldConfig["type"] == "text") {
+        if($fieldConfig["type"] == "text" || $fieldConfig["type"] == "textarea" ) {
             if (!empty($fieldConfig["minLength"]) && strlen($textInput) < $fieldConfig["minLength"]) {
                 $errors[] = $fieldConfig["error"];
             }
@@ -72,12 +70,12 @@ class FormValidator
         }
     }
 
-    public static function numberInputValidator($numberInput, $fieldConfig, &$errors){
+    public static function numberInputValidator($numberInput, $fieldConfig, &$errors) {
         if($fieldConfig["type"] == "number") {
-            if (!empty($fieldConfig["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
+            if (isset($fieldConfig["min"]) && is_numeric($fieldConfig["min"]) && $numberInput < $fieldConfig["min"] ) {
                 $errors[] = $fieldConfig["error"];
             }
-            if (!empty($fieldConfig["max"]) && is_numeric($fieldConfig["max"]) && $numberInput > $fieldConfig["max"]) {
+            if (isset($fieldConfig["max"]) && is_numeric($fieldConfig["max"]) && $numberInput > $fieldConfig["max"]) {
                 $errors[] = $fieldConfig["error"];
             }
         }
@@ -167,8 +165,16 @@ class FormValidator
             }
 
             if (in_array(false, $correctOptions)) {
-                echo "Tentative de hack : l'option n'existe pas !";
-                exit;
+                $errors[] = "Tentative de hack : l'option n'existe pas !";
+                return $errors;
+            }
+        }
+    }
+
+    public static function colorValidator($fieldContent, $fieldConfig, &$errors) {
+        if($fieldConfig['type'] == 'color') {
+            if(!preg_match('/^#([0-9a-f]{3}){1,2}$/', $fieldContent)) {
+                $errors[] = $fieldConfig["error"];
             }
         }
     }

@@ -1,0 +1,56 @@
+#footer-front {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+
+  padding-left: 8rem;
+  padding-right: 8rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+
+  background-color: #000d28;
+
+  img {
+    align-self: center;
+    height: 5rem;
+    object-fit: cover;
+  }
+
+  .path-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 2rem;
+
+    article {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      height: 100%;
+      padding-bottom: 1rem;
+      font-size: 0.8rem;
+
+      p {
+        color: whitesmoke;
+        padding-bottom: 0.8rem;
+      }
+
+      a {
+        text-decoration: none;
+        color: whitesmoke;
+        border: solid 2px #000d28;
+        border-radius: 50px;
+        padding: 0.5rem;
+
+        &:hover {
+          transition: 0.3s ease-in-out;
+          border: solid 2px $blue;
+        }
+      }
+    }
+  }
+}

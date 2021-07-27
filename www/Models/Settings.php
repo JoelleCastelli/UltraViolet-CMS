@@ -8,9 +8,10 @@ use App\Core\Helpers;
 
 class Settings extends Database
 {
-    private $id = null;
-    protected string $name;
+    private ?int $id = null;
+    protected string $selector;
     protected string $value;
+    protected string $defaultValue;
 
     public function __construct()
     {
@@ -18,17 +19,17 @@ class Settings extends Database
     }
 
     /**
-     * @return null
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param null $id
+     * @param int|null $id
      */
-    public function setId($id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -36,17 +37,17 @@ class Settings extends Database
     /**
      * @return string
      */
-    public function getName(): string
+    public function getSelector(): string
     {
-        return $this->name;
+        return $this->selector;
     }
 
     /**
-     * @param string $name
+     * @param string $selector
      */
-    public function setName(string $name): void
+    public function setSelector(string $selector): void
     {
-        $this->name = $name;
+        $this->selector = $selector;
     }
 
     /**
@@ -66,59 +67,196 @@ class Settings extends Database
     }
 
     /**
-     * Form to update the app settings
+     * @return string
      */
-    public function formBuilderUpdateSettings(): array
+    public function getDefaultValue(): string
     {
-        $settings = Helpers::readConfigFile();
-        if($settings) {
-            return [
-                "config" => [
-                    "method" => "POST",
-                    "action" => "",
-                    "class" => "form_control card",
-                    "id" => "formAddCategory",
-                    "submit" => "Valider",
-                    "referer" => Helpers::callRoute('settings')
-                ],
-                "fields" => [
-                    "APP_NAME" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 60,
-                        "label" => "Nom de l'application",
-                        "class" => "search-bar",
-                        "value" => $settings['APP_NAME'],
-                        "error" => "Le nom l'application doit contenir entre 1 et 60 caractères",
-                        "required" => true,
-                    ],
-                    "TMDB_API_KEY" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 60,
-                        "label" => "Clé API TMDB",
-                        "class" => "search-bar",
-                        "value" => $settings['TMDB_API_KEY'],
-                        "error" => "La clé API TMDB doit contenir entre 1 et 60 caractères",
-                        "required" => true,
-                    ],
-                    "TINYMCE_API_KEY" => [
-                        "type" => "text",
-                        "minLength" => 1,
-                        "maxLength" => 60,
-                        "label" => "Clé API TinyMCE",
-                        "class" => "search-bar",
-                        "value" => $settings['TINYMCE_API_KEY'],
-                        "error" => "La clé API TinyMCE doit contenir entre 1 et 60 caractères",
-                        "required" => true,
-                    ],
-                    "csrfToken" => [
-                        "type"=>"hidden",
-                        "value"=> FormBuilder::generateCSRFToken(),
-                    ]
-                ],
-            ];
+        return $this->defaultValue;
+    }
+
+    /**
+     * @param string $defaultValue
+     */
+    public function setDefaultValue(string $defaultValue): void
+    {
+        $this->defaultValue = $defaultValue;
+    }
+
+    public function getCurrentVariables(): array
+    {
+        $variables = new Settings();
+        $variables = $variables->findAll();
+        $variablesArray = [];
+        foreach ($variables as $variable) {
+            $variablesArray[$variable->getSelector()] = $variable->getValue();
         }
+        return $variablesArray;
+    }
+
+    public static function getAppName() {
+        $settings = new Settings();
+        return $settings->findOneBy('selector', 'appName')->getValue();
+    }
+
+    public static function getMetaTitle() {
+        $settings = new Settings();
+        return $settings->findOneBy('selector', 'metaTitle')->getValue();
+    }
+
+    public static function getMetaDescription() {
+        $settings = new Settings();
+        return $settings->findOneBy('selector', 'metaDescription')->getValue();
+    }
+
+
+    /**
+     * Form to read and update the template variables
+     */
+    public function formBuilderUpdateTemplateVariables(): array
+    {
+        $currentVariables = $this->getCurrentVariables();
+
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "class" => "form_control card",
+                "id" => "formAddCategory",
+                "submit" => "Valider",
+                "referer" => Helpers::callRoute('templates_lists')
+            ],
+            "fields" => [
+                "pageBackground" => [
+                    "type" => "color",
+                    "label" => "Fond de la page",
+                    "value" => $currentVariables['pageBackground'],
+                    "error" => "Le code couleur du fond de la page n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "navbarBackground" => [
+                    "type" => "color",
+                    "label" => "Couleur du menu",
+                    "value" => $currentVariables['navbarBackground'],
+                    "error" => "Le code couleur du menu n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "navbarColor" => [
+                    "type" => "color",
+                    "label" => "Couleur des titres du menu",
+                    "value" => $currentVariables['navbarColor'],
+                    "error" => "Le code couleur des titres du menu n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "navbarColorHover" => [
+                    "type" => "color",
+                    "label" => "Couleur des titres du menu survolés",
+                    "value" => $currentVariables['navbarColorHover'],
+                    "error" => "Le code couleur des titres du menu survolés n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "footerBackground" => [
+                    "type" => "color",
+                    "label" => "Couleur du footer",
+                    "value" => $currentVariables['footerBackground'],
+                    "error" => "Le code couleur du footer n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "footerColor" => [
+                    "type" => "color",
+                    "label" => "Couleur du texte du footer",
+                    "value" => $currentVariables['footerColor'],
+                    "error" => "Le code couleur des titres du footer n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "footerColorHover" => [
+                    "type" => "color",
+                    "label" => "Couleur des liens du footer survolés",
+                    "value" => $currentVariables['footerColorHover'],
+                    "error" => "Le code couleur des liens du footer survolés n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "titleColor" => [
+                    "type" => "color",
+                    "label" => "Couleur des titres",
+                    "value" => $currentVariables['titleColor'],
+                    "error" => "Le code couleur des titres n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "tagsBackground" => [
+                    "type" => "color",
+                    "label" => "Couleur du fond des tags",
+                    "min" => "0.1",
+                    "value" => $currentVariables['tagsBackground'],
+                    "error" => "Le code couleur du fond des tags n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "tagsColor" => [
+                    "type" => "color",
+                    "label" => "Couleur du texte des tags",
+                    "min" => "0.1",
+                    "value" => $currentVariables['tagsColor'],
+                    "error" => "Le code couleur du texte des tags n'est pas valable",
+                    "required" => true,
+                    "max" => 160
+                ],
+                "fontFamily" => [
+                    "type" => "select",
+                    "label" => "Police",
+                    "options" => [
+                        [
+                            "value" => "mulish",
+                            "text" => "Mulish",
+                            "selected" => $currentVariables['fontFamily'] == 'mulish',
+                        ],
+                        [
+                            "value" => "poppins",
+                            "text" => "Poppins",
+                            "selected" => $currentVariables['fontFamily'] == 'poppins',
+                        ],
+                        [
+                            "value" => "tahoma",
+                            "text" => "Tahoma",
+                            "selected" => $currentVariables['fontFamily'] == 'tahoma',
+                        ],
+                        [
+                            "value" => "calibri",
+                            "text" => "Calibri",
+                            "selected" => $currentVariables['fontFamily'] == 'calibri',
+                        ],
+                        [
+                            "value" => "roboto",
+                            "text" => "Roboto",
+                            "selected" => $currentVariables['fontFamily'] == 'roboto',
+                        ],
+                        [
+                            "value" => "arial",
+                            "text" => "Arial",
+                            "selected" => $currentVariables['fontFamily'] == 'arial',
+                        ],
+                        [
+                            "value" => "papyrus",
+                            "text" => "Papyrus",
+                            "selected" => $currentVariables['fontFamily'] == 'papyrus',
+                        ]
+                    ],
+                    "error" => "La police choisie n'existe pas",
+                    "required" => true,
+                ],
+                "csrfToken" => [
+                    "type"=>"hidden",
+                    "value"=> FormBuilder::generateCSRFToken(),
+                ]
+            ],
+        ];
     }
 
 }

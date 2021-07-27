@@ -1,80 +1,80 @@
 // TMDB CREATION
 #bannerToManual div {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 #tmdbForm {
-    font-family: $mulish;
-    margin-top: 20px;
+  font-family: $mulish;
+  margin-top: 20px;
+  display: flex;
+
+  form {
+    width: 250px;
+    margin-right: 10px;
+  }
+
+  #production-preview {
+    width: 100%;
+    line-height: 1.5;
+    text-align: justify;
     display: flex;
+    flex-direction: column;
+    p {
+      text-align: center;
+    }
 
-    form {
-        width: 250px;
+    #productionInfos {
+      min-height: 110px;
+      #poster {
+        width: 200px;
+        float: left;
         margin-right: 10px;
+      }
     }
 
-    #production-preview {
-        width: 100%;
-        line-height: 1.5;
-        text-align: justify;
+    #cast {
+      #actors {
+        margin-top: 10px;
         display: flex;
-        flex-direction: column;
-        p {
+        flex-wrap: wrap;
+        justify-content: space-around;
+        .actorCard {
+          border-radius: 8px;
+          margin-bottom: 5px;
+          border: solid rgba(0, 0, 0, 0) 3px;
+          box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
+
+          .actorName {
             text-align: center;
+            padding-bottom: 5px;
+          }
+          .actorImg {
+            border-radius: 8px 8px 0 0;
+            width: 150px;
+          }
         }
-
-        #productionInfos {
-            min-height: 110px;
-            #poster {
-                width: 200px;
-                float: left;
-                margin-right: 10px;
-            }
-        }
-
-        #cast {
-            #actors {
-                margin-top: 10px;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-                .actorCard {
-                    border: solid $grey4 1px;
-                    border-radius: 8px;
-                    margin-bottom: 5px;
-                    box-shadow: 2px 2px 5px $grey4;;
-
-                    .actorName {
-                        text-align: center;
-                        padding-bottom: 5px;
-                    }
-                    .actorImg {
-                        border-radius: 8px 8px 0 0;
-                        width: 150px;
-                    }
-                }
-            }
-        }
+      }
     }
+  }
 }
 
 // MANUAL CREATION
 #formAddProduction {
-    textarea {
-        min-height: 100px;
-        font-size: 16px;
-        resize: vertical;
-    }
-    .btn {
-        margin-top: 15px;
-    }
+  textarea {
+    min-height: 100px;
+    font-size: 16px;
+    resize: vertical;
+  }
+  .btn {
+    margin-top: 15px;
+  }
 }
 
 // UPDATE
 #formUpdateProductionTmdb {
-    textarea {
-        min-height: 200px;
-        font-size: 16px;
-        resize: vertical;
-    }
+  textarea {
+    min-height: 200px;
+    font-size: 16px;
+    resize: vertical;
+  }
 }

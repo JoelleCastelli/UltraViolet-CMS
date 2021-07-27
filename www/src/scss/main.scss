@@ -7,20 +7,24 @@
 
 // Grids
 @import "layouts/containers";
-@import "layouts/grid_modify_article";
-@import "layouts/grid-create-article";
 @import "layouts/productions";
 @import "layouts/install";
 @import "layouts/login_subscription";
 @import "layouts/dashboard";
 @import "layouts/medias";
 @import "layouts/settings";
-
+@import "layouts/statistics";
+@import "layouts/404";
+@import "layouts/grid_article";
+@import "layouts/userSettings";
 // Components
 @import "components/button";
+@import "components/button-dropdown";
 @import "components/banner";
 @import "components/slider";
 @import "components/sidebar";
+@import "components/navbar-front";
+@import "components/footer-front";
 @import "components/header";
 @import "components/card";
 @import "components/filter-tag";
@@ -37,6 +41,7 @@
 @import "components/bubble-actions";
 @import "components/state-switch";
 @import "components/modal";
+@import "components/modal-media";
 @import "components/request-response";
 
 .preload * {
@@ -51,6 +56,8 @@
   padding-left: 30px;
   padding-right: 30px;
   transition: margin 0.4s;
+  line-height: 1.5;
+  padding-bottom: 1rem;
 
   &.sidebarWrapped {
     margin-left: $sidebarWrappedWidth;

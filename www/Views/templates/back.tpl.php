@@ -1,6 +1,3 @@
-<?php
-    use App\Core\Request;
-?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -16,11 +13,13 @@
     <script src="https://cdn.tiny.cloud/1/itne6ytngfhi89x71prh233w7ahp2mgfmc8vwnjxhvue2m6h/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js">
     </script>
-    <?php if(isset($headScripts) && !empty($headScripts)) {
-            foreach ($headScripts as $script) {
-                echo "<script src='$script'></script>";
-            }
-        }?>
+    <?php
+        if(isset($headScripts) && !empty($headScripts)) {
+                foreach ($headScripts as $script) {
+                    echo "<script src='$script'></script>";
+                }
+        }
+    ?>
 
     <!--CSS-->
     <link rel="stylesheet" href="<?=PATH_TO_DIST.'main.css'?>">
@@ -41,15 +40,16 @@
                 include 'Views/components/header.php';
             if(isset($flash)) $this->displayFlash($flash);
             include $this->view;
-
         ?>
     </main>
 
-    <?php if(isset($bodyScripts) && !empty($bodyScripts)) {
-            foreach ($bodyScripts as $script) {
-                echo "<script src='$script'></script>";
-            }
-        }?>
+    <?php
+        if(isset($bodyScripts) && !empty($bodyScripts)) {
+                foreach ($bodyScripts as $script) {
+                    echo "<script src='$script'></script>";
+                }
+        }
+    ?>
 </body>
 
 </html>

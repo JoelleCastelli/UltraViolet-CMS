@@ -1,6 +1,6 @@
 <div id="tableActions">
     <div class="filtering-status">
-        <div class="filtering-btn articleState" id="published">Publiés</div>
+        <div class="filtering-btn articleState active" id="published">Publiés</div>
         <div class="filtering-btn articleState" id="scheduled">Planifiés</div>
         <div class="filtering-btn articleState" id="draft">Brouillons</div>
         <div class="filtering-btn articleState" id="removed">Supprimés</div>
@@ -22,8 +22,8 @@
             <th>Auteur</th>
             <th>Vues</th>
             <th>Commentaires</th>
-            <th>Date creation</th>
-            <th>Date publication</th>
+            <th>Création</th>
+            <th>Publication</th>
             <th>Actions</th>
         </tr>
     </thead>

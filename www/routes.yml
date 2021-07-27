@@ -3,12 +3,23 @@ front_home:
   controller: Main
   action:     frontHome
 
+404:
+  path:       /404
+  controller: Main
+  action:     page404
+
+sitemap:
+  path:       /sitemap.xml
+  controller: Main
+  action:     generateSitemap
+
+# LOGIN / LOGOUT / REGISTER
 login:
   path:       /connexion
   controller: Person
   action:     login
 
-subscription:
+register:
   path:       /inscription
   controller: Person
   action:     register
@@ -35,18 +46,56 @@ reset_password:
     key:    (\d+)
 
 forget_password:
-  path:       /forget_password
+  path:       /mot-de-passe-oublie
   controller: Person
   action:     forgetPasswordMail
 
-404:
-  path:       /404
-  controller: Main
-  action:     page404
 
+#SETTINGS
+user_update:
+  path:       /parametres
+  controller: Person
+  action:     updateUser
+
+user_delete:
+  path:       /parametres/supprimer-mon-compte
+  controller: Person
+  action:     deleteUser
+
+update_password:
+  path:       /parametres/modifier-mot-de-passe
+  controller: Person
+  action:     updatePassword
+
+
+# PAGE
 display_static_page:
-  path:       /{slug}
+  path:       /{page}
   controller: Page
   action:     showStaticPage
   requirements:
-    slug: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
+    page: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
+
+
+# CATEGORY
+display_category:
+  path:       /categorie/{category}
+  controller: Category
+  action:     showCategoryArticles
+  requirements:
+    category: ([a-z0-9]+(?:-[a-z0-9]+)*) # slug format
+
+
+# ARTICLE
+display_article:
+  path:       /article/{article}
+  controller: Article
+  action:     showArticle
+  requirements:
+    article: ([a-z0-9]+(?:-[a-z0-9]+)*)
+
+#DATABASE
+populate-database:
+  path:       /base-de-donnees/peupler
+  controller: Main
+  action:  populateDatabase

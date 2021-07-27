@@ -1,0 +1,187 @@
+.background-modal,
+.background-modal-production {
+  z-index: 100;
+  display: none;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.759);
+  position: fixed;
+}
+
+.visible {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-media,
+modal-production-details {
+  background: white;
+  z-index: 120;
+  position: relative;
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+
+  border-radius: 15px;
+  padding: 2rem;
+
+  h1 {
+    align-self: center;
+  }
+}
+
+.clickable-bg {
+  z-index: 110;
+  background: transparent;
+  position: inherit;
+  top: inherit;
+  right: inherit;
+  bottom: inherit;
+  left: inherit;
+}
+
+.media-name-cta,
+.production-name-cta {
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-radius: 100px;
+    background-color: $purple2;
+    color: white;
+    cursor: pointer;
+    transform: scale(0.9);
+  }
+}
+
+.prod {
+  display: grid;
+  grid-template-columns: min-content 3fr;
+  grid-template-rows: repeat(5, min-content);
+  grid-template-areas:
+    "prod-cover prod-details"
+    "actors actors"
+    "directors directors"
+    "writers writers"
+    "creators creators";
+
+  background: white;
+  z-index: 120;
+  position: relative;
+  width: 85%;
+  height: 85%;
+  border-radius: 15px;
+  padding: 2rem;
+  overflow: auto;
+
+  h1 {
+    font-size: 1.5rem;
+  }
+  &__cover {
+    grid-area: prod-cover;
+    object-fit: cover;
+  }
+
+  &__details {
+    padding: 0 1rem 0 1rem;
+    grid-area: prod-details;
+    display: flex;
+    flex-flow: column;
+
+    &_resume {
+      text-align: justify;
+      line-height: 1.2;
+    }
+
+    * {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  &__actors, &__creators, &__writers, &__directors {
+    position: relative;
+    grid-area: actors;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 4rem;
+
+    .person-card {
+      border-radius: 8px;
+      margin-bottom: 5px;
+      border: solid rgba(0, 0, 0, 0) 3px;
+      box-shadow: 1px 6px 20px -4px rgba(0, 0, 0, 0.05);
+
+      .person-name {
+        text-align: center;
+        padding-bottom: 5px;
+      }
+      .character {
+        font-style: italic;
+      }
+      .person-img {
+        border-radius: 8px 8px 0 0;
+        width: 100px;
+      }
+    }
+  }
+
+  &__directors {
+    position: relative;
+    padding-top: 4rem;
+    grid-area: directors;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__writers {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding-top: 4rem;
+    grid-area: writers;
+  }
+
+  &__creators {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding-top: 4rem;
+    grid-area: creators;
+  }
+}
+
+.production {
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: $grey3;
+    transform: scale(1.01);
+  }
+}
+
+.little-thumbnail {
+  object-fit: cover;
+  width: 8vw;
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+.prod-modal-title {
+  font-size: 1.5rem;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateY(50%) translateX(-50%);
+}
+
+.person-card {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}

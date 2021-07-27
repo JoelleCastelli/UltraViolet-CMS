@@ -3,6 +3,8 @@ let b = 0;
 $(document).ready(function () {
   /* BUILD DATATABLES */
   let table = $("#datatable").DataTable({
+    "order": [],
+    "autoWidth": false,
     responsive: true,
     // All columns
     columns: [
@@ -57,28 +59,19 @@ $(document).ready(function () {
 
   // On page load, display user
   getUsersByRole("user");
-  getUsersdeletedAt("user");
 
   // Display different types on filtering button click
   $(".filtering-btn").click(function () {
     $(".filtering-btn").removeClass("active");
     $(this).addClass("active");
     table.columns([0]).visible(true);
-    if (this.id === "user") {
+    if (this.id === "user" || this.id === "removed") {
       table.columns([0]).visible(false);
     }
-    getUsersByRole(this.id);
-  });
+    if (this.id == "removed") getRemovedUser(this.id);
+    else getUsersByRole(this.id);
 
-  // Display last filtering column to show deleted user
-  $(".filter-delete").click(function () {
-    $(".filter-delete").removeClass("active");
-    $(this).addClass("active");
-    table.columns([0]).visible(true);
-    if (this.id === "user") {
-      table.columns([0]).visible(false);
-    }
-    getUsersByRole(this.id);
+    console.log(this.id);
   });
 
   function getUsersByRole(role) {
@@ -99,8 +92,7 @@ $(document).ready(function () {
     });
   }
 
-  //getUser if deletedAt
-  function getUsersdeletedAt(deletedAt) {
+  function getRemovedUser(deletedAt) {
     $.ajax({
       type: "POST",
       url: callRoute("users_data"),
@@ -110,11 +102,13 @@ $(document).ready(function () {
         table.clear();
         table.rows.add(response.users).draw();
       },
-      error: function () {
+      error: function (error) {
         console.log(
-          "Erreur dans la récupération des utilisateurs de deletedAt " +
+          "Erreur dans la récupération des utilisateurs de removed  " +
+            error +
             deletedAt
         );
+        console.log(error);
       },
     });
   }
@@ -128,6 +122,34 @@ $(document).ready(function () {
       $.ajax({
         type: "POST",
         url: callRoute("users_delete"),
+        data: { id: personId },
+        dataType: "json",
+        success: function (response) {
+          if(response['success']){
+              row.remove().draw();
+
+          }else {
+            alert(response['message']);
+          }
+        },
+        error: function () {
+          $(".header").after(
+            "Erreur dans la suppression de l'utilisateur ID " + personId
+          );
+        },
+      });
+    }
+  });
+
+  /* UPDATE STATE FOR DELETED PAGE */
+  table.on("click", ".state-hidden", function (event) {
+    event.preventDefault();
+    if (confirm("Êtes-vous sûr de vouloir restaurer cette utilisateur ?")) {
+      let personId = this.id.substring(this.id.lastIndexOf("-") + 1);
+      let row = table.row($(this).parents("tr"));
+      $.ajax({
+        type: "POST",
+        url: callRoute("users_update_state"),
         data: { id: personId },
         success: function () {
           row.remove().draw();

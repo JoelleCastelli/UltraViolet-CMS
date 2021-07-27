@@ -1,65 +1,70 @@
-#CONFIG
-configStep1:
-  path:       /installation/introduction
-  controller: Installer
-  action:     step1
-
-configStep2:
-  path:       /installation/database
-  controller: Installer
-  action:     step2
-
-configStep3:
-  path:       /installation/lancement
-  controller: Installer
-  action:     step3
-
-configStep4:
-  path:       /installation/populate-database
-  controller: Installer
-  action:     step4
-
-configStep5:
-  path:       /installation/nouvel-utilisateur
-  controller: Installer
-  action:     step5
-
-configStep6:
-  path:       /installation/conclusion
-  controller: Installer
-  action:     step6
-
 # GLOBAL
 admin:
   path: /admin
   controller: Main
   action: default
+  middleware: Moderator
 
 routes:
   path: /admin/routes
   controller: Main
   action: getRoute
 
+#CONFIG
+configStep1:
+  path: /installation/introduction
+  controller: Installer
+  action: step1
+
+configStep2:
+  path: /installation/database
+  controller: Installer
+  action: step2
+
+configStep3:
+  path: /installation/lancement
+  controller: Installer
+  action: step3
+
+configStep4:
+  path: /installation/populate-database
+  controller: Installer
+  action: step4
+
+configStep5:
+  path: /installation/nouvel-utilisateur
+  controller: Installer
+  action: step5
+
+configStep6:
+  path: /installation/conclusion
+  controller: Installer
+  action: step6
+
 # PAGES
 pages_list:
   path: /admin/pages
   controller: Page
   action: showAll
+  middleware: Editor
 
 page_creation:
   path: /admin/pages/creation
   controller: Page
   action: createPage
+  middleware: Editor
 
 page_delete:
   path: /admin/pages/delete
   controller: Page
   action: deletePage
+  middleware: Editor
 
 page_update:
   path: /admin/pages/update/{id}
   controller: Page
   action: updatePage
+  middleware: Editor
   requirements:
     id: (\d+)
 
@@ -67,32 +72,45 @@ page_update_state:
   path: /admin/pages/update-state
   controller: Page
   action: updatePageState
+  middleware: Editor
 
 page_update_visibility:
   path: /admin/pages/update-visibility
   controller: Page
   action: updateVisibility
+  middleware: Editor
 
 pages_data:
   path: /admin/pages-data
   controller: Page
   action: getPages
+  middleware: Editor
+
 
 # CATEGORIES
+categories_data:
+  path: /admin/categories-data
+  controller: Category
+  action: getCategories
+  middleware: Editor
+
 categories_list:
   path: /admin/categories
   controller: Category
   action: showAll
+  middleware: Editor
 
 category_creation:
   path: /admin/categories/creation
   controller: Category
   action: addCategory
+  middleware: Editor
 
 category_update:
   path: /admin/categories/modifier/{id}
   controller: Category
   action: updateCategory
+  middleware: Editor
   requirements:
     id: (\d+)
 
@@ -100,18 +118,37 @@ category_delete:
   path: /admin/categories/supprimer
   controller: Category
   action: deleteCategory
-  middleware: Admin
+  middleware: Editor
+
+category_hide:
+  path: /admin/categories/cacher/{id}
+  controller: Category
+  action: hideCategory
+  middleware: Editor
+  requirements:
+    id: (\d+)
+
+category_restore:
+  path: /admin/categories/restaurer/{id}
+  controller: Category
+  action: restoreCategory
+  middleware: Editor
+  requirements:
+    id: (\d+)
+
 
 # ARTICLES
 articles_list:
   path: /admin/articles
   controller: Article
   action: showAll
+  middleware: Editor
 
 article_creation:
   path: /admin/articles/creation
   controller: Article
   action: createArticle
+  middleware: Editor
 
 article_update:
   path: /admin/articles/modification/{id}
@@ -125,42 +162,45 @@ article_delete:
   path: /admin/articles/delete
   controller: Article
   action: deleteArticle
+  middleware: Editor
 
 article_data:
   path: /admin/articles/articles-data
   controller: Article
   action: getArticles
+  middleware: Editor
 
 article_tab_change:
   path: /admin/tab-change
   controller: Article
   action: tabChange
+  middleware: Editor
+
 
 # PRODUCTIONS
 productions_list:
   path: /admin/productions
   controller: Production
   action: showAll
-
-productions_creation:
-  path: /admin/productions/creation-manuelle
-  controller: Production
-  action: addProduction
+  middleware: Editor
 
 productions_creation_tmdb:
   path: /admin/productions/creation
   controller: Production
-  action: addProductionTmdb
+  action: addProduction
+  middleware: Editor
 
 productions_show_preview:
   path: /admin/productions/tmdb-request
   controller: Production
   action: ajaxShowPreview
+  middleware: Editor
 
 productions_data:
   path: /admin/productions/productions-data
   controller: Production
   action: getProductions
+  middleware: Editor
 
 production_update:
   path: /admin/productions/modification/{id}
@@ -176,34 +216,63 @@ production_delete:
   action: deleteProduction
   middleware: Editor
 
+
 # COMMENTS
 comments_list:
   path: /admin/commentaires
   controller: Comment
   action: showAll
 
+comments_delete:
+  path: /admin/commentaires/supprimer
+  controller: Comment
+  action: deleteComment
+
+comments_update_state:
+  path: /admin/commentaires/update-state
+  controller: Comment
+  action: updateCommentState
+
+comments_data:
+  path: /admin/comments-data
+  controller: Comment
+  action: getComments
+
+
 # TEMPLATES
 templates_lists:
-  path: /admin/templates
-  controller: Template
-  action: showAll
+  path:       /admin/templates
+  controller: Templates
+  action:     showAll
+  middleware: Admin
+
+restore_templates:
+  path:       /admin/templates/restaurer
+  controller: Templates
+  action:     restore
+  middleware: Admin
+
 
 # STATS
 stats:
   path: /admin/statistiques
-  controller: Stats
-  action: showAll
+  controller: Statistics
+  action: default
+  middleware: Admin
+
 
 # USERS
 users_list:
   path: /admin/utilisateurs
   controller: Person
   action: showAll
+  middleware: Admin
 
 users_data:
   path: /admin/utilisateurs/utilisateurs-data
   controller: Person
   action: getUsers
+  middleware: Admin
 
 users_update:
   path: /admin/utilisateurs/modification/{id}
@@ -219,31 +288,31 @@ users_delete:
   action: deletePerson
   middleware: Admin
 
-user_show:
-  path: /admin/utilisateur
+users_update_state:
+  path: /admin/utilisateurs/update-state
   controller: Person
-  action: show
+  action: updatePersonState
+  middleware: Admin
 
-user_creation:
-  path: /admin/utilisateurs/creation
-  controller: Person
-  action: add
 
 # MEDIAS
 media_list:
   path: /admin/medias
   controller: Media
   action: showAll
+  middleware: Editor
 
 media_upload:
   path: /admin/medias/chargement
   controller: Media
   action: upload
+  middleware: Editor
 
 medias-data:
   path: /admin/medias/medias-data
   controller: Media
   action: getMedias
+  middleware: Editor
 
 media_delete:
   path: /admin/medias/supprimer
@@ -255,10 +324,12 @@ medias_user_data:
   path: /admin/medias/user
   controller: Media
   action: getMediasUser
+  middleware: Editor
+
 
 # SETTINGS
 settings:
   path: /admin/parametres
   controller: Settings
-  action:     showAll
+  action: showAll
   middleware: Admin

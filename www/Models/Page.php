@@ -18,12 +18,11 @@ class Page extends Database implements JsonSerializable
 	protected $slug;
 	protected $position;
 	protected $state;
-	protected $titleSeo;
 	protected $descriptionSeo;
 	protected $publicationDate;
     protected $content;
-	protected $createdAt;
-	protected $updatedAt;
+	private $createdAt;
+	private $updatedAt;
 	protected $deletedAt;
 
     private $actions;
@@ -33,13 +32,13 @@ class Page extends Database implements JsonSerializable
 		parent::__construct();
 		$this->actions = [
 		    ['name' => 'Modifier', 'action' => 'modify', 'class' => "update", 'url' => Helpers::callRoute('page_update', ['id' => $this->id])],
-            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => "delete", 'url' => Helpers::callRoute('page_delete', ['id' => $this->id])],
         ];
 
         $this->actionsDeletedPages = [
-            ['name' => 'Supprimer définitivement', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('page_delete', ['id' => $this->id]), 'role' => 'admin'],
-            ['name' => 'Restaurer en tant que brouillon', 'action' => 'update-state', 'class' => 'state-draft', 'url' => Helpers::callRoute('page_update_state'), 'role' => 'admin'],
-            ['name' =>'Restaurer en tant que publiée', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('page_update_state'), 'role' => 'admin'],
+            ['name' => 'Supprimer définitivement', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute('page_delete', ['id' => $this->id])],
+            ['name' => 'Restaurer en tant que brouillon', 'action' => 'update-state', 'class' => 'state-draft', 'url' => Helpers::callRoute('page_update_state')],
+            ['name' =>'Restaurer en tant que publiée', 'action'=> 'update-state', 'class' => 'state-hidden', 'url' => Helpers::callRoute('page_update_state')],
         ];
 	}
 
@@ -113,22 +112,6 @@ class Page extends Database implements JsonSerializable
     public function setState($state): void
     {
         $this->state = $state;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitleSeo()
-    {
-        return $this->titleSeo;
-    }
-
-    /**
-     * @param mixed $titleSeo
-     */
-    public function setTitleSeo($titleSeo): void
-    {
-        $this->titleSeo = $titleSeo;
     }
 
     /**
@@ -282,6 +265,14 @@ class Page extends Database implements JsonSerializable
         $this->setPublicationDate(null);
     }
 
+    public static function getStaticPages()
+    {
+        $page = new Page;
+        $pages = $page->select()->where('deletedAt', 'NULL')->andWhere('state', 'published')->orderBy('position')->orderBy('title')->get();
+        return $pages;
+    }
+
+
     public function jsonSerialize(): array
     {
         return [
@@ -290,7 +281,6 @@ class Page extends Database implements JsonSerializable
             "slug" => $this->getSlug(),
             "position" => $this->getPosition(),
             "state" => $this->getState(),
-            "titleSeo" => $this->getTitleSeo(),
             "descriptionSeo" => $this->getDescriptionSeo(),
             "publicationDate" => $this->getPublicationDate(),
             "content" => $this->getContent(),
@@ -324,15 +314,15 @@ class Page extends Database implements JsonSerializable
 				"method"=>"POST",
 				"action"=>"",
 				"class"=>"form_control form-add-page",
-				"id"=>"form_register",
+				"id"=>"form_create_page",
 				"submit"=>"Ajout d'une page",
                 "referer" => Helpers::callRoute('page_creation')
 			],
 			"fields"=>[
 				"title" => [
                     "type" => "text",
-                    "placeholder" => "Animées",
-                    "label" => "Titre *",
+                    "placeholder" => "Nous contacter",
+                    "label" => "Titre",
                     "class" => "search-bar",
                     "error" => "Votre titre doit faire entre 1 et 100 caractères",
                     "required" => true,
@@ -341,7 +331,7 @@ class Page extends Database implements JsonSerializable
                 ],
 				"slug"=>[
                     "type" => "text",
-                    "placeholder" => "meilleures-animees",
+                    "placeholder" => "nous-contacter",
                     "label" => "Slug",
                     "class" => "search-bar",
                     "error" => "Votre slug est incorrect et doit faire entre 1 et 100 caractères",
@@ -352,36 +342,33 @@ class Page extends Database implements JsonSerializable
 				"position"=>[
                     "type" => "number",
                     "placeholder" => "3",
-                    "label" => "Position * ",
+                    "label" => "Position",
                     "class" => "search-bar",
                     "error" => "Le champs position est vide et doit être supérieur à 0",
                     "min" => 1,
                     "max" => 127,
                     "required" => true,
                 ],
-				"titleSeo"=>[
-                    "type"=>"text",
-                    "placeholder" => "Titre pour le référencement",
-                    "label" => "Titre SEO",
-                    "class" => "search-bar",
-                ],
 				"descriptionSeo"=>[
-                    "type"=>"text",
+                    "type"=>"textarea",
                     "label" => "Description SEO",
-                    "placeholder" => "Description de la page",
+                    "maxLength" => 160,
+                    "error" => "La description ne peut pas contenir plus de 160 caractères",
+                    "placeholder" => "Description de la page vue par les moteurs de recherche",
                     "class"=>"search-bar",
                 ],
                 "content" => [
+                    "id" => "articleContent",
+                    "label" => "Contenu de la page <span class='requiredField'>*</span>",
                     "type" => "textarea",
-                    "placeholder" => "Contenu de la page",
                     "class" => "input",
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État *",
+                    "label" => "État",
                     "class" => "state",
                     "required" => true,
-                    "error" => "Le champs état est vide",
+                    "error" => "Le champs Etat est vide",
                     "options" => [
                         [
                             "value" => "draft",
@@ -415,7 +402,7 @@ class Page extends Database implements JsonSerializable
 		];
 	}
 
-    public function formBuilderUpdate($id)
+    public function formBuilderUpdate($id): array
     {
         $today = date("Y-m-d\TH:i");
         $todayText = date("Y-m-d H:i");
@@ -425,7 +412,7 @@ class Page extends Database implements JsonSerializable
                 "method" => "POST",
                 "action" => "",
                 "class" => "form_control",
-                "id" => "",
+                "id" => "form_update_page",
                 "submit" => "Modifier la page",
                 "referer" => Helpers::callRoute('page_update', ['id' => $id])
             ],
@@ -433,8 +420,8 @@ class Page extends Database implements JsonSerializable
             "fields" => [
                 "title" => [
                     "type" => "text",
-                    "placeholder" => "Animées",
-                    "label" => "Titre *",
+                    "placeholder" => "Nous contacter",
+                    "label" => "Titre",
                     "class" => "search-bar",
                     "error" => "Votre titre doit faire entre 1 et 100 caractères",
                     "required" => true,
@@ -443,7 +430,7 @@ class Page extends Database implements JsonSerializable
                 ],
                 "slug" => [
                     "type" => "text",
-                    "placeholder" => "meilleures-animees",
+                    "placeholder" => "nous-contacter",
                     "label" => "Slug",
                     "class" => "search-bar",
                     "error" => "Votre slug est incorrect et doit faire entre 1 et 100 caractères",
@@ -454,33 +441,30 @@ class Page extends Database implements JsonSerializable
                 "position" => [
                     "type" => "number",
                     "placeholder" => "3",
-                    "label" => "Position * ",
+                    "label" => "Position",
                     "class" => "search-bar",
                     "error" => "Le champs position est vide et doit être supérieur à 0",
                     "min" => 1,
                     "max" => 127,
                     "required" => true,
                 ],
-                "titleSeo" => [
-                    "type" => "text",
-                    "placeholder" => "Titre pour le référencement",
-                    "label" => "Titre SEO",
-                    "class" => "search-bar",
-                ],
                 "descriptionSeo" => [
                     "type" => "text",
                     "label" => "Description SEO",
-                    "placeholder" => "Description de la page",
+                    "placeholder" => "Description de la page vue par les moteurs de recherche",
+                    "maxLength" => 160,
+                    "error" => "La description ne peut pas contenir plus de 160 caractères",
                     "class" => "search-bar",
                 ],
                 "content" => [
+                    "id" => "articleContent",
+                    "label" => "Contenu de la page <span class='requiredField'>*</span>",
                     "type" => "textarea",
-                    "placeholder" => "Contenu de la page",
                     "class" => "input",
                 ],
                 "state" => [
                     "type" => "radio",
-                    "label" => "État *",
+                    "label" => "État",
                     "class" => "",
                     "required" => true,
                     "error" => "Le champs état est vide",

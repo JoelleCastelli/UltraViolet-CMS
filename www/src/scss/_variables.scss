@@ -1,48 +1,50 @@
-
 /* GLOBAL COLORS */
-$pure-white: #FFFFFF;
+$pure-white: #ffffff;
 $light-white: brightness(white, 30%);
-$white: #E5E5E5;
-$white2: #DFE0EB;
-$white3: #C5C7CD;
-$white4: #D5C6FF;
-$white5: #F7F7FC;
+$white: #e5e5e5;
+$white2: #dfe0eb;
+$white3: #c5c7cd;
+$white4: #d5c6ff;
+$white5: #f7f7fc;
 
 $grey: #252733;
 $grey2: #b8abdb;
-$grey3: #E7E9F3;
+$grey3: #e7e9f3;
 $grey4: #b5b5b5;
-$grey5: #EFF0F6;
-$grey6: #9FA2B4;
-$grey7: #737A87;
+$grey5: #eff0f6;
+$grey6: #9fa2b4;
+$grey7: #737a87;
 $light-grey: lighten(#252733, 25%);
-$light-grey2: lighten(#E3E3E3, 25%);
+$light-grey2: lighten(#e3e3e3, 25%);
 
 $pure-black: black;
-$black: #14142B;
+$black: #14142b;
 $light-black: lighten(black, 26%);
 
 $green: #32cd32;
 
-$purple: #5F2EEA;
-$purple2: #5B1CE0;
+$purple: #5f2eea;
+$purple2: #5b1ce0;
 $purple3: #4622ab;
 $purple4: #4622ab;
 
 $purple-light: #b898ff;
 
-$orange-light: lighten(#F29400, 25%);
-$orange: #E0861C;
+$orange-light: lighten(#f29400, 25%);
+$orange: #e0861c;
 
-$cyan: #1CB1E0;
+$cyan: #1cb1e0;
 
-$red-light: lighten(#F20000, 10%);
-$red: #EB5757;
+$red-light: lighten(#f20000, 10%);
+$red: #eb5757;
 $red2: #c94949;
 
-$blue: #3751FF;
+$blue: #3751ff;
 
-$transparent: rgba($color: #000000, $alpha: 0.0);
+$transparent: rgba(
+  $color: #000000,
+  $alpha: 0,
+);
 
 // TODO : Remove the lines below when the final colors will be defined
 
@@ -116,7 +118,7 @@ $item-navigation-font-color: $grey6;
 $logo-bg-color: $blue;
 $logo-icon-color: $light-white;
 
-
 // SIZES
 $sidebarFullWidth: 220px;
 $sidebarWrappedWidth: 6rem;
+$navbarFrontHeight: 4.5rem;

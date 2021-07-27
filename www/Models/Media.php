@@ -26,7 +26,7 @@ class Media extends Database
     {
         parent::__construct();
         $this->actions = [
-            ['name' => 'Supprimer', 'action' => 'delete', 'url' => Helpers::callRoute(''), 'role' => 'admin'],
+            ['name' => 'Supprimer', 'action' => 'delete', 'class' => 'delete', 'url' => Helpers::callRoute(''), 'role' => 'admin'],
         ];
     }
 
@@ -105,12 +105,20 @@ class Media extends Database
         $this->deletedAt = $deletedAt;
     }
 
+    public function getLastInsertId(): string
+    {
+        $latestMedia = new Media();
+        $latestMedia = $latestMedia->select()->orderby('id', 'DESC')->first();
+        return $latestMedia->id;
+    }
+
     public function formBuilderUpload(): array
     {
         return [
             "config" => [
                 "method" => "POST",
                 "action" => '',
+                "id" => "form_add_media",
                 "referer" => Helpers::callRoute('media_list'),
                 "enctype" => "multipart/form-data"
             ],
@@ -139,5 +147,10 @@ class Media extends Database
         } else {
             return "-";
         }
+    }
+
+    public function getMediaByTitle($title) {
+        $media = $this->select("id")->where("title", $title)->first(0);
+        return !empty($media) ? $media : -1;
     }
 }

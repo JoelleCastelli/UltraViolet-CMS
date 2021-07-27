@@ -24,7 +24,12 @@ class FormBuilder
             $readonly = isset($field["readonly"]) && $field["readonly"] == true ? "readonly" : '';
             $multiple = isset($field["multiple"]) && $field["multiple"] == true ? "multiple" : '';
 
-            $html .= "<label class='".($field["classLabel"] ?? "")."' for = '".($field["id"] ?? $fieldName)."'>".($field["label"] ?? "")." </label>";
+            // Add * next to label if required
+            $html .= "<label class='".($field["classLabel"] ?? "")."' for = '".($field["id"] ?? $fieldName)."'>";
+            $html .= ($field["label"] ?? "");
+            if(!in_array($config["config"]["id"], ['form_register', 'form_add_media']))
+                $html .= $required ? ' <span class="requiredField">*</span>' : '';
+            $html .= "</label>";
 
             // SELECT
 		    if ($field["type"] == "select") {
@@ -82,7 +87,7 @@ class FormBuilder
                     $value = htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
-                $html .="<textarea name='".$fieldName."'
+                $html .="<textarea wrap='off' name='".$fieldName."'
                                    placeholder='".($field["placeholder"] ?? "")."'
                                    class='".($field["class"] ?? "")."'
                                    id='".($field["id"] ?? $fieldName)."'
@@ -99,6 +104,11 @@ class FormBuilder
                     $value = ($field['type'] === 'password') ? '' : htmlspecialchars($data[$fieldName], ENT_QUOTES);
                 }
 
+                // Add preview for app logo and favicon in Settings page
+                if($fieldName == "logo")
+                    $html .="<img id='appLogo' src='".PATH_TO_IMG."logo/$fieldName.png'>";
+                if($fieldName == "favicon")
+                    $html .="<img id='appFavicon' src='".PATH_TO_IMG."logo/$fieldName.ico'>";
 
                 $html .="<input
                     type='".($field["type"] ?? "text")."'
@@ -108,13 +118,14 @@ class FormBuilder
                     class='".($field["class"] ?? "")."'
                     min='".($field["min"] ?? "")."'
                     max='".($field["max"] ?? "")."'
+                    step='".($field["step"] ?? "")."'
                     id='".($field["id"] ?? $fieldName)."'
                     accept='".($field["accept"] ?? "")."'
                     $required $disabled $readonly $multiple
                 >";
             }
 		}
-        $html .= "<input type='submit' class='btn' value=\"".($config["config"]["submit"]??"Valider")."\">";
+        $html .= "<input type='submit' class='btn tagsBackground tagsColor' value=\"".($config["config"]["submit"]??"Valider")."\">";
 		$html .= "</form>";
 
 		if($show) {

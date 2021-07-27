@@ -1,0 +1,19 @@
+#userSettings {
+  margin-top: 2rem;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+  padding-bottom: 4.5rem;
+
+  a {
+    float: right;
+    &:hover {
+      color: $white;
+    }
+  }
+
+  .btn {
+    margin-top: 20px;
+  }
+}

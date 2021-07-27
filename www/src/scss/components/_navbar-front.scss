@@ -1,0 +1,69 @@
+#navbar-front {
+  width: 100%;
+  min-width: 480px;
+  height: $navbarFrontHeight;
+  position: fixed;
+  padding-left: 6rem;
+  padding-right: 8rem;
+  z-index: 1;
+  top: 0;
+  background: #000d28;
+  color: #a4a6b3;
+  font-family: "Mulish", sans-serif;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  & > * {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    height: 100%;
+    text-decoration: none;
+    color: whitesmoke;
+    @extend %flex-center;
+  }
+
+  #userImage {
+    img {
+      height: 50px;
+      width: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .dropdown-user {
+      transform: translate(-20%, 0);
+    }
+  }
+
+  a {
+    height: 2rem;
+    &:hover {
+      color: $purple-light;
+      -webkit-transform: scale(1.05);
+      -ms-transform: scale(1.05);
+      transform: scale(1.05);
+      color: whitesmoke;
+      transition: 0.2s ease-out;
+      opacity: 1;
+    }
+
+    &.brandLogo {
+      &:hover {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+      }
+      height: $navbarFrontHeight;
+      img {
+        max-height: 100%;
+        object-fit: scale-down;
+      }
+    }
+  }
+
+  .dropdown-content {
+    position: absolute;
+    top: 4rem;
+  }
+}

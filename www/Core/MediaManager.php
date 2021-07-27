@@ -9,7 +9,7 @@ class MediaManager
     protected array $files = [];
     protected int $oneMegabytesInBytes = 1048576;
     protected array $result = [];
-    private array $imageExtensions = ['jpg', 'jpeg', 'png', 'svg'];
+    private array $imageExtensions = ['jpg', 'jpeg', 'png', 'svg', 'ico'];
 
     public function __construct()
     {
@@ -32,7 +32,10 @@ class MediaManager
         // verifications files
         foreach ($this->getFiles() as $file) {
 
-            if($file['error'] != UPLOAD_ERR_OK) return "Erreur dans le chargement du fichier";
+            if($file['error'] != UPLOAD_ERR_OK) {
+                $this->result['errors'][] = "Erreur dans le chargement du fichier";
+                return $this->result['errors'];
+            }
 
             //init
             $fileSize = $file['size'];
@@ -81,25 +84,21 @@ class MediaManager
     public function uploadFile($mediaManagerFiles): bool
     {
         foreach ($mediaManagerFiles as $key => $file ) {
-
             $media = new Media();
             $existingMediaCount = $media->count('path')->where('path', $file['path'])->first();
 
-            if ($existingMediaCount->total > 0) {
+            // Format image name with (number) if not user profile picture
+            if ($existingMediaCount->total > 0 && strpos($file['path'], PATH_TO_IMG_USERS) === false) {
                 $number = 1;
-
-                // to format image name with number
-                while($existingMediaCount->total > 0)
-                {
+                while($existingMediaCount->total > 0) {
                     $title = $file['title'] . '(' . $number . ')';
                     $path = pathinfo($file['path'], PATHINFO_DIRNAME) . '/' . $title . '.' . pathinfo($file['path'], PATHINFO_EXTENSION);
-                $existingMediaCount = $media->count('path')->where('path', $path)->first();
+                    $existingMediaCount = $media->count('path')->where('path', $path)->first();
                     $number++;
                 }
 
                 $this->files[$key]['path'] = pathinfo($file['path'], PATHINFO_DIRNAME) . '/' . $title . '.' . pathinfo($file['path'], PATHINFO_EXTENSION);
                 $this->files[$key]['title'] = $title;
-
                 $file['path'] = $this->files[$key]['path'];
             }
 
@@ -115,12 +114,16 @@ class MediaManager
 
     public function saveFile($mediaManagerFiles) {
         foreach ($mediaManagerFiles as $file) {
-
-            $media = new Media();
-            $media->setPath($file['path']);
-            $media->setTitle($file['title']);
-            $media->save();
-            
+            $existingMedia = new Media();
+            $existingMedia = $existingMedia->findOneBy('path', $file['path']);
+            if($existingMedia) {
+                $existingMedia->save();
+            } else {
+                $media = new Media();
+                $media->setPath($file['path']);
+                $media->setTitle($file['title']);
+                $media->save();
+            }
         }
     }
 

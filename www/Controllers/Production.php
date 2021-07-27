@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Core\FormValidator;
 use App\Core\Helpers;
-use App\Core\MediaManager;
 use App\Core\View;
 use App\Models\Production as ProductionModel;
 use App\Models\ProductionArticle;
@@ -24,6 +23,7 @@ class Production
             "season" => 'Saison',
             "series" => 'Série',
             "runtime" => 'Durée',
+            "id" => 'Identifiant',
             "releaseDate" => 'Date de sortie',
             "createdAt" => 'Date d\'ajout',
             "actions" => 'Actions'
@@ -51,28 +51,14 @@ class Production
 
             $productionArray = [];
             foreach ($productions as $production) {
-                // Find production key art media and populate poster object
-                $productionMedia = new ProductionMedia();
-                $productionMedia = $productionMedia->select()->where('productionId', $production->getId())->andWhere('keyArt', 1)->first();
-                if($productionMedia) {
-                    $production->getPoster()->setId($productionMedia->getMediaId());
-                    // Display default image if file is not found
-                    if(file_exists(getcwd().$production->getPoster()->getPath()))
-                        $path = $production->getPoster()->getPath();
-                    else
-                        $path = PATH_TO_IMG.'default_poster.jpg';
-                } else {
-                    // Display default image if no key art is associated
-                    $path = PATH_TO_IMG.'default_poster.jpg';
-                }
-
                 $productionArray[] = [
                     $this->columnsTable['title'] => $production->getTitle(),
-                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$path."'/>",
+                    $this->columnsTable['thumbnail'] => "<img class='thumbnail' src='".$production->getProductionPosterPath()."'/>",
                     $this->columnsTable['originalTitle'] => $production->getOriginalTitle(),
                     $this->columnsTable['season'] => $production->getParentSeasonName(),
                     $this->columnsTable['series'] => $production->getParentSeriesName(),
                     $this->columnsTable['runtime'] => $production->getCleanRuntime(),
+                    $this->columnsTable['id'] => $production->getId(),
                     $this->columnsTable['releaseDate'] => $production->getCleanReleaseDate(),
                     $this->columnsTable['createdAt'] => $production->getCleanCreatedAt(),
                     $this->columnsTable['actions'] => $production->generateActionsMenu(),
@@ -82,55 +68,12 @@ class Production
         }
     }
 
-    /**
-     * Manually add a production in the database
-     */
     public function addProductionAction() {
-        // Generate form
         $production = new ProductionModel();
         $form = $production->formBuilderAddProduction();
-        $view = new View("productions/add-production");
-        $view->assign('title', 'Nouvelle production manuelle');
-        $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/addProductionManual.js']);
-        $view->assign("form", $form);
-
-        // If form is submitted, check the data and save production
-        if(!empty($_POST)) {
-            $errors = FormValidator::check($form, $_POST);
-            if(empty($errors)) {
-                // Set object values
-                $production->setType(htmlspecialchars($_POST['type']));
-                $production->setTitle(htmlspecialchars($_POST['title']));
-                $production->setOriginalTitle(htmlspecialchars($_POST['originalTitle']));
-                $production->setReleaseDate(htmlspecialchars($_POST['releaseDate']));
-                $production->setOverview(htmlspecialchars($_POST['overview']));
-                if($_POST['runtime'] != '')     // runtime only accepts integer, no empty string
-                    $production->setRuntime(htmlspecialchars($_POST['runtime']));
-                if($_FILES['poster']) {
-                    // If an image is submitted, upload file and update production poster object
-                    $mediaManager = new MediaManager();
-                    $check = $mediaManager->check($_FILES["poster"], $production->getType());
-                    if(empty($check)) {
-                        $mediaManager->uploadFile($mediaManager->getFiles());
-                        $production->getPoster()->setPath(getcwd().PATH_TO_IMG_POSTERS.$production->getType().'/'.htmlspecialchars($mediaManager->getFiles()[0]['path']));
-                    } else {
-                        $errors[] = "Le fichier n'a pas pu être téléchargé, la production n'est pas sauvegardée";
-                    }
-                }
-                $production->save();
-                Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été ajoutée à la base de données.");
-                Helpers::redirect(Helpers::callRoute('productions_list'));
-            }
-            $view->assign("errors", $errors);
-        }
-    }
-
-    public function addProductionTmdbAction() {
-        $production = new ProductionModel();
-        $form = $production->formBuilderAddProductionTmdb();
         $view = new View("productions/add-production-tmdb");
         $view->assign("form", $form);
-        $view->assign("title", "Ajout d'une production");
+        $view->assign("title", "Nouvelle production");
         $view->assign('headScripts', [PATH_TO_SCRIPTS.'headScripts/productions/addProduction.js']);
 
         if(!empty($_POST)) {
@@ -147,7 +90,7 @@ class Production
                     if (!empty($jsonResponseArray)) {
                         $production = new ProductionModel();
                         if($production->populateFromTmdb($_POST, $jsonResponseArray)) {
-                            if ($production->findOneBy('tmdbId', $production->getTmdbId())) {
+                            if ($production->select()->where('tmdbId', $production->getTmdbId())->andWhere('type', $_POST['productionType'])->first()) {
                                 $errors[] = "La production avec l'ID TMDB ".$production->getTmdbId()." existe déjà dans la base de données";
                             } else {
                                 $production->save();
@@ -186,6 +129,11 @@ class Production
         }
     }
 
+    /**
+     * Get TMDB URL from user form
+     * Movie, series or season = 1 URL
+     * Episode: 2 URLs (parent series that includes season + episode URL)
+     */
     public function getTmdbUrl($data){
         if(!$data['productionType'] || !$data['productionID']) return false;
         $urlArray = [];
@@ -206,9 +154,8 @@ class Production
         }
 
         // French results + credits
-        foreach ($urlArray as $type => $url) {
+        foreach ($urlArray as $type => $url)
             $urlArray[$type] = $url."&language=fr&append_to_response=credits";
-        }
 
         return $urlArray;
     }
@@ -255,6 +202,7 @@ class Production
                         }
                     }
                 }
+                $production->setTmdbId($production->select('tmdbId')->where('id', $_POST['id'])->first(false));
                 $production->save();
                 Helpers::setFlashMessage('success', "La production ".$_POST["title"]." a bien été mise à jour");
                 Helpers::redirect(Helpers::callRoute('productions_list'));
