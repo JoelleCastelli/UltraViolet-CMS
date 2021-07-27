@@ -11,3 +11,14 @@ stateRadios.forEach((state) => {
     }
   });
 });
+
+$(document).ready(function () {
+
+  $('#remove-prod').click(function(){
+    $('#production').val("");
+  });
+
+  $('#remove-media').click(function(){
+    $('#media').val("");
+  });
+});

@@ -263,7 +263,7 @@ class Database {
         return $this;
     }
 
-    public function get($setFetchMode = true): array
+    public function get($setFetchMode = true, $fetchBoth = false): array
     {
         $this->order = 0;
         $this->like = 0;
@@ -275,8 +275,10 @@ class Database {
         try {
             if ($setFetchMode)
                 return $query->fetchAll();
-            else
+            else if($fetchBoth)
                 return $query->fetchAll(\PDO::FETCH_BOTH);
+            else
+                return $query->fetchAll(\PDO::FETCH_COLUMN);
 
         } catch (\Exception $e) {
             echo "EXCEPTION : Query not correct <br>" . $e->getMessage();

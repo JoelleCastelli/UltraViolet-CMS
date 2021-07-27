@@ -769,6 +769,12 @@ class Article extends Database implements JsonSerializable
                     "readonly" => true,
                     "value" => !empty($productionId) ?  $productionName . " (" . $productionId . ")" : ""
                 ],
+                "productionRemove" => [
+                    "type" => "button",
+                    "id"    => "remove-prod",
+                    "class" => "btn",
+                    "value" => "Supprimer la production"
+                ],
                 "state" => [
                     "type" => "radio",
                     "label" => "État <span class='requiredField'>*</span>",
@@ -819,6 +825,12 @@ class Article extends Database implements JsonSerializable
                     "readonly" => true,
                     "value" => $mediaTitle . " (" . $mediaId . ")"
 
+                ],
+                "mediaRemove" => [
+                    "type" => "button",
+                    "id"    => "remove-media",
+                    "class" => "btn",
+                    "value" => "Supprimer la média"
                 ],
                 "categories" => [
                     "type" => "checkbox",
