@@ -1,5 +1,6 @@
 <?php use App\Core\Helpers; ?>
 <?php use App\Core\Request; ?>
+<?php use App\Models\Production; ?>
 
 <div class="grid-article">
 
@@ -88,11 +89,29 @@
             <img class="prod__cover" src="<?= $production->getProductionPosterPath() ?>">
             <article class="prod__details">
                 <h1 class="prod__details_title"><?= $production->getTitle() ?></h1>
+                <?php if($production->getType() == 'season') {
+                    $series = new Production();
+                    $series = $series->select()->where('id', $production->getParentProductionId())->first() ?>
+                    <p class="prod__details_type tag-item"><b>Série :</b> <?= $series->getTitle() ?></p>
+                <?php } ?>
+                <?php if($production->getType() == 'episode') {
+                    $season = new Production();
+                    $season = $season->select()->where('id', $production->getParentProductionId())->first();
+                    $series = new Production();
+                    $series = $series->select()->where('id', $season->getParentProductionId())->first(); ?>
+
+                    <p class="prod__details_type tag-item"><b>Série :</b> <?= $series->getTitle() ?></p>
+                    <p class="prod__details_type tag-item"><b>Saison :</b> <?= $season->getTitle() ?></p>
+                <?php } ?>
                 <p class="prod__details_type tag-item"><b>Type :</b> <?= $production->getTranslatedType() ?></p>
-                <p class="prod__details_type"><b>Titre original :</b> <?= $production->getOriginalTitle() ?></p>
+                <?php if($production->getOriginalTitle()) { ?>
+                    <p class="prod__details_type"><b>Titre original :</b> <?= $production->getOriginalTitle() ?></p>
+                <?php } ?>
                 <p class="prod__details_date"><b>Date de sortie :</b> <?= $production->getCleanReleaseDate() ?></p>
                 <p class="prod__details_date"><b>Durée :</b> <?= $production->getRuntime() ?> minutes</p>
-                <small class="prod__details_resume"><b>Résumé :</b> <br><?= $production->getOverview() ?></small>
+                <?php if($production->getOverview()) { ?>
+                    <small class="prod__details_resume"><b>Résumé :</b> <br><?= $production->getOverview() ?></small>
+                <?php } ?>
             </article>
 
 
