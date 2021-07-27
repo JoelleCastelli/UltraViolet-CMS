@@ -117,6 +117,7 @@ class Statistics
     public function getViewsGraphAction()
     {
         $articleHistory = new ArticleHistory();
+        
         $formatResult = [
             "labels" => [],
             "data" => []
