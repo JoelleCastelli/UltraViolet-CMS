@@ -80,6 +80,8 @@ class Article {
                 $article->setContent($_POST["content"]);
                 if (!empty($mediaId))
                     $article->setMediaId($mediaId);
+                else 
+                    $article->setDefaultPicture();
                 $article->setPersonId($user->getId());
 
                 if ($state == "published") {
@@ -173,6 +175,8 @@ class Article {
 
                 if(!empty($mediaId))
                     $article->setMediaId($mediaId);
+                else
+                    $article->setDefaultPicture();
 
                 $article->setPersonId($user->getId());
                 $article->setContentUpdatedAt(date("Y-m-d H:i:s"));
