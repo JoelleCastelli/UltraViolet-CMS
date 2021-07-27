@@ -9,8 +9,18 @@ $(document).ready(function () {
     columns: [
       { data: "Miniature" },
       { data: "Nom" },
+      { data: "Identifiant" },
       { data: "Date d'ajout" },
       { data: "Actions" },
+    ],
+
+    columnDefs: [
+      {
+        targets: 4, // Actions column
+        data: "name",
+        searchable: false,
+        orderable: false
+      },
     ],
 
     language: {
@@ -45,6 +55,7 @@ $(document).ready(function () {
     },
   });
 
+  table.columns([2]).visible(false); //ID
   table.columns([3]).visible(false); //actions
   $(".filtering-btn").click(function () {
     $(".filtering-btn").removeClass("active");
