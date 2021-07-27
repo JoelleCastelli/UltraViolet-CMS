@@ -477,11 +477,11 @@ class Person
                 $user = $user->select()->where("id", $id)->andWhere("emailkey", $key)->first();
                 if (!empty($user)) {
                     if (password_verify($_POST['password'], $user->getPassword())) {
-                        Helpers::setFlashMessage('error', "Le mot de passe corespond au mot de passe déjà enregistré.");
+                        Helpers::setFlashMessage('error', "Le mot de passe correspond au mot de passe déjà enregistré.");
                     } else {
                         $user->setPassword(password_hash(htmlspecialchars($_POST['pwd']), PASSWORD_DEFAULT));
                         $user->save();
-                        Helpers::setFlashMessage('success', "Votre mot de passe à bien était changée.");
+                        Helpers::setFlashMessage('success', "Votre mot de passe a bien été modifié.");
                         Helpers::namedRedirect('login');
                     }
                 } else {
