@@ -56,8 +56,8 @@
             <div class="filtering-status">
                 <div class="filtering-btn active" id="movie">Films</div>
                 <div class="filtering-btn" id="series">Séries</div>
-                <!-- <div class="filtering-btn" id="season">Saisons</div>
-                <div class="filtering-btn" id="episode">Episodes</div> -->
+                <div class="filtering-btn" id="season">Saisons</div>
+                <div class="filtering-btn" id="episode">Episodes</div>
             </div>
 
             <table id="datatable-production" class="display">
